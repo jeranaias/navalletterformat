@@ -4,9 +4,26 @@
 
 [![SECNAV M-5216.5](https://img.shields.io/badge/SECNAV-M--5216.5-blue)](https://www.secnav.navy.mil/doni/SECNAV%20Manuals1/5216.5%20DON%20Correspondence%20Manual.pdf)
 [![MCO 5216.20](https://img.shields.io/badge/MCO-5216.20-red)](https://www.marines.mil/News/Publications/MCPEL/Electronic-Library-Display/Article/899678/mco-521620/)
+[![Status](https://img.shields.io/badge/Status-Beta-yellow)](https://github.com/jeranaias/navalletterformat/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**🔗 Live Tool: [https://jeranaias.github.io/navalletterformat/](https://jeranaias.github.io/navalletterformat/)**
+**🔗 Live Tool: [https://bit.ly/navalletter](https://bit.ly/navalletter)**
+
+---
+
+## 🚧 Beta - We Want Your Feedback!
+
+**This tool is under active development.** It works, but it's not perfect yet—and that's where you come in.
+
+If you're an S-1 clerk, adjutant, admin Marine, Yeoman, or anyone who works with naval correspondence regularly, **your eye for detail is exactly what this project needs.**
+
+**Found something off?**
+- Spacing look wrong?
+- Alignment not matching your command's standard?
+- Missing a feature you need?
+- Have a suggestion?
+
+**[Open an issue on GitHub](https://github.com/jeranaias/navalletterformat/issues)** or comment with details. Screenshots are incredibly helpful. Every piece of feedback makes this tool better for the next Marine or Sailor who uses it.
 
 ---
 
@@ -14,27 +31,27 @@
 
 The **Naval Letter Generator** is a free, browser-based tool that creates properly formatted naval correspondence for the **United States Marine Corps** and **United States Navy**. It generates publication-ready documents that comply with **SECNAV M-5216.5** (Department of the Navy Correspondence Manual) and **MCO 5216.20** (Marine Corps supplement).
 
-No software installation required. No account needed. Just open the link and start typing.
+**No software installation. No account. No Overleaf required.**
+
+Just open the link, fill in your information, and download your PDF.
 
 ---
 
-## Why This Exists
+## ✨ What's New (v1.1 Beta)
 
-Every Marine and Sailor has struggled with naval letter formatting at some point:
-
-- Hunting for a template that's actually correct
-- Manually adjusting margins, tabs, and spacing
-- Getting paragraph numbering wrong (is it 1.a.(1)(a) or 1.a.1.a?)
-- Inconsistent formatting across the command
-- Wasting hours on administrative formatting instead of actual work
-
-This tool eliminates all of that. Fill in your information, click a button, and get a perfectly formatted document every time.
+- **Direct PDF Download** - No more Overleaf step for basic letters. Click "Download PDF" and you're done.
+- **Instant Results** - Generate a formatted naval letter in under a minute
+- **Works Offline** - Once loaded, works without internet (except for seal images)
+- **Mobile Friendly** - Works on phones and tablets in a pinch
 
 ---
 
 ## Features
 
-### ✅ Full SECNAV M-5216.5 Compliance
+### ⬇️ One-Click PDF Generation (NEW!)
+Click "Download PDF" and get your formatted letter instantly. No external tools, no accounts, no waiting for compilation. For 90% of use cases, this is all you need.
+
+### 📄 Full SECNAV M-5216.5 Compliance
 Every measurement, margin, and spacing rule from the correspondence manual is built in:
 
 | Element | Specification |
@@ -51,233 +68,179 @@ Every measurement, margin, and spacing rule from the correspondence manual is bu
 | Signature block | 4 lines below text, starts at page center (3.25") |
 | Continuation pages | Subject in header, page number centered at bottom |
 
-### ✅ Smart Paragraph Numbering
+### 🔢 Smart Paragraph Numbering
 Automatic hierarchical numbering with proper indentation:
 - **Main paragraphs:** 1., 2., 3.
 - **Sub-paragraphs:** a., b., c.
 - **Sub-sub-paragraphs:** (1), (2), (3)
 - **Sub-sub-sub-paragraphs:** (a), (b), (c)
 
-Alignment is calculated using actual character widths—not fixed measurements—ensuring perfect alignment regardless of content.
-
-### ✅ Automatic Via/Reference/Enclosure Numbering
+### 🔄 Automatic Numbering
 - **Via addressees** auto-number as (1), (2), (3), (4)
 - **References** auto-letter as (a), (b), (c), (d)
 - **Enclosures** auto-number as (1), (2), (3)
 
-### ✅ Custom Letterhead Support
+### 🏛️ Custom Letterhead Support
 - Add your unit's service name and address
 - Upload your unit seal/emblem (PNG or JPEG)
 - Seal automatically positioned per regulations
 
-### ✅ Drag-and-Drop Paragraph Reordering
+### ↕️ Drag-and-Drop Reordering
 Click and drag paragraphs to reorganize. Numbering updates automatically.
 
-### ✅ Multiple Output Options
-- **Preview** the LaTeX code
-- **Download .tex file** for local compilation
-- **Download ZIP** with all files (for letters with seal images)
-- **Copy to clipboard**
-- **Open directly in Overleaf** (one-click cloud compilation)
+### 📤 Multiple Output Options
+- **Download PDF** - Instant, recommended for most users (NEW!)
+- **Open in Overleaf** - For pixel-perfect LaTeX output
+- **Download ZIP** - For letters with seal images
+- **Download .tex** - For local LaTeX compilation
+- **Copy to clipboard** - For pasting into other tools
 
-### ✅ Works Everywhere
+### 💻 Works Everywhere
 - Desktop, laptop, tablet, or phone
 - Chrome, Firefox, Safari, Edge
-- No installation, no plugins, no account required
 - Works on NMCI, personal devices, or any computer with a browser
+- No installation, no plugins, no account required
 
 ---
 
 ## How to Use
 
-### Quick Start (5 minutes)
+### Quick Start (Under 2 Minutes)
 
-1. **Open the tool:** [https://jeranaias.github.io/navalletterformat/](https://jeranaias.github.io/navalletterformat/)
+1. **Open the tool:** [https://bit.ly/navalletter](https://bit.ly/navalletter)
 
-2. **Fill in header information:**
-   - SSIC (Standard Subject Identification Code)
-   - Date (auto-filled, adjust if needed)
-   - Classification level
+2. **Fill in your letter information:**
+   - SSIC, date, classification
+   - From, To, Via (if applicable), Subject
+   - References and enclosures
+   - Body paragraphs
+   - Signature block
 
-3. **Add letterhead** (optional):
-   - Toggle "Include generated letterhead"
-   - Enter service name and unit address
-   - Upload unit seal if desired
+3. **Click "Download PDF"**
 
-4. **Complete addressing:**
-   - From: (Rank Name EDIPI/MOS Service)
-   - To: (Primary addressee)
-   - Via: (Click "+ Add Via" for each routing addressee)
-   - Subject: (Will auto-capitalize)
+4. **Done.** Print or email your properly formatted letter.
 
-5. **Add references and enclosures** (if applicable)
+### Tips
+- **Two spaces after periods** - Type them yourself; the tool preserves them
+- **Subject line** - Will be automatically capitalized
+- **Paragraphs** - Click any paragraph to see action buttons for adding siblings or children
+- **Drag to reorder** - Grab the ☰ handle to rearrange paragraphs
 
-6. **Build body paragraphs:**
-   - Click "+ Add First Paragraph"
-   - Type your text (remember: two spaces after periods)
-   - Click any paragraph to see action buttons
-   - Use "+ Same Level" for siblings, "+ Indent" for sub-paragraphs
+### Advanced Options
 
-7. **Complete signature block:**
-   - Name (will be capitalized)
-   - Rank
-   - Title/Billet
-   - Check "By direction" if applicable
+**Need a unit seal in your letter?**
+1. Upload your seal image in the Letterhead section
+2. Click "Download ZIP" instead of "Download PDF"
+3. Upload the ZIP to [Overleaf.com](https://www.overleaf.com/) → New Project → Upload
+4. Click "Recompile" → Download PDF
 
-8. **Generate your document:**
-   - **Without seal:** Click "Open in Overleaf" → Recompile → Download PDF
-   - **With seal:** Click "Download ZIP" → Upload to Overleaf → Recompile → Download PDF
+**Need pixel-perfect output?**
+Use "Open in Overleaf" for precise LaTeX compilation. This produces the most accurate output but requires the extra Overleaf step.
 
 ---
 
-## Detailed Instructions
+## Known Limitations (Help Us Fix These!)
 
-### Using Overleaf (Recommended)
+We're actively working on improvements. Current known issues:
 
-[Overleaf](https://www.overleaf.com/) is a free online LaTeX editor. You don't need to know LaTeX—just upload and click "Recompile."
+- [ ] Direct PDF may have minor spacing differences from LaTeX output on complex multi-page letters
+- [ ] Seal images only work through the Overleaf/ZIP workflow
+- [ ] No save/load functionality yet (refresh = start over)
+- [ ] Single letter format only (no endorsements or memoranda yet)
 
-**For letters WITHOUT a seal image:**
-1. Click "Open in Overleaf"
-2. Click the green "Recompile" button
-3. Download your PDF
-
-**For letters WITH a seal image:**
-1. Click "Download ZIP"
-2. Go to [Overleaf.com](https://www.overleaf.com/) → New Project → Upload Project
-3. Upload the ZIP file
-4. Click "Recompile"
-5. Download your PDF
-
-### Paragraph Structure
-
-Naval letters use a specific hierarchy. Here's how to structure complex correspondence:
-
-```
-1.  Main paragraph introducing the first topic.
-
-    a.  Sub-paragraph providing supporting detail.
-
-    b.  Another sub-paragraph.
-
-        (1)  Sub-sub-paragraph for further breakdown.
-
-        (2)  Another sub-sub-paragraph.
-
-            (a)  Deepest level (use sparingly).
-
-            (b)  Another deepest level item.
-
-        (3)  Back to sub-sub level.
-
-    c.  Back to sub-paragraph level.
-
-2.  Second main paragraph with new topic.
-```
-
-**Rules:**
-- Never have just one sub-paragraph (if you indent, you need at least two items)
-- Don't go deeper than (a) level unless absolutely necessary
-- Each level aligns with the text of the level above
-
-### Special Characters
-
-If your text includes these characters, the generator handles them automatically:
-- `&` (ampersand)
-- `%` (percent)
-- `$` (dollar sign)
-- `_` (underscore)
-- `#` (hash)
-
-### Classification Markings
-
-Select classification from the dropdown:
-- UNCLASSIFIED
-- CUI (Controlled Unclassified Information)
-- FOR OFFICIAL USE ONLY
-- CONFIDENTIAL
-- SECRET
-
-**Note:** This tool is for UNCLASSIFIED use only. Do not enter classified information into any web-based tool.
+**See something else?** [Report it here](https://github.com/jeranaias/navalletterformat/issues)
 
 ---
 
-## Technical Specifications
+## Roadmap - What's Next?
+
+We're prioritizing based on user feedback. Current plans:
+
+- [ ] Save/load letter drafts (localStorage)
+- [ ] Seal support in direct PDF generation
+- [ ] Endorsement letter format
+- [ ] Memorandum format
+- [ ] Spell check integration
+- [ ] Print directly from browser
+- [ ] Dark mode (for the night shift)
+
+**Want to influence priorities?** [Vote on issues](https://github.com/jeranaias/navalletterformat/issues) or open a new one describing what you need.
+
+---
+
+## Frequently Asked Questions
+
+**Q: Is this an official Marine Corps/Navy tool?**
+A: No. This is a personal project created to help service members format correspondence correctly. Always verify your command's specific requirements.
+
+**Q: Does this work on NMCI computers?**
+A: Yes. It's a standard webpage that works in any browser. No installation or admin rights required.
+
+**Q: Is my data saved anywhere?**
+A: No. Everything runs in your browser. Nothing is transmitted to any server. When you close the page, your data is gone. (Save/load feature coming soon!)
+
+**Q: Can I use this for classified correspondence?**
+A: **No.** This is for UNCLASSIFIED use only. Never enter classified information into any web-based tool.
+
+**Q: The PDF looks slightly different from Overleaf output.**
+A: The direct PDF generator is optimized for speed and convenience. For the most precise output, use the "Open in Overleaf" option. We're working to close this gap.
+
+**Q: Something looks wrong / doesn't match my command's format.**
+A: [Please report it!](https://github.com/jeranaias/navalletterformat/issues) Include a screenshot and description of what you expected. Different commands sometimes have local variations, but if it's a SECNAV M-5216.5 compliance issue, we want to fix it.
+
+---
+
+## Contributing
+
+This project needs people who know naval correspondence. If that's you, your feedback is invaluable.
+
+### Ways to Help
+
+1. **Use the tool and report issues** - [GitHub Issues](https://github.com/jeranaias/navalletterformat/issues)
+2. **Suggest features** - What would make your admin life easier?
+3. **Share with your shop** - More users = more feedback = better tool
+4. **Submit code improvements** - Pull requests welcome
+
+### Feedback That Helps Most
+
+- Screenshots showing the problem
+- "Expected X but got Y" descriptions
+- References to specific SECNAV M-5216.5 sections
+- Comparison with your command's approved templates
+
+---
+
+## Technical Details
 
 ### Compliance Standards
 - **SECNAV M-5216.5** – Department of the Navy Correspondence Manual
 - **MCO 5216.20B** – Marine Corps Supplement to SECNAV M-5216.5
 - **U.S. Government Printing Office (GPO) Style Manual**
 
-### Output Format
-- LaTeX source code (.tex)
-- Compiles to PDF via Overleaf or local LaTeX installation
-- Uses `article` document class with `mathptmx` (Times New Roman equivalent)
+### Technology
+- Pure HTML/CSS/JavaScript (no framework)
+- [jsPDF](https://github.com/parallax/jsPDF) for direct PDF generation
+- [JSZip](https://stuk.github.io/jszip/) for ZIP file creation
+- LaTeX output uses `article` class with `mathptmx` (Times New Roman equivalent)
 
-### Browser Compatibility
-- Google Chrome (recommended)
-- Mozilla Firefox
-- Microsoft Edge
-- Apple Safari
-- Mobile browsers (iOS Safari, Chrome for Android)
-
-### Dependencies
-- [JSZip](https://stuk.github.io/jszip/) – For ZIP file generation (loaded via CDN)
-- No other external dependencies
-
----
-
-## Frequently Asked Questions
-
-**Q: Is this an official Marine Corps/Navy tool?**  
-A: No. This is a personal project created to help service members format correspondence correctly. Always verify your command's specific requirements.
-
-**Q: Does this work on NMCI computers?**  
-A: Yes. It's a standard webpage that works in any browser. No installation or admin rights required.
-
-**Q: Is my data saved anywhere?**  
-A: No. Everything runs in your browser. Nothing is transmitted to any server. When you close the page, your data is gone.
-
-**Q: Can I use this for classified correspondence?**  
-A: **No.** This is for UNCLASSIFIED use only. Never enter classified information into any web-based tool.
-
-**Q: Why LaTeX instead of Word?**  
-A: LaTeX produces consistent, publication-quality formatting every time. The same input always produces the same output, eliminating the "it looks different on my computer" problem.
-
-**Q: Do I need to learn LaTeX?**  
-A: No. The generator creates the LaTeX code for you. Just upload to Overleaf and click "Recompile."
-
-**Q: Can I edit the generated document?**  
-A: Yes. You can edit the .tex file in Overleaf before compiling, or regenerate from the web tool with changes.
-
-**Q: The PDF looks slightly different from my command's template.**  
-A: Minor variations exist between commands. This tool follows SECNAV M-5216.5 exactly. If your command requires specific deviations, you may need to adjust the output.
-
----
-
-## Contributing
-
-Found a bug? Have a feature request? Want to improve the tool?
-
-- **Report issues:** [GitHub Issues](https://github.com/jeranaias/navalletterformat/issues)
-- **Submit improvements:** Pull requests welcome
-- **Feedback:** Open an issue with the "feedback" label
-
-### Future Enhancements (Planned)
-- [ ] Direct PDF generation (no Overleaf step)
-- [ ] Save/load letter drafts
-- [ ] Multiple letter templates (endorsements, memoranda)
-- [ ] Print directly from browser
-- [ ] Spell check integration
+### Browser Support
+- Chrome (recommended)
+- Firefox
+- Edge
+- Safari
+- Mobile browsers
 
 ---
 
 ## About
 
-**Created by:** SSgt Jesse Morgan, USMC  
-**Location:** Presidio of Monterey, California  
-**Purpose:** Making naval correspondence formatting accessible to every Marine and Sailor
+**Created by:** SSgt Jesse Morgan, USMC
+**Location:** Presidio of Monterey, California
+**Status:** Active development - feedback welcome!
 
-This tool was built out of frustration with inconsistent templates and wasted time on administrative formatting. Every service member deserves access to properly formatted correspondence tools—not just those who happen to have the right template or know the right person.
+This tool was built out of frustration with inconsistent templates and wasted time on administrative formatting. Every service member deserves access to properly formatted correspondence tools—not just those lucky enough to have the right template.
+
+**The goal:** Make naval correspondence formatting a solved problem so Marines and Sailors can focus on their actual jobs.
 
 ---
 
@@ -291,17 +254,19 @@ This tool was built out of frustration with inconsistent templates and wasted ti
 
 ## License
 
-This project is released under the MIT License. See [LICENSE](LICENSE) for details.
-
-Free to use, modify, and distribute. No warranty expressed or implied.
+MIT License - Free to use, modify, and distribute.
 
 ---
 
 ## Keywords
 
-Naval letter format, SECNAV M-5216.5, Marine Corps correspondence, Navy correspondence, military letter format, naval letter template, USMC letter format, official military correspondence, naval letter generator, military document formatting, Marine Corps letter template, Navy letter template, DON correspondence manual, MCO 5216.20, military admin, S-1, adjutant, correspondence manual, naval message format, military writing, professional military correspondence
+Naval letter format, SECNAV M-5216.5, Marine Corps correspondence, Navy correspondence, military letter format, naval letter template, USMC letter format, official military correspondence, naval letter generator, military document formatting, Marine Corps letter template, Navy letter template, DON correspondence manual, MCO 5216.20, military admin, S-1, adjutant, correspondence manual, naval message format, military writing, professional military correspondence, Yeoman, admin clerk, military PDF generator
 
 ---
+
+<p align="center">
+  <b>Found this useful? Star the repo ⭐ and share with your shop.</b>
+</p>
 
 <p align="center">
   <i>Semper Fidelis</i>
