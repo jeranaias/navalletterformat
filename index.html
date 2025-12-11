@@ -582,7 +582,14 @@
     </form>
 
     <!-- Action Buttons -->
+    <div class="info-box" style="background: #fff3cd; border-color: #ffc107; margin-bottom: 15px;">
+      <p style="margin: 0; font-size: 0.85rem;">
+        <strong>🚧 Active Development:</strong> This tool is in beta. Found a bug or formatting issue? 
+        <a href="https://github.com/jeranaias/navalletterformat/issues" target="_blank">Report it on GitHub</a> - your feedback helps make this better for everyone.
+      </p>
+    </div>
     <div class="actions">
+      <button type="button" class="btn btn-primary" onclick="generatePDF()" style="background: #2e7d32;">⬇ Download PDF</button>
       <button type="button" class="btn btn-secondary" onclick="previewTex()">Preview .tex</button>
       <button type="button" class="btn btn-secondary" onclick="downloadTex()">Download .tex</button>
       <button type="button" class="btn btn-secondary" onclick="downloadZip()">Download ZIP</button>
@@ -592,8 +599,9 @@
     
     <div class="info-box">
       <p>
+        <strong>Recommended:</strong> Click "Download PDF" for instant results (no external tools needed)<br>
         <strong>With seal/image:</strong> Download ZIP → Upload to <a href="https://www.overleaf.com/project" target="_blank">Overleaf</a> (New Project → Upload) → Recompile<br>
-        <strong>Without seal:</strong> Click "Open in Overleaf" → Recompile → Download PDF
+        <strong>Advanced:</strong> Use Overleaf options for precise LaTeX control
       </p>
     </div>
 
@@ -607,13 +615,16 @@
     </div>
 
     <footer>
-      <p>Naval Letter Generator v1.0 | Per SECNAV M-5216.5</p>
-      <p>Defense Language Institute | December 2025</p>
+      <p>Naval Letter Generator v1.1 (Beta) | Per SECNAV M-5216.5</p>
+      <p>Created by SSgt Jesse Morgan, USMC | Presidio of Monterey</p>
+      <p style="font-size: 0.75rem; margin-top: 8px;"><a href="https://github.com/jeranaias/navalletterformat/issues" target="_blank" style="color: #bf9b30;">Report bugs or request features</a></p>
     </footer>
   </div>
 
   <!-- JSZip for creating ZIP files -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <!-- jsPDF for direct PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script>
     // Global seal data storage
@@ -1355,6 +1366,378 @@ Per SECNAV M-5216.5
           status.classList.remove('show');
         }, 5000);
       }
+    }
+
+    // Generate PDF directly using jsPDF
+    async function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const d = collectData();
+      const letters = 'abcdefghijklmnopqrstuvwxyz';
+      
+      showStatus('loading', 'Generating PDF...');
+      
+      // Create PDF - letter size in points (72 points = 1 inch)
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'letter'  // 612 x 792 points
+      });
+      
+      // Measurements (in points, 72pt = 1 inch)
+      const PAGE_WIDTH = 612;
+      const PAGE_HEIGHT = 792;
+      const MARGIN_LEFT = 72;      // 1 inch
+      const MARGIN_RIGHT = 72;     // 1 inch
+      const MARGIN_TOP = 72;       // 1 inch
+      const MARGIN_BOTTOM = 72;    // 1 inch
+      const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;  // 468pt = 6.5"
+      const LABEL_TAB = 45;        // 0.625 inch for From:, To:, etc.
+      const LINE_HEIGHT = 14;      // ~12pt font with spacing
+      const PARA_SPACING = LINE_HEIGHT;  // One blank line between paragraphs
+      
+      // Indentation widths (approximate character widths for Times)
+      const INDENT_MAIN = 18;      // "1.  " width
+      const INDENT_SUB = 16;       // "a.  " width  
+      const INDENT_SUBSUB = 22;    // "(1)  " width
+      const INDENT_SUBSUBSUB = 22; // "(a)  " width
+      
+      let y = MARGIN_TOP;
+      let pageNum = 1;
+      const subjectText = d.subj.toUpperCase();
+      
+      // Helper function to check page break and add continuation header
+      function checkPageBreak(neededSpace) {
+        if (y + neededSpace > PAGE_HEIGHT - MARGIN_BOTTOM) {
+          pdf.addPage();
+          pageNum++;
+          y = MARGIN_TOP;
+          
+          // Add continuation header
+          pdf.setFont('times', 'normal');
+          pdf.setFontSize(10);
+          pdf.text('Subj:', MARGIN_LEFT, y);
+          
+          // Wrap subject text for continuation header
+          const subjLines = pdf.splitTextToSize(subjectText, CONTENT_WIDTH - 50);
+          pdf.text(subjLines[0], MARGIN_LEFT + 45, y);
+          y += LINE_HEIGHT * 2;
+        }
+      }
+      
+      // Helper function to add wrapped text
+      function addWrappedText(text, x, maxWidth, indent = 0) {
+        const lines = pdf.splitTextToSize(text, maxWidth);
+        lines.forEach((line, i) => {
+          checkPageBreak(LINE_HEIGHT);
+          if (i === 0) {
+            pdf.text(line, x, y);
+          } else {
+            pdf.text(line, x + indent, y);
+          }
+          y += LINE_HEIGHT;
+        });
+      }
+      
+      // === FIRST PAGE HEADER ===
+      
+      // Adjust start position for first page (0.625" from top)
+      y = 45;  // ~0.625 inch
+      
+      // Classification marking at top
+      if (d.classification && d.classification !== 'UNCLASSIFIED') {
+        pdf.setFont('times', 'bold');
+        pdf.setFontSize(12);
+        const classWidth = pdf.getTextWidth(d.classification);
+        pdf.text(d.classification, (PAGE_WIDTH - classWidth) / 2, y);
+        y += LINE_HEIGHT + 4;
+      }
+      
+      // Letterhead
+      if (d.useLetterhead) {
+        // Unit seal (if provided)
+        if (d.hasSeal && sealData) {
+          try {
+            // Position: 0.5" from left, 0.5" from top, 1" diameter
+            pdf.addImage(sealData, 'JPEG', 36, 36, 72, 72);
+          } catch (e) {
+            console.warn('Could not add seal image:', e);
+          }
+        }
+        
+        // Service name - 10pt Bold, centered
+        if (d.unitName) {
+          pdf.setFont('times', 'bold');
+          pdf.setFontSize(10);
+          const nameWidth = pdf.getTextWidth(d.unitName.toUpperCase());
+          pdf.text(d.unitName.toUpperCase(), (PAGE_WIDTH - nameWidth) / 2, y);
+          y += 11;  // 10pt + small gap
+        }
+        
+        // Unit address - 8pt, centered
+        if (d.unitAddress) {
+          pdf.setFont('times', 'normal');
+          pdf.setFontSize(8);
+          const addressLines = d.unitAddress.split('\n').filter(l => l.trim());
+          addressLines.forEach(line => {
+            const lineWidth = pdf.getTextWidth(line.trim());
+            pdf.text(line.trim(), (PAGE_WIDTH - lineWidth) / 2, y);
+            y += 9;  // 8pt + small gap
+          });
+        }
+        
+        y += 6;  // Gap after letterhead
+      }
+      
+      // SSIC and Date - right aligned
+      pdf.setFont('times', 'normal');
+      pdf.setFontSize(12);
+      
+      const ssicWidth = pdf.getTextWidth(d.ssic);
+      pdf.text(d.ssic, PAGE_WIDTH - MARGIN_RIGHT - ssicWidth, y);
+      y += LINE_HEIGHT;
+      
+      const dateWidth = pdf.getTextWidth(d.date);
+      pdf.text(d.date, PAGE_WIDTH - MARGIN_RIGHT - dateWidth, y);
+      y += LINE_HEIGHT * 2;
+      
+      // === ADDRESSING BLOCK ===
+      
+      // From:
+      pdf.setFont('times', 'normal');
+      pdf.setFontSize(12);
+      pdf.text('From:', MARGIN_LEFT, y);
+      const fromLines = pdf.splitTextToSize(d.from, CONTENT_WIDTH - LABEL_TAB);
+      fromLines.forEach((line, i) => {
+        pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
+        y += LINE_HEIGHT;
+      });
+      
+      // To:
+      pdf.text('To:', MARGIN_LEFT, y);
+      const toLines = pdf.splitTextToSize(d.to, CONTENT_WIDTH - LABEL_TAB);
+      toLines.forEach((line, i) => {
+        pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
+        y += LINE_HEIGHT;
+      });
+      
+      // Via: (if any)
+      if (d.via.length > 0) {
+        pdf.text('Via:', MARGIN_LEFT, y);
+        d.via.forEach((via, i) => {
+          const viaText = `(${i + 1})  ${via}`;
+          const viaLines = pdf.splitTextToSize(viaText, CONTENT_WIDTH - LABEL_TAB);
+          viaLines.forEach((line, j) => {
+            if (j === 0 && i === 0) {
+              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
+            } else if (j === 0) {
+              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
+            } else {
+              pdf.text(line, MARGIN_LEFT + LABEL_TAB + 25, y);
+            }
+            y += LINE_HEIGHT;
+          });
+        });
+      }
+      
+      y += PARA_SPACING;
+      
+      // Subject:
+      checkPageBreak(LINE_HEIGHT * 2);
+      pdf.text('Subj:', MARGIN_LEFT, y);
+      const subjLines = pdf.splitTextToSize(subjectText, CONTENT_WIDTH - LABEL_TAB);
+      subjLines.forEach((line, i) => {
+        pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
+        y += LINE_HEIGHT;
+      });
+      
+      // References (if any)
+      if (d.refs.length > 0) {
+        y += PARA_SPACING;
+        checkPageBreak(LINE_HEIGHT * (d.refs.length + 1));
+        pdf.text('Ref:', MARGIN_LEFT, y);
+        d.refs.forEach((ref, i) => {
+          const refText = `(${letters[i]})  ${ref}`;
+          const refLines = pdf.splitTextToSize(refText, CONTENT_WIDTH - LABEL_TAB);
+          refLines.forEach((line, j) => {
+            if (j === 0 && i === 0) {
+              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
+            } else if (j === 0) {
+              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
+            } else {
+              pdf.text(line, MARGIN_LEFT + LABEL_TAB + 25, y);
+            }
+            y += LINE_HEIGHT;
+          });
+        });
+      }
+      
+      // Enclosures (if any)
+      if (d.encls.length > 0) {
+        y += PARA_SPACING;
+        checkPageBreak(LINE_HEIGHT * (d.encls.length + 1));
+        pdf.text('Encl:', MARGIN_LEFT, y);
+        d.encls.forEach((encl, i) => {
+          const enclText = `(${i + 1})  ${encl}`;
+          const enclLines = pdf.splitTextToSize(enclText, CONTENT_WIDTH - LABEL_TAB);
+          enclLines.forEach((line, j) => {
+            if (j === 0 && i === 0) {
+              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
+            } else if (j === 0) {
+              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
+            } else {
+              pdf.text(line, MARGIN_LEFT + LABEL_TAB + 25, y);
+            }
+            y += LINE_HEIGHT;
+          });
+        });
+      }
+      
+      // === BODY PARAGRAPHS ===
+      
+      if (d.paras.length > 0) {
+        let paraNum = 0;
+        let subparaNum = 0;
+        let subsubparaNum = 0;
+        let subsubsubparaNum = 0;
+        
+        for (const para of d.paras) {
+          y += PARA_SPACING;
+          
+          let label = '';
+          let indent = 0;
+          let textIndent = 0;
+          
+          if (para.type === 'para') {
+            paraNum++;
+            subparaNum = 0;
+            subsubparaNum = 0;
+            subsubsubparaNum = 0;
+            label = `${paraNum}.`;
+            indent = 0;
+            textIndent = INDENT_MAIN;
+          } else if (para.type === 'subpara') {
+            subparaNum++;
+            subsubparaNum = 0;
+            subsubsubparaNum = 0;
+            label = `${letters[subparaNum - 1]}.`;
+            indent = INDENT_MAIN;
+            textIndent = INDENT_SUB;
+          } else if (para.type === 'subsubpara') {
+            subsubparaNum++;
+            subsubsubparaNum = 0;
+            label = `(${subsubparaNum})`;
+            indent = INDENT_MAIN + INDENT_SUB;
+            textIndent = INDENT_SUBSUB;
+          } else if (para.type === 'subsubsubpara') {
+            subsubsubparaNum++;
+            label = `(${letters[subsubsubparaNum - 1]})`;
+            indent = INDENT_MAIN + INDENT_SUB + INDENT_SUBSUB;
+            textIndent = INDENT_SUBSUBSUB;
+          }
+          
+          const labelX = MARGIN_LEFT + indent;
+          const textX = labelX + textIndent;
+          const textWidth = CONTENT_WIDTH - indent - textIndent;
+          
+          checkPageBreak(LINE_HEIGHT * 2);
+          
+          // Draw label
+          pdf.text(label, labelX, y);
+          
+          // Draw wrapped text
+          const textLines = pdf.splitTextToSize(para.text, textWidth);
+          textLines.forEach((line, i) => {
+            if (i > 0) checkPageBreak(LINE_HEIGHT);
+            pdf.text(line, textX, y);
+            y += LINE_HEIGHT;
+          });
+        }
+      }
+      
+      // === SIGNATURE BLOCK ===
+      
+      if (d.sigName || d.sigRank || d.sigTitle) {
+        y += PARA_SPACING * 4;  // 4 lines below last text
+        checkPageBreak(LINE_HEIGHT * 4);
+        
+        const sigX = PAGE_WIDTH / 2;  // Center of page (3.25")
+        
+        // Name in caps
+        if (d.sigName) {
+          pdf.text(d.sigName.toUpperCase(), sigX, y);
+          y += LINE_HEIGHT;
+        }
+        
+        // By direction
+        if (d.byDirection) {
+          pdf.text('By direction', sigX, y);
+          y += LINE_HEIGHT;
+        }
+        
+        // Rank
+        if (d.sigRank) {
+          pdf.text(d.sigRank, sigX, y);
+          y += LINE_HEIGHT;
+        }
+        
+        // Title
+        if (d.sigTitle) {
+          pdf.text(d.sigTitle, sigX, y);
+          y += LINE_HEIGHT;
+        }
+      }
+      
+      // === COPY TO ===
+      
+      if (d.copies.length > 0) {
+        y += PARA_SPACING * 2;
+        checkPageBreak(LINE_HEIGHT * (d.copies.length + 2));
+        
+        pdf.text('Copy to:', MARGIN_LEFT, y);
+        y += LINE_HEIGHT;
+        
+        d.copies.forEach(copy => {
+          pdf.text(copy, MARGIN_LEFT, y);
+          y += LINE_HEIGHT;
+        });
+      }
+      
+      // === CLASSIFICATION AT BOTTOM (if applicable) ===
+      
+      if (d.classification && d.classification !== 'UNCLASSIFIED') {
+        const totalPages = pdf.getNumberOfPages();
+        for (let i = 1; i <= totalPages; i++) {
+          pdf.setPage(i);
+          pdf.setFont('times', 'bold');
+          pdf.setFontSize(12);
+          const classWidth = pdf.getTextWidth(d.classification);
+          pdf.text(d.classification, (PAGE_WIDTH - classWidth) / 2, PAGE_HEIGHT - 36);
+        }
+      }
+      
+      // === PAGE NUMBERS (centered at bottom) ===
+      
+      const totalPages = pdf.getNumberOfPages();
+      if (totalPages > 1) {
+        for (let i = 2; i <= totalPages; i++) {
+          pdf.setPage(i);
+          pdf.setFont('times', 'normal');
+          pdf.setFontSize(12);
+          const pageStr = String(i);
+          const pageWidth = pdf.getTextWidth(pageStr);
+          pdf.text(pageStr, (PAGE_WIDTH - pageWidth) / 2, PAGE_HEIGHT - 36);
+        }
+      }
+      
+      // === SAVE PDF ===
+      
+      const filename = d.subj ? 
+        d.subj.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30) + '.pdf' : 
+        'naval_letter.pdf';
+      
+      pdf.save(filename);
+      
+      showStatus('success', 'PDF downloaded: ' + filename);
     }
   </script>
 </body>
