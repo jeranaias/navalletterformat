@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naval Letter Generator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f0f0e8;
+      color: #333;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 15px 20px;
+      background: #004481;
+      border-bottom: 4px solid #bf9b30;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 1.6rem;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #d4c5a0;
+      font-size: 0.85rem;
+    }
+
+    .form-section {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-top: 3px solid #004481;
+    }
+
+    .section-title {
+      color: #004481;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ddd;
+      text-transform: uppercase;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.small {
+      flex: 0 0 150px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+      background: #fff;
+      border: 1px solid #999;
+      padding: 8px 10px;
+      color: #333;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #004481;
+      box-shadow: 0 0 3px rgba(0, 68, 129, 0.3);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .dynamic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .dynamic-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .dynamic-item input, .dynamic-item textarea {
+      flex: 1;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .btn-add {
+      background: #004481;
+      color: #fff;
+      align-self: flex-start;
+      margin-top: 5px;
+    }
+
+    .btn-add:hover {
+      background: #003366;
+    }
+
+    .btn-remove {
+      background: #8b0000;
+      color: #fff;
+      padding: 6px 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-remove:hover {
+      background: #a00000;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 25px 0;
+      padding: 20px;
+      background: #004481;
+    }
+
+    .btn-primary {
+      background: #bf9b30;
+      color: #000;
+      padding: 12px 24px;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary:hover {
+      background: #d4aa33;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: #004481;
+      border: 2px solid #fff;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+    }
+
+    .btn-secondary:hover {
+      background: #e8e8e0;
+    }
+
+    .preview-section {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .preview-section.show {
+      display: block;
+    }
+
+    .preview-section h3 {
+      color: #004481;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+
+    .preview-content {
+      background: #f8f8f0;
+      border: 1px solid #ccc;
+      padding: 15px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.75rem;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+      color: #333;
+    }
+
+    .status {
+      text-align: center;
+      padding: 12px;
+      margin: 15px 0;
+      display: none;
+      font-weight: bold;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .status.loading {
+      background: #e8e8d8;
+      color: #333;
+      border: 1px solid #999;
+    }
+
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #28a745;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #dc3545;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+    }
+
+    .para-type {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #fff;
+      background: #004481;
+      padding: 4px 8px;
+      min-width: 45px;
+      text-align: center;
+    }
+
+    .help-text {
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .branch-toggle {
+      display: flex;
+      gap: 20px;
+    }
+
+    .branch-toggle label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: normal;
+    }
+
+    .classification-select {
+      width: 200px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding: 15px;
+      background: #004481;
+      color: #d4c5a0;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        flex-direction: column;
+      }
+      .form-group.small {
+        flex: 1;
+      }
+    }
+
+    .seal-upload-area {
+      margin-top: 10px;
+    }
+
+    .seal-preview {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .seal-preview img {
+      max-width: 150px;
+      max-height: 150px;
+      border: 2px solid #004481;
+      background: #fff;
+      padding: 5px;
+    }
+
+    #letterheadFields {
+      padding-top: 15px;
+      border-top: 1px solid #ddd;
+      margin-top: 15px;
+    }
+
+    .para-item {
+      cursor: grab;
+      transition: all 0.2s;
+      border: 1px solid #ddd;
+      padding: 8px;
+      margin: 4px 0;
+      background: #fafaf5;
+      position: relative;
+    }
+
+    .para-item:hover {
+      border-color: #004481;
+      background: #f0f0e8;
+    }
+
+    .para-item.active {
+      border-color: #bf9b30;
+      background: #fffde8;
+      box-shadow: 0 0 5px rgba(191, 155, 48, 0.3);
+    }
+
+    .para-item.dragging {
+      opacity: 0.5;
+      cursor: grabbing;
+    }
+
+    .para-item.drag-over {
+      border-color: #bf9b30;
+      border-style: dashed;
+    }
+
+    .para-inline-buttons {
+      display: none;
+      gap: 8px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #ccc;
+    }
+
+    .para-item.active .para-inline-buttons {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .btn-inline {
+      background: #004481;
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-inline:hover {
+      background: #003366;
+    }
+
+    .btn-inline.sibling {
+      background: #2e7d32;
+    }
+
+    .btn-inline.sibling:hover {
+      background: #1b5e20;
+    }
+
+    .drag-handle {
+      color: #666;
+      margin-right: 8px;
+      cursor: grab;
+      user-select: none;
+      font-size: 1.1rem;
+    }
+
+    .drag-handle:hover {
+      color: #004481;
+    }
+
+    .info-box {
+      text-align: center;
+      margin-top: 15px;
+      padding: 15px;
+      background: #fffde8;
+      border: 1px solid #bf9b30;
+    }
+
+    .info-box p {
+      color: #333;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .info-box strong {
+      color: #004481;
+    }
+
+    .info-box a {
+      color: #004481;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>NAVAL LETTER GENERATOR</h1>
+      <p class="subtitle">SECNAV M-5216.5 Compliant Correspondence</p>
+    </header>
+
+    <form id="letterForm">
+      <!-- Basic Info -->
+      <div class="form-section">
+        <h2 class="section-title">Basic Information</h2>
+        <div class="form-row">
+          <div class="form-group small">
+            <label for="ssic">SSIC</label>
+            <input type="text" id="ssic" placeholder="1500" maxlength="5">
+          </div>
+          <div class="form-group small">
+            <label for="date">Date (DD Mon YY)</label>
+            <input type="text" id="date" placeholder="01 Dec 2025">
+          </div>
+          <div class="form-group small">
+            <label for="classification">Classification</label>
+            <select id="classification" class="classification-select">
+              <option value="">UNCLASSIFIED</option>
+              <option value="CUI">CUI</option>
+              <option value="FOUO">FOR OFFICIAL USE ONLY</option>
+              <option value="CONFIDENTIAL">CONFIDENTIAL</option>
+              <option value="SECRET">SECRET</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Branch</label>
+            <div class="branch-toggle">
+              <label><input type="radio" name="branch" value="USMC" checked> USMC</label>
+              <label><input type="radio" name="branch" value="USN"> USN</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Letterhead / Seal -->
+      <div class="form-section">
+        <h2 class="section-title">Letterhead &amp; Seal (Optional)</h2>
+        <div class="checkbox-group" style="margin-bottom: 15px;">
+          <input type="checkbox" id="useLetterhead">
+          <label for="useLetterhead" style="margin-bottom: 0;">Include generated letterhead</label>
+        </div>
+        <div id="letterheadFields" style="display: none;">
+          <div class="form-group">
+            <label for="unitName">Service/Organization (10pt Bold)</label>
+            <input type="text" id="unitName" placeholder="UNITED STATES MARINE CORPS">
+          </div>
+          <div class="form-group" style="margin-top: 15px;">
+            <label for="unitAddress">Unit Name &amp; Address (8pt, one line per entry)</label>
+            <textarea id="unitAddress" rows="3" placeholder="MARINE CORPS DETACHMENT&#10;DEFENSE LANGUAGE INSTITUTE FOREIGN LANGUAGE CENTER&#10;PRESIDIO OF MONTEREY, CALIFORNIA 93944-5006"></textarea>
+          </div>
+          <div class="form-group" style="margin-top: 15px;">
+            <label for="sealUpload">Unit Seal/Emblem (PNG, JPG)</label>
+            <div class="seal-upload-area">
+              <input type="file" id="sealUpload" accept="image/png,image/jpeg,image/jpg" onchange="handleSealUpload(event)">
+              <div id="sealPreview" class="seal-preview"></div>
+              <button type="button" id="removeSeal" class="btn btn-remove" style="display: none; margin-top: 10px;" onclick="removeSeal()">Remove Seal</button>
+            </div>
+            <p class="help-text">Recommended: PNG with transparent background, 300+ DPI</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Addressing -->
+      <div class="form-section">
+        <h2 class="section-title">Addressing</h2>
+        <div class="form-group">
+          <label for="from">From</label>
+          <input type="text" id="from" placeholder="Commanding Officer, Marine Corps Detachment, Presidio of Monterey">
+        </div>
+        <div class="form-group" style="margin-top: 15px;">
+          <label for="to">To</label>
+          <input type="text" id="to" placeholder="Director, Defense Language Institute Foreign Language Center">
+        </div>
+        <div class="form-group" style="margin-top: 15px;">
+          <label>Via (optional - routing through chain of command)</label>
+          <div class="dynamic-list" id="viaList"></div>
+          <button type="button" class="btn btn-add" onclick="addVia()">+ Add Via</button>
+        </div>
+        <div class="form-group" style="margin-top: 15px;">
+          <label for="subj">Subject</label>
+          <input type="text" id="subj" placeholder="Request for Additional Training Resources">
+          <p class="help-text">Will be automatically converted to ALL CAPS</p>
+        </div>
+      </div>
+
+      <!-- References -->
+      <div class="form-section">
+        <h2 class="section-title">References</h2>
+        <p class="help-text" style="margin-bottom: 15px;">Auto-lettered (a), (b), (c), etc.</p>
+        <div class="dynamic-list" id="refList"></div>
+        <button type="button" class="btn btn-add" onclick="addRef()">+ Add Reference</button>
+      </div>
+
+      <!-- Enclosures -->
+      <div class="form-section">
+        <h2 class="section-title">Enclosures</h2>
+        <p class="help-text" style="margin-bottom: 15px;">Auto-numbered (1), (2), (3), etc.</p>
+        <div class="dynamic-list" id="enclList"></div>
+        <button type="button" class="btn btn-add" onclick="addEncl()">+ Add Enclosure</button>
+      </div>
+
+      <!-- Body Paragraphs -->
+      <div class="form-section">
+        <h2 class="section-title">Body Paragraphs</h2>
+        <p class="help-text" style="margin-bottom: 15px;">
+          Hierarchy: <strong>1.</strong> → <strong>a.</strong> → <strong>(1)</strong> → <strong>(a)</strong> | Click a paragraph to see options | Drag ☰ to reorder
+        </p>
+        <div class="dynamic-list" id="paraList"></div>
+        <button type="button" class="btn btn-add" id="btnFirstPara" onclick="addFirstPara()">+ Add First Paragraph</button>
+      </div>
+
+      <!-- Signature -->
+      <div class="form-section">
+        <h2 class="section-title">Signature Block</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sigName">Name</label>
+            <input type="text" id="sigName" placeholder="R. M. SMITH">
+          </div>
+          <div class="form-group small">
+            <label for="sigRank">Rank</label>
+            <input type="text" id="sigRank" placeholder="LtCol">
+          </div>
+        </div>
+        <div class="form-group" style="margin-top: 15px;">
+          <label for="sigTitle">Title</label>
+          <input type="text" id="sigTitle" placeholder="Commanding Officer">
+        </div>
+        <div class="checkbox-group" style="margin-top: 15px;">
+          <input type="checkbox" id="byDirection">
+          <label for="byDirection" style="margin-bottom: 0;">Add "By direction"</label>
+        </div>
+      </div>
+
+      <!-- Distribution -->
+      <div class="form-section">
+        <h2 class="section-title">Distribution (Copy To)</h2>
+        <div class="dynamic-list" id="copyList"></div>
+        <button type="button" class="btn btn-add" onclick="addCopy()">+ Add Recipient</button>
+      </div>
+    </form>
+
+    <!-- Action Buttons -->
+    <div class="actions">
+      <button type="button" class="btn btn-secondary" onclick="previewTex()">Preview .tex</button>
+      <button type="button" class="btn btn-secondary" onclick="downloadTex()">Download .tex</button>
+      <button type="button" class="btn btn-secondary" onclick="downloadZip()">Download ZIP</button>
+      <button type="button" class="btn btn-secondary" onclick="copyToClipboard()">Copy to Clipboard</button>
+      <button type="button" class="btn btn-primary" onclick="openInOverleafDirect()">Open in Overleaf →</button>
+    </div>
+    
+    <div class="info-box">
+      <p>
+        <strong>With seal/image:</strong> Download ZIP → Upload to <a href="https://www.overleaf.com/project" target="_blank">Overleaf</a> (New Project → Upload) → Recompile<br>
+        <strong>Without seal:</strong> Click "Open in Overleaf" → Recompile → Download PDF
+      </p>
+    </div>
+
+    <!-- Status -->
+    <div id="status" class="status"></div>
+
+    <!-- Preview -->
+    <div id="previewSection" class="preview-section">
+      <h3>Generated LaTeX Code</h3>
+      <div id="previewContent" class="preview-content"></div>
+    </div>
+
+    <footer>
+      <p>Naval Letter Generator v1.0 | Per SECNAV M-5216.5</p>
+      <p>Defense Language Institute | December 2025</p>
+    </footer>
+  </div>
+
+  <!-- JSZip for creating ZIP files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <script>
+    // Global seal data storage
+    let sealData = null;
+    let sealFilename = null;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const month = months[today.getMonth()];
+      const year = String(today.getFullYear()).slice(-2);  // 2-digit year per SECNAV M-5216.5
+      document.getElementById('date').value = `${day} ${month} ${year}`;
+      
+      document.getElementById('useLetterhead').addEventListener('change', function() {
+        document.getElementById('letterheadFields').style.display = this.checked ? 'block' : 'none';
+      });
+    });
+
+    // Seal handling
+    function handleSealUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      if (!file.type.match(/image\/(png|jpeg|jpg)/)) {
+        showStatus('error', 'Please upload a PNG or JPG image.');
+        return;
+      }
+      
+      const ext = file.name.split('.').pop().toLowerCase();
+      sealFilename = 'seal.' + (ext === 'jpeg' ? 'jpg' : ext);
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        sealData = e.target.result;
+        document.getElementById('sealPreview').innerHTML = `<img src="${sealData}" alt="Unit Seal">`;
+        document.getElementById('removeSeal').style.display = 'inline-block';
+        showStatus('success', 'Seal uploaded successfully.');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeSeal() {
+      sealData = null;
+      sealFilename = null;
+      document.getElementById('sealUpload').value = '';
+      document.getElementById('sealPreview').innerHTML = '';
+      document.getElementById('removeSeal').style.display = 'none';
+    }
+
+    // Dynamic list management
+    function addVia() {
+      const list = document.getElementById('viaList');
+      const div = document.createElement('div');
+      div.className = 'dynamic-item';
+      div.innerHTML = `
+        <input type="text" name="via[]" placeholder="Executive Officer, Marine Corps Detachment">
+        <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">✕</button>
+      `;
+      list.appendChild(div);
+    }
+
+    function addRef() {
+      const list = document.getElementById('refList');
+      const div = document.createElement('div');
+      div.className = 'dynamic-item';
+      div.innerHTML = `
+        <input type="text" name="ref[]" placeholder="MCO 1500.55 (Marine Corps Training)">
+        <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">✕</button>
+      `;
+      list.appendChild(div);
+    }
+
+    function addEncl() {
+      const list = document.getElementById('enclList');
+      const div = document.createElement('div');
+      div.className = 'dynamic-item';
+      div.innerHTML = `
+        <input type="text" name="encl[]" placeholder="Cost Analysis Spreadsheet">
+        <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">✕</button>
+      `;
+      list.appendChild(div);
+    }
+
+    // Paragraph management with inline buttons
+    const letters = 'abcdefghijklmnopqrstuvwxyz';
+    const typeHierarchy = ['para', 'subpara', 'subsubpara', 'subsubsubpara'];
+    const typeLabels = { para: '1.', subpara: 'a.', subsubpara: '(1)', subsubsubpara: '(a)' };
+
+    function addFirstPara() {
+      addParaAfter(null, 'para');
+      document.getElementById('btnFirstPara').style.display = 'none';
+    }
+
+    function addParaAfter(afterElement, type) {
+      const list = document.getElementById('paraList');
+      const div = document.createElement('div');
+      div.className = 'dynamic-item para-item';
+      div.draggable = true;
+      div.dataset.paraType = type;
+      
+      const indentLevels = { para: 0, subpara: 25, subsubpara: 50, subsubsubpara: 75 };
+      const indent = indentLevels[type] || 0;
+      
+      const typeIndex = typeHierarchy.indexOf(type);
+      const canAddChild = typeIndex < typeHierarchy.length - 1;
+      const childType = canAddChild ? typeHierarchy[typeIndex + 1] : null;
+      const childLabel = childType ? typeLabels[childType] : '';
+      
+      div.innerHTML = `
+        <div style="display: flex; flex-direction: column; width: 100%; margin-left: ${indent}px;">
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <span class="drag-handle" title="Drag to reorder">☰</span>
+            <span class="para-type" data-label></span>
+            <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." style="flex: 1;" onfocus="setActivePara(this)" onclick="setActivePara(this)"></textarea>
+            <button type="button" class="btn btn-remove" onclick="removePara(this)">✕</button>
+          </div>
+          <div class="para-inline-buttons">
+            <button type="button" class="btn-inline sibling" onclick="addSibling(this)">+ Same Level (${typeLabels[type]})</button>
+            ${canAddChild ? `<button type="button" class="btn-inline" onclick="addChild(this)">+ Indent (${childLabel})</button>` : ''}
+            <button type="button" class="btn-inline sibling" onclick="addParaHere(this, 'para')">+ New Para (1.)</button>
+          </div>
+        </div>
+      `;
+      
+      div.addEventListener('dragstart', handleDragStart);
+      div.addEventListener('dragend', handleDragEnd);
+      div.addEventListener('dragover', handleDragOver);
+      div.addEventListener('dragleave', handleDragLeave);
+      div.addEventListener('drop', handleDrop);
+      
+      if (afterElement) {
+        afterElement.after(div);
+      } else {
+        list.appendChild(div);
+      }
+      
+      updateParaLabels();
+      setActivePara(div.querySelector('textarea'));
+      div.querySelector('textarea').focus();
+    }
+
+    function setActivePara(textarea) {
+      document.querySelectorAll('.para-item').forEach(item => item.classList.remove('active'));
+      textarea.closest('.para-item').classList.add('active');
+    }
+
+    function addSibling(btn) {
+      const item = btn.closest('.para-item');
+      const type = item.dataset.paraType;
+      addParaAfter(item, type);
+    }
+
+    function addChild(btn) {
+      const item = btn.closest('.para-item');
+      const type = item.dataset.paraType;
+      const typeIndex = typeHierarchy.indexOf(type);
+      if (typeIndex < typeHierarchy.length - 1) {
+        addParaAfter(item, typeHierarchy[typeIndex + 1]);
+      }
+    }
+
+    function addParaHere(btn, type) {
+      const item = btn.closest('.para-item');
+      addParaAfter(item, type);
+    }
+
+    function removePara(btn) {
+      const item = btn.closest('.para-item');
+      item.remove();
+      updateParaLabels();
+      
+      const remaining = document.querySelectorAll('.para-item');
+      if (remaining.length === 0) {
+        document.getElementById('btnFirstPara').style.display = 'inline-block';
+      } else {
+        setActivePara(remaining[remaining.length - 1].querySelector('textarea'));
+      }
+    }
+
+    // Update all paragraph labels with correct numbering
+    function updateParaLabels() {
+      const list = document.getElementById('paraList');
+      const items = list.querySelectorAll('.para-item');
+      
+      let paraNum = 0, subparaNum = 0, subsubparaNum = 0, subsubsubparaNum = 0;
+      
+      items.forEach(item => {
+        const type = item.dataset.paraType;
+        const labelSpan = item.querySelector('[data-label]');
+        let label = '';
+        
+        switch (type) {
+          case 'para':
+            paraNum++;
+            subparaNum = subsubparaNum = subsubsubparaNum = 0;
+            label = paraNum + '.';
+            break;
+          case 'subpara':
+            subparaNum++;
+            subsubparaNum = subsubsubparaNum = 0;
+            label = letters[subparaNum - 1] + '.';
+            break;
+          case 'subsubpara':
+            subsubparaNum++;
+            subsubsubparaNum = 0;
+            label = '(' + subsubparaNum + ')';
+            break;
+          case 'subsubsubpara':
+            subsubsubparaNum++;
+            label = '(' + letters[subsubsubparaNum - 1] + ')';
+            break;
+        }
+        
+        labelSpan.textContent = label;
+      });
+    }
+
+    // Drag and drop handlers
+    let draggedItem = null;
+
+    function handleDragStart(e) {
+      draggedItem = this;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd(e) {
+      this.classList.remove('dragging');
+      document.querySelectorAll('.para-item').forEach(item => {
+        item.classList.remove('drag-over');
+      });
+      draggedItem = null;
+      updateParaLabels();
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      if (this !== draggedItem) {
+        this.classList.add('drag-over');
+      }
+    }
+
+    function handleDragLeave(e) {
+      this.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      this.classList.remove('drag-over');
+      
+      if (this !== draggedItem) {
+        const list = document.getElementById('paraList');
+        const items = [...list.querySelectorAll('.para-item')];
+        const draggedIndex = items.indexOf(draggedItem);
+        const dropIndex = items.indexOf(this);
+        
+        if (draggedIndex < dropIndex) {
+          this.parentNode.insertBefore(draggedItem, this.nextSibling);
+        } else {
+          this.parentNode.insertBefore(draggedItem, this);
+        }
+      }
+    }
+
+    function addCopy() {
+      const list = document.getElementById('copyList');
+      const div = document.createElement('div');
+      div.className = 'dynamic-item';
+      div.innerHTML = `
+        <input type="text" name="copy[]" placeholder="S-3, MCD-POM">
+        <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">✕</button>
+      `;
+      list.appendChild(div);
+    }
+
+    // Collect form data
+    function collectData() {
+      return {
+        ssic: document.getElementById('ssic').value.trim(),
+        date: document.getElementById('date').value.trim(),
+        classification: document.getElementById('classification').value,
+        branch: document.querySelector('input[name="branch"]:checked').value,
+        useLetterhead: document.getElementById('useLetterhead').checked,
+        unitName: document.getElementById('unitName').value.trim(),
+        unitAddress: document.getElementById('unitAddress').value.trim(),
+        hasSeal: sealData !== null,
+        sealFilename: sealFilename,
+        from: document.getElementById('from').value.trim(),
+        to: document.getElementById('to').value.trim(),
+        via: Array.from(document.querySelectorAll('input[name="via[]"]')).map(i => i.value.trim()).filter(v => v),
+        subj: document.getElementById('subj').value.trim(),
+        refs: Array.from(document.querySelectorAll('input[name="ref[]"]')).map(i => i.value.trim()).filter(v => v),
+        encls: Array.from(document.querySelectorAll('input[name="encl[]"]')).map(i => i.value.trim()).filter(v => v),
+        paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => ({
+          type: t.dataset.type,
+          text: t.value.trim()
+        })).filter(p => p.text),
+        sigName: document.getElementById('sigName').value.trim(),
+        sigRank: document.getElementById('sigRank').value.trim(),
+        sigTitle: document.getElementById('sigTitle').value.trim(),
+        byDirection: document.getElementById('byDirection').checked,
+        copies: Array.from(document.querySelectorAll('input[name="copy[]"]')).map(i => i.value.trim()).filter(v => v)
+      };
+    }
+
+    // Escape LaTeX special characters
+    function escapeLatex(str) {
+      if (!str) return '';
+      return str
+        .replace(/\\/g, '\\textbackslash{}')
+        .replace(/&/g, '\\&')
+        .replace(/%/g, '\\%')
+        .replace(/\$/g, '\\$')
+        .replace(/#/g, '\\#')
+        .replace(/_/g, '\\_')
+        .replace(/\{/g, '\\{')
+        .replace(/\}/g, '\\}')
+        .replace(/~/g, '\\textasciitilde{}')
+        .replace(/\^/g, '\\textasciicircum{}');
+    }
+
+    // Generate LaTeX code
+    function generateTex() {
+      const d = collectData();
+      const refLetters = 'abcdefghijklmnopqrstuvwxyz';
+      
+      let tex = `%% Naval Letter - Generated ${new Date().toISOString()}
+%% Per SECNAV M-5216.5 (Department of the Navy Correspondence Manual)
+
+\\documentclass[12pt,oneside]{article}
+
+\\usepackage[letterpaper,top=1in,bottom=1in,left=1in,right=1in,headheight=26pt,headsep=12pt,footskip=0.5in]{geometry}
+\\usepackage{mathptmx}
+\\usepackage{setspace}
+\\usepackage{fancyhdr}
+\\usepackage{graphicx}
+\\usepackage{lastpage}
+\\usepackage{tikz}
+\\usepackage{eso-pic}
+
+\\singlespacing
+\\setlength{\\parindent}{0pt}
+\\setlength{\\parskip}{0pt}
+
+%% First page style - no header, no page number
+\\fancypagestyle{firstpage}{
+  \\fancyhf{}
+  \\renewcommand{\\headrulewidth}{0pt}
+}
+
+%% Continuation pages - subject at top, page number at bottom center (.5" from bottom)
+\\fancypagestyle{continuation}{
+  \\fancyhf{}
+  \\renewcommand{\\headrulewidth}{0pt}
+  \\fancyhead[L]{\\small Subj:\\hspace{0.375in}${escapeLatex(d.subj.toUpperCase())}}
+  \\fancyfoot[C]{\\thepage}
+}
+
+\\pagestyle{continuation}
+
+\\newlength{\\labeltab}
+\\setlength{\\labeltab}{0.625in}
+
+%% Paragraph indentation per SECNAV M-5216.5
+%% Each sub-level's label aligns with the first letter of text from level above
+
+%% Measure actual label widths including 2 trailing spaces
+\\newlength{\\Lmain}
+\\settowidth{\\Lmain}{1.\\ \\ }
+
+\\newlength{\\Lsub}
+\\settowidth{\\Lsub}{a.\\ \\ }
+
+\\newlength{\\Lsubsub}
+\\settowidth{\\Lsubsub}{(1)\\ \\ }
+
+\\newlength{\\Lsubsubsub}
+\\settowidth{\\Lsubsubsub}{(a)\\ \\ }
+
+\\begin{document}
+\\thispagestyle{firstpage}
+
+%% First page: .625" from top of page to top of letterhead
+\\vspace*{-0.5in}
+
+`;
+
+      if (d.classification) {
+        tex += `\\begin{center}\\textbf{${escapeLatex(d.classification)}}\\end{center}
+\\vspace{6pt}
+
+`;
+      }
+
+      if (d.useLetterhead) {
+        if (d.hasSeal) {
+          // Seal positioned absolutely: .5" from left edge, .5" from top edge, 1" diameter
+          // Font sizes per SECNAV M-5216.5: 10pt Bold, 8pt
+          tex += `%% Letterhead with seal - per SECNAV M-5216.5
+\\AddToShipoutPictureBG*{%
+  \\AtPageUpperLeft{%
+    \\put(0.5in,-1.5in){\\includegraphics[width=1in]{${d.sealFilename}}}%
+  }%
+}
+\\begin{center}
+`;
+          if (d.unitName) {
+            tex += `{\\fontsize{10}{11}\\selectfont\\textbf{${escapeLatex(d.unitName.toUpperCase())}}}\\\\
+`;
+          }
+          if (d.unitAddress) {
+            const addressLines = d.unitAddress.split('\n').map(line => line.trim()).filter(line => line);
+            addressLines.forEach(line => {
+              tex += `{\\fontsize{8}{9}\\selectfont ${escapeLatex(line)}}\\\\
+`;
+            });
+          }
+          tex += `\\end{center}
+\\vspace{6pt}
+
+`;
+        } else {
+          // No seal, just centered letterhead
+          tex += `\\begin{center}
+`;
+          if (d.unitName) {
+            tex += `{\\fontsize{10}{11}\\selectfont\\textbf{${escapeLatex(d.unitName.toUpperCase())}}}\\\\
+`;
+          }
+          if (d.unitAddress) {
+            const addressLines = d.unitAddress.split('\n').map(line => line.trim()).filter(line => line);
+            addressLines.forEach(line => {
+              tex += `{\\fontsize{8}{9}\\selectfont ${escapeLatex(line)}}\\\\
+`;
+            });
+          }
+          tex += `\\end{center}
+\\vspace{6pt}
+
+`;
+        }
+      }
+
+      tex += `\\begin{flushright}
+${escapeLatex(d.ssic)}\\\\
+${escapeLatex(d.date)}
+\\end{flushright}
+
+\\vspace{\\baselineskip}
+
+\\noindent\\makebox[\\labeltab][l]{From:}${escapeLatex(d.from)}
+
+\\noindent\\makebox[\\labeltab][l]{To:}${escapeLatex(d.to)}
+
+`;
+
+      // Via lines - numbered (1), (2), (3), (4) per SECNAV M-5216.5
+      if (d.via.length > 0) {
+        d.via.forEach((via, i) => {
+          if (i === 0) {
+            tex += `\\noindent\\makebox[\\labeltab][l]{Via:}(${i + 1}) ${escapeLatex(via)}`;
+          } else {
+            tex += `\\\\
+\\hspace*{\\labeltab}(${i + 1}) ${escapeLatex(via)}`;
+          }
+        });
+        tex += `
+
+`;
+      }
+
+      tex += `\\vspace{\\baselineskip}
+\\noindent\\makebox[\\labeltab][l]{Subj:}${escapeLatex(d.subj.toUpperCase())}
+
+`;
+
+      if (d.refs.length > 0) {
+        tex += `\\vspace{\\baselineskip}
+\\noindent\\makebox[\\labeltab][l]{Ref:}%
+\\begin{minipage}[t]{\\dimexpr\\textwidth-\\labeltab\\relax}
+`;
+        d.refs.forEach((ref, i) => {
+          tex += `(${refLetters[i]}) ${escapeLatex(ref)}`;
+          if (i < d.refs.length - 1) tex += `\\\\*\n`;
+          else tex += `\n`;
+        });
+        tex += `\\end{minipage}
+
+`;
+      }
+
+      if (d.encls.length > 0) {
+        tex += `\\vspace{\\baselineskip}
+\\noindent\\makebox[\\labeltab][l]{Encl:}%
+\\begin{minipage}[t]{\\dimexpr\\textwidth-\\labeltab\\relax}
+`;
+        d.encls.forEach((encl, i) => {
+          tex += `(${i + 1}) ${escapeLatex(encl)}`;
+          if (i < d.encls.length - 1) tex += `\\\\*\n`;
+          else tex += `\n`;
+        });
+        tex += `\\end{minipage}
+
+`;
+      }
+
+      if (d.paras.length > 0) {
+        let paraNum = 0;
+        let subparaNum = 0;
+        let subsubparaNum = 0;
+        let subsubsubparaNum = 0;
+        
+        for (const para of d.paras) {
+          if (para.type === 'para') {
+            paraNum++;
+            subparaNum = 0;
+            subsubparaNum = 0;
+            subsubsubparaNum = 0;
+            tex += `\\par\\vspace{\\baselineskip}
+\\noindent ${paraNum}.\\ \\ ${escapeLatex(para.text)}
+
+`;
+          } else if (para.type === 'subpara') {
+            subparaNum++;
+            subsubparaNum = 0;
+            subsubsubparaNum = 0;
+            tex += `\\par\\vspace{\\baselineskip}
+\\noindent\\hspace{\\Lmain}${letters[subparaNum - 1]}.\\ \\ ${escapeLatex(para.text)}
+
+`;
+          } else if (para.type === 'subsubpara') {
+            subsubparaNum++;
+            subsubsubparaNum = 0;
+            tex += `\\par\\vspace{\\baselineskip}
+\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${subsubparaNum})\\ \\ ${escapeLatex(para.text)}
+
+`;
+          } else if (para.type === 'subsubsubpara') {
+            subsubsubparaNum++;
+            tex += `\\par\\vspace{\\baselineskip}
+\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${letters[subsubsubparaNum - 1]})\\ \\ ${escapeLatex(para.text)}
+
+`;
+          }
+        }
+      }
+
+      if (d.sigName || d.sigRank || d.sigTitle) {
+        // Signature block: 4 lines below last text, begins center of page
+        tex += `\\par\\vspace{4\\baselineskip}
+\\hspace*{3.25in}${escapeLatex(d.sigName.toUpperCase())}`;
+        if (d.byDirection) {
+          tex += `\\\\
+\\hspace*{3.25in}By direction`;
+        }
+        tex += `
+
+`;
+      }
+
+      if (d.copies.length > 0) {
+        // Copy to: 2 lines below signature block
+        tex += `\\par\\vspace{2\\baselineskip}
+\\noindent Copy to:\\\\
+`;
+        d.copies.forEach((copy, i) => {
+          tex += escapeLatex(copy);
+          if (i < d.copies.length - 1) tex += `\\\\*\n`;
+          else tex += `\n`;
+        });
+      }
+
+      if (d.classification) {
+        tex += `
+\\vfill
+\\begin{center}\\textbf{${escapeLatex(d.classification)}}\\end{center}
+`;
+      }
+
+      tex += `\\end{document}
+`;
+
+      return tex;
+    }
+
+    // Preview
+    function previewTex() {
+      const tex = generateTex();
+      document.getElementById('previewContent').textContent = tex;
+      document.getElementById('previewSection').classList.add('show');
+    }
+
+    // Download .tex file
+    function downloadTex() {
+      const tex = generateTex();
+      const blob = new Blob([tex], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      
+      const d = collectData();
+      const filename = d.subj ? 
+        d.subj.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30) + '.tex' : 
+        'naval_letter.tex';
+      
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showStatus('success', 'Downloaded ' + filename);
+    }
+
+    // Download ZIP
+    async function downloadZip() {
+      const tex = generateTex();
+      const d = collectData();
+      
+      if (typeof JSZip === 'undefined') {
+        showStatus('error', 'ZIP library not loaded. Check internet connection.');
+        return;
+      }
+      
+      showStatus('loading', 'Creating ZIP file...');
+      
+      try {
+        const zip = new JSZip();
+        zip.file('naval_letter.tex', tex);
+        
+        if (sealData && sealFilename) {
+          const base64Data = sealData.split(',')[1];
+          zip.file(sealFilename, base64Data, {base64: true});
+        }
+        
+        const readme = `Naval Letter Package
+====================
+
+To compile:
+1. Go to https://www.overleaf.com
+2. New Project → Upload Project → Select this ZIP
+3. Click "Recompile" (green button)
+4. Download the PDF
+
+Generated by Naval Letter Generator
+Per SECNAV M-5216.5
+`;
+        zip.file('README.txt', readme);
+        
+        const blob = await zip.generateAsync({type: 'blob'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        
+        const filename = d.subj ? 
+          d.subj.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30) + '.zip' : 
+          'naval_letter.zip';
+        
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showStatus('success', 'Downloaded ' + filename);
+        
+      } catch (error) {
+        showStatus('error', 'Failed to create ZIP: ' + error.message);
+      }
+    }
+
+    // Copy to clipboard
+    async function copyToClipboard() {
+      const tex = generateTex();
+      
+      try {
+        await navigator.clipboard.writeText(tex);
+        showStatus('success', 'Copied to clipboard!');
+      } catch (error) {
+        const textArea = document.createElement('textarea');
+        textArea.value = tex;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showStatus('success', 'Copied to clipboard!');
+      }
+    }
+
+    // Open in Overleaf
+    function openInOverleafDirect() {
+      const d = collectData();
+      
+      if (d.hasSeal) {
+        const proceed = confirm(
+          "You have a seal/emblem attached.\n\n" +
+          "The 'Open in Overleaf' option cannot include images.\n\n" +
+          "For letters with seals, use 'Download ZIP' instead.\n\n" +
+          "Continue without seal?"
+        );
+        if (!proceed) return;
+      }
+      
+      const tex = generateTex();
+      
+      showStatus('loading', 'Opening Overleaf...');
+      
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = 'https://www.overleaf.com/docs';
+      form.target = '_blank';
+      form.style.display = 'none';
+      
+      const snipInput = document.createElement('input');
+      snipInput.type = 'hidden';
+      snipInput.name = 'snip';
+      snipInput.value = tex;
+      form.appendChild(snipInput);
+      
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+      
+      showStatus('success', 'Overleaf opened! Click "Recompile" then download PDF.');
+    }
+
+    function showStatus(type, message) {
+      const status = document.getElementById('status');
+      status.className = `status show ${type}`;
+      status.textContent = message;
+      
+      if (type !== 'loading') {
+        setTimeout(() => {
+          status.classList.remove('show');
+        }, 5000);
+      }
+    }
+  </script>
+</body>
+</html>
