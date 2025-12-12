@@ -37,7 +37,19 @@ Just open the link, fill in your information, and download your PDF.
 
 ---
 
-## ✨ What's New (v1.1 Beta)
+## ✨ What's New
+
+### v1.2 Beta (12 Dec 24)
+
+- **🔍 SSIC Search** - Type a subject like "leave" or "training" and get matching codes. 100+ SSICs in the database.
+- **🏢 Unit Database** - Search 60+ units (all MEFs, divisions, regiments, bases, schools) and auto-fill letterhead.
+- **📅 Smart Date Entry** - Type any format (12/25/24, "Dec 25 2024", "today") and it auto-converts to DD Mon YY.
+- **🏛️ Seal in PDF** - Upload your PNG/JPG seal and it now appears directly in the PDF. No Overleaf required.
+- **📋 Endorsement Format** - Switch between Basic Letter and Endorsement with one click.
+- **📁 Collapsible Sections** - Via, References, Enclosures collapse by default for a cleaner UI.
+- **🎨 Cleaner Design** - Refined interface with better spacing, subtle shadows, and gold accents.
+
+### v1.1 Beta (11 Dec 24)
 
 - **Direct PDF Download** - No more Overleaf step for basic letters. Click "Download PDF" and you're done.
 - **Instant Results** - Generate a formatted naval letter in under a minute
@@ -48,8 +60,34 @@ Just open the link, fill in your information, and download your PDF.
 
 ## Features
 
-### ⬇️ One-Click PDF Generation (NEW!)
-Click "Download PDF" and get your formatted letter instantly. No external tools, no accounts, no waiting for compilation. For 90% of use cases, this is all you need.
+### ⬇️ One-Click PDF Generation
+Click "Download PDF" and get your formatted letter instantly. Your uploaded seal appears in the PDF. No external tools, no accounts, no waiting.
+
+### 🔍 SSIC Search (100+ Codes)
+Type a subject and get matching SSIC codes instantly:
+- **1000s** — Personnel (promotions, leave, assignments, awards, fitness reports, NJP)
+- **3000s** — Operations (OPSEC, training, PFT/CFT, marksmanship)
+- **4000s** — Logistics (supply, maintenance, transportation)
+- **5000s** — Admin (records, FOIA, security clearances, urinalysis, EO)
+- **6000s** — Medical (LIMDU, dental readiness, mental health)
+- **7000s** — Financial (travel, PCS, TAD, pay)
+- **10000+** — Weapons, Communications, Intelligence, Aviation
+
+### 🏢 Unit Database (60+ Units)
+Search and auto-fill your letterhead:
+- HQMC, MCCDC, TECOM, MCICOM, LOGCOM, MARFORRES
+- I/II/III MEF, 1st/2nd/3rd MarDiv, 1st/2nd/3rd MAW, 1st/2nd/3rd MLG
+- All infantry regiments (1st, 2nd, 5th, 6th, 7th, 8th Marines)
+- Bases (Pendleton, Lejeune, Quantico, 29 Palms, MCBH)
+- Air stations (Miramar, Cherry Point, Yuma, Beaufort)
+- Schools (TBS, OCS, IOC, SOI, EWS, C&S, War College)
+- Special units (MSG Bn, SECFOR, CBIRF, MCD DLI)
+
+### 📋 Endorsement Format
+Switch between Basic Letter and Endorsement. First/Second/Third endorsement headers generated automatically.
+
+### 🏛️ Custom Seal Upload
+Upload your unit's PNG or JPG seal. It appears in the PDF at regulation position (0.5" from edges, 1" diameter).
 
 ### 📄 Full SECNAV M-5216.5 Compliance
 Every measurement, margin, and spacing rule from the correspondence manual is built in:
@@ -128,14 +166,68 @@ Click and drag paragraphs to reorganize. Numbering updates automatically.
 
 ### Advanced Options
 
-**Need a unit seal in your letter?**
-1. Upload your seal image in the Letterhead section
-2. Click "Download ZIP" instead of "Download PDF"
-3. Upload the ZIP to [Overleaf.com](https://www.overleaf.com/) → New Project → Upload
-4. Click "Recompile" → Download PDF
+**Using a custom seal:**
+1. Upload your seal image (PNG or JPG) in the Letterhead section
+2. Click "Download PDF" — the seal appears in your PDF automatically!
 
-**Need pixel-perfect output?**
-Use "Open in Overleaf" for precise LaTeX compilation. This produces the most accurate output but requires the extra Overleaf step.
+**Need pixel-perfect output or LaTeX control?**
+Use "Open in Overleaf" or "Download ZIP" for precise LaTeX compilation.
+
+---
+
+## 📄 Sample Output
+
+Here's what the tool generates — this is an actual PDF created by the generator:
+
+**[Download Example PDF](https://github.com/jeranaias/navalletterformat/raw/main/naval_letter_example.pdf)**
+
+Preview:
+```
+                         UNITED STATES MARINE CORPS
+                           MARINE CORPS DETACHMENT
+               DEFENSE LANGUAGE INSTITUTE FOREIGN LANGUAGE CENTER
+                        PRESIDIO OF MONTEREY, CA 93944
+
+                                                                    1500
+                                                                    S-3
+                                                                    12 Dec 24
+
+From:  Commanding Officer, Marine Corps Detachment
+To:    Commandant of the Marine Corps (MMEA-25)
+Via:   (1)  Commanding General, Training and Education Command
+
+Subj:  REQUEST FOR ADDITIONAL INSTRUCTOR BILLETS
+
+Ref:   (a)  MCO 1500.52A
+       (b)  TECOM ltr 1500 S-3 dtd 15 Nov 24
+
+Encl:  (1)  Manning Document
+       (2)  Student Throughput Analysis
+
+1.  Per reference (a), this command requests three additional instructor
+    billets to support increased student throughput beginning FY25.
+
+2.  Background.  Current manning supports 45 students per class cycle.
+    Projected requirements indicate 60 students per cycle beginning
+    October 2025.
+
+    a.  Current instructor-to-student ratio is 1:9.
+
+    b.  Proposed ratio maintains quality at 1:10.
+
+3.  Recommendation.  Approve the addition of three 0211 billets to T/O
+    01234.
+
+4.  Point of contact is the undersigned at DSN 555-1234.
+
+
+                              J. M. SMITH
+                              LtCol, USMC
+                              Commanding Officer
+
+Copy to:
+CG, TECOM (C 469)
+```
 
 ---
 
@@ -144,9 +236,9 @@ Use "Open in Overleaf" for precise LaTeX compilation. This produces the most acc
 We're actively working on improvements. Current known issues:
 
 - [ ] Direct PDF may have minor spacing differences from LaTeX output on complex multi-page letters
-- [ ] Seal images only work through the Overleaf/ZIP workflow
+- [x] ~~Seal images only work through the Overleaf/ZIP workflow~~ **Fixed in v1.2!**
 - [ ] No save/load functionality yet (refresh = start over)
-- [ ] Single letter format only (no endorsements or memoranda yet)
+- [x] ~~Single letter format only (no endorsements or memoranda yet)~~ **Endorsements added in v1.2!**
 
 **See something else?** [Report it here](https://github.com/jeranaias/navalletterformat/issues)
 
@@ -157,10 +249,10 @@ We're actively working on improvements. Current known issues:
 We're prioritizing based on user feedback. Current plans:
 
 - [ ] Save/load letter drafts (localStorage)
-- [ ] Seal support in direct PDF generation
-- [ ] Endorsement letter format
+- [x] ~~Seal support in direct PDF generation~~ **Done!**
+- [x] ~~Endorsement letter format~~ **Done!**
 - [ ] Memorandum format
-- [ ] Spell check integration
+- [ ] More units and SSICs (request yours!)
 - [ ] Print directly from browser
 - [ ] Dark mode (for the night shift)
 
