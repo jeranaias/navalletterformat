@@ -3,8 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Naval Letter Generator</title>
+  <title>Naval Letter Generator | SECNAV M-5216.5</title>
   <style>
+    :root {
+      --navy: #003366;
+      --navy-light: #004488;
+      --gold: #b89d5b;
+      --gold-light: #d4b86a;
+      --bg: #f5f5f0;
+      --white: #ffffff;
+      --gray-100: #f8f9fa;
+      --gray-200: #e9ecef;
+      --gray-300: #dee2e6;
+      --gray-400: #ced4da;
+      --gray-500: #adb5bd;
+      --gray-600: #6c757d;
+      --gray-700: #495057;
+      --gray-800: #343a40;
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --radius: 6px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -12,264 +35,326 @@
     }
 
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f0f0e8;
-      color: #333;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--bg);
+      color: var(--gray-800);
       min-height: 100vh;
-      padding: 20px;
+      line-height: 1.5;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 880px;
       margin: 0 auto;
+      padding: 20px;
     }
 
+    /* Header */
     header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      padding: 24px 20px;
+      text-align: center;
+      border-bottom: 4px solid var(--gold);
+      margin-bottom: 20px;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+
+    header h1 {
+      color: var(--white);
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    header .subtitle {
+      color: var(--gold-light);
+      font-size: 0.85rem;
+      font-weight: 400;
+    }
+
+    .intro-link {
       text-align: center;
       margin-bottom: 20px;
-      padding: 15px 20px;
-      background: #004481;
-      border-bottom: 4px solid #bf9b30;
+      font-size: 0.9rem;
+      color: var(--gray-600);
     }
 
-    h1 {
-      color: #fff;
-      font-size: 1.6rem;
-      margin-bottom: 5px;
+    .intro-link a {
+      color: var(--navy);
+      font-weight: 600;
+      text-decoration: none;
     }
 
-    .subtitle {
-      color: #d4c5a0;
-      font-size: 0.85rem;
+    .intro-link a:hover {
+      text-decoration: underline;
     }
 
+    /* Form Sections */
     .form-section {
-      background: #fff;
-      padding: 20px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-top: 3px solid #004481;
+      background: var(--white);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border-left: 3px solid var(--navy);
     }
 
     .section-title {
-      color: #004481;
-      font-size: 1rem;
-      font-weight: bold;
-      margin-bottom: 15px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #ddd;
+      color: var(--navy);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 16px;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    /* Form Elements */
     .form-row {
       display: flex;
-      gap: 15px;
-      margin-bottom: 15px;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .form-row:last-child {
+      margin-bottom: 0;
     }
 
     .form-group {
       flex: 1;
-      display: flex;
-      flex-direction: column;
+      min-width: 180px;
     }
 
     .form-group.small {
-      flex: 0 0 150px;
+      flex: 0 0 140px;
+      min-width: 120px;
+    }
+
+    .form-group.medium {
+      flex: 0 0 200px;
     }
 
     label {
-      font-size: 0.85rem;
-      color: #333;
-      font-weight: bold;
-      margin-bottom: 5px;
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 6px;
     }
 
     input, textarea, select {
-      background: #fff;
-      border: 1px solid #999;
-      padding: 8px 10px;
-      color: #333;
+      width: 100%;
+      padding: 10px 12px;
       font-size: 0.9rem;
-      font-family: inherit;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius);
+      background: var(--white);
+      color: var(--gray-800);
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     input:focus, textarea:focus, select:focus {
       outline: none;
-      border-color: #004481;
-      box-shadow: 0 0 3px rgba(0, 68, 129, 0.3);
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
     }
 
     textarea {
       resize: vertical;
-      min-height: 70px;
-    }
-
-    .dynamic-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .dynamic-item {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .dynamic-item input, .dynamic-item textarea {
-      flex: 1;
-    }
-
-    .btn {
-      padding: 8px 16px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: bold;
-      transition: all 0.2s;
-    }
-
-    .btn-add {
-      background: #004481;
-      color: #fff;
-      align-self: flex-start;
-      margin-top: 5px;
-    }
-
-    .btn-add:hover {
-      background: #003366;
-    }
-
-    .btn-remove {
-      background: #8b0000;
-      color: #fff;
-      padding: 6px 10px;
-      flex-shrink: 0;
-    }
-
-    .btn-remove:hover {
-      background: #a00000;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 25px 0;
-      padding: 20px;
-      background: #004481;
-    }
-
-    .btn-primary {
-      background: #bf9b30;
-      color: #000;
-      padding: 12px 24px;
-      font-size: 0.95rem;
-    }
-
-    .btn-primary:hover {
-      background: #d4aa33;
-    }
-
-    .btn-secondary {
-      background: #fff;
-      color: #004481;
-      border: 2px solid #fff;
-      padding: 10px 20px;
-      font-size: 0.9rem;
-    }
-
-    .btn-secondary:hover {
-      background: #e8e8e0;
-    }
-
-    .preview-section {
-      background: #fff;
-      border: 1px solid #ccc;
-      padding: 20px;
-      margin-top: 20px;
-      display: none;
-    }
-
-    .preview-section.show {
-      display: block;
-    }
-
-    .preview-section h3 {
-      color: #004481;
-      margin-bottom: 15px;
-      font-size: 1rem;
-      text-transform: uppercase;
-    }
-
-    .preview-content {
-      background: #f8f8f0;
-      border: 1px solid #ccc;
-      padding: 15px;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 0.75rem;
-      white-space: pre-wrap;
-      max-height: 400px;
-      overflow-y: auto;
-      color: #333;
-    }
-
-    .status {
-      text-align: center;
-      padding: 12px;
-      margin: 15px 0;
-      display: none;
-      font-weight: bold;
-    }
-
-    .status.show {
-      display: block;
-    }
-
-    .status.loading {
-      background: #e8e8d8;
-      color: #333;
-      border: 1px solid #999;
-    }
-
-    .status.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #28a745;
-    }
-
-    .status.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #dc3545;
-    }
-
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .checkbox-group input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-    }
-
-    .para-type {
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: #fff;
-      background: #004481;
-      padding: 4px 8px;
-      min-width: 45px;
-      text-align: center;
+      min-height: 80px;
     }
 
     .help-text {
       font-size: 0.75rem;
-      color: #666;
-      margin-top: 5px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--navy-light);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: var(--white);
+    }
+
+    .btn-success:hover {
+      background: #218838;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--gray-200);
+      color: var(--gray-700);
+    }
+
+    .btn-secondary:hover {
+      background: var(--gray-300);
+    }
+
+    .btn-add {
+      background: transparent;
+      color: var(--navy);
+      border: 1px dashed var(--navy);
+      padding: 8px 14px;
+      font-size: 0.8rem;
+    }
+
+    .btn-add:hover {
+      background: rgba(0, 51, 102, 0.05);
+    }
+
+    .btn-remove {
+      background: transparent;
+      color: var(--danger);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+
+    .btn-remove:hover {
+      background: rgba(220, 53, 69, 0.1);
+    }
+
+    /* Document Type Selector */
+    .doc-type-selector {
+      display: flex;
+      gap: 12px;
+    }
+
+    .doc-type-option {
+      flex: 1;
+      padding: 16px;
+      border: 2px solid var(--gray-300);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .doc-type-option:hover {
+      border-color: var(--navy);
+      background: var(--gray-100);
+    }
+
+    .doc-type-option.selected {
+      border-color: var(--navy);
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .doc-type-option h3 {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .doc-type-option p {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    /* Search/Autocomplete */
+    .search-container {
+      position: relative;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 100;
+      display: none;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .search-results.show {
+      display: block;
+    }
+
+    .search-result-item {
+      padding: 10px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--gray-200);
+      transition: background 0.15s;
+    }
+
+    .search-result-item:hover {
+      background: var(--gray-100);
+    }
+
+    .search-result-item:last-child {
+      border-bottom: none;
+    }
+
+    .search-result-item .code {
+      font-weight: 600;
+      color: var(--navy);
+      font-size: 0.9rem;
+    }
+
+    .search-result-item .desc {
+      font-size: 0.8rem;
+      color: var(--gray-600);
+      margin-top: 2px;
+    }
+
+    /* Toggle/Checkbox */
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toggle-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--navy);
+    }
+
+    .toggle-group label {
+      margin-bottom: 0;
+      font-weight: 500;
+      cursor: pointer;
     }
 
     .branch-toggle {
@@ -280,154 +365,328 @@
     .branch-toggle label {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      font-weight: 500;
       cursor: pointer;
-      font-weight: normal;
     }
 
-    .classification-select {
-      width: 200px;
+    .branch-toggle input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--navy);
     }
 
-    footer {
-      text-align: center;
-      margin-top: 30px;
-      padding: 15px;
-      background: #004481;
-      color: #d4c5a0;
-      font-size: 0.8rem;
-    }
-
-    @media (max-width: 600px) {
-      .form-row {
-        flex-direction: column;
-      }
-      .form-group.small {
-        flex: 1;
-      }
-    }
-
+    /* Seal Upload */
     .seal-upload-area {
-      margin-top: 10px;
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .seal-upload-area:hover {
+      border-color: var(--navy);
+      background: var(--gray-100);
+    }
+
+    .seal-upload-area.has-image {
+      border-style: solid;
+      border-color: var(--success);
     }
 
     .seal-preview {
-      margin-top: 10px;
-      text-align: center;
+      margin-top: 12px;
     }
 
     .seal-preview img {
-      max-width: 150px;
-      max-height: 150px;
-      border: 2px solid #004481;
-      background: #fff;
-      padding: 5px;
+      max-width: 100px;
+      max-height: 100px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
     }
 
-    #letterheadFields {
-      padding-top: 15px;
-      border-top: 1px solid #ddd;
-      margin-top: 15px;
+    /* Dynamic Lists */
+    .dynamic-list {
+      margin-bottom: 12px;
+    }
+
+    .dynamic-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+
+    .dynamic-item .item-label {
+      min-width: 32px;
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      font-weight: 500;
+    }
+
+    .dynamic-item input {
+      flex: 1;
+    }
+
+    /* Collapsible */
+    .collapsible-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 4px 0;
+      user-select: none;
+    }
+
+    .collapsible-header:hover .section-title {
+      color: var(--navy-light);
+    }
+
+    .collapsible-icon {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      transition: transform 0.2s;
+    }
+
+    .collapsible-header.expanded .collapsible-icon {
+      transform: rotate(180deg);
+    }
+
+    .collapsible-content {
+      display: none;
+      padding-top: 16px;
+    }
+
+    .collapsible-content.show {
+      display: block;
+    }
+
+    /* Paragraphs */
+    .para-container {
+      margin-bottom: 12px;
     }
 
     .para-item {
-      cursor: grab;
-      transition: all 0.2s;
-      border: 1px solid #ddd;
-      padding: 8px;
-      margin: 4px 0;
-      background: #fafaf5;
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding: 12px;
+      background: var(--gray-100);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius);
       position: relative;
+      transition: all 0.2s;
     }
 
     .para-item:hover {
-      border-color: #004481;
-      background: #f0f0e8;
+      border-color: var(--gray-400);
     }
 
     .para-item.active {
-      border-color: #bf9b30;
-      background: #fffde8;
-      box-shadow: 0 0 5px rgba(191, 155, 48, 0.3);
+      border-color: var(--navy);
+      background: rgba(0, 51, 102, 0.03);
+      box-shadow: var(--shadow);
     }
 
-    .para-item.dragging {
-      opacity: 0.5;
+    .para-item .drag-handle {
+      cursor: grab;
+      color: var(--gray-400);
+      padding: 4px;
+      font-size: 1rem;
+    }
+
+    .para-item .drag-handle:active {
       cursor: grabbing;
     }
 
-    .para-item.drag-over {
-      border-color: #bf9b30;
-      border-style: dashed;
+    .para-item .para-label {
+      min-width: 40px;
+      font-weight: 600;
+      color: var(--navy);
+      padding-top: 10px;
+      font-size: 0.9rem;
     }
 
-    .para-inline-buttons {
+    .para-item textarea {
+      flex: 1;
+      min-height: 70px;
+      font-size: 0.9rem;
+    }
+
+    .para-actions {
       display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--navy);
+      padding: 10px;
+      border-radius: 0 0 var(--radius) var(--radius);
+      z-index: 10;
       gap: 8px;
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed #ccc;
+      flex-wrap: wrap;
+      margin-top: -1px;
     }
 
-    .para-item.active .para-inline-buttons {
+    .para-item.active .para-actions {
       display: flex;
+    }
+
+    .para-actions .btn {
+      background: rgba(255,255,255,0.15);
+      color: var(--white);
+      padding: 6px 12px;
+      font-size: 0.75rem;
+    }
+
+    .para-actions .btn:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .para-actions .btn-remove {
+      background: rgba(220, 53, 69, 0.8);
+    }
+
+    /* Actions Bar */
+    .actions-bar {
+      background: var(--white);
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    .btn-inline {
-      background: #004481;
-      color: #fff;
-      padding: 4px 10px;
-      font-size: 0.75rem;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn-inline:hover {
-      background: #003366;
-    }
-
-    .btn-inline.sibling {
-      background: #2e7d32;
-    }
-
-    .btn-inline.sibling:hover {
-      background: #1b5e20;
-    }
-
-    .drag-handle {
-      color: #666;
-      margin-right: 8px;
-      cursor: grab;
-      user-select: none;
-      font-size: 1.1rem;
-    }
-
-    .drag-handle:hover {
-      color: #004481;
-    }
-
+    /* Info Box */
     .info-box {
-      text-align: center;
-      margin-top: 15px;
-      padding: 15px;
-      background: #fffde8;
-      border: 1px solid #bf9b30;
-    }
-
-    .info-box p {
-      color: #333;
+      background: var(--gray-100);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius);
+      padding: 14px 16px;
       font-size: 0.85rem;
-      line-height: 1.6;
-    }
-
-    .info-box strong {
-      color: #004481;
+      color: var(--gray-600);
     }
 
     .info-box a {
-      color: #004481;
-      font-weight: bold;
+      color: var(--navy);
+    }
+
+    .info-box.warning {
+      background: #fff8e6;
+      border-color: var(--warning);
+    }
+
+    /* Status */
+    .status {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      display: none;
+      font-size: 0.9rem;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .status.success {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+    }
+
+    .status.loading {
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      color: #856404;
+    }
+
+    /* Preview */
+    .preview-section {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-top: 16px;
+      display: none;
+    }
+
+    .preview-section.show {
+      display: block;
+    }
+
+    .preview-section h3 {
+      margin-bottom: 12px;
+      color: var(--navy);
+      font-size: 0.9rem;
+    }
+
+    .preview-content {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px;
+      font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+      font-size: 0.8rem;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: var(--radius);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 32px;
+      padding: 24px;
+      color: var(--gray-500);
+      font-size: 0.8rem;
+    }
+
+    footer a {
+      color: var(--gold);
+    }
+
+    footer p {
+      margin-bottom: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .form-row {
+        flex-direction: column;
+      }
+      
+      .form-group.small,
+      .form-group.medium {
+        flex: 1;
+        min-width: 100%;
+      }
+      
+      .doc-type-selector {
+        flex-direction: column;
+      }
+      
+      .actions {
+        flex-direction: column;
+      }
+      
+      .actions .btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -438,22 +697,50 @@
       <p class="subtitle">SECNAV M-5216.5 Compliant Correspondence</p>
     </header>
 
+    <p class="intro-link">
+      Free tool for Marines &amp; Sailors · <a href="https://github.com/jeranaias/navalletterformat#readme" target="_blank">Full Guide &amp; Documentation →</a>
+    </p>
+
     <form id="letterForm">
+      <!-- Document Type -->
+      <div class="form-section">
+        <h2 class="section-title">Document Type</h2>
+        <div class="doc-type-selector">
+          <div class="doc-type-option selected" data-type="basic" onclick="selectDocType('basic')">
+            <h3>📄 Basic Letter</h3>
+            <p>Standard correspondence format</p>
+          </div>
+          <div class="doc-type-option" data-type="endorsement" onclick="selectDocType('endorsement')">
+            <h3>📋 Endorsement</h3>
+            <p>Forward with comments</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Basic Info -->
       <div class="form-section">
-        <h2 class="section-title">Basic Information</h2>
+        <h2 class="section-title">Header Information</h2>
         <div class="form-row">
-          <div class="form-group small">
-            <label for="ssic">SSIC</label>
-            <input type="text" id="ssic" placeholder="1500" maxlength="5">
+          <div class="form-group medium">
+            <label>SSIC</label>
+            <div class="search-container">
+              <input type="text" id="ssicSearch" placeholder="Search or enter code..." autocomplete="off">
+              <div class="search-results" id="ssicResults"></div>
+            </div>
+            <p class="help-text">e.g., "leave" or "1050"</p>
           </div>
           <div class="form-group small">
-            <label for="date">Date (DD Mon YY)</label>
-            <input type="text" id="date" placeholder="01 Dec 2025">
+            <label>Office Code</label>
+            <input type="text" id="officeCode" placeholder="S-1">
           </div>
           <div class="form-group small">
-            <label for="classification">Classification</label>
-            <select id="classification" class="classification-select">
+            <label>Date</label>
+            <input type="text" id="date" placeholder="Auto-formats">
+            <p class="help-text">Any format works</p>
+          </div>
+          <div class="form-group small">
+            <label>Classification</label>
+            <select id="classification">
               <option value="">UNCLASSIFIED</option>
               <option value="CUI">CUI</option>
               <option value="FOUO">FOR OFFICIAL USE ONLY</option>
@@ -473,30 +760,50 @@
         </div>
       </div>
 
-      <!-- Letterhead / Seal -->
+      <!-- Letterhead -->
       <div class="form-section">
-        <h2 class="section-title">Letterhead &amp; Seal (Optional)</h2>
-        <div class="checkbox-group" style="margin-bottom: 15px;">
-          <input type="checkbox" id="useLetterhead">
-          <label for="useLetterhead" style="margin-bottom: 0;">Include generated letterhead</label>
+        <h2 class="section-title">Letterhead</h2>
+        <div class="toggle-group" style="margin-bottom: 16px;">
+          <input type="checkbox" id="useLetterhead" checked>
+          <label for="useLetterhead">Include letterhead on first page</label>
         </div>
-        <div id="letterheadFields" style="display: none;">
-          <div class="form-group">
-            <label for="unitName">Service/Organization (10pt Bold)</label>
-            <input type="text" id="unitName" placeholder="UNITED STATES MARINE CORPS">
-          </div>
-          <div class="form-group" style="margin-top: 15px;">
-            <label for="unitAddress">Unit Name &amp; Address (8pt, one line per entry)</label>
-            <textarea id="unitAddress" rows="3" placeholder="MARINE CORPS DETACHMENT&#10;DEFENSE LANGUAGE INSTITUTE FOREIGN LANGUAGE CENTER&#10;PRESIDIO OF MONTEREY, CALIFORNIA 93944-5006"></textarea>
-          </div>
-          <div class="form-group" style="margin-top: 15px;">
-            <label for="sealUpload">Unit Seal/Emblem (PNG, JPG)</label>
-            <div class="seal-upload-area">
-              <input type="file" id="sealUpload" accept="image/png,image/jpeg,image/jpg" onchange="handleSealUpload(event)">
-              <div id="sealPreview" class="seal-preview"></div>
-              <button type="button" id="removeSeal" class="btn btn-remove" style="display: none; margin-top: 10px;" onclick="removeSeal()">Remove Seal</button>
+        <div id="letterheadFields">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Find Unit (Optional)</label>
+              <div class="search-container">
+                <input type="text" id="unitSearch" placeholder="Search units..." autocomplete="off">
+                <div class="search-results" id="unitResults"></div>
+              </div>
+              <p class="help-text">Search or manually enter below</p>
             </div>
-            <p class="help-text">Recommended: PNG with transparent background, 300+ DPI</p>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Service/Organization</label>
+              <input type="text" id="unitName" placeholder="UNITED STATES MARINE CORPS">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Unit Name &amp; Address</label>
+              <textarea id="unitAddress" rows="3" placeholder="MARINE CORPS DETACHMENT&#10;DEFENSE LANGUAGE INSTITUTE&#10;PRESIDIO OF MONTEREY, CA 93944"></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Unit Seal (Optional - PNG or JPG)</label>
+              <div class="seal-upload-area" id="sealUploadArea" onclick="document.getElementById('sealUpload').click()">
+                <input type="file" id="sealUpload" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleSealUpload(event)">
+                <div id="sealPlaceholder">
+                  <div style="font-size: 2rem; margin-bottom: 8px;">📷</div>
+                  <div style="font-size: 0.85rem; color: var(--gray-600);">Click to upload seal image</div>
+                  <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 4px;">PNG or JPG, any size</div>
+                </div>
+                <div id="sealPreview" class="seal-preview" style="display:none;"></div>
+              </div>
+              <button type="button" id="removeSeal" class="btn btn-remove" style="display:none; margin-top: 8px;" onclick="removeSeal(event)">Remove Seal</button>
+            </div>
           </div>
         </div>
       </div>
@@ -504,50 +811,86 @@
       <!-- Addressing -->
       <div class="form-section">
         <h2 class="section-title">Addressing</h2>
-        <div class="form-group">
-          <label for="from">From</label>
-          <input type="text" id="from" placeholder="Commanding Officer, Marine Corps Detachment, Presidio of Monterey">
+        <div class="form-row">
+          <div class="form-group">
+            <label>From</label>
+            <input type="text" id="from" placeholder="Commanding Officer, Marine Corps Detachment">
+          </div>
         </div>
-        <div class="form-group" style="margin-top: 15px;">
-          <label for="to">To</label>
-          <input type="text" id="to" placeholder="Director, Defense Language Institute Foreign Language Center">
+        <div class="form-row">
+          <div class="form-group">
+            <label>To</label>
+            <input type="text" id="to" placeholder="Commandant of the Marine Corps">
+          </div>
         </div>
-        <div class="form-group" style="margin-top: 15px;">
-          <label>Via (optional - routing through chain of command)</label>
-          <div class="dynamic-list" id="viaList"></div>
-          <button type="button" class="btn btn-add" onclick="addVia()">+ Add Via</button>
-        </div>
-        <div class="form-group" style="margin-top: 15px;">
-          <label for="subj">Subject</label>
-          <input type="text" id="subj" placeholder="Request for Additional Training Resources">
-          <p class="help-text">Will be automatically converted to ALL CAPS</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Subject</label>
+            <input type="text" id="subj" placeholder="REQUEST FOR ADDITIONAL PERSONNEL">
+            <p class="help-text">Auto-capitalizes</p>
+          </div>
         </div>
       </div>
 
-      <!-- References -->
-      <div class="form-section">
-        <h2 class="section-title">References</h2>
-        <p class="help-text" style="margin-bottom: 15px;">Auto-lettered (a), (b), (c), etc.</p>
-        <div class="dynamic-list" id="refList"></div>
-        <button type="button" class="btn btn-add" onclick="addRef()">+ Add Reference</button>
+      <!-- Endorsement Fields -->
+      <div class="form-section" id="endorsementFields" style="display: none;">
+        <h2 class="section-title">Endorsement Details</h2>
+        <div class="form-row">
+          <div class="form-group small">
+            <label>Endorsement</label>
+            <select id="endorseNumber">
+              <option value="FIRST">FIRST</option>
+              <option value="SECOND">SECOND</option>
+              <option value="THIRD">THIRD</option>
+              <option value="FOURTH">FOURTH</option>
+              <option value="FIFTH">FIFTH</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Action</label>
+            <select id="endorseAction">
+              <option value="Forwarded">Forwarded</option>
+              <option value="Returned">Returned</option>
+              <option value="Forwarded, recommending approval">Forwarded, recommending approval</option>
+              <option value="Forwarded, recommending disapproval">Forwarded, recommending disapproval</option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      <!-- Enclosures -->
+      <!-- Optional Items -->
       <div class="form-section">
-        <h2 class="section-title">Enclosures</h2>
-        <p class="help-text" style="margin-bottom: 15px;">Auto-numbered (1), (2), (3), etc.</p>
-        <div class="dynamic-list" id="enclList"></div>
-        <button type="button" class="btn btn-add" onclick="addEncl()">+ Add Enclosure</button>
+        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+          <h2 class="section-title" style="margin-bottom: 0;">Via / References / Enclosures</h2>
+          <span class="collapsible-icon">▼</span>
+        </div>
+        <div class="collapsible-content">
+          <div style="margin-bottom: 20px;">
+            <label style="margin-bottom: 10px; display: block;">Via (Chain of Command Routing)</label>
+            <div class="dynamic-list" id="viaList"></div>
+            <button type="button" class="btn btn-add" onclick="addVia()">+ Add Via</button>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="margin-bottom: 10px; display: block;">References <span style="font-weight: 400; color: var(--gray-500);">— auto-letters (a), (b), (c)</span></label>
+            <div class="dynamic-list" id="refList"></div>
+            <button type="button" class="btn btn-add" onclick="addRef()">+ Add Reference</button>
+          </div>
+          <div>
+            <label style="margin-bottom: 10px; display: block;">Enclosures <span style="font-weight: 400; color: var(--gray-500);">— auto-numbers (1), (2), (3)</span></label>
+            <div class="dynamic-list" id="enclList"></div>
+            <button type="button" class="btn btn-add" onclick="addEncl()">+ Add Enclosure</button>
+          </div>
+        </div>
       </div>
 
       <!-- Body Paragraphs -->
       <div class="form-section">
         <h2 class="section-title">Body Paragraphs</h2>
-        <p class="help-text" style="margin-bottom: 15px;">
-          Hierarchy: <strong>1.</strong> → <strong>a.</strong> → <strong>(1)</strong> → <strong>(a)</strong> | Click a paragraph to see options | Drag ☰ to reorder
+        <p class="help-text" style="margin-bottom: 16px;">
+          <strong>1.</strong> → <strong>a.</strong> → <strong>(1)</strong> → <strong>(a)</strong> &nbsp;|&nbsp; Click paragraph for options &nbsp;|&nbsp; Drag ☰ to reorder
         </p>
-        <div class="dynamic-list" id="paraList"></div>
-        <button type="button" class="btn btn-add" id="btnFirstPara" onclick="addFirstPara()">+ Add First Paragraph</button>
+        <div class="para-container" id="paraContainer"></div>
+        <button type="button" class="btn btn-add" onclick="addFirstPara()">+ Add Paragraph</button>
       </div>
 
       <!-- Signature -->
@@ -555,25 +898,25 @@
         <h2 class="section-title">Signature Block</h2>
         <div class="form-row">
           <div class="form-group">
-            <label for="sigName">Name</label>
-            <input type="text" id="sigName" placeholder="R. M. SMITH">
+            <label>Name</label>
+            <input type="text" id="sigName" placeholder="J. M. SMITH">
           </div>
           <div class="form-group small">
-            <label for="sigRank">Rank</label>
+            <label>Rank</label>
             <input type="text" id="sigRank" placeholder="LtCol">
           </div>
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="sigTitle" placeholder="Commanding Officer">
+          </div>
         </div>
-        <div class="form-group" style="margin-top: 15px;">
-          <label for="sigTitle">Title</label>
-          <input type="text" id="sigTitle" placeholder="Commanding Officer">
-        </div>
-        <div class="checkbox-group" style="margin-top: 15px;">
+        <div class="toggle-group" style="margin-top: 12px;">
           <input type="checkbox" id="byDirection">
-          <label for="byDirection" style="margin-bottom: 0;">Add "By direction"</label>
+          <label for="byDirection">By direction</label>
         </div>
       </div>
 
-      <!-- Distribution -->
+      <!-- Copy To -->
       <div class="form-section">
         <h2 class="section-title">Distribution (Copy To)</h2>
         <div class="dynamic-list" id="copyList"></div>
@@ -581,28 +924,25 @@
       </div>
     </form>
 
-    <!-- Action Buttons -->
-    <div class="info-box" style="background: #fff3cd; border-color: #ffc107; margin-bottom: 15px;">
-      <p style="margin: 0; font-size: 0.85rem;">
-        <strong>🚧 Active Development:</strong> This tool is in beta. Found a bug or formatting issue? 
-        <a href="https://github.com/jeranaias/navalletterformat/issues" target="_blank">Report it on GitHub</a> - your feedback helps make this better for everyone.
-      </p>
+    <!-- Beta Notice -->
+    <div class="info-box warning" style="margin-bottom: 16px;">
+      <strong>🚧 Beta:</strong> Found a bug? <a href="https://github.com/jeranaias/navalletterformat/issues" target="_blank">Report on GitHub</a>
     </div>
-    <div class="actions">
-      <button type="button" class="btn btn-primary" onclick="generatePDF()" style="background: #2e7d32;">⬇ Download PDF</button>
-      <button type="button" class="btn btn-secondary" onclick="previewTex()">Preview .tex</button>
-      <button type="button" class="btn btn-secondary" onclick="downloadTex()">Download .tex</button>
-      <button type="button" class="btn btn-secondary" onclick="downloadZip()">Download ZIP</button>
-      <button type="button" class="btn btn-secondary" onclick="copyToClipboard()">Copy to Clipboard</button>
-      <button type="button" class="btn btn-primary" onclick="openInOverleafDirect()">Open in Overleaf →</button>
+
+    <!-- Actions -->
+    <div class="actions-bar">
+      <div class="actions">
+        <button type="button" class="btn btn-success" onclick="generatePDF()">⬇ Download PDF</button>
+        <button type="button" class="btn btn-secondary" onclick="previewTex()">Preview LaTeX</button>
+        <button type="button" class="btn btn-secondary" onclick="downloadTex()">Download .tex</button>
+        <button type="button" class="btn btn-secondary" onclick="downloadZip()">Download ZIP</button>
+        <button type="button" class="btn btn-primary" onclick="openInOverleafDirect()">Open in Overleaf</button>
+      </div>
     </div>
-    
+
     <div class="info-box">
-      <p>
-        <strong>Recommended:</strong> Click "Download PDF" for instant results (no external tools needed)<br>
-        <strong>With seal/image:</strong> Download ZIP → Upload to <a href="https://www.overleaf.com/project" target="_blank">Overleaf</a> (New Project → Upload) → Recompile<br>
-        <strong>Advanced:</strong> Use Overleaf options for precise LaTeX control
-      </p>
+      <strong>Quick:</strong> "Download PDF" for instant results &nbsp;|&nbsp; 
+      <strong>Advanced:</strong> Use Overleaf for precise LaTeX control
     </div>
 
     <!-- Status -->
@@ -615,281 +955,579 @@
     </div>
 
     <footer>
-      <p>Naval Letter Generator v1.1 (Beta) | Per SECNAV M-5216.5</p>
-      <p>Created by SSgt Jesse Morgan, USMC | Presidio of Monterey</p>
-      <p style="font-size: 0.75rem; margin-top: 8px;"><a href="https://github.com/jeranaias/navalletterformat/issues" target="_blank" style="color: #bf9b30;">Report bugs or request features</a></p>
+      <p><strong>Naval Letter Generator v1.2</strong> · SECNAV M-5216.5</p>
+      <p>Created by SSgt Jesse Morgan, USMC · Presidio of Monterey</p>
+      <p><a href="https://github.com/jeranaias/navalletterformat">GitHub</a> · <a href="https://github.com/jeranaias/navalletterformat/issues">Report Issues</a></p>
     </footer>
   </div>
 
-  <!-- JSZip for creating ZIP files -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <!-- jsPDF for direct PDF generation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script>
-    // Global seal data storage
+    // ============================================================
+    // COMPREHENSIVE SSIC DATABASE
+    // ============================================================
+    const SSIC_DATABASE = [
+      // 1000 - Military Personnel
+      { code: '1000', desc: 'Military Personnel (General)' },
+      { code: '1001', desc: 'General Personnel Matters' },
+      { code: '1020', desc: 'Officer Strength and Distribution' },
+      { code: '1040', desc: 'Promotions' },
+      { code: '1050', desc: 'Leave, Liberty, and Passes' },
+      { code: '1070', desc: 'Reenlistment' },
+      { code: '1080', desc: 'Military Awards and Decorations' },
+      { code: '1100', desc: 'Recruiting' },
+      { code: '1120', desc: 'Officer Procurement' },
+      { code: '1130', desc: 'Enlisted Procurement' },
+      { code: '1131', desc: 'Regular Enlistment' },
+      { code: '1133', desc: 'Marine Corps Options Programs' },
+      { code: '1140', desc: 'Reserve Procurement' },
+      { code: '1200', desc: 'Officer Transfer and Discharge' },
+      { code: '1300', desc: 'Assignments and Details' },
+      { code: '1301', desc: 'General Assignment Policies' },
+      { code: '1306', desc: 'Transfer and Assignment Procedures' },
+      { code: '1320', desc: 'Enlisted Assignments' },
+      { code: '1326', desc: 'Overseas Control Date' },
+      { code: '1400', desc: 'Separation and Retirement' },
+      { code: '1420', desc: 'Officer Retirement' },
+      { code: '1440', desc: 'Enlisted Separation' },
+      { code: '1500', desc: 'Education and Training' },
+      { code: '1510', desc: 'Training Administration' },
+      { code: '1520', desc: 'Schools and Courses' },
+      { code: '1540', desc: 'Professional Military Education' },
+      { code: '1550', desc: 'Training Aids and Devices' },
+      { code: '1560', desc: 'Civilian Education Programs' },
+      { code: '1570', desc: 'Off-Duty Education' },
+      { code: '1600', desc: 'Personnel Classification' },
+      { code: '1610', desc: 'Performance Evaluation' },
+      { code: '1611', desc: 'Officer Fitness Reports' },
+      { code: '1616', desc: 'Enlisted Proficiency/Conduct' },
+      { code: '1640', desc: 'MOS Classification' },
+      { code: '1650', desc: 'Morale, Welfare, Recreation' },
+      { code: '1700', desc: 'Discipline and Conduct' },
+      { code: '1710', desc: 'General Discipline Matters' },
+      { code: '1720', desc: 'Desertion and Unauthorized Absence' },
+      { code: '1740', desc: 'Fraternization' },
+      { code: '1750', desc: 'Legal Assistance' },
+      { code: '1752', desc: 'Courts-Martial' },
+      { code: '1754', desc: 'Non-Judicial Punishment' },
+      { code: '1760', desc: 'Corrections' },
+      { code: '1800', desc: 'Casualties' },
+      { code: '1820', desc: 'Line of Duty Investigations' },
+      { code: '1850', desc: 'Deceased Personnel' },
+      { code: '1860', desc: 'Missing Personnel' },
+      { code: '1900', desc: 'Reserve Affairs' },
+      
+      // 3000 - Operations and Readiness
+      { code: '3000', desc: 'Operations and Readiness (General)' },
+      { code: '3040', desc: 'Operations Security (OPSEC)' },
+      { code: '3050', desc: 'Operations Plans' },
+      { code: '3070', desc: 'Anti-Terrorism / Force Protection' },
+      { code: '3100', desc: 'Operational Reports' },
+      { code: '3120', desc: 'Unit Status Reports' },
+      { code: '3140', desc: 'After Action Reports' },
+      { code: '3300', desc: 'Exercises' },
+      { code: '3440', desc: 'Nuclear, Biological, Chemical Defense' },
+      { code: '3500', desc: 'Training' },
+      { code: '3502', desc: 'Unit Training' },
+      { code: '3510', desc: 'Individual Training' },
+      { code: '3540', desc: 'Combined Arms Training' },
+      { code: '3571', desc: 'Combat Conditioning' },
+      { code: '3574', desc: 'Combat Marksmanship' },
+      { code: '3580', desc: 'Martial Arts Program' },
+      { code: '3590', desc: 'Physical Fitness' },
+      { code: '3591', desc: 'Physical Fitness Test' },
+      { code: '3592', desc: 'Combat Fitness Test' },
+      { code: '3750', desc: 'Search and Rescue' },
+      
+      // 4000 - Logistics
+      { code: '4000', desc: 'Logistics (General)' },
+      { code: '4100', desc: 'Transportation' },
+      { code: '4200', desc: 'Movements' },
+      { code: '4400', desc: 'Supply' },
+      { code: '4440', desc: 'Property Accountability' },
+      { code: '4500', desc: 'Inventory Management' },
+      { code: '4600', desc: 'Maintenance' },
+      { code: '4700', desc: 'Labor Resources' },
+      { code: '4790', desc: 'Equipment Maintenance' },
+      
+      // 5000 - General Administration and Management
+      { code: '5000', desc: 'General Administration' },
+      { code: '5040', desc: 'Safety' },
+      { code: '5041', desc: 'Ground Safety' },
+      { code: '5100', desc: 'Organization' },
+      { code: '5200', desc: 'Administrative Management' },
+      { code: '5210', desc: 'Records Management' },
+      { code: '5211', desc: 'Directives Issuance' },
+      { code: '5212', desc: 'Forms Management' },
+      { code: '5214', desc: 'Official Mail' },
+      { code: '5215', desc: 'Directives Control' },
+      { code: '5216', desc: 'Correspondence Procedures' },
+      { code: '5230', desc: 'Freedom of Information Act' },
+      { code: '5239', desc: 'Privacy Act' },
+      { code: '5300', desc: 'Manpower Management' },
+      { code: '5310', desc: 'Billet Structure' },
+      { code: '5311', desc: 'Table of Organization' },
+      { code: '5320', desc: 'Strength Reporting' },
+      { code: '5350', desc: 'Drug and Alcohol Abuse' },
+      { code: '5354', desc: 'Urinalysis Program' },
+      { code: '5370', desc: 'Weight Control' },
+      { code: '5380', desc: 'Equal Opportunity' },
+      { code: '5400', desc: 'Public Affairs' },
+      { code: '5500', desc: 'Security (Physical)' },
+      { code: '5510', desc: 'Personnel Security' },
+      { code: '5511', desc: 'Security Clearances' },
+      { code: '5520', desc: 'Industrial Security' },
+      { code: '5530', desc: 'Law Enforcement' },
+      { code: '5560', desc: 'Military Working Dogs' },
+      { code: '5580', desc: 'Traffic Safety' },
+      { code: '5600', desc: 'Information Technology' },
+      { code: '5700', desc: 'Postal Affairs' },
+      { code: '5720', desc: 'Military Postal Service' },
+      { code: '5800', desc: 'Legal' },
+      { code: '5810', desc: 'Legal Assistance' },
+      { code: '5820', desc: 'Judge Advocate Matters' },
+      { code: '5830', desc: 'Military Justice' },
+      { code: '5840', desc: 'Claims' },
+      
+      // 6000 - Medicine and Dentistry
+      { code: '6000', desc: 'Medicine and Dentistry (General)' },
+      { code: '6100', desc: 'Medical Administration' },
+      { code: '6110', desc: 'Medical Records' },
+      { code: '6150', desc: 'Medical Readiness' },
+      { code: '6200', desc: 'Dental Services' },
+      { code: '6210', desc: 'Dental Readiness' },
+      { code: '6260', desc: 'Preventive Dentistry' },
+      { code: '6300', desc: 'Medical Treatment' },
+      { code: '6320', desc: 'Limited Duty (LIMDU)' },
+      { code: '6400', desc: 'Preventive Medicine' },
+      { code: '6500', desc: 'Mental Health' },
+      
+      // 7000 - Financial Management
+      { code: '7000', desc: 'Financial Management (General)' },
+      { code: '7100', desc: 'Budget' },
+      { code: '7200', desc: 'Disbursing' },
+      { code: '7220', desc: 'Travel' },
+      { code: '7221', desc: 'Permanent Change of Station' },
+      { code: '7222', desc: 'Temporary Additional Duty' },
+      { code: '7300', desc: 'Pay and Allowances' },
+      { code: '7310', desc: 'Military Pay' },
+      { code: '7320', desc: 'Allowances' },
+      { code: '7330', desc: 'Special Pay' },
+      { code: '7400', desc: 'Accounting' },
+      { code: '7500', desc: 'Auditing' },
+      
+      // 8000 - Ordnance Material
+      { code: '8000', desc: 'Ordnance Material (General)' },
+      { code: '8010', desc: 'Ammunition' },
+      
+      // 9000 - Construction, Engineering, Housing
+      { code: '9000', desc: 'Construction and Engineering' },
+      { code: '9100', desc: 'Real Property' },
+      { code: '9110', desc: 'Housing' },
+      { code: '9200', desc: 'Facilities Planning' },
+      
+      // 10000+ Special Categories
+      { code: '10000', desc: 'Weapons' },
+      { code: '10110', desc: 'Small Arms' },
+      { code: '10120', desc: 'Infantry Weapons' },
+      { code: '11000', desc: 'Communications-Electronics' },
+      { code: '11200', desc: 'Telecommunications' },
+      { code: '11300', desc: 'Electromagnetic Spectrum' },
+      { code: '12000', desc: 'Intelligence' },
+      { code: '12300', desc: 'Counterintelligence' },
+      { code: '13000', desc: 'Aviation' },
+      { code: '13100', desc: 'Air Operations' }
+    ];
+
+    // ============================================================
+    // COMPREHENSIVE UNIT DATABASE
+    // ============================================================
+    const UNIT_DATABASE = [
+      // Headquarters
+      { name: 'HEADQUARTERS, U.S. MARINE CORPS', address: '3000 MARINE CORPS PENTAGON\nWASHINGTON, DC 20350-3000', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS COMBAT DEVELOPMENT COMMAND', address: '3300 RUSSELL ROAD\nQUANTICO, VA 22134', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'TRAINING AND EDUCATION COMMAND', address: '1019 ELLIOT ROAD\nQUANTICO, VA 22134', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS INSTALLATIONS COMMAND', address: '3000 MARINE CORPS PENTAGON\nWASHINGTON, DC 20350', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS LOGISTICS COMMAND', address: '814 RADFORD BLVD\nALBANY, GA 31704', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE FORCES RESERVE', address: '2000 OPELOUSAS AVE\nNEW ORLEANS, LA 70114', service: 'UNITED STATES MARINE CORPS' },
+      
+      // MEFs
+      { name: 'I MARINE EXPEDITIONARY FORCE', address: 'BOX 555300\nCAMP PENDLETON, CA 92055', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'II MARINE EXPEDITIONARY FORCE', address: 'PSC BOX 20080\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'III MARINE EXPEDITIONARY FORCE', address: 'UNIT 35623\nFPO AP 96373', service: 'UNITED STATES MARINE CORPS' },
+      
+      // Divisions
+      { name: '1ST MARINE DIVISION', address: 'BOX 555380\nCAMP PENDLETON, CA 92055', service: 'UNITED STATES MARINE CORPS' },
+      { name: '2ND MARINE DIVISION', address: 'PSC BOX 20040\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      { name: '3RD MARINE DIVISION', address: 'UNIT 35600\nFPO AP 96373', service: 'UNITED STATES MARINE CORPS' },
+      
+      // Regiments - 1st MarDiv
+      { name: '1ST MARINE REGIMENT', address: 'BOX 555381\nCAMP PENDLETON, CA 92055', service: 'UNITED STATES MARINE CORPS' },
+      { name: '5TH MARINE REGIMENT', address: 'BOX 555385\nCAMP PENDLETON, CA 92055', service: 'UNITED STATES MARINE CORPS' },
+      { name: '7TH MARINE REGIMENT', address: 'BOX 788100\nTWENTYNINE PALMS, CA 92278', service: 'UNITED STATES MARINE CORPS' },
+      { name: '11TH MARINE REGIMENT', address: 'BOX 555411\nCAMP PENDLETON, CA 92055', service: 'UNITED STATES MARINE CORPS' },
+      
+      // Regiments - 2nd MarDiv
+      { name: '2ND MARINE REGIMENT', address: 'PSC BOX 20041\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      { name: '6TH MARINE REGIMENT', address: 'PSC BOX 20042\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      { name: '8TH MARINE REGIMENT', address: 'PSC BOX 20043\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      { name: '10TH MARINE REGIMENT', address: 'PSC BOX 20044\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      
+      // Air Wings
+      { name: '1ST MARINE AIRCRAFT WING', address: 'UNIT 35640\nFPO AP 96373', service: 'UNITED STATES MARINE CORPS' },
+      { name: '2ND MARINE AIRCRAFT WING', address: 'PSC BOX 8050\nCHERRY POINT, NC 28533', service: 'UNITED STATES MARINE CORPS' },
+      { name: '3RD MARINE AIRCRAFT WING', address: 'BOX 452001\nSAN DIEGO, CA 92145', service: 'UNITED STATES MARINE CORPS' },
+      
+      // MLGs
+      { name: '1ST MARINE LOGISTICS GROUP', address: 'BOX 555500\nCAMP PENDLETON, CA 92055', service: 'UNITED STATES MARINE CORPS' },
+      { name: '2ND MARINE LOGISTICS GROUP', address: 'PSC BOX 20100\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      { name: '3RD MARINE LOGISTICS GROUP', address: 'UNIT 35650\nFPO AP 96373', service: 'UNITED STATES MARINE CORPS' },
+      
+      // Bases - West Coast
+      { name: 'MARINE CORPS BASE CAMP PENDLETON', address: 'BOX 555010\nCAMP PENDLETON, CA 92055', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS AIR GROUND COMBAT CENTER', address: 'BOX 788100\nTWENTYNINE PALMS, CA 92278', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS AIR STATION MIRAMAR', address: 'BOX 452001\nSAN DIEGO, CA 92145', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS AIR STATION YUMA', address: 'BOX 99100\nYUMA, AZ 85369', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS RECRUIT DEPOT SAN DIEGO', address: '1600 HENDERSON AVE\nSAN DIEGO, CA 92140', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS BASE CAMP SMEDLEY D. BUTLER', address: 'UNIT 35001\nFPO AP 96373', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS BASE HAWAII', address: 'BOX 63002\nKANEOHE BAY, HI 96863', service: 'UNITED STATES MARINE CORPS' },
+      
+      // Bases - East Coast
+      { name: 'MARINE CORPS BASE CAMP LEJEUNE', address: 'PSC BOX 20004\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS AIR STATION CHERRY POINT', address: 'PSC BOX 8003\nCHERRY POINT, NC 28533', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS AIR STATION NEW RIVER', address: 'PSC BOX 21001\nJACKSONVILLE, NC 28545', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS AIR STATION BEAUFORT', address: 'BOX 55001\nBEAUFORT, SC 29904', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS RECRUIT DEPOT PARRIS ISLAND', address: 'BOX 5001\nPARRIS ISLAND, SC 29905', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS BASE QUANTICO', address: '3250 CATLIN AVE\nQUANTICO, VA 22134', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE BARRACKS WASHINGTON', address: '8TH AND I STREETS SE\nWASHINGTON, DC 20390', service: 'UNITED STATES MARINE CORPS' },
+      
+      // Schools
+      { name: 'THE BASIC SCHOOL', address: '24164 BELLEAU AVE\nQUANTICO, VA 22134', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'OFFICER CANDIDATES SCHOOL', address: '2189 ELROD AVE\nQUANTICO, VA 22134', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'INFANTRY OFFICER COURSE', address: '24191 GILBERT RD\nQUANTICO, VA 22134', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'SCHOOL OF INFANTRY - WEST', address: 'BOX 555190\nCAMP PENDLETON, CA 92055', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'SCHOOL OF INFANTRY - EAST', address: 'PSC BOX 20070\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS COMMUNICATION-ELECTRONICS SCHOOL', address: 'BOX 788150\nTWENTYNINE PALMS, CA 92278', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'FIELD MEDICAL TRAINING BATTALION - WEST', address: 'BOX 555020\nCAMP PENDLETON, CA 92055', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'FIELD MEDICAL TRAINING BATTALION - EAST', address: 'PSC BOX 20042\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS ENGINEER SCHOOL', address: 'PSC BOX 20080\nCAMP LEJEUNE, NC 28542', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'EXPEDITIONARY WARFARE SCHOOL', address: '2076 SOUTH STREET\nQUANTICO, VA 22134', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'COMMAND AND STAFF COLLEGE', address: '2076 SOUTH STREET\nQUANTICO, VA 22134', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS WAR COLLEGE', address: '2076 SOUTH STREET\nQUANTICO, VA 22134', service: 'UNITED STATES MARINE CORPS' },
+      
+      // Special Units
+      { name: 'MARINE CORPS DETACHMENT', address: 'DEFENSE LANGUAGE INSTITUTE FOREIGN LANGUAGE CENTER\nPRESIDIO OF MONTEREY, CA 93944', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE SECURITY GUARD BATTALION', address: '3280 RUSSELL RD\nQUANTICO, VA 22134', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'MARINE CORPS SECURITY FORCE REGIMENT', address: '8615 GULF ST\nNORFOLK, VA 23505', service: 'UNITED STATES MARINE CORPS' },
+      { name: 'CHEMICAL BIOLOGICAL INCIDENT RESPONSE FORCE', address: 'INDIAN HEAD, MD 20640', service: 'UNITED STATES MARINE CORPS' },
+      
+      // Navy
+      { name: 'CHIEF OF NAVAL OPERATIONS', address: '2000 NAVY PENTAGON\nWASHINGTON, DC 20350', service: 'DEPARTMENT OF THE NAVY' },
+      { name: 'COMMANDER, NAVAL SURFACE FORCES', address: '2841 RENDOVA RD\nSAN DIEGO, CA 92155', service: 'DEPARTMENT OF THE NAVY' },
+      { name: 'COMMANDER, NAVAL AIR FORCES', address: 'NAS NORTH ISLAND\nSAN DIEGO, CA 92135', service: 'DEPARTMENT OF THE NAVY' },
+      { name: 'COMMANDER, SUBMARINE FORCES', address: '7800 HAMPTON BLVD\nNORFOLK, VA 23505', service: 'DEPARTMENT OF THE NAVY' },
+      { name: 'NAVAL STATION NORFOLK', address: '1530 GILBERT ST\nNORFOLK, VA 23511', service: 'DEPARTMENT OF THE NAVY' },
+      { name: 'NAVAL STATION SAN DIEGO', address: '3455 SENN RD\nSAN DIEGO, CA 92136', service: 'DEPARTMENT OF THE NAVY' },
+      { name: 'NAVAL AIR STATION PENSACOLA', address: '190 RADFORD BLVD\nPENSACOLA, FL 32508', service: 'DEPARTMENT OF THE NAVY' },
+      { name: 'NAVAL BASE CORONADO', address: 'NAS NORTH ISLAND\nSAN DIEGO, CA 92135', service: 'DEPARTMENT OF THE NAVY' }
+    ];
+
+    // ============================================================
+    // GLOBAL STATE
+    // ============================================================
     let sealData = null;
     let sealFilename = null;
+    let documentType = 'basic';
+    const letters = 'abcdefghijklmnopqrstuvwxyz';
 
-    // Initialize
+    // ============================================================
+    // INITIALIZATION
+    // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
+      // Set today's date
       const today = new Date();
-      const day = String(today.getDate()).padStart(2, '0');
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      const month = months[today.getMonth()];
-      const year = String(today.getFullYear()).slice(-2);  // 2-digit year per SECNAV M-5216.5
-      document.getElementById('date').value = `${day} ${month} ${year}`;
-      
+      document.getElementById('date').value = `${String(today.getDate()).padStart(2, '0')} ${months[today.getMonth()]} ${String(today.getFullYear()).slice(-2)}`;
+
+      // Letterhead toggle
       document.getElementById('useLetterhead').addEventListener('change', function() {
         document.getElementById('letterheadFields').style.display = this.checked ? 'block' : 'none';
       });
+
+      // SSIC Search
+      const ssicInput = document.getElementById('ssicSearch');
+      ssicInput.addEventListener('input', handleSSICSearch);
+      ssicInput.addEventListener('focus', handleSSICSearch);
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#ssicSearch') && !e.target.closest('#ssicResults')) {
+          document.getElementById('ssicResults').classList.remove('show');
+        }
+      });
+
+      // Unit Search
+      const unitInput = document.getElementById('unitSearch');
+      unitInput.addEventListener('input', handleUnitSearch);
+      unitInput.addEventListener('focus', handleUnitSearch);
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#unitSearch') && !e.target.closest('#unitResults')) {
+          document.getElementById('unitResults').classList.remove('show');
+        }
+      });
+
+      // Date auto-format
+      document.getElementById('date').addEventListener('blur', formatDate);
     });
 
-    // Seal handling
+    // ============================================================
+    // DOCUMENT TYPE
+    // ============================================================
+    function selectDocType(type) {
+      documentType = type;
+      document.querySelectorAll('.doc-type-option').forEach(opt => {
+        opt.classList.toggle('selected', opt.dataset.type === type);
+      });
+      document.getElementById('endorsementFields').style.display = type === 'endorsement' ? 'block' : 'none';
+    }
+
+    // ============================================================
+    // SSIC SEARCH
+    // ============================================================
+    function handleSSICSearch() {
+      const input = document.getElementById('ssicSearch');
+      const results = document.getElementById('ssicResults');
+      const query = input.value.toLowerCase().trim();
+
+      if (query.length < 1) {
+        results.classList.remove('show');
+        return;
+      }
+
+      const matches = SSIC_DATABASE.filter(s => 
+        s.code.includes(query) || s.desc.toLowerCase().includes(query)
+      ).slice(0, 12);
+
+      if (matches.length > 0) {
+        results.innerHTML = matches.map(s => `
+          <div class="search-result-item" onmousedown="selectSSIC('${s.code}', '${s.desc.replace(/'/g, "\\'")}')">
+            <div class="code">${s.code}</div>
+            <div class="desc">${s.desc}</div>
+          </div>
+        `).join('');
+        results.classList.add('show');
+      } else {
+        results.innerHTML = '<div class="search-result-item"><div class="desc">No matches found</div></div>';
+        results.classList.add('show');
+      }
+    }
+
+    function selectSSIC(code, desc) {
+      document.getElementById('ssicSearch').value = code;
+      document.getElementById('ssicResults').classList.remove('show');
+    }
+
+    // ============================================================
+    // UNIT SEARCH
+    // ============================================================
+    function handleUnitSearch() {
+      const input = document.getElementById('unitSearch');
+      const results = document.getElementById('unitResults');
+      const query = input.value.toLowerCase().trim();
+
+      if (query.length < 2) {
+        results.classList.remove('show');
+        return;
+      }
+
+      const matches = UNIT_DATABASE.filter(u => 
+        u.name.toLowerCase().includes(query) || 
+        u.address.toLowerCase().includes(query)
+      ).slice(0, 10);
+
+      if (matches.length > 0) {
+        results.innerHTML = matches.map((u, i) => `
+          <div class="search-result-item" onmousedown="selectUnit(${i}, '${query.replace(/'/g, "\\'")}')">
+            <div class="code">${u.name}</div>
+            <div class="desc">${u.address.replace(/\n/g, ' · ')}</div>
+          </div>
+        `).join('');
+        results.classList.add('show');
+      } else {
+        results.classList.remove('show');
+      }
+    }
+
+    function selectUnit(index, query) {
+      const matches = UNIT_DATABASE.filter(u => 
+        u.name.toLowerCase().includes(query) || 
+        u.address.toLowerCase().includes(query)
+      );
+      const unit = matches[index];
+      if (unit) {
+        document.getElementById('unitName').value = unit.service;
+        document.getElementById('unitAddress').value = unit.name + '\n' + unit.address;
+        document.getElementById('unitSearch').value = '';
+      }
+      document.getElementById('unitResults').classList.remove('show');
+    }
+
+    // ============================================================
+    // DATE AUTO-FORMAT
+    // ============================================================
+    function formatDate() {
+      const input = document.getElementById('date');
+      let value = input.value.trim().toLowerCase();
+      if (!value) return;
+      
+      const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+      const monthsFull = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+      
+      let date = null;
+      
+      if (value === 'today' || value === 'now') {
+        date = new Date();
+      } else {
+        // MM/DD/YYYY or MM-DD-YYYY
+        let match = value.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+        if (match) {
+          const year = match[3].length === 2 ? '20' + match[3] : match[3];
+          date = new Date(year, parseInt(match[1]) - 1, parseInt(match[2]));
+        }
+        
+        // YYYY-MM-DD
+        if (!date) {
+          match = value.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
+          if (match) {
+            date = new Date(match[1], parseInt(match[2]) - 1, parseInt(match[3]));
+          }
+        }
+        
+        // Mon DD YYYY or DD Mon YYYY
+        if (!date) {
+          for (let i = 0; i < months.length; i++) {
+            const patterns = [
+              new RegExp(`(${months[i]}|${monthsFull[i]})\\s*(\\d{1,2}),?\\s*(\\d{2,4})`, 'i'),
+              new RegExp(`(\\d{1,2})\\s*(${months[i]}|${monthsFull[i]}),?\\s*(\\d{2,4})`, 'i')
+            ];
+            for (const pattern of patterns) {
+              match = value.match(pattern);
+              if (match) {
+                const day = match[1].length <= 2 ? match[1] : match[2];
+                const yr = match[3].length === 2 ? '20' + match[3] : match[3];
+                date = new Date(yr, i, parseInt(day));
+                break;
+              }
+            }
+            if (date) break;
+          }
+        }
+      }
+      
+      if (date && !isNaN(date)) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = months[date.getMonth()].charAt(0).toUpperCase() + months[date.getMonth()].slice(1);
+        const year = String(date.getFullYear()).slice(-2);
+        input.value = `${day} ${month} ${year}`;
+      }
+    }
+
+    // ============================================================
+    // SEAL UPLOAD
+    // ============================================================
     function handleSealUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
-      
+
       if (!file.type.match(/image\/(png|jpeg|jpg)/)) {
-        showStatus('error', 'Please upload a PNG or JPG image.');
+        showStatus('error', 'Please upload a PNG or JPG image');
         return;
       }
-      
-      const ext = file.name.split('.').pop().toLowerCase();
-      sealFilename = 'seal.' + (ext === 'jpeg' ? 'jpg' : ext);
-      
+
+      sealFilename = file.name;
       const reader = new FileReader();
       reader.onload = function(e) {
         sealData = e.target.result;
-        document.getElementById('sealPreview').innerHTML = `<img src="${sealData}" alt="Unit Seal">`;
+        document.getElementById('sealPlaceholder').style.display = 'none';
+        document.getElementById('sealPreview').style.display = 'block';
+        document.getElementById('sealPreview').innerHTML = `<img src="${sealData}" alt="Seal">`;
+        document.getElementById('sealUploadArea').classList.add('has-image');
         document.getElementById('removeSeal').style.display = 'inline-block';
-        showStatus('success', 'Seal uploaded successfully.');
+        showStatus('success', 'Seal uploaded: ' + file.name);
       };
       reader.readAsDataURL(file);
     }
 
-    function removeSeal() {
+    function removeSeal(event) {
+      event.stopPropagation();
       sealData = null;
       sealFilename = null;
       document.getElementById('sealUpload').value = '';
+      document.getElementById('sealPlaceholder').style.display = 'block';
+      document.getElementById('sealPreview').style.display = 'none';
       document.getElementById('sealPreview').innerHTML = '';
+      document.getElementById('sealUploadArea').classList.remove('has-image');
       document.getElementById('removeSeal').style.display = 'none';
     }
 
-    // Dynamic list management
+    // ============================================================
+    // COLLAPSIBLE
+    // ============================================================
+    function toggleCollapsible(header) {
+      header.classList.toggle('expanded');
+      header.nextElementSibling.classList.toggle('show');
+    }
+
+    // ============================================================
+    // DYNAMIC LISTS
+    // ============================================================
     function addVia() {
       const list = document.getElementById('viaList');
+      const n = list.children.length + 1;
       const div = document.createElement('div');
       div.className = 'dynamic-item';
       div.innerHTML = `
-        <input type="text" name="via[]" placeholder="Executive Officer, Marine Corps Detachment">
-        <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">✕</button>
+        <span class="item-label">(${n})</span>
+        <input type="text" name="via[]" placeholder="Via addressee ${n}">
+        <button type="button" class="btn btn-remove" onclick="removeItem(this, 'via')">×</button>
       `;
       list.appendChild(div);
     }
 
     function addRef() {
       const list = document.getElementById('refList');
+      const n = list.children.length;
       const div = document.createElement('div');
       div.className = 'dynamic-item';
       div.innerHTML = `
-        <input type="text" name="ref[]" placeholder="MCO 1500.55 (Marine Corps Training)">
-        <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">✕</button>
+        <span class="item-label">(${letters[n]})</span>
+        <input type="text" name="ref[]" placeholder="Reference ${letters[n]}">
+        <button type="button" class="btn btn-remove" onclick="removeItem(this, 'ref')">×</button>
       `;
       list.appendChild(div);
     }
 
     function addEncl() {
       const list = document.getElementById('enclList');
+      const n = list.children.length + 1;
       const div = document.createElement('div');
       div.className = 'dynamic-item';
       div.innerHTML = `
-        <input type="text" name="encl[]" placeholder="Cost Analysis Spreadsheet">
-        <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">✕</button>
+        <span class="item-label">(${n})</span>
+        <input type="text" name="encl[]" placeholder="Enclosure ${n}">
+        <button type="button" class="btn btn-remove" onclick="removeItem(this, 'encl')">×</button>
       `;
       list.appendChild(div);
     }
 
-    // Paragraph management with inline buttons
-    const letters = 'abcdefghijklmnopqrstuvwxyz';
-    const typeHierarchy = ['para', 'subpara', 'subsubpara', 'subsubsubpara'];
-    const typeLabels = { para: '1.', subpara: 'a.', subsubpara: '(1)', subsubsubpara: '(a)' };
-
-    function addFirstPara() {
-      addParaAfter(null, 'para');
-      document.getElementById('btnFirstPara').style.display = 'none';
-    }
-
-    function addParaAfter(afterElement, type) {
-      const list = document.getElementById('paraList');
-      const div = document.createElement('div');
-      div.className = 'dynamic-item para-item';
-      div.draggable = true;
-      div.dataset.paraType = type;
-      
-      const indentLevels = { para: 0, subpara: 25, subsubpara: 50, subsubsubpara: 75 };
-      const indent = indentLevels[type] || 0;
-      
-      const typeIndex = typeHierarchy.indexOf(type);
-      const canAddChild = typeIndex < typeHierarchy.length - 1;
-      const childType = canAddChild ? typeHierarchy[typeIndex + 1] : null;
-      const childLabel = childType ? typeLabels[childType] : '';
-      
-      div.innerHTML = `
-        <div style="display: flex; flex-direction: column; width: 100%; margin-left: ${indent}px;">
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <span class="drag-handle" title="Drag to reorder">☰</span>
-            <span class="para-type" data-label></span>
-            <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." style="flex: 1;" onfocus="setActivePara(this)" onclick="setActivePara(this)"></textarea>
-            <button type="button" class="btn btn-remove" onclick="removePara(this)">✕</button>
-          </div>
-          <div class="para-inline-buttons">
-            <button type="button" class="btn-inline sibling" onclick="addSibling(this)">+ Same Level (${typeLabels[type]})</button>
-            ${canAddChild ? `<button type="button" class="btn-inline" onclick="addChild(this)">+ Indent (${childLabel})</button>` : ''}
-            <button type="button" class="btn-inline sibling" onclick="addParaHere(this, 'para')">+ New Para (1.)</button>
-          </div>
-        </div>
-      `;
-      
-      div.addEventListener('dragstart', handleDragStart);
-      div.addEventListener('dragend', handleDragEnd);
-      div.addEventListener('dragover', handleDragOver);
-      div.addEventListener('dragleave', handleDragLeave);
-      div.addEventListener('drop', handleDrop);
-      
-      if (afterElement) {
-        afterElement.after(div);
-      } else {
-        list.appendChild(div);
-      }
-      
-      updateParaLabels();
-      setActivePara(div.querySelector('textarea'));
-      div.querySelector('textarea').focus();
-    }
-
-    function setActivePara(textarea) {
-      document.querySelectorAll('.para-item').forEach(item => item.classList.remove('active'));
-      textarea.closest('.para-item').classList.add('active');
-    }
-
-    function addSibling(btn) {
-      const item = btn.closest('.para-item');
-      const type = item.dataset.paraType;
-      addParaAfter(item, type);
-    }
-
-    function addChild(btn) {
-      const item = btn.closest('.para-item');
-      const type = item.dataset.paraType;
-      const typeIndex = typeHierarchy.indexOf(type);
-      if (typeIndex < typeHierarchy.length - 1) {
-        addParaAfter(item, typeHierarchy[typeIndex + 1]);
-      }
-    }
-
-    function addParaHere(btn, type) {
-      const item = btn.closest('.para-item');
-      addParaAfter(item, type);
-    }
-
-    function removePara(btn) {
-      const item = btn.closest('.para-item');
+    function removeItem(btn, type) {
+      const item = btn.parentElement;
+      const list = item.parentElement;
       item.remove();
-      updateParaLabels();
-      
-      const remaining = document.querySelectorAll('.para-item');
-      if (remaining.length === 0) {
-        document.getElementById('btnFirstPara').style.display = 'inline-block';
-      } else {
-        setActivePara(remaining[remaining.length - 1].querySelector('textarea'));
-      }
-    }
-
-    // Update all paragraph labels with correct numbering
-    function updateParaLabels() {
-      const list = document.getElementById('paraList');
-      const items = list.querySelectorAll('.para-item');
-      
-      let paraNum = 0, subparaNum = 0, subsubparaNum = 0, subsubsubparaNum = 0;
-      
-      items.forEach(item => {
-        const type = item.dataset.paraType;
-        const labelSpan = item.querySelector('[data-label]');
-        let label = '';
-        
-        switch (type) {
-          case 'para':
-            paraNum++;
-            subparaNum = subsubparaNum = subsubsubparaNum = 0;
-            label = paraNum + '.';
-            break;
-          case 'subpara':
-            subparaNum++;
-            subsubparaNum = subsubsubparaNum = 0;
-            label = letters[subparaNum - 1] + '.';
-            break;
-          case 'subsubpara':
-            subsubparaNum++;
-            subsubsubparaNum = 0;
-            label = '(' + subsubparaNum + ')';
-            break;
-          case 'subsubsubpara':
-            subsubsubparaNum++;
-            label = '(' + letters[subsubsubparaNum - 1] + ')';
-            break;
-        }
-        
-        labelSpan.textContent = label;
+      // Renumber
+      Array.from(list.children).forEach((child, i) => {
+        child.querySelector('.item-label').textContent = type === 'ref' ? `(${letters[i]})` : `(${i + 1})`;
       });
-    }
-
-    // Drag and drop handlers
-    let draggedItem = null;
-
-    function handleDragStart(e) {
-      draggedItem = this;
-      this.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    }
-
-    function handleDragEnd(e) {
-      this.classList.remove('dragging');
-      document.querySelectorAll('.para-item').forEach(item => {
-        item.classList.remove('drag-over');
-      });
-      draggedItem = null;
-      updateParaLabels();
-    }
-
-    function handleDragOver(e) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      if (this !== draggedItem) {
-        this.classList.add('drag-over');
-      }
-    }
-
-    function handleDragLeave(e) {
-      this.classList.remove('drag-over');
-    }
-
-    function handleDrop(e) {
-      e.preventDefault();
-      this.classList.remove('drag-over');
-      
-      if (this !== draggedItem) {
-        const list = document.getElementById('paraList');
-        const items = [...list.querySelectorAll('.para-item')];
-        const draggedIndex = items.indexOf(draggedItem);
-        const dropIndex = items.indexOf(this);
-        
-        if (draggedIndex < dropIndex) {
-          this.parentNode.insertBefore(draggedItem, this.nextSibling);
-        } else {
-          this.parentNode.insertBefore(draggedItem, this);
-        }
-      }
     }
 
     function addCopy() {
@@ -897,16 +1535,124 @@
       const div = document.createElement('div');
       div.className = 'dynamic-item';
       div.innerHTML = `
-        <input type="text" name="copy[]" placeholder="S-3, MCD-POM">
-        <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">✕</button>
+        <input type="text" name="copy[]" placeholder="Copy recipient">
+        <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">×</button>
       `;
       list.appendChild(div);
     }
 
-    // Collect form data
+    // ============================================================
+    // PARAGRAPHS
+    // ============================================================
+    function addFirstPara() {
+      addParaAfter(null, 'para');
+    }
+
+    function addParaAfter(afterEl, type) {
+      const container = document.getElementById('paraContainer');
+      const div = document.createElement('div');
+      div.className = 'para-item';
+      div.draggable = true;
+      div.dataset.type = type;
+      div.innerHTML = `
+        <span class="drag-handle">☰</span>
+        <span class="para-label"></span>
+        <textarea name="para[]" data-type="${type}" placeholder="Enter text..." onclick="setActivePara(this)"></textarea>
+        <div class="para-actions">
+          <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
+          <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>
+          <button type="button" class="btn" onclick="addParent(this)" ${type === 'para' ? 'disabled' : ''}>← Outdent</button>
+          <button type="button" class="btn btn-remove" onclick="removePara(this)">Delete</button>
+        </div>
+      `;
+      div.addEventListener('dragstart', handleDragStart);
+      div.addEventListener('dragend', handleDragEnd);
+      div.addEventListener('dragover', handleDragOver);
+      div.addEventListener('dragleave', handleDragLeave);
+      div.addEventListener('drop', handleDrop);
+
+      if (afterEl) {
+        afterEl.closest('.para-item').after(div);
+      } else {
+        container.appendChild(div);
+      }
+      updateParaLabels();
+      div.querySelector('textarea').focus();
+    }
+
+    function setActivePara(textarea) {
+      document.querySelectorAll('.para-item').forEach(p => p.classList.remove('active'));
+      textarea.closest('.para-item').classList.add('active');
+    }
+
+    function addSibling(btn) {
+      const para = btn.closest('.para-item');
+      addParaAfter(para.querySelector('textarea'), para.dataset.type);
+    }
+
+    function addChild(btn) {
+      const para = btn.closest('.para-item');
+      const types = ['para', 'subpara', 'subsubpara', 'subsubsubpara'];
+      const idx = types.indexOf(para.dataset.type);
+      if (idx < types.length - 1) {
+        addParaAfter(para.querySelector('textarea'), types[idx + 1]);
+      }
+    }
+
+    function addParent(btn) {
+      const para = btn.closest('.para-item');
+      const types = ['para', 'subpara', 'subsubpara', 'subsubsubpara'];
+      const idx = types.indexOf(para.dataset.type);
+      if (idx > 0) {
+        addParaAfter(para.querySelector('textarea'), types[idx - 1]);
+      }
+    }
+
+    function removePara(btn) {
+      btn.closest('.para-item').remove();
+      updateParaLabels();
+    }
+
+    function updateParaLabels() {
+      let pn = 0, sn = 0, ssn = 0, sssn = 0;
+      document.querySelectorAll('.para-item').forEach(item => {
+        const type = item.dataset.type;
+        let label = '';
+        if (type === 'para') { pn++; sn = 0; ssn = 0; sssn = 0; label = pn + '.'; }
+        else if (type === 'subpara') { sn++; ssn = 0; sssn = 0; label = letters[sn - 1] + '.'; }
+        else if (type === 'subsubpara') { ssn++; sssn = 0; label = '(' + ssn + ')'; }
+        else if (type === 'subsubsubpara') { sssn++; label = '(' + letters[sssn - 1] + ')'; }
+        item.querySelector('.para-label').textContent = label;
+        item.querySelector('textarea').dataset.type = type;
+      });
+    }
+
+    // Drag & Drop
+    let draggedItem = null;
+    function handleDragStart(e) { draggedItem = this; this.style.opacity = '0.5'; }
+    function handleDragEnd(e) { this.style.opacity = '1'; document.querySelectorAll('.para-item').forEach(i => i.style.borderTop = ''); }
+    function handleDragOver(e) { e.preventDefault(); this.style.borderTop = '3px solid var(--navy)'; }
+    function handleDragLeave(e) { this.style.borderTop = ''; }
+    function handleDrop(e) {
+      e.preventDefault();
+      if (draggedItem !== this) {
+        const container = document.getElementById('paraContainer');
+        const items = Array.from(container.children);
+        if (items.indexOf(draggedItem) < items.indexOf(this)) this.after(draggedItem);
+        else this.before(draggedItem);
+        updateParaLabels();
+      }
+      this.style.borderTop = '';
+    }
+
+    // ============================================================
+    // DATA COLLECTION
+    // ============================================================
     function collectData() {
       return {
-        ssic: document.getElementById('ssic').value.trim(),
+        documentType,
+        ssic: document.getElementById('ssicSearch').value.trim().split(/\s/)[0] || '',
+        officeCode: document.getElementById('officeCode').value.trim(),
         date: document.getElementById('date').value.trim(),
         classification: document.getElementById('classification').value,
         branch: document.querySelector('input[name="branch"]:checked').value,
@@ -914,830 +1660,385 @@
         unitName: document.getElementById('unitName').value.trim(),
         unitAddress: document.getElementById('unitAddress').value.trim(),
         hasSeal: sealData !== null,
-        sealFilename: sealFilename,
+        sealFilename,
         from: document.getElementById('from').value.trim(),
         to: document.getElementById('to').value.trim(),
         via: Array.from(document.querySelectorAll('input[name="via[]"]')).map(i => i.value.trim()).filter(v => v),
         subj: document.getElementById('subj').value.trim(),
         refs: Array.from(document.querySelectorAll('input[name="ref[]"]')).map(i => i.value.trim()).filter(v => v),
         encls: Array.from(document.querySelectorAll('input[name="encl[]"]')).map(i => i.value.trim()).filter(v => v),
-        paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => ({
-          type: t.dataset.type,
-          text: t.value.trim()
-        })).filter(p => p.text),
+        paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => ({ type: t.dataset.type, text: t.value.trim() })).filter(p => p.text),
         sigName: document.getElementById('sigName').value.trim(),
         sigRank: document.getElementById('sigRank').value.trim(),
         sigTitle: document.getElementById('sigTitle').value.trim(),
         byDirection: document.getElementById('byDirection').checked,
-        copies: Array.from(document.querySelectorAll('input[name="copy[]"]')).map(i => i.value.trim()).filter(v => v)
+        copies: Array.from(document.querySelectorAll('input[name="copy[]"]')).map(i => i.value.trim()).filter(v => v),
+        endorseNumber: document.getElementById('endorseNumber').value,
+        endorseAction: document.getElementById('endorseAction').value
       };
     }
 
-    // Escape LaTeX special characters
+    // ============================================================
+    // LATEX ESCAPE
+    // ============================================================
     function escapeLatex(str) {
       if (!str) return '';
-      return str
-        .replace(/\\/g, '\\textbackslash{}')
-        .replace(/&/g, '\\&')
-        .replace(/%/g, '\\%')
-        .replace(/\$/g, '\\$')
-        .replace(/#/g, '\\#')
-        .replace(/_/g, '\\_')
-        .replace(/\{/g, '\\{')
-        .replace(/\}/g, '\\}')
-        .replace(/~/g, '\\textasciitilde{}')
-        .replace(/\^/g, '\\textasciicircum{}');
+      return str.replace(/\\/g, '\\textbackslash{}').replace(/&/g, '\\&').replace(/%/g, '\\%').replace(/\$/g, '\\$').replace(/#/g, '\\#').replace(/_/g, '\\_').replace(/\{/g, '\\{').replace(/\}/g, '\\}').replace(/~/g, '\\textasciitilde{}').replace(/\^/g, '\\textasciicircum{}');
     }
 
-    // Generate LaTeX code
+    // ============================================================
+    // GENERATE LATEX
+    // ============================================================
     function generateTex() {
       const d = collectData();
-      const refLetters = 'abcdefghijklmnopqrstuvwxyz';
-      
       let tex = `%% Naval Letter - Generated ${new Date().toISOString()}
-%% Per SECNAV M-5216.5 (Department of the Navy Correspondence Manual)
+%% SECNAV M-5216.5 Compliant
 
 \\documentclass[12pt,oneside]{article}
-
 \\usepackage[letterpaper,top=1in,bottom=1in,left=1in,right=1in,headheight=26pt,headsep=12pt,footskip=0.5in]{geometry}
 \\usepackage{mathptmx}
 \\usepackage{setspace}
 \\usepackage{fancyhdr}
 \\usepackage{graphicx}
 \\usepackage{lastpage}
-\\usepackage{tikz}
 \\usepackage{eso-pic}
 
 \\singlespacing
 \\setlength{\\parindent}{0pt}
 \\setlength{\\parskip}{0pt}
 
-%% First page style - no header, no page number
-\\fancypagestyle{firstpage}{
-  \\fancyhf{}
-  \\renewcommand{\\headrulewidth}{0pt}
-}
-
-%% Continuation pages - subject at top, page number at bottom center (.5" from bottom)
-\\fancypagestyle{continuation}{
-  \\fancyhf{}
-  \\renewcommand{\\headrulewidth}{0pt}
-  \\fancyhead[L]{\\small Subj:\\hspace{0.375in}${escapeLatex(d.subj.toUpperCase())}}
-  \\fancyfoot[C]{\\thepage}
-}
-
+\\fancypagestyle{firstpage}{\\fancyhf{}\\renewcommand{\\headrulewidth}{0pt}}
+\\fancypagestyle{continuation}{\\fancyhf{}\\renewcommand{\\headrulewidth}{0pt}\\fancyhead[L]{\\small Subj:\\hspace{0.375in}${escapeLatex(d.subj.toUpperCase())}}\\fancyfoot[C]{\\thepage}}
 \\pagestyle{continuation}
 
-\\newlength{\\labeltab}
-\\setlength{\\labeltab}{0.625in}
-
-%% Paragraph indentation per SECNAV M-5216.5
-%% Each sub-level's label aligns with the first letter of text from level above
-
-%% Measure actual label widths including 2 trailing spaces
-\\newlength{\\Lmain}
-\\settowidth{\\Lmain}{1.\\ \\ }
-
-\\newlength{\\Lsub}
-\\settowidth{\\Lsub}{a.\\ \\ }
-
-\\newlength{\\Lsubsub}
-\\settowidth{\\Lsubsub}{(1)\\ \\ }
-
-\\newlength{\\Lsubsubsub}
-\\settowidth{\\Lsubsubsub}{(a)\\ \\ }
+\\newlength{\\labeltab}\\setlength{\\labeltab}{0.625in}
+\\newlength{\\Lmain}\\settowidth{\\Lmain}{1.\\ \\ }
+\\newlength{\\Lsub}\\settowidth{\\Lsub}{a.\\ \\ }
+\\newlength{\\Lsubsub}\\settowidth{\\Lsubsub}{(1)\\ \\ }
+\\newlength{\\Lsubsubsub}\\settowidth{\\Lsubsubsub}{(a)\\ \\ }
 
 \\begin{document}
 \\thispagestyle{firstpage}
-
-%% First page: .625" from top of page to top of letterhead
 \\vspace*{-0.5in}
 
 `;
-
-      if (d.classification) {
-        tex += `\\begin{center}\\textbf{${escapeLatex(d.classification)}}\\end{center}
-\\vspace{6pt}
-
-`;
-      }
-
+      if (d.classification) tex += `\\begin{center}\\textbf{${escapeLatex(d.classification)}}\\end{center}\\vspace{6pt}\n`;
+      
       if (d.useLetterhead) {
-        if (d.hasSeal) {
-          // Seal positioned absolutely: .5" from left edge, .5" from top edge, 1" diameter
-          // Font sizes per SECNAV M-5216.5: 10pt Bold, 8pt
-          tex += `%% Letterhead with seal - per SECNAV M-5216.5
-\\AddToShipoutPictureBG*{%
-  \\AtPageUpperLeft{%
-    \\put(0.5in,-1.5in){\\includegraphics[width=1in]{${d.sealFilename}}}%
-  }%
-}
-\\begin{center}
-`;
-          if (d.unitName) {
-            tex += `{\\fontsize{10}{11}\\selectfont\\textbf{${escapeLatex(d.unitName.toUpperCase())}}}\\\\
-`;
-          }
-          if (d.unitAddress) {
-            const addressLines = d.unitAddress.split('\n').map(line => line.trim()).filter(line => line);
-            addressLines.forEach(line => {
-              tex += `{\\fontsize{8}{9}\\selectfont ${escapeLatex(line)}}\\\\
-`;
-            });
-          }
-          tex += `\\end{center}
-\\vspace{6pt}
-
-`;
-        } else {
-          // No seal, just centered letterhead
-          tex += `\\begin{center}
-`;
-          if (d.unitName) {
-            tex += `{\\fontsize{10}{11}\\selectfont\\textbf{${escapeLatex(d.unitName.toUpperCase())}}}\\\\
-`;
-          }
-          if (d.unitAddress) {
-            const addressLines = d.unitAddress.split('\n').map(line => line.trim()).filter(line => line);
-            addressLines.forEach(line => {
-              tex += `{\\fontsize{8}{9}\\selectfont ${escapeLatex(line)}}\\\\
-`;
-            });
-          }
-          tex += `\\end{center}
-\\vspace{6pt}
-
-`;
+        if (d.hasSeal) tex += `\\AddToShipoutPictureBG*{\\AtPageUpperLeft{\\put(0.5in,-1.5in){\\includegraphics[width=1in]{${d.sealFilename}}}}}\n`;
+        tex += `\\begin{center}\n`;
+        if (d.unitName) tex += `{\\fontsize{10}{11}\\selectfont\\textbf{${escapeLatex(d.unitName.toUpperCase())}}}\\\\\n`;
+        if (d.unitAddress) {
+          d.unitAddress.split('\n').filter(l => l.trim()).forEach(line => {
+            tex += `{\\fontsize{8}{9}\\selectfont ${escapeLatex(line.trim())}}\\\\\n`;
+          });
         }
+        tex += `\\end{center}\\vspace{6pt}\n`;
       }
 
-      tex += `\\begin{flushright}
-${escapeLatex(d.ssic)}\\\\
-${escapeLatex(d.date)}
-\\end{flushright}
+      tex += `\\begin{flushright}\n${escapeLatex(d.ssic)}\\\\\n`;
+      if (d.officeCode) tex += `${escapeLatex(d.officeCode)}\\\\\n`;
+      tex += `${escapeLatex(d.date)}\n\\end{flushright}\n\\vspace{\\baselineskip}\n`;
 
-\\vspace{\\baselineskip}
+      if (d.documentType === 'endorsement') {
+        tex += `\\begin{center}\\textbf{${escapeLatex(d.endorseNumber)} ENDORSEMENT}\\end{center}\\vspace{\\baselineskip}\n`;
+      }
 
-\\noindent\\makebox[\\labeltab][l]{From:}${escapeLatex(d.from)}
+      tex += `\\noindent\\makebox[\\labeltab][l]{From:}${escapeLatex(d.from)}\n\n`;
+      tex += `\\noindent\\makebox[\\labeltab][l]{To:}${escapeLatex(d.to)}\n\n`;
 
-\\noindent\\makebox[\\labeltab][l]{To:}${escapeLatex(d.to)}
-
-`;
-
-      // Via lines - numbered (1), (2), (3), (4) per SECNAV M-5216.5
       if (d.via.length > 0) {
-        d.via.forEach((via, i) => {
-          if (i === 0) {
-            tex += `\\noindent\\makebox[\\labeltab][l]{Via:}(${i + 1}) ${escapeLatex(via)}`;
-          } else {
-            tex += `\\\\
-\\hspace*{\\labeltab}(${i + 1}) ${escapeLatex(via)}`;
-          }
+        tex += `\\noindent\\makebox[\\labeltab][l]{Via:}`;
+        d.via.forEach((v, i) => {
+          tex += i === 0 ? `(${i + 1}) ${escapeLatex(v)}` : `\\\\\n\\hspace*{\\labeltab}(${i + 1}) ${escapeLatex(v)}`;
         });
-        tex += `
-
-`;
+        tex += `\n\n`;
       }
 
-      tex += `\\vspace{\\baselineskip}
-\\noindent\\makebox[\\labeltab][l]{Subj:}${escapeLatex(d.subj.toUpperCase())}
-
-`;
+      tex += `\\vspace{\\baselineskip}\n\\noindent\\makebox[\\labeltab][l]{Subj:}${escapeLatex(d.subj.toUpperCase())}\n\n`;
 
       if (d.refs.length > 0) {
-        tex += `\\vspace{\\baselineskip}
-\\noindent\\makebox[\\labeltab][l]{Ref:}%
-\\begin{minipage}[t]{\\dimexpr\\textwidth-\\labeltab\\relax}
-`;
-        d.refs.forEach((ref, i) => {
-          tex += `(${refLetters[i]}) ${escapeLatex(ref)}`;
-          if (i < d.refs.length - 1) tex += `\\\\*\n`;
-          else tex += `\n`;
-        });
-        tex += `\\end{minipage}
-
-`;
+        tex += `\\vspace{\\baselineskip}\n\\noindent\\makebox[\\labeltab][l]{Ref:}%\n\\begin{minipage}[t]{\\dimexpr\\textwidth-\\labeltab\\relax}\n`;
+        d.refs.forEach((r, i) => tex += `(${letters[i]}) ${escapeLatex(r)}${i < d.refs.length - 1 ? '\\\\*\n' : '\n'}`);
+        tex += `\\end{minipage}\n\n`;
       }
 
       if (d.encls.length > 0) {
-        tex += `\\vspace{\\baselineskip}
-\\noindent\\makebox[\\labeltab][l]{Encl:}%
-\\begin{minipage}[t]{\\dimexpr\\textwidth-\\labeltab\\relax}
-`;
-        d.encls.forEach((encl, i) => {
-          tex += `(${i + 1}) ${escapeLatex(encl)}`;
-          if (i < d.encls.length - 1) tex += `\\\\*\n`;
-          else tex += `\n`;
-        });
-        tex += `\\end{minipage}
-
-`;
+        tex += `\\vspace{\\baselineskip}\n\\noindent\\makebox[\\labeltab][l]{Encl:}%\n\\begin{minipage}[t]{\\dimexpr\\textwidth-\\labeltab\\relax}\n`;
+        d.encls.forEach((e, i) => tex += `(${i + 1}) ${escapeLatex(e)}${i < d.encls.length - 1 ? '\\\\*\n' : '\n'}`);
+        tex += `\\end{minipage}\n\n`;
       }
 
       if (d.paras.length > 0) {
-        let paraNum = 0;
-        let subparaNum = 0;
-        let subsubparaNum = 0;
-        let subsubsubparaNum = 0;
-        
-        for (const para of d.paras) {
-          if (para.type === 'para') {
-            paraNum++;
-            subparaNum = 0;
-            subsubparaNum = 0;
-            subsubsubparaNum = 0;
-            tex += `\\par\\vspace{\\baselineskip}
-\\noindent ${paraNum}.\\ \\ ${escapeLatex(para.text)}
-
-`;
-          } else if (para.type === 'subpara') {
-            subparaNum++;
-            subsubparaNum = 0;
-            subsubsubparaNum = 0;
-            tex += `\\par\\vspace{\\baselineskip}
-\\noindent\\hspace{\\Lmain}${letters[subparaNum - 1]}.\\ \\ ${escapeLatex(para.text)}
-
-`;
-          } else if (para.type === 'subsubpara') {
-            subsubparaNum++;
-            subsubsubparaNum = 0;
-            tex += `\\par\\vspace{\\baselineskip}
-\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${subsubparaNum})\\ \\ ${escapeLatex(para.text)}
-
-`;
-          } else if (para.type === 'subsubsubpara') {
-            subsubsubparaNum++;
-            tex += `\\par\\vspace{\\baselineskip}
-\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${letters[subsubsubparaNum - 1]})\\ \\ ${escapeLatex(para.text)}
-
-`;
-          }
+        let pn = 0, sn = 0, ssn = 0, sssn = 0;
+        for (const p of d.paras) {
+          if (p.type === 'para') { pn++; sn = 0; ssn = 0; sssn = 0; tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${escapeLatex(p.text)}\n\n`; }
+          else if (p.type === 'subpara') { sn++; ssn = 0; sssn = 0; tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${letters[sn - 1]}.\\ \\ ${escapeLatex(p.text)}\n\n`; }
+          else if (p.type === 'subsubpara') { ssn++; sssn = 0; tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${ssn})\\ \\ ${escapeLatex(p.text)}\n\n`; }
+          else if (p.type === 'subsubsubpara') { sssn++; tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${letters[sssn - 1]})\\ \\ ${escapeLatex(p.text)}\n\n`; }
         }
       }
 
-      if (d.sigName || d.sigRank || d.sigTitle) {
-        // Signature block: 4 lines below last text, begins center of page
-        tex += `\\par\\vspace{4\\baselineskip}
-\\hspace*{3.25in}${escapeLatex(d.sigName.toUpperCase())}`;
-        if (d.byDirection) {
-          tex += `\\\\
-\\hspace*{3.25in}By direction`;
-        }
-        tex += `
-
-`;
+      if (d.sigName) {
+        tex += `\\par\\vspace{4\\baselineskip}\n\\hspace*{3.25in}${escapeLatex(d.sigName.toUpperCase())}`;
+        if (d.byDirection) tex += `\\\\\n\\hspace*{3.25in}By direction`;
+        tex += `\n\n`;
       }
 
       if (d.copies.length > 0) {
-        // Copy to: 2 lines below signature block
-        tex += `\\par\\vspace{2\\baselineskip}
-\\noindent Copy to:\\\\
-`;
-        d.copies.forEach((copy, i) => {
-          tex += escapeLatex(copy);
-          if (i < d.copies.length - 1) tex += `\\\\*\n`;
-          else tex += `\n`;
-        });
+        tex += `\\par\\vspace{2\\baselineskip}\n\\noindent Copy to:\\\\\n`;
+        d.copies.forEach((c, i) => tex += `${escapeLatex(c)}${i < d.copies.length - 1 ? '\\\\*\n' : '\n'}`);
       }
 
-      if (d.classification) {
-        tex += `
-\\vfill
-\\begin{center}\\textbf{${escapeLatex(d.classification)}}\\end{center}
-`;
-      }
-
-      tex += `\\end{document}
-`;
-
+      if (d.classification) tex += `\\vfill\n\\begin{center}\\textbf{${escapeLatex(d.classification)}}\\end{center}\n`;
+      tex += `\\end{document}\n`;
       return tex;
     }
 
-    // Preview
+    // ============================================================
+    // OUTPUT FUNCTIONS
+    // ============================================================
     function previewTex() {
-      const tex = generateTex();
-      document.getElementById('previewContent').textContent = tex;
+      document.getElementById('previewContent').textContent = generateTex();
       document.getElementById('previewSection').classList.add('show');
     }
 
-    // Download .tex file
     function downloadTex() {
       const tex = generateTex();
-      const blob = new Blob([tex], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      
       const d = collectData();
-      const filename = d.subj ? 
-        d.subj.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30) + '.tex' : 
-        'naval_letter.tex';
-      
+      const filename = d.subj ? d.subj.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30) + '.tex' : 'naval_letter.tex';
+      const blob = new Blob([tex], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
       a.download = filename;
-      document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      
+      URL.revokeObjectURL(a.href);
       showStatus('success', 'Downloaded ' + filename);
     }
 
-    // Download ZIP
     async function downloadZip() {
-      const tex = generateTex();
-      const d = collectData();
-      
-      if (typeof JSZip === 'undefined') {
-        showStatus('error', 'ZIP library not loaded. Check internet connection.');
-        return;
-      }
-      
-      showStatus('loading', 'Creating ZIP file...');
-      
+      if (typeof JSZip === 'undefined') { showStatus('error', 'ZIP library not loaded'); return; }
+      showStatus('loading', 'Creating ZIP...');
       try {
         const zip = new JSZip();
-        zip.file('naval_letter.tex', tex);
-        
+        zip.file('naval_letter.tex', generateTex());
         if (sealData && sealFilename) {
-          const base64Data = sealData.split(',')[1];
-          zip.file(sealFilename, base64Data, {base64: true});
+          zip.file(sealFilename, sealData.split(',')[1], { base64: true });
         }
-        
-        const readme = `Naval Letter Package
-====================
-
-To compile:
-1. Go to https://www.overleaf.com
-2. New Project → Upload Project → Select this ZIP
-3. Click "Recompile" (green button)
-4. Download the PDF
-
-Generated by Naval Letter Generator
-Per SECNAV M-5216.5
-`;
-        zip.file('README.txt', readme);
-        
-        const blob = await zip.generateAsync({type: 'blob'});
-        const url = URL.createObjectURL(blob);
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const d = collectData();
+        const filename = d.subj ? d.subj.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30) + '.zip' : 'naval_letter.zip';
         const a = document.createElement('a');
-        a.href = url;
-        
-        const filename = d.subj ? 
-          d.subj.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30) + '.zip' : 
-          'naval_letter.zip';
-        
+        a.href = URL.createObjectURL(blob);
         a.download = filename;
-        document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
+        URL.revokeObjectURL(a.href);
         showStatus('success', 'Downloaded ' + filename);
-        
-      } catch (error) {
-        showStatus('error', 'Failed to create ZIP: ' + error.message);
-      }
+      } catch (err) { showStatus('error', 'Error: ' + err.message); }
     }
 
-    // Copy to clipboard
-    async function copyToClipboard() {
-      const tex = generateTex();
-      
-      try {
-        await navigator.clipboard.writeText(tex);
-        showStatus('success', 'Copied to clipboard!');
-      } catch (error) {
-        const textArea = document.createElement('textarea');
-        textArea.value = tex;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-9999px';
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        showStatus('success', 'Copied to clipboard!');
-      }
-    }
-
-    // Open in Overleaf
     function openInOverleafDirect() {
       const d = collectData();
-      
-      if (d.hasSeal) {
-        const proceed = confirm(
-          "You have a seal/emblem attached.\n\n" +
-          "The 'Open in Overleaf' option cannot include images.\n\n" +
-          "For letters with seals, use 'Download ZIP' instead.\n\n" +
-          "Continue without seal?"
-        );
-        if (!proceed) return;
-      }
-      
-      const tex = generateTex();
-      
-      showStatus('loading', 'Opening Overleaf...');
-      
+      if (d.hasSeal) showStatus('error', 'Custom seal requires ZIP upload to Overleaf');
       const form = document.createElement('form');
       form.method = 'POST';
       form.action = 'https://www.overleaf.com/docs';
       form.target = '_blank';
-      form.style.display = 'none';
-      
-      const snipInput = document.createElement('input');
-      snipInput.type = 'hidden';
-      snipInput.name = 'snip';
-      snipInput.value = tex;
-      form.appendChild(snipInput);
-      
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'snip';
+      input.value = generateTex();
+      form.appendChild(input);
       document.body.appendChild(form);
       form.submit();
       document.body.removeChild(form);
-      
-      showStatus('success', 'Overleaf opened! Click "Recompile" then download PDF.');
+      showStatus('success', 'Overleaf opened - click Recompile');
     }
 
-    function showStatus(type, message) {
-      const status = document.getElementById('status');
-      status.className = `status show ${type}`;
-      status.textContent = message;
-      
-      if (type !== 'loading') {
-        setTimeout(() => {
-          status.classList.remove('show');
-        }, 5000);
-      }
-    }
-
-    // Generate PDF directly using jsPDF
+    // ============================================================
+    // PDF GENERATION
+    // ============================================================
     async function generatePDF() {
       const { jsPDF } = window.jspdf;
       const d = collectData();
-      const letters = 'abcdefghijklmnopqrstuvwxyz';
-      
       showStatus('loading', 'Generating PDF...');
-      
-      // Create PDF - letter size in points (72 points = 1 inch)
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'pt',
-        format: 'letter'  // 612 x 792 points
-      });
-      
-      // Measurements (in points, 72pt = 1 inch)
-      const PAGE_WIDTH = 612;
-      const PAGE_HEIGHT = 792;
-      const MARGIN_LEFT = 72;      // 1 inch
-      const MARGIN_RIGHT = 72;     // 1 inch
-      const MARGIN_TOP = 72;       // 1 inch
-      const MARGIN_BOTTOM = 72;    // 1 inch
-      const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;  // 468pt = 6.5"
-      const LABEL_TAB = 45;        // 0.625 inch for From:, To:, etc.
-      const LINE_HEIGHT = 14;      // ~12pt font with spacing
-      const PARA_SPACING = LINE_HEIGHT;  // One blank line between paragraphs
-      
-      // Indentation widths (approximate character widths for Times)
-      const INDENT_MAIN = 18;      // "1.  " width
-      const INDENT_SUB = 16;       // "a.  " width  
-      const INDENT_SUBSUB = 22;    // "(1)  " width
-      const INDENT_SUBSUBSUB = 22; // "(a)  " width
-      
-      let y = MARGIN_TOP;
-      let pageNum = 1;
-      const subjectText = d.subj.toUpperCase();
-      
-      // Helper function to check page break and add continuation header
-      function checkPageBreak(neededSpace) {
-        if (y + neededSpace > PAGE_HEIGHT - MARGIN_BOTTOM) {
+
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+      const PW = 612, PH = 792, ML = 72, MR = 72, MT = 72, MB = 72;
+      const CW = PW - ML - MR, LH = 14, TAB = 45;
+      const IM = 18, IS = 16, ISS = 22, ISSS = 22;
+      let y = 45, pageNum = 1;
+      const subjText = d.subj.toUpperCase();
+
+      function pageBreak(need) {
+        if (y + need > PH - MB) {
           pdf.addPage();
           pageNum++;
-          y = MARGIN_TOP;
-          
-          // Add continuation header
+          y = MT;
           pdf.setFont('times', 'normal');
           pdf.setFontSize(10);
-          pdf.text('Subj:', MARGIN_LEFT, y);
-          
-          // Wrap subject text for continuation header
-          const subjLines = pdf.splitTextToSize(subjectText, CONTENT_WIDTH - 50);
-          pdf.text(subjLines[0], MARGIN_LEFT + 45, y);
-          y += LINE_HEIGHT * 2;
+          pdf.text('Subj:', ML, y);
+          pdf.text(pdf.splitTextToSize(subjText, CW - 50)[0] || '', ML + 45, y);
+          y += LH * 2;
         }
       }
-      
-      // Helper function to add wrapped text
-      function addWrappedText(text, x, maxWidth, indent = 0) {
-        const lines = pdf.splitTextToSize(text, maxWidth);
-        lines.forEach((line, i) => {
-          checkPageBreak(LINE_HEIGHT);
-          if (i === 0) {
-            pdf.text(line, x, y);
-          } else {
-            pdf.text(line, x + indent, y);
-          }
-          y += LINE_HEIGHT;
-        });
-      }
-      
-      // === FIRST PAGE HEADER ===
-      
-      // Adjust start position for first page (0.625" from top)
-      y = 45;  // ~0.625 inch
-      
-      // Classification marking at top
-      if (d.classification && d.classification !== 'UNCLASSIFIED') {
+
+      // Classification top
+      if (d.classification) {
         pdf.setFont('times', 'bold');
         pdf.setFontSize(12);
-        const classWidth = pdf.getTextWidth(d.classification);
-        pdf.text(d.classification, (PAGE_WIDTH - classWidth) / 2, y);
-        y += LINE_HEIGHT + 4;
+        pdf.text(d.classification, PW / 2, y, { align: 'center' });
+        y += LH + 4;
       }
-      
+
       // Letterhead
       if (d.useLetterhead) {
-        // Unit seal (if provided)
         if (d.hasSeal && sealData) {
-          try {
-            // Position: 0.5" from left, 0.5" from top, 1" diameter
-            pdf.addImage(sealData, 'JPEG', 36, 36, 72, 72);
-          } catch (e) {
-            console.warn('Could not add seal image:', e);
-          }
+          try { pdf.addImage(sealData, 'JPEG', 36, 36, 72, 72); } catch (e) { console.warn(e); }
         }
-        
-        // Service name - 10pt Bold, centered
         if (d.unitName) {
           pdf.setFont('times', 'bold');
           pdf.setFontSize(10);
-          const nameWidth = pdf.getTextWidth(d.unitName.toUpperCase());
-          pdf.text(d.unitName.toUpperCase(), (PAGE_WIDTH - nameWidth) / 2, y);
-          y += 11;  // 10pt + small gap
+          pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
+          y += 11;
         }
-        
-        // Unit address - 8pt, centered
         if (d.unitAddress) {
           pdf.setFont('times', 'normal');
           pdf.setFontSize(8);
-          const addressLines = d.unitAddress.split('\n').filter(l => l.trim());
-          addressLines.forEach(line => {
-            const lineWidth = pdf.getTextWidth(line.trim());
-            pdf.text(line.trim(), (PAGE_WIDTH - lineWidth) / 2, y);
-            y += 9;  // 8pt + small gap
+          d.unitAddress.split('\n').filter(l => l.trim()).forEach(line => {
+            pdf.text(line.trim(), PW / 2, y, { align: 'center' });
+            y += 9;
           });
         }
-        
-        y += 6;  // Gap after letterhead
+        y += 6;
       }
-      
-      // SSIC and Date - right aligned
+
+      // Header block
       pdf.setFont('times', 'normal');
       pdf.setFontSize(12);
-      
-      const ssicWidth = pdf.getTextWidth(d.ssic);
-      pdf.text(d.ssic, PAGE_WIDTH - MARGIN_RIGHT - ssicWidth, y);
-      y += LINE_HEIGHT;
-      
-      const dateWidth = pdf.getTextWidth(d.date);
-      pdf.text(d.date, PAGE_WIDTH - MARGIN_RIGHT - dateWidth, y);
-      y += LINE_HEIGHT * 2;
-      
-      // === ADDRESSING BLOCK ===
-      
-      // From:
-      pdf.setFont('times', 'normal');
-      pdf.setFontSize(12);
-      pdf.text('From:', MARGIN_LEFT, y);
-      const fromLines = pdf.splitTextToSize(d.from, CONTENT_WIDTH - LABEL_TAB);
-      fromLines.forEach((line, i) => {
-        pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
-        y += LINE_HEIGHT;
-      });
-      
-      // To:
-      pdf.text('To:', MARGIN_LEFT, y);
-      const toLines = pdf.splitTextToSize(d.to, CONTENT_WIDTH - LABEL_TAB);
-      toLines.forEach((line, i) => {
-        pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
-        y += LINE_HEIGHT;
-      });
-      
-      // Via: (if any)
+      if (d.ssic) { pdf.text(d.ssic, PW - MR, y, { align: 'right' }); y += LH; }
+      if (d.officeCode) { pdf.text(d.officeCode, PW - MR, y, { align: 'right' }); y += LH; }
+      pdf.text(d.date, PW - MR, y, { align: 'right' });
+      y += LH * 2;
+
+      // Endorsement header
+      if (d.documentType === 'endorsement') {
+        pdf.setFont('times', 'bold');
+        pdf.text(`${d.endorseNumber} ENDORSEMENT`, PW / 2, y, { align: 'center' });
+        y += LH * 2;
+        pdf.setFont('times', 'normal');
+      }
+
+      // From/To
+      pdf.text('From:', ML, y);
+      pdf.splitTextToSize(d.from, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+      pdf.text('To:', ML, y);
+      pdf.splitTextToSize(d.to, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+
+      // Via
       if (d.via.length > 0) {
-        pdf.text('Via:', MARGIN_LEFT, y);
-        d.via.forEach((via, i) => {
-          const viaText = `(${i + 1})  ${via}`;
-          const viaLines = pdf.splitTextToSize(viaText, CONTENT_WIDTH - LABEL_TAB);
-          viaLines.forEach((line, j) => {
-            if (j === 0 && i === 0) {
-              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
-            } else if (j === 0) {
-              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
-            } else {
-              pdf.text(line, MARGIN_LEFT + LABEL_TAB + 25, y);
-            }
-            y += LINE_HEIGHT;
-          });
+        pdf.text('Via:', ML, y);
+        d.via.forEach((v, i) => {
+          pdf.splitTextToSize(`(${i + 1})  ${v}`, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
         });
       }
-      
-      y += PARA_SPACING;
-      
-      // Subject:
-      checkPageBreak(LINE_HEIGHT * 2);
-      pdf.text('Subj:', MARGIN_LEFT, y);
-      const subjLines = pdf.splitTextToSize(subjectText, CONTENT_WIDTH - LABEL_TAB);
-      subjLines.forEach((line, i) => {
-        pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
-        y += LINE_HEIGHT;
-      });
-      
-      // References (if any)
+
+      y += LH;
+      pageBreak(LH * 2);
+      pdf.text('Subj:', ML, y);
+      pdf.splitTextToSize(subjText, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+
+      // Refs
       if (d.refs.length > 0) {
-        y += PARA_SPACING;
-        checkPageBreak(LINE_HEIGHT * (d.refs.length + 1));
-        pdf.text('Ref:', MARGIN_LEFT, y);
-        d.refs.forEach((ref, i) => {
-          const refText = `(${letters[i]})  ${ref}`;
-          const refLines = pdf.splitTextToSize(refText, CONTENT_WIDTH - LABEL_TAB);
-          refLines.forEach((line, j) => {
-            if (j === 0 && i === 0) {
-              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
-            } else if (j === 0) {
-              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
-            } else {
-              pdf.text(line, MARGIN_LEFT + LABEL_TAB + 25, y);
-            }
-            y += LINE_HEIGHT;
-          });
+        y += LH;
+        pageBreak(LH * (d.refs.length + 1));
+        pdf.text('Ref:', ML, y);
+        d.refs.forEach((r, i) => {
+          pdf.splitTextToSize(`(${letters[i]})  ${r}`, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
         });
       }
-      
-      // Enclosures (if any)
+
+      // Encls
       if (d.encls.length > 0) {
-        y += PARA_SPACING;
-        checkPageBreak(LINE_HEIGHT * (d.encls.length + 1));
-        pdf.text('Encl:', MARGIN_LEFT, y);
-        d.encls.forEach((encl, i) => {
-          const enclText = `(${i + 1})  ${encl}`;
-          const enclLines = pdf.splitTextToSize(enclText, CONTENT_WIDTH - LABEL_TAB);
-          enclLines.forEach((line, j) => {
-            if (j === 0 && i === 0) {
-              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
-            } else if (j === 0) {
-              pdf.text(line, MARGIN_LEFT + LABEL_TAB, y);
-            } else {
-              pdf.text(line, MARGIN_LEFT + LABEL_TAB + 25, y);
-            }
-            y += LINE_HEIGHT;
-          });
+        y += LH;
+        pageBreak(LH * (d.encls.length + 1));
+        pdf.text('Encl:', ML, y);
+        d.encls.forEach((e, i) => {
+          pdf.splitTextToSize(`(${i + 1})  ${e}`, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
         });
       }
-      
-      // === BODY PARAGRAPHS ===
-      
+
+      // Body
       if (d.paras.length > 0) {
-        let paraNum = 0;
-        let subparaNum = 0;
-        let subsubparaNum = 0;
-        let subsubsubparaNum = 0;
-        
-        for (const para of d.paras) {
-          y += PARA_SPACING;
+        let pn = 0, sn = 0, ssn = 0, sssn = 0;
+        for (const p of d.paras) {
+          y += LH;
+          let label, indent, tIndent;
+          if (p.type === 'para') { pn++; sn = 0; ssn = 0; sssn = 0; label = pn + '.'; indent = 0; tIndent = IM; }
+          else if (p.type === 'subpara') { sn++; ssn = 0; sssn = 0; label = letters[sn - 1] + '.'; indent = IM; tIndent = IS; }
+          else if (p.type === 'subsubpara') { ssn++; sssn = 0; label = '(' + ssn + ')'; indent = IM + IS; tIndent = ISS; }
+          else { sssn++; label = '(' + letters[sssn - 1] + ')'; indent = IM + IS + ISS; tIndent = ISSS; }
           
-          let label = '';
-          let indent = 0;
-          let textIndent = 0;
-          
-          if (para.type === 'para') {
-            paraNum++;
-            subparaNum = 0;
-            subsubparaNum = 0;
-            subsubsubparaNum = 0;
-            label = `${paraNum}.`;
-            indent = 0;
-            textIndent = INDENT_MAIN;
-          } else if (para.type === 'subpara') {
-            subparaNum++;
-            subsubparaNum = 0;
-            subsubsubparaNum = 0;
-            label = `${letters[subparaNum - 1]}.`;
-            indent = INDENT_MAIN;
-            textIndent = INDENT_SUB;
-          } else if (para.type === 'subsubpara') {
-            subsubparaNum++;
-            subsubsubparaNum = 0;
-            label = `(${subsubparaNum})`;
-            indent = INDENT_MAIN + INDENT_SUB;
-            textIndent = INDENT_SUBSUB;
-          } else if (para.type === 'subsubsubpara') {
-            subsubsubparaNum++;
-            label = `(${letters[subsubsubparaNum - 1]})`;
-            indent = INDENT_MAIN + INDENT_SUB + INDENT_SUBSUB;
-            textIndent = INDENT_SUBSUBSUB;
-          }
-          
-          const labelX = MARGIN_LEFT + indent;
-          const textX = labelX + textIndent;
-          const textWidth = CONTENT_WIDTH - indent - textIndent;
-          
-          checkPageBreak(LINE_HEIGHT * 2);
-          
-          // Draw label
-          pdf.text(label, labelX, y);
-          
-          // Draw wrapped text
-          const textLines = pdf.splitTextToSize(para.text, textWidth);
-          textLines.forEach((line, i) => {
-            if (i > 0) checkPageBreak(LINE_HEIGHT);
-            pdf.text(line, textX, y);
-            y += LINE_HEIGHT;
+          const lx = ML + indent, tx = lx + tIndent, tw = CW - indent - tIndent;
+          pageBreak(LH * 2);
+          pdf.text(label, lx, y);
+          pdf.splitTextToSize(p.text, tw).forEach((line, i) => {
+            if (i > 0) pageBreak(LH);
+            pdf.text(line, tx, y);
+            y += LH;
           });
         }
       }
-      
-      // === SIGNATURE BLOCK ===
-      
-      if (d.sigName || d.sigRank || d.sigTitle) {
-        y += PARA_SPACING * 4;  // 4 lines below last text
-        checkPageBreak(LINE_HEIGHT * 4);
-        
-        const sigX = PAGE_WIDTH / 2;  // Center of page (3.25")
-        
-        // Name in caps
-        if (d.sigName) {
-          pdf.text(d.sigName.toUpperCase(), sigX, y);
-          y += LINE_HEIGHT;
-        }
-        
-        // By direction
-        if (d.byDirection) {
-          pdf.text('By direction', sigX, y);
-          y += LINE_HEIGHT;
-        }
-        
-        // Rank
-        if (d.sigRank) {
-          pdf.text(d.sigRank, sigX, y);
-          y += LINE_HEIGHT;
-        }
-        
-        // Title
-        if (d.sigTitle) {
-          pdf.text(d.sigTitle, sigX, y);
-          y += LINE_HEIGHT;
-        }
+
+      // Signature
+      if (d.sigName) {
+        y += LH * 4;
+        pageBreak(LH * 4);
+        const sx = PW / 2;
+        pdf.text(d.sigName.toUpperCase(), sx, y); y += LH;
+        if (d.byDirection) { pdf.text('By direction', sx, y); y += LH; }
+        if (d.sigRank) { pdf.text(d.sigRank, sx, y); y += LH; }
+        if (d.sigTitle) { pdf.text(d.sigTitle, sx, y); y += LH; }
       }
-      
-      // === COPY TO ===
-      
+
+      // Copy to
       if (d.copies.length > 0) {
-        y += PARA_SPACING * 2;
-        checkPageBreak(LINE_HEIGHT * (d.copies.length + 2));
-        
-        pdf.text('Copy to:', MARGIN_LEFT, y);
-        y += LINE_HEIGHT;
-        
-        d.copies.forEach(copy => {
-          pdf.text(copy, MARGIN_LEFT, y);
-          y += LINE_HEIGHT;
-        });
+        y += LH * 2;
+        pageBreak(LH * (d.copies.length + 2));
+        pdf.text('Copy to:', ML, y); y += LH;
+        d.copies.forEach(c => { pdf.text(c, ML, y); y += LH; });
       }
-      
-      // === CLASSIFICATION AT BOTTOM (if applicable) ===
-      
-      if (d.classification && d.classification !== 'UNCLASSIFIED') {
-        const totalPages = pdf.getNumberOfPages();
-        for (let i = 1; i <= totalPages; i++) {
+
+      // Classification bottom
+      if (d.classification) {
+        for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
           pdf.setPage(i);
           pdf.setFont('times', 'bold');
           pdf.setFontSize(12);
-          const classWidth = pdf.getTextWidth(d.classification);
-          pdf.text(d.classification, (PAGE_WIDTH - classWidth) / 2, PAGE_HEIGHT - 36);
+          pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
         }
       }
-      
-      // === PAGE NUMBERS (centered at bottom) ===
-      
-      const totalPages = pdf.getNumberOfPages();
-      if (totalPages > 1) {
-        for (let i = 2; i <= totalPages; i++) {
+
+      // Page numbers
+      if (pdf.getNumberOfPages() > 1) {
+        for (let i = 2; i <= pdf.getNumberOfPages(); i++) {
           pdf.setPage(i);
           pdf.setFont('times', 'normal');
           pdf.setFontSize(12);
-          const pageStr = String(i);
-          const pageWidth = pdf.getTextWidth(pageStr);
-          pdf.text(pageStr, (PAGE_WIDTH - pageWidth) / 2, PAGE_HEIGHT - 36);
+          pdf.text(String(i), PW / 2, PH - 36, { align: 'center' });
         }
       }
-      
-      // === SAVE PDF ===
-      
-      const filename = d.subj ? 
-        d.subj.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30) + '.pdf' : 
-        'naval_letter.pdf';
-      
+
+      const filename = d.subj ? d.subj.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30) + '.pdf' : 'naval_letter.pdf';
       pdf.save(filename);
-      
-      showStatus('success', 'PDF downloaded: ' + filename);
+      showStatus('success', 'Downloaded ' + filename);
+    }
+
+    function showStatus(type, msg) {
+      const s = document.getElementById('status');
+      s.className = `status show ${type}`;
+      s.textContent = msg;
+      if (type !== 'loading') setTimeout(() => s.classList.remove('show'), 5000);
     }
   </script>
 </body>
