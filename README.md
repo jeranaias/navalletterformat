@@ -327,7 +327,9 @@ This project needs people who know naval correspondence. If that's you, your fee
 ## About
 
 **Created by:** SSgt Jesse Morgan, USMC
+
 **Location:** Presidio of Monterey, California
+
 **Status:** Active development - feedback welcome!
 
 This tool was built out of frustration with inconsistent templates and wasted time on administrative formatting. Every service member deserves access to properly formatted correspondence tools—not just those lucky enough to have the right template.
