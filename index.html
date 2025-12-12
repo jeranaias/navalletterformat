@@ -1866,8 +1866,8 @@
       const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
       const PW = 612, PH = 792, ML = 72, MR = 72, MT = 72, MB = 72;
       const CW = PW - ML - MR, LH = 14, TAB = 45;
-      const IM = 18, IS = 16, ISS = 22, ISSS = 22;
-      let y = 45, pageNum = 1;
+      const IM = 14, IS = 12, ISS = 18, ISSS = 18;
+      let y = 54, pageNum = 1;
       const subjText = d.subj.toUpperCase();
 
       function pageBreak(need) {
@@ -1910,7 +1910,7 @@
             y += 9;
           });
         }
-        y += 6;
+        y += LH * 2;  // 2 blank lines after letterhead
       }
 
       // Header block
