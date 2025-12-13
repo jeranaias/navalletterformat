@@ -3,6 +3,8 @@ node_modules/
 
 # Generated files
 testing/testing/examples/
+example_3page_letter.pdf
+tests/output/
 
 # Lock files (optional - can be committed for reproducibility)
 package-lock.json
