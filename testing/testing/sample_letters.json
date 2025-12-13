@@ -1,0 +1,225 @@
+{
+  "description": "Sample naval letter data for testing PDF generation against HTML preview",
+  "usage": "Load this JSON into the web form OR use with generate_examples.js to create reference PDFs",
+  
+  "examples": {
+    "basic": {
+      "name": "Basic Letter (minimal fields)",
+      "ssic": "1000",
+      "serialNumber": "",
+      "date": "13 Dec 24",
+      "fromLine": "Commanding Officer, Marine Corps Detachment",
+      "toLine": "Commanding General, Training and Education Command",
+      "viaLines": [],
+      "subjectLine": "Request for Additional Training Resources",
+      "references": [],
+      "enclosures": [],
+      "paragraphs": [
+        "1.  This letter is to request additional training resources for the upcoming fiscal year.",
+        "2.  Current resources are insufficient to meet projected training requirements.",
+        "3.  Request approval for the attached resource allocation."
+      ],
+      "signatureName": "J. D. SMITH",
+      "signatureRank": "Lieutenant Colonel, U.S. Marine Corps",
+      "signatureTitle": "Commanding Officer",
+      "copyTo": []
+    },
+
+    "standard": {
+      "name": "Standard Letter (via, refs, enclosures)",
+      "ssic": "5216",
+      "serialNumber": "001/25",
+      "date": "13 Dec 24",
+      "fromLine": "Commanding Officer, Headquarters and Service Battalion",
+      "toLine": "Commandant of the Marine Corps (MMEA-25)",
+      "viaLines": [
+        "Commanding General, Marine Corps Combat Development Command",
+        "Director, Training and Education Command"
+      ],
+      "subjectLine": "Recommendation for Meritorious Promotion to Sergeant",
+      "references": [
+        "(a) MCO 1400.32D",
+        "(b) MCO P1070.12K"
+      ],
+      "enclosures": [
+        "(1) Meritorious Promotion Package",
+        "(2) Fitness Reports (last 3)",
+        "(3) Letters of Recommendation"
+      ],
+      "paragraphs": [
+        "1.  Per references (a) and (b), Corporal John A. Marine, 1234567/0311, is recommended for meritorious promotion to Sergeant.",
+        "2.  Corporal Marine has consistently demonstrated superior performance, leadership ability, and dedication to duty that distinguish him from his peers.",
+        "3.  Supporting documentation is provided in enclosures (1) through (3).",
+        "4.  Point of contact for this matter is the undersigned at DSN 278-1234 or john.smith@usmc.mil."
+      ],
+      "signatureName": "J. D. SMITH",
+      "signatureRank": "Major, U.S. Marine Corps",
+      "signatureTitle": "Commanding Officer",
+      "copyTo": [
+        "S-1",
+        "Marine's Service Record Book"
+      ]
+    },
+
+    "award": {
+      "name": "Award Recommendation",
+      "ssic": "1650",
+      "serialNumber": "042/25",
+      "date": "10 Dec 24",
+      "fromLine": "Commanding Officer, Company A, 1st Battalion, 5th Marines",
+      "toLine": "Commandant of the Marine Corps (MMMA)",
+      "viaLines": [
+        "Commanding Officer, 1st Battalion, 5th Marines",
+        "Commanding General, 1st Marine Division"
+      ],
+      "subjectLine": "Recommendation for Navy and Marine Corps Achievement Medal",
+      "references": [
+        "(a) SECNAVINST 1650.1H"
+      ],
+      "enclosures": [
+        "(1) Award Recommendation",
+        "(2) Summary of Action"
+      ],
+      "paragraphs": [
+        "1.  Per reference (a), Lance Corporal Jane A. Marine, 7654321/0311, is recommended for the Navy and Marine Corps Achievement Medal.",
+        "2.  During the period 1 June 2024 to 30 November 2024, Lance Corporal Marine performed her duties in an exemplary manner that brought credit upon herself, her unit, and the Marine Corps.",
+        "3.  Enclosures (1) and (2) provide detailed justification for this recommendation.",
+        "4.  Strongly recommend approval."
+      ],
+      "signatureName": "R. T. JONES",
+      "signatureRank": "Captain, U.S. Marine Corps",
+      "signatureTitle": "Commanding Officer",
+      "copyTo": []
+    },
+
+    "multiPage": {
+      "name": "Multi-page AAR (tests continuation)",
+      "ssic": "3000",
+      "serialNumber": "005/25",
+      "date": "13 Dec 24",
+      "fromLine": "Commanding Officer, Marine Corps Detachment, Defense Language Institute",
+      "toLine": "Director, Defense Language Institute Foreign Language Center",
+      "viaLines": [
+        "Assistant Commandant, Academic Operations"
+      ],
+      "subjectLine": "After Action Report for Training Exercise DESERT LINGUIST 24-02",
+      "references": [
+        "(a) DLIFLC Order 3500.1B",
+        "(b) MCO 3500.27C",
+        "(c) MCDP 1-0"
+      ],
+      "enclosures": [
+        "(1) Exercise Timeline",
+        "(2) Participant Roster",
+        "(3) Lessons Learned Database Extract",
+        "(4) Photographs"
+      ],
+      "paragraphs": [
+        "1.  Purpose.  This report documents the planning, execution, and results of Training Exercise DESERT LINGUIST 24-02, conducted 15-22 November 2024.",
+        "2.  Background.  Per reference (a), the Marine Corps Detachment is required to conduct semi-annual field training exercises to maintain operational readiness and language proficiency in austere environments.",
+        "3.  Participants.  A total of 47 Marines participated in the exercise, including 12 Arabic linguists, 15 Russian linguists, 8 Chinese linguists, and 12 support personnel. Complete roster is provided in enclosure (2).",
+        "4.  Execution.",
+        "    a.  Phase I (15-17 Nov).  Initial deployment and establishment of forward operating base. Language teams conducted pattern of life analysis and began source development role-play scenarios.",
+        "    b.  Phase II (18-20 Nov).  Full mission profiles including tactical questioning, document exploitation, and real-time reporting exercises. Teams rotated through all stations every 4 hours.",
+        "    c.  Phase III (21-22 Nov).  Culminating exercise involving multi-language operations and joint debrief with Navy and Army linguist units.",
+        "5.  Results.",
+        "    a.  All participants met or exceeded minimum proficiency standards.",
+        "    b.  Average DLPT improvement of 0.3 points across all languages.",
+        "    c.  Three Marines achieved ILR 3/3 proficiency for the first time.",
+        "    d.  Zero safety incidents reported.",
+        "6.  Lessons Learned.",
+        "    a.  Sustainment: Early coordination with range control and logistics support proved essential. Recommend maintaining 30-day advance coordination timeline.",
+        "    b.  Improvement: Communication between language teams could be enhanced with dedicated radio nets. Recommend procurement of additional SINCGARS equipment.",
+        "    c.  Improvement: Scenario injects should be developed further in advance to allow proper vetting by subject matter experts.",
+        "7.  Recommendations.",
+        "    a.  Continue semi-annual exercise schedule as specified in reference (a).",
+        "    b.  Request funding for additional field communication equipment.",
+        "    c.  Establish formal partnership with sister service linguist units for future joint exercises.",
+        "8.  Point of contact is the Operations Officer at DSN 768-5432 or ops.mcddet@dli.mil."
+      ],
+      "signatureName": "J. M. MORGAN",
+      "signatureRank": "Major, U.S. Marine Corps",
+      "signatureTitle": "Commanding Officer",
+      "copyTo": [
+        "S-3",
+        "Training NCO"
+      ]
+    },
+
+    "dli_specific": {
+      "name": "DLI-specific example (language training)",
+      "ssic": "1500",
+      "serialNumber": "003/25",
+      "date": "13 Dec 24",
+      "fromLine": "Senior Marine Instructor, Arabic Basic Course",
+      "toLine": "Officer in Charge, Marine Corps Detachment",
+      "viaLines": [],
+      "subjectLine": "Weekly Training Report for Arabic Basic Course 25-01",
+      "references": [
+        "(a) DLIFLC Order 1500.1",
+        "(b) MCO 1510.116A"
+      ],
+      "enclosures": [
+        "(1) Student Progress Matrix",
+        "(2) Diagnostic Test Results"
+      ],
+      "paragraphs": [
+        "1.  Per reference (a), this report provides the weekly training status for Arabic Basic Course 25-01, Week 12 of 64.",
+        "2.  Current Status.",
+        "    a.  Course strength: 8 Marines (100% of original enrollment).",
+        "    b.  Academic standing: 7 passing, 1 on academic probation.",
+        "    c.  No disciplinary issues to report.",
+        "3.  Training Highlights.",
+        "    a.  Completed Module 3 (Levantine Dialect Introduction).",
+        "    b.  Diagnostic testing indicates class average tracking at 1+/1+ with projected graduation proficiency of 2+/2+/2.",
+        "    c.  One Marine (LCpl Smith) demonstrating exceptional aptitude; recommend consideration for accelerated track.",
+        "4.  Concerns.",
+        "    a.  PFC Jones struggling with Modern Standard Arabic listening comprehension. Additional lab hours and peer tutoring have been arranged.",
+        "5.  Request guidance on accelerated track nomination procedures for LCpl Smith."
+      ],
+      "signatureName": "A. B. INSTRUCTOR",
+      "signatureRank": "Staff Sergeant, U.S. Marine Corps",
+      "signatureTitle": "Senior Marine Instructor",
+      "copyTo": []
+    }
+  },
+
+  "formFieldMapping": {
+    "description": "Maps JSON fields to HTML form input IDs for automated testing",
+    "mappings": {
+      "ssic": "#ssic",
+      "serialNumber": "#serialNumber", 
+      "date": "#date",
+      "fromLine": "#fromLine",
+      "toLine": "#toLine",
+      "viaLines[0]": "#via1",
+      "viaLines[1]": "#via2",
+      "viaLines[2]": "#via3",
+      "subjectLine": "#subject",
+      "references": "#references (textarea, one per line)",
+      "enclosures": "#enclosures (textarea, one per line)",
+      "paragraphs": "#body (textarea, paragraphs separated by blank lines)",
+      "signatureName": "#signatureName",
+      "signatureRank": "#signatureRank",
+      "signatureTitle": "#signatureTitle",
+      "copyTo": "#copyTo (textarea, one per line)"
+    }
+  },
+
+  "verificationChecklist": [
+    "SSIC appears 1 inch from top, flush left",
+    "Date appears 2 inches from top, flush right",
+    "From/To/Via lines start at 2.5 inches from top",
+    "Subject line has blank line before it",
+    "References use (a), (b), (c) format",
+    "Enclosures use (1), (2), (3) format",
+    "Body paragraphs numbered 1., 2., 3. with two spaces after period",
+    "Subparagraphs indented with a., b., c. format",
+    "Signature block starts at center of page",
+    "3 blank lines between last paragraph and signature",
+    "Copy to appears below signature with blank line",
+    "Continuation pages show Subject and page number at top",
+    "Times New Roman 12pt throughout",
+    "1-inch margins on all sides"
+  ]
+}
