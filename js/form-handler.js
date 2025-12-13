@@ -334,7 +334,7 @@ function collectData() {
     date: document.getElementById('date').value.trim(),
     classification: document.getElementById('classification').value,
     branch: document.querySelector('input[name="branch"]:checked').value,
-    useLetterhead: document.getElementById('useLetterhead').checked,
+    useLetterhead: true, // Always include letterhead
     unitName: document.getElementById('unitName').value.trim(),
     unitAddress: document.getElementById('unitAddress').value.trim(),
     hasSeal: sealData !== null,
@@ -364,11 +364,6 @@ function collectData() {
 async function initFormListeners() {
   // Load the default DON seal
   await loadDefaultSeal();
-
-  // Letterhead toggle
-  document.getElementById('useLetterhead').addEventListener('change', function() {
-    document.getElementById('letterheadFields').style.display = this.checked ? 'block' : 'none';
-  });
 
   // Date auto-format
   document.getElementById('date').addEventListener('blur', function() {

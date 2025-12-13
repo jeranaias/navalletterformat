@@ -26,8 +26,7 @@ function collectFormData() {
     classification: document.getElementById('classification')?.value || '',
     branch: document.querySelector('input[name="branch"]:checked')?.value || 'USMC',
 
-    // Letterhead
-    useLetterhead: document.getElementById('useLetterhead')?.checked ?? true,
+    // Letterhead (always true)
     unitName: document.getElementById('unitName')?.value || '',
     unitAddress: document.getElementById('unitAddress')?.value || '',
 
@@ -74,28 +73,19 @@ function collectDynamicList(containerId) {
 }
 
 /**
- * Recursively collect paragraph data
+ * Collect paragraph data as flat array with type info
  */
 function collectParagraphs() {
   const container = document.getElementById('paraContainer');
   if (!container) return [];
 
-  return collectParagraphLevel(container);
-}
-
-function collectParagraphLevel(container) {
   const paragraphs = [];
-
-  container.querySelectorAll(':scope > .para-item').forEach(item => {
-    const textarea = item.querySelector(':scope > .para-content textarea');
-    const subContainer = item.querySelector(':scope > .para-children');
-
-    const para = {
-      text: textarea?.value || '',
-      children: subContainer ? collectParagraphLevel(subContainer) : []
-    };
-
-    paragraphs.push(para);
+  container.querySelectorAll('.para-item').forEach(item => {
+    const textarea = item.querySelector('textarea');
+    paragraphs.push({
+      type: item.dataset.type || 'para',
+      text: textarea?.value || ''
+    });
   });
 
   return paragraphs;
@@ -129,11 +119,6 @@ function restoreFormData(data) {
     }
 
     // Letterhead
-    const useLetterhead = document.getElementById('useLetterhead');
-    if (useLetterhead) {
-      useLetterhead.checked = data.useLetterhead ?? true;
-      toggleLetterhead();
-    }
     setInputValue('unitName', data.unitName);
     setInputValue('unitAddress', data.unitAddress);
 
@@ -201,51 +186,67 @@ function restoreParagraphs(paragraphs) {
   // Clear existing paragraphs
   container.innerHTML = '';
 
-  // Restore each paragraph recursively
-  paragraphs.forEach((para, index) => {
-    addParagraphWithData(container, 0, index, para);
-  });
+  // Check if paragraphs are in new flat format or old nested format
+  if (paragraphs[0] && paragraphs[0].type !== undefined) {
+    // New flat format with type
+    paragraphs.forEach(para => {
+      addParagraphWithType(container, para.type, para.text);
+    });
+  } else {
+    // Old nested format - flatten it
+    flattenAndAddParagraphs(container, paragraphs, 'para');
+  }
 
-  // Renumber all paragraphs
-  if (typeof renumberParagraphs === 'function') {
-    renumberParagraphs();
+  // Update labels
+  if (typeof updateParaLabels === 'function') {
+    updateParaLabels();
   }
 }
 
-function addParagraphWithData(container, level, index, data) {
-  // Create paragraph using existing function pattern
-  const item = document.createElement('div');
-  item.className = 'para-item';
-  item.draggable = true;
-  item.dataset.level = level;
+/**
+ * Flatten nested paragraph structure and add to container
+ */
+function flattenAndAddParagraphs(container, paragraphs, type) {
+  const types = ['para', 'subpara', 'subsubpara', 'subsubsubpara'];
+  const typeIndex = types.indexOf(type);
+  const childType = types[Math.min(typeIndex + 1, types.length - 1)];
 
-  item.innerHTML = `
-    <div class="para-content">
-      <span class="para-label"></span>
-      <textarea rows="2" placeholder="Paragraph text...">${data.text || ''}</textarea>
-      <div class="para-actions">
-        <button type="button" class="para-btn" onclick="addSubPara(this)" title="Add sub-paragraph">+Sub</button>
-        <button type="button" class="para-btn" onclick="addSiblingPara(this)" title="Add paragraph after">+Para</button>
-        <button type="button" class="para-btn delete" onclick="deletePara(this)" title="Delete">&times;</button>
-      </div>
+  paragraphs.forEach(para => {
+    addParagraphWithType(container, type, para.text);
+    if (para.children && para.children.length > 0) {
+      flattenAndAddParagraphs(container, para.children, childType);
+    }
+  });
+}
+
+/**
+ * Add a single paragraph with specified type
+ */
+function addParagraphWithType(container, type, text) {
+  const div = document.createElement('div');
+  div.className = 'para-item';
+  div.draggable = true;
+  div.dataset.type = type;
+  div.innerHTML = `
+    <span class="drag-handle">☰</span>
+    <span class="para-label"></span>
+    <textarea name="para[]" data-type="${type}" placeholder="Enter text..." onclick="setActivePara(this)">${text || ''}</textarea>
+    <div class="para-actions">
+      <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
+      <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>
+      <button type="button" class="btn" onclick="addParent(this)" ${type === 'para' ? 'disabled' : ''}>← Outdent</button>
+      <button type="button" class="btn btn-remove" onclick="removePara(this)">Delete</button>
     </div>
-    <div class="para-children"></div>
   `;
 
-  container.appendChild(item);
+  // Add drag-drop listeners
+  div.addEventListener('dragstart', handleDragStart);
+  div.addEventListener('dragend', handleDragEnd);
+  div.addEventListener('dragover', handleDragOver);
+  div.addEventListener('dragleave', handleDragLeave);
+  div.addEventListener('drop', handleDrop);
 
-  // Add drag listeners
-  if (typeof addDragListeners === 'function') {
-    addDragListeners(item);
-  }
-
-  // Recursively add children
-  if (data.children && data.children.length > 0) {
-    const childContainer = item.querySelector('.para-children');
-    data.children.forEach((child, childIndex) => {
-      addParagraphWithData(childContainer, level + 1, childIndex, child);
-    });
-  }
+  container.appendChild(div);
 }
 
 /**
