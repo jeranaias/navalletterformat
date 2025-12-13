@@ -21,6 +21,9 @@ async function initApp() {
   // Initialize search functionality
   initSearchListeners();
 
+  // Initialize draft auto-save and restore
+  initDraftManager();
+
   console.log('Naval Letter Generator v2.0 ready!');
 }
 
