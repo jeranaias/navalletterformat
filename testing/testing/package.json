@@ -1,0 +1,13 @@
+{
+  "name": "naval-letter-test-generator",
+  "version": "1.0.0",
+  "description": "Generate example naval letters for testing PDF output",
+  "main": "generate_examples.js",
+  "scripts": {
+    "generate": "node generate_examples.js",
+    "test": "echo \"Run: npm run generate\""
+  },
+  "dependencies": {
+    "pdfkit": "^0.13.0"
+  }
+}

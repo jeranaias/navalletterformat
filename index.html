@@ -156,21 +156,9 @@
               <textarea id="unitAddress" rows="3" placeholder="MARINE CORPS DETACHMENT&#10;DEFENSE LANGUAGE INSTITUTE&#10;PRESIDIO OF MONTEREY, CA 93944"></textarea>
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Unit Seal (Optional - PNG or JPG)</label>
-              <div class="seal-upload-area" id="sealUploadArea" onclick="document.getElementById('sealUpload').click()">
-                <input type="file" id="sealUpload" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="handleSealUpload(event)">
-                <div id="sealPlaceholder">
-                  <div style="font-size: 2rem; margin-bottom: 8px;">+</div>
-                  <div style="font-size: 0.85rem; color: var(--gray-600);">Click to upload seal image</div>
-                  <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 4px;">PNG or JPG, any size</div>
-                </div>
-                <div id="sealPreview" class="seal-preview" style="display:none;"></div>
-              </div>
-              <button type="button" id="removeSeal" class="btn btn-remove" style="display:none; margin-top: 8px;" onclick="removeSeal(event)">Remove Seal</button>
-            </div>
-          </div>
+          <p class="help-text" style="margin-top: 12px;">
+            <strong>Seal:</strong> The Department of the Navy seal is automatically included on letterhead.
+          </p>
         </div>
       </div>
 
