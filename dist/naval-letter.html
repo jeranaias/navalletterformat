@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-13T23:36:49.722Z
+  Built: 2025-12-13T23:46:32.537Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -578,6 +578,32 @@ textarea {
   flex: 1;
   min-height: 70px;
   font-size: 0.9rem;
+}
+
+.para-subject {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.para-subject input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px dashed var(--gray-300);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  background: var(--gray-50);
+}
+
+.para-subject input:focus {
+  border-style: solid;
+  border-color: var(--navy);
+  background: var(--white);
+  outline: none;
+}
+
+.para-subject input::placeholder {
+  color: var(--gray-400);
+  font-style: italic;
 }
 
 .para-actions {
@@ -1539,10 +1565,19 @@ function addParaAfter(afterEl, type) {
   div.className = 'para-item';
   div.draggable = true;
   div.dataset.type = type;
+
+  // Only top-level paragraphs can have subjects
+  const subjectField = type === 'para' ? `
+    <div class="para-subject">
+      <input type="text" name="paraSubj[]" placeholder="Subject (optional, will be underlined)" />
+    </div>
+  ` : '';
+
   div.innerHTML = `
     <span class="drag-handle">☰</span>
     <span class="para-label"></span>
-    <textarea name="para[]" data-type="${type}" placeholder="Enter text..." onclick="setActivePara(this)"></textarea>
+    ${subjectField}
+    <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)"></textarea>
     <div class="para-actions">
       <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
       <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>
@@ -1721,10 +1756,15 @@ function collectData() {
     subj: document.getElementById('subj').value.trim(),
     refs: Array.from(document.querySelectorAll('input[name="ref[]"]')).map(i => i.value.trim()).filter(v => v),
     encls: Array.from(document.querySelectorAll('input[name="encl[]"]')).map(i => i.value.trim()).filter(v => v),
-    paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => ({
-      type: t.dataset.type,
-      text: t.value.trim()
-    })).filter(p => p.text),
+    paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => {
+      const paraItem = t.closest('.para-item');
+      const subjInput = paraItem?.querySelector('input[name="paraSubj[]"]');
+      return {
+        type: t.dataset.type,
+        subject: subjInput?.value.trim() || '',
+        text: t.value.trim()
+      };
+    }).filter(p => p.text),
     sigName: document.getElementById('sigName').value.trim(),
     byDirection: document.getElementById('byDirection').checked,
     copies: Array.from(document.querySelectorAll('input[name="copy[]"]')).map(i => i.value.trim()).filter(v => v),
@@ -1878,7 +1918,9 @@ function generateTex() {
         sn = 0;
         ssn = 0;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${escapeLatex(p.text)}\n\n`;
+        // Add underlined subject if present
+        const subjectPart = p.subject ? `\\underline{${escapeLatex(p.subject)}}  ` : '';
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${subjectPart}${escapeLatex(p.text)}\n\n`;
       } else if (p.type === 'subpara') {
         sn++;
         ssn = 0;
@@ -2279,28 +2321,24 @@ async function generatePDF() {
       pageBreak(LH * 2);
       pdf.text(label, lx, y);
 
-      // Check for paragraph title (word(s) ending with period at start)
-      const titleMatch = p.text.match(/^([A-Za-z][A-Za-z\s]*\.)\s+/);
-
-      if (titleMatch) {
-        // Draw title with underline
-        const title = titleMatch[1];
-        const titleWidth = pdf.getTextWidth(title);
-        pdf.text(title, tx, y);
+      // Check for explicit paragraph subject (only for top-level paragraphs)
+      if (p.subject && p.type === 'para') {
+        // Draw subject with underline
+        const subjectWidth = pdf.getTextWidth(p.subject);
+        pdf.text(p.subject, tx, y);
         pdf.setLineWidth(0.5);
-        pdf.line(tx, y + 2, tx + titleWidth, y + 2);
+        pdf.line(tx, y + 2, tx + subjectWidth, y + 2);
 
-        const restOfText = p.text.substring(titleMatch[0].length);
-        const afterTitleX = tx + titleWidth + 4;
-        const remainingWidth = firstLineWidth - titleWidth - 4;
+        const afterSubjectX = tx + subjectWidth + 6;
+        const remainingWidth = firstLineWidth - subjectWidth - 6;
 
-        if (restOfText && remainingWidth > 50) {
-          const firstLinePart = pdf.splitTextToSize(restOfText, remainingWidth);
-          pdf.text(firstLinePart[0], afterTitleX, y);
+        if (p.text && remainingWidth > 50) {
+          const firstLinePart = pdf.splitTextToSize(p.text, remainingWidth);
+          pdf.text(firstLinePart[0], afterSubjectX, y);
           y += LH;
 
-          if (firstLinePart.length > 1 || restOfText.length > firstLinePart[0].length) {
-            const leftover = restOfText.substring(firstLinePart[0].length).trim();
+          if (firstLinePart.length > 1 || p.text.length > firstLinePart[0].length) {
+            const leftover = p.text.substring(firstLinePart[0].length).trim();
             if (leftover) {
               pdf.splitTextToSize(leftover, wrapWidth).forEach(line => {
                 pageBreak(LH);
@@ -2311,8 +2349,8 @@ async function generatePDF() {
           }
         } else {
           y += LH;
-          if (restOfText) {
-            pdf.splitTextToSize(restOfText, wrapWidth).forEach(line => {
+          if (p.text) {
+            pdf.splitTextToSize(p.text, wrapWidth).forEach(line => {
               pageBreak(LH);
               pdf.text(line, ML, y);
               y += LH;
@@ -2320,7 +2358,7 @@ async function generatePDF() {
           }
         }
       } else {
-        // No title - render normally
+        // No subject - render text normally
         pdf.text(firstLineText[0], tx, y);
         y += LH;
 
@@ -2474,8 +2512,10 @@ function collectParagraphs() {
   const paragraphs = [];
   container.querySelectorAll('.para-item').forEach(item => {
     const textarea = item.querySelector('textarea');
+    const subjInput = item.querySelector('input[name="paraSubj[]"]');
     paragraphs.push({
       type: item.dataset.type || 'para',
+      subject: subjInput?.value || '',
       text: textarea?.value || ''
     });
   });
@@ -2582,7 +2622,7 @@ function restoreParagraphs(paragraphs) {
   if (paragraphs[0] && paragraphs[0].type !== undefined) {
     // New flat format with type
     paragraphs.forEach(para => {
-      addParagraphWithType(container, para.type, para.text);
+      addParagraphWithType(container, para.type, para.text, para.subject || '');
     });
   } else {
     // Old nested format - flatten it
@@ -2614,15 +2654,24 @@ function flattenAndAddParagraphs(container, paragraphs, type) {
 /**
  * Add a single paragraph with specified type
  */
-function addParagraphWithType(container, type, text) {
+function addParagraphWithType(container, type, text, subject) {
   const div = document.createElement('div');
   div.className = 'para-item';
   div.draggable = true;
   div.dataset.type = type;
+
+  // Only top-level paragraphs can have subjects
+  const subjectField = type === 'para' ? `
+    <div class="para-subject">
+      <input type="text" name="paraSubj[]" placeholder="Subject (optional, will be underlined)" value="${subject || ''}" />
+    </div>
+  ` : '';
+
   div.innerHTML = `
     <span class="drag-handle">☰</span>
     <span class="para-label"></span>
-    <textarea name="para[]" data-type="${type}" placeholder="Enter text..." onclick="setActivePara(this)">${text || ''}</textarea>
+    ${subjectField}
+    <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)">${text || ''}</textarea>
     <div class="para-actions">
       <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
       <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>

@@ -119,7 +119,9 @@ function generateTex() {
         sn = 0;
         ssn = 0;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${escapeLatex(p.text)}\n\n`;
+        // Add underlined subject if present
+        const subjectPart = p.subject ? `\\underline{${escapeLatex(p.subject)}}  ` : '';
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${subjectPart}${escapeLatex(p.text)}\n\n`;
       } else if (p.type === 'subpara') {
         sn++;
         ssn = 0;

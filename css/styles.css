@@ -512,6 +512,32 @@ textarea {
   font-size: 0.9rem;
 }
 
+.para-subject {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.para-subject input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px dashed var(--gray-300);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  background: var(--gray-50);
+}
+
+.para-subject input:focus {
+  border-style: solid;
+  border-color: var(--navy);
+  background: var(--white);
+  outline: none;
+}
+
+.para-subject input::placeholder {
+  color: var(--gray-400);
+  font-style: italic;
+}
+
 .para-actions {
   display: none;
   position: absolute;
