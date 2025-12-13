@@ -182,16 +182,13 @@ describe('Naval Letter Structure', () => {
   });
 });
 
-describe('Example PDF Generation', () => {
-  test('3-page example PDF exists and has content', () => {
-    const examplePath = path.join(__dirname, '..', 'example_3page_letter.pdf');
+describe('Seal Asset', () => {
+  test('DON seal image exists', () => {
+    const sealPath = path.join(__dirname, '..', 'assets', 'DOW-Seal-BW.jpg');
+    expect(fs.existsSync(sealPath)).toBe(true);
 
-    if (fs.existsSync(examplePath)) {
-      const stats = fs.statSync(examplePath);
-      expect(stats.size).toBeGreaterThan(100000); // Should be at least 100KB with seal
-    } else {
-      console.warn('Example PDF not found - run generate-example-pdf.js first');
-    }
+    const stats = fs.statSync(sealPath);
+    expect(stats.size).toBeGreaterThan(100000); // Seal should be substantial size
   });
 });
 
