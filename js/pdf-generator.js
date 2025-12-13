@@ -268,28 +268,24 @@ async function generatePDF() {
       pageBreak(LH * 2);
       pdf.text(label, lx, y);
 
-      // Check for paragraph title (word(s) ending with period at start)
-      const titleMatch = p.text.match(/^([A-Za-z][A-Za-z\s]*\.)\s+/);
-
-      if (titleMatch) {
-        // Draw title with underline
-        const title = titleMatch[1];
-        const titleWidth = pdf.getTextWidth(title);
-        pdf.text(title, tx, y);
+      // Check for explicit paragraph subject (only for top-level paragraphs)
+      if (p.subject && p.type === 'para') {
+        // Draw subject with underline
+        const subjectWidth = pdf.getTextWidth(p.subject);
+        pdf.text(p.subject, tx, y);
         pdf.setLineWidth(0.5);
-        pdf.line(tx, y + 2, tx + titleWidth, y + 2);
+        pdf.line(tx, y + 2, tx + subjectWidth, y + 2);
 
-        const restOfText = p.text.substring(titleMatch[0].length);
-        const afterTitleX = tx + titleWidth + 4;
-        const remainingWidth = firstLineWidth - titleWidth - 4;
+        const afterSubjectX = tx + subjectWidth + 6;
+        const remainingWidth = firstLineWidth - subjectWidth - 6;
 
-        if (restOfText && remainingWidth > 50) {
-          const firstLinePart = pdf.splitTextToSize(restOfText, remainingWidth);
-          pdf.text(firstLinePart[0], afterTitleX, y);
+        if (p.text && remainingWidth > 50) {
+          const firstLinePart = pdf.splitTextToSize(p.text, remainingWidth);
+          pdf.text(firstLinePart[0], afterSubjectX, y);
           y += LH;
 
-          if (firstLinePart.length > 1 || restOfText.length > firstLinePart[0].length) {
-            const leftover = restOfText.substring(firstLinePart[0].length).trim();
+          if (firstLinePart.length > 1 || p.text.length > firstLinePart[0].length) {
+            const leftover = p.text.substring(firstLinePart[0].length).trim();
             if (leftover) {
               pdf.splitTextToSize(leftover, wrapWidth).forEach(line => {
                 pageBreak(LH);
@@ -300,8 +296,8 @@ async function generatePDF() {
           }
         } else {
           y += LH;
-          if (restOfText) {
-            pdf.splitTextToSize(restOfText, wrapWidth).forEach(line => {
+          if (p.text) {
+            pdf.splitTextToSize(p.text, wrapWidth).forEach(line => {
               pageBreak(LH);
               pdf.text(line, ML, y);
               y += LH;
@@ -309,7 +305,7 @@ async function generatePDF() {
           }
         }
       } else {
-        // No title - render normally
+        // No subject - render text normally
         pdf.text(firstLineText[0], tx, y);
         y += LH;
 

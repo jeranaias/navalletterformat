@@ -82,8 +82,10 @@ function collectParagraphs() {
   const paragraphs = [];
   container.querySelectorAll('.para-item').forEach(item => {
     const textarea = item.querySelector('textarea');
+    const subjInput = item.querySelector('input[name="paraSubj[]"]');
     paragraphs.push({
       type: item.dataset.type || 'para',
+      subject: subjInput?.value || '',
       text: textarea?.value || ''
     });
   });
@@ -190,7 +192,7 @@ function restoreParagraphs(paragraphs) {
   if (paragraphs[0] && paragraphs[0].type !== undefined) {
     // New flat format with type
     paragraphs.forEach(para => {
-      addParagraphWithType(container, para.type, para.text);
+      addParagraphWithType(container, para.type, para.text, para.subject || '');
     });
   } else {
     // Old nested format - flatten it
@@ -222,15 +224,24 @@ function flattenAndAddParagraphs(container, paragraphs, type) {
 /**
  * Add a single paragraph with specified type
  */
-function addParagraphWithType(container, type, text) {
+function addParagraphWithType(container, type, text, subject) {
   const div = document.createElement('div');
   div.className = 'para-item';
   div.draggable = true;
   div.dataset.type = type;
+
+  // Only top-level paragraphs can have subjects
+  const subjectField = type === 'para' ? `
+    <div class="para-subject">
+      <input type="text" name="paraSubj[]" placeholder="Subject (optional, will be underlined)" value="${subject || ''}" />
+    </div>
+  ` : '';
+
   div.innerHTML = `
     <span class="drag-handle">☰</span>
     <span class="para-label"></span>
-    <textarea name="para[]" data-type="${type}" placeholder="Enter text..." onclick="setActivePara(this)">${text || ''}</textarea>
+    ${subjectField}
+    <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)">${text || ''}</textarea>
     <div class="para-actions">
       <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
       <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>

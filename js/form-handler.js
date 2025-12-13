@@ -164,10 +164,19 @@ function addParaAfter(afterEl, type) {
   div.className = 'para-item';
   div.draggable = true;
   div.dataset.type = type;
+
+  // Only top-level paragraphs can have subjects
+  const subjectField = type === 'para' ? `
+    <div class="para-subject">
+      <input type="text" name="paraSubj[]" placeholder="Subject (optional, will be underlined)" />
+    </div>
+  ` : '';
+
   div.innerHTML = `
     <span class="drag-handle">☰</span>
     <span class="para-label"></span>
-    <textarea name="para[]" data-type="${type}" placeholder="Enter text..." onclick="setActivePara(this)"></textarea>
+    ${subjectField}
+    <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)"></textarea>
     <div class="para-actions">
       <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
       <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>
@@ -346,10 +355,15 @@ function collectData() {
     subj: document.getElementById('subj').value.trim(),
     refs: Array.from(document.querySelectorAll('input[name="ref[]"]')).map(i => i.value.trim()).filter(v => v),
     encls: Array.from(document.querySelectorAll('input[name="encl[]"]')).map(i => i.value.trim()).filter(v => v),
-    paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => ({
-      type: t.dataset.type,
-      text: t.value.trim()
-    })).filter(p => p.text),
+    paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => {
+      const paraItem = t.closest('.para-item');
+      const subjInput = paraItem?.querySelector('input[name="paraSubj[]"]');
+      return {
+        type: t.dataset.type,
+        subject: subjInput?.value.trim() || '',
+        text: t.value.trim()
+      };
+    }).filter(p => p.text),
     sigName: document.getElementById('sigName').value.trim(),
     byDirection: document.getElementById('byDirection').checked,
     copies: Array.from(document.querySelectorAll('input[name="copy[]"]')).map(i => i.value.trim()).filter(v => v),
