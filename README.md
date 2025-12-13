@@ -39,6 +39,19 @@ Just open the link, fill in your information, and download your PDF.
 
 ## ✨ What's New
 
+### v1.3 Beta (13 Dec 24)
+
+**Major formatting corrections based on community feedback** — Special thanks to **u/BorderlineSatisfied** on r/USMC for the detailed review!
+
+- **🔧 Sender's Symbols Alignment** - SSIC, office code, and date now left-align under their first character (not right-aligned). The "1," "S," and "1" now form a straight vertical line.
+- **🔧 Via Numbering** - Via addressees are only numbered (1), (2), etc. when there are multiple. Single via addressee has no number.
+- **🔧 Paragraph Text Wrap** - Second and subsequent lines of paragraphs now indent to the page margin, not the beginning of the paragraph text.
+- **🔧 Paragraph Titles Underlined** - Single-word titles like "Background." and "Recommendation." are now automatically underlined per SECNAV M-5216.5.
+- **🔧 Signature Block** - Removed rank and title below signee name. That's an Army format, not DoN/USMC. Now shows name only.
+- **🔧 Page Numbers** - Page numbers now only appear on page 2 and beyond (page 1 has no number).
+- **🔧 Orphan Prevention** - Last paragraph, signature block, and "Copy to" section are kept together. No more lonely signature blocks on the last page.
+- **🔧 Department of War Seal** - Example PDF now uses the correct DoW seal (not DoD).
+
 ### v1.2 Beta (12 Dec 24)
 
 - **🔍 SSIC Search** - Type a subject like "leave" or "training" and get matching codes. 100+ SSICs in the database.
@@ -102,8 +115,9 @@ Every measurement, margin, and spacing rule from the correspondence manual is bu
 | Date format | DD Mon YY (e.g., 02 Dec 24) |
 | Label tab width | 0.625 inches (From:, To:, Via:, Subj:, Ref:, Encl:) |
 | Paragraph spacing | One blank line between all levels |
+| Paragraph text wrap | Subsequent lines return to page margin |
 | Sentence spacing | Two spaces after periods |
-| Signature block | 4 lines below text, starts at page center (3.25") |
+| Signature block | 4 lines below text, starts at page center (3.25"), name only (no rank/title per DoN standard) |
 | Continuation pages | Subject in header, page number centered at bottom |
 
 ### 🔢 Smart Paragraph Numbering
@@ -112,9 +126,10 @@ Automatic hierarchical numbering with proper indentation:
 - **Sub-paragraphs:** a., b., c.
 - **Sub-sub-paragraphs:** (1), (2), (3)
 - **Sub-sub-sub-paragraphs:** (a), (b), (c)
+- **Paragraph titles** (like "Background." or "Recommendation.") are automatically underlined
 
 ### 🔄 Automatic Numbering
-- **Via addressees** auto-number as (1), (2), (3), (4)
+- **Via addressees** auto-number as (1), (2), (3) only when multiple (single via has no number)
 - **References** auto-letter as (a), (b), (c), (d)
 - **Enclosures** auto-number as (1), (2), (3)
 
@@ -194,7 +209,7 @@ Preview:
 
 From:  Commanding Officer, Marine Corps Detachment
 To:    Commandant of the Marine Corps (MMEA-25)
-Via:   (1)  Commanding General, Training and Education Command
+Via:   Commanding General, Training and Education Command
 
 Subj:  REQUEST FOR ADDITIONAL INSTRUCTOR BILLETS
 
@@ -222,8 +237,6 @@ Encl:  (1)  Manning Document
 
 
                               J. M. SMITH
-                              LtCol, USMC
-                              Commanding Officer
 
 Copy to:
 CG, TECOM (C 469)
@@ -282,6 +295,16 @@ A: [Please report it!](https://github.com/jeranaias/navalletterformat/issues) In
 
 ---
 
+## Acknowledgments
+
+Thanks to the Marines and Sailors who've provided feedback to make this tool better:
+
+- **u/BorderlineSatisfied** (r/USMC) — Detailed v1.3 formatting corrections including sender's symbols alignment, via numbering, paragraph wrapping, title underlining, and signature block format.
+
+Your feedback makes this tool better for everyone. Keep it coming!
+
+---
+
 ## Contributing
 
 This project needs people who know naval correspondence. If that's you, your feedback is invaluable.
@@ -327,7 +350,6 @@ This project needs people who know naval correspondence. If that's you, your fee
 ## About
 
 **Created by:** Jesse Morgan  
-
 **Status:** Active development - feedback welcome!
 
 *Personal project, not officially endorsed by any military branch.*
