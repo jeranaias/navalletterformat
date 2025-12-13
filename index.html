@@ -1916,10 +1916,15 @@
           pageNum++;
           y = MT;
           pdf.setFont('times', 'normal');
-          pdf.setFontSize(10);
+          pdf.setFontSize(12);
           pdf.text('Subj:', ML, y);
-          pdf.text(pdf.splitTextToSize(subjText, CW - 50)[0] || '', ML + 45, y);
-          y += LH * 2;
+          // Full subject line on continuation pages, wrapped as needed
+          const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
+          subjLines.forEach((line, i) => {
+            pdf.text(line, ML + TAB, y);
+            y += LH;
+          });
+          y += LH;  // One blank line after subject
         }
       }
 
