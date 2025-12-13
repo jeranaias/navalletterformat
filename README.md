@@ -7,7 +7,7 @@
 [![Status](https://img.shields.io/badge/Status-Beta-yellow)](https://github.com/jeranaias/navalletterformat/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**🔗 Live Tool: [https://bit.ly/navalletter](https://bit.ly/navalletter)**
+**🔗 Live Tool: [(https://jeranaias.github.io/navalletterformat/)](https://jeranaias.github.io/navalletterformat/)**
 
 ---
 
