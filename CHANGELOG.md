@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Draft save/load functionality**
+  - Auto-saves to localStorage every 2 seconds (debounced)
+  - Prompts to restore saved draft on page load
+  - "Save Draft" button exports a `.json` file
+  - "Load Draft" button imports saved drafts
+  - Supports all form fields including nested paragraphs
 - Modular JavaScript architecture (v2.0 refactor)
   - `js/utils.js` - Common helper functions
   - `js/data-manager.js` - SSIC and unit search with external JSON loading
