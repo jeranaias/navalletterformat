@@ -13,8 +13,10 @@ const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
  */
 function escapeLatex(str) {
   if (!str) return '';
+  // Use placeholder for backslash to prevent double-escaping of {} in \textbackslash{}
+  const BACKSLASH_PLACEHOLDER = '\x00BACKSLASH\x00';
   return str
-    .replace(/\\/g, '\\textbackslash{}')
+    .replace(/\\/g, BACKSLASH_PLACEHOLDER)
     .replace(/&/g, '\\&')
     .replace(/%/g, '\\%')
     .replace(/\$/g, '\\$')
@@ -23,7 +25,8 @@ function escapeLatex(str) {
     .replace(/\{/g, '\\{')
     .replace(/\}/g, '\\}')
     .replace(/~/g, '\\textasciitilde{}')
-    .replace(/\^/g, '\\textasciicircum{}');
+    .replace(/\^/g, '\\textasciicircum{}')
+    .replace(new RegExp(BACKSLASH_PLACEHOLDER, 'g'), '\\textbackslash{}');
 }
 
 /**
@@ -60,11 +63,14 @@ function formatDateValue(value) {
     }
 
     // Mon DD YYYY or DD Mon YYYY
+    // Require separators between parts to prevent "2024" being split as day "20" + year "24"
     if (!date) {
       for (let i = 0; i < months.length; i++) {
         const patterns = [
-          new RegExp(`(${months[i]}|${monthsFull[i]})\\s*(\\d{1,2}),?\\s*(\\d{2,4})`, 'i'),
-          new RegExp(`(\\d{1,2})\\s*(${months[i]}|${monthsFull[i]}),?\\s*(\\d{2,4})`, 'i')
+          // Mon DD, YYYY or Mon DD YYYY (require space after month, separator before year)
+          new RegExp(`(${months[i]}|${monthsFull[i]})\\s+(\\d{1,2})[,\\s]+(\\d{2,4})`, 'i'),
+          // DD Mon YYYY (require space around month, separator before year)
+          new RegExp(`(\\d{1,2})\\s+(${months[i]}|${monthsFull[i]})[,\\s]+(\\d{2,4})`, 'i')
         ];
         for (const pattern of patterns) {
           match = value.match(pattern);

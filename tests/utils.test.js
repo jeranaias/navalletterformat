@@ -42,10 +42,8 @@ describe('escapeLatex', () => {
     expect(escapeLatex('{test}')).toBe('\\{test\\}');
   });
 
-  // Note: Known issue - curly braces in \textbackslash{} get double-escaped
-  // TODO: Fix escapeLatex to handle backslash escaping order
   test('should escape backslash', () => {
-    expect(escapeLatex('path\\to\\file')).toBe('path\\textbackslash\\{\\}to\\textbackslash\\{\\}file');
+    expect(escapeLatex('path\\to\\file')).toBe('path\\textbackslash{}to\\textbackslash{}file');
   });
 
   test('should escape tilde', () => {
@@ -94,12 +92,10 @@ describe('formatDateValue', () => {
     expect(formatDateValue('December 25, 2024')).toBe('25 Dec 24');
   });
 
-  // Note: Known bug - DD Mon YYYY format parsing is incorrect
-  // TODO: Fix formatDateValue pattern matching for DD Mon YYYY
   test('should parse "DD Mon YYYY" format', () => {
-    // Current behavior returns wrong day - marking as known issue
-    const result = formatDateValue('25 Dec 2024');
-    expect(result).toMatch(/^\d{2} Dec 24$/); // At least month/year correct
+    expect(formatDateValue('25 Dec 2024')).toBe('25 Dec 24');
+    expect(formatDateValue('25 December 2024')).toBe('25 Dec 24');
+    expect(formatDateValue('1 Jan 2025')).toBe('01 Jan 25');
   });
 
   test('should handle "today" keyword', () => {
