@@ -7,7 +7,7 @@
 [![Status](https://img.shields.io/badge/Status-Beta-yellow)](https://github.com/jeranaias/navalletterformat/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**🔗 Live Tool: [(https://jeranaias.github.io/navalletterformat/)](https://jeranaias.github.io/navalletterformat/)**
+**🔗 Live Tool: [https://bit.ly/navalletter](https://bit.ly/navalletter)**
 
 ---
 
@@ -51,6 +51,7 @@ Just open the link, fill in your information, and download your PDF.
 - **🔧 Page Numbers** - Page numbers now only appear on page 2 and beyond (page 1 has no number).
 - **🔧 Orphan Prevention** - Last paragraph, signature block, and "Copy to" section are kept together. No more lonely signature blocks on the last page.
 - **🔧 Department of War Seal** - Example PDF now uses the correct DoW seal (not DoD).
+- **🔧 Continuation Page Subject** - Full subject line now displays on continuation pages, not just the first line. Proper document identification if pages separate.
 
 ### v1.2 Beta (12 Dec 24)
 
@@ -118,7 +119,7 @@ Every measurement, margin, and spacing rule from the correspondence manual is bu
 | Paragraph text wrap | Subsequent lines return to page margin |
 | Sentence spacing | Two spaces after periods |
 | Signature block | 4 lines below text, starts at page center (3.25"), name only (no rank/title per DoN standard) |
-| Continuation pages | Subject in header, page number centered at bottom |
+| Continuation pages | Full subject line in header (wrapped if needed), page number centered at bottom |
 
 ### 🔢 Smart Paragraph Numbering
 Automatic hierarchical numbering with proper indentation:
@@ -259,7 +260,9 @@ We're actively working on improvements. Current known issues:
 
 ## Roadmap - What's Next?
 
-We're prioritizing based on user feedback. Current plans:
+We're prioritizing based on user feedback.
+
+### v1.x - Near Term
 
 - [ ] Save/load letter drafts (localStorage)
 - [x] ~~Seal support in direct PDF generation~~ **Done!**
@@ -269,7 +272,22 @@ We're prioritizing based on user feedback. Current plans:
 - [ ] Print directly from browser
 - [ ] Dark mode (for the night shift)
 
+### v2.0 - Architecture Overhaul
+
+A complete rewrite focused on maintainability and scalability:
+
+- [ ] **Separate HTML/CSS/JS** - Break the monolithic single-file into proper separate files for easier maintenance and testing
+- [ ] **SSIC Database (Full Manual)** - Parse the complete SSIC manual into a searchable JSON database (currently ~100 codes, full manual has thousands)
+- [ ] **Complete Unit Database** - Import ALL Marine Corps units from authoritative source (rumor has it there's an Excel doc floating around the Corps with every unit - if you have it, we want it!)
+- [ ] **Modular Component Architecture** - Reusable components for form sections, PDF generation, and data management
+- [ ] **Unit Tests** - Automated testing for PDF output compliance
+- [ ] **Build Pipeline** - Proper build process while maintaining a "single-file portable" distribution option
+
+> **Note:** v1.x will remain available as the "it just works" single-file version. Some users need a file they can save and run offline forever without dependencies - we won't abandon that use case.
+
 **Want to influence priorities?** [Vote on issues](https://github.com/jeranaias/navalletterformat/issues) or open a new one describing what you need.
+
+**Have that unit Excel doc or know where to find the complete SSIC listing?** [Let us know!](https://github.com/jeranaias/navalletterformat/issues)
 
 ---
 
@@ -300,6 +318,7 @@ A: [Please report it!](https://github.com/jeranaias/navalletterformat/issues) In
 Thanks to the Marines and Sailors who've provided feedback to make this tool better:
 
 - **u/BorderlineSatisfied** (r/USMC) — Detailed v1.3 formatting corrections including sender's symbols alignment, via numbering, paragraph wrapping, title underlining, and signature block format.
+- **u/christian_austin85** (r/USMC) — Continuation page subject line correction; v2.0 architecture recommendations (separate files, external SSIC/unit databases, maintainability improvements).
 
 Your feedback makes this tool better for everyone. Keep it coming!
 
