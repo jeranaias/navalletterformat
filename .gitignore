@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Generated files
+testing/testing/examples/
+
+# Lock files (optional - can be committed for reproducibility)
+package-lock.json
+testing/testing/package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
