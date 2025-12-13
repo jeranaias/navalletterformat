@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Build output now embeds seal as base64 for fully offline use
 
 ### Fixed
+- **Unit selection letterhead**: Service/Organization now shows full name (e.g., "UNITED STATES MARINE CORPS") instead of abbreviation ("USMC")
 - **Seal description**: Changed "Department of the Navy seal" to "Department of War seal"
   - The auto-included seal is the historical Department of War seal, not the Navy seal
 - **escapeLatex()**: Fixed double-escaping of curly braces in `\textbackslash{}`
