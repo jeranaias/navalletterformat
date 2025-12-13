@@ -1,0 +1,498 @@
+{
+  "source": "Compiled from Marines.mil, SNDL, and public sources",
+  "description": "Marine Corps and Navy unit addresses for correspondence",
+  "lastUpdated": "2024-12-13",
+  "notes": "For complete unit data, obtain MCC/RUC spreadsheet or SNDL (requires CAC)",
+  "dataRequests": [
+    "MCC Codes Manual (Excel) - Contains all USMC units with addresses",
+    "SNDL (Standard Naval Distribution List) - Official source, CAC required"
+  ],
+  "units": [
+    {
+      "name": "Headquarters Marine Corps",
+      "abbrev": "HQMC",
+      "address": "3000 MARINE CORPS PENTAGON\nWASHINGTON, DC 20350-3000",
+      "type": "headquarters"
+    },
+    {
+      "name": "Marine Corps Combat Development Command",
+      "abbrev": "MCCDC",
+      "address": "3300 RUSSELL ROAD\nQUANTICO, VA 22134-5001",
+      "type": "headquarters"
+    },
+    {
+      "name": "Training and Education Command",
+      "abbrev": "TECOM",
+      "address": "1019 ELLIOT ROAD\nQUANTICO, VA 22134-5001",
+      "type": "headquarters"
+    },
+    {
+      "name": "Marine Corps Installations Command",
+      "abbrev": "MCICOM",
+      "address": "3000 MARINE CORPS PENTAGON\nWASHINGTON, DC 20350-3000",
+      "type": "headquarters"
+    },
+    {
+      "name": "Marine Corps Logistics Command",
+      "abbrev": "LOGCOM",
+      "address": "814 RADFORD BOULEVARD\nALBANY, GA 31704-1128",
+      "type": "headquarters"
+    },
+    {
+      "name": "Marine Forces Reserve",
+      "abbrev": "MARFORRES",
+      "address": "2000 OPELOUSAS AVENUE\nNEW ORLEANS, LA 70146-5400",
+      "type": "headquarters"
+    },
+    {
+      "name": "Marine Corps Recruiting Command",
+      "abbrev": "MCRC",
+      "address": "3280 RUSSELL ROAD\nQUANTICO, VA 22134-5103",
+      "type": "headquarters"
+    },
+    {
+      "name": "Marine Corps Systems Command",
+      "abbrev": "MCSC",
+      "address": "2200 LESTER STREET\nQUANTICO, VA 22134-5010",
+      "type": "headquarters"
+    },
+    {
+      "name": "I Marine Expeditionary Force",
+      "abbrev": "I MEF",
+      "address": "BOX 555300\nCAMP PENDLETON, CA 92055-5300",
+      "type": "mef"
+    },
+    {
+      "name": "II Marine Expeditionary Force",
+      "abbrev": "II MEF",
+      "address": "PSC BOX 20080\nCAMP LEJEUNE, NC 28542-0080",
+      "type": "mef"
+    },
+    {
+      "name": "III Marine Expeditionary Force",
+      "abbrev": "III MEF",
+      "address": "UNIT 35602\nFPO AP 96373-5602",
+      "type": "mef"
+    },
+    {
+      "name": "1st Marine Division",
+      "abbrev": "1st MarDiv",
+      "address": "BOX 555520\nCAMP PENDLETON, CA 92055-5520",
+      "type": "division"
+    },
+    {
+      "name": "2nd Marine Division",
+      "abbrev": "2nd MarDiv",
+      "address": "PSC BOX 20050\nCAMP LEJEUNE, NC 28542-0050",
+      "type": "division"
+    },
+    {
+      "name": "3rd Marine Division",
+      "abbrev": "3rd MarDiv",
+      "address": "UNIT 35604\nFPO AP 96604",
+      "type": "division"
+    },
+    {
+      "name": "4th Marine Division",
+      "abbrev": "4th MarDiv",
+      "address": "2000 OPELOUSAS AVENUE\nNEW ORLEANS, LA 70146-5400",
+      "type": "division"
+    },
+    {
+      "name": "1st Marine Aircraft Wing",
+      "abbrev": "1st MAW",
+      "address": "UNIT 35001\nFPO AP 96373-5001",
+      "type": "wing"
+    },
+    {
+      "name": "2nd Marine Aircraft Wing",
+      "abbrev": "2nd MAW",
+      "address": "PSC BOX 8050\nCHERRY POINT, NC 28533-0050",
+      "type": "wing"
+    },
+    {
+      "name": "3rd Marine Aircraft Wing",
+      "abbrev": "3rd MAW",
+      "address": "BOX 452001\nSAN DIEGO, CA 92145-2001",
+      "type": "wing"
+    },
+    {
+      "name": "4th Marine Aircraft Wing",
+      "abbrev": "4th MAW",
+      "address": "2000 OPELOUSAS AVENUE\nNEW ORLEANS, LA 70146-5400",
+      "type": "wing"
+    },
+    {
+      "name": "1st Marine Logistics Group",
+      "abbrev": "1st MLG",
+      "address": "BOX 555600\nCAMP PENDLETON, CA 92055-5600",
+      "type": "mlg"
+    },
+    {
+      "name": "2nd Marine Logistics Group",
+      "abbrev": "2nd MLG",
+      "address": "PSC BOX 20100\nCAMP LEJEUNE, NC 28542-0100",
+      "type": "mlg"
+    },
+    {
+      "name": "3rd Marine Logistics Group",
+      "abbrev": "3rd MLG",
+      "address": "UNIT 35606\nFPO AP 96373-5606",
+      "type": "mlg"
+    },
+    {
+      "name": "4th Marine Logistics Group",
+      "abbrev": "4th MLG",
+      "address": "2000 OPELOUSAS AVENUE\nNEW ORLEANS, LA 70146-5400",
+      "type": "mlg"
+    },
+    {
+      "name": "1st Marine Regiment",
+      "abbrev": "1st Marines",
+      "address": "BOX 555521\nCAMP PENDLETON, CA 92055-5521",
+      "type": "regiment"
+    },
+    {
+      "name": "2nd Marine Regiment",
+      "abbrev": "2nd Marines",
+      "address": "PSC BOX 20051\nCAMP LEJEUNE, NC 28542-0051",
+      "type": "regiment"
+    },
+    {
+      "name": "3rd Marine Regiment",
+      "abbrev": "3rd Marines",
+      "address": "UNIT 35605\nFPO AP 96373-5605",
+      "type": "regiment"
+    },
+    {
+      "name": "4th Marine Regiment",
+      "abbrev": "4th Marines",
+      "address": "UNIT 35605\nFPO AP 96373-5605",
+      "type": "regiment"
+    },
+    {
+      "name": "5th Marine Regiment",
+      "abbrev": "5th Marines",
+      "address": "BOX 555522\nCAMP PENDLETON, CA 92055-5522",
+      "type": "regiment"
+    },
+    {
+      "name": "6th Marine Regiment",
+      "abbrev": "6th Marines",
+      "address": "PSC BOX 20052\nCAMP LEJEUNE, NC 28542-0052",
+      "type": "regiment"
+    },
+    {
+      "name": "7th Marine Regiment",
+      "abbrev": "7th Marines",
+      "address": "BOX 788100\nTWENTYNINE PALMS, CA 92278-8100",
+      "type": "regiment"
+    },
+    {
+      "name": "8th Marine Regiment",
+      "abbrev": "8th Marines",
+      "address": "PSC BOX 20053\nCAMP LEJEUNE, NC 28542-0053",
+      "type": "regiment"
+    },
+    {
+      "name": "11th Marine Regiment",
+      "abbrev": "11th Marines",
+      "address": "BOX 555530\nCAMP PENDLETON, CA 92055-5530",
+      "type": "regiment"
+    },
+    {
+      "name": "10th Marine Regiment",
+      "abbrev": "10th Marines",
+      "address": "PSC BOX 20060\nCAMP LEJEUNE, NC 28542-0060",
+      "type": "regiment"
+    },
+    {
+      "name": "12th Marine Regiment",
+      "abbrev": "12th Marines",
+      "address": "UNIT 35610\nFPO AP 96373-5610",
+      "type": "regiment"
+    },
+    {
+      "name": "Marine Corps Base Camp Pendleton",
+      "abbrev": "MCB Camp Pendleton",
+      "address": "BOX 555010\nCAMP PENDLETON, CA 92055-5010",
+      "type": "base"
+    },
+    {
+      "name": "Marine Corps Base Camp Lejeune",
+      "abbrev": "MCB Camp Lejeune",
+      "address": "PSC BOX 20004\nCAMP LEJEUNE, NC 28542-0004",
+      "type": "base"
+    },
+    {
+      "name": "Marine Corps Base Quantico",
+      "abbrev": "MCB Quantico",
+      "address": "3250 CATLIN AVENUE\nQUANTICO, VA 22134-5001",
+      "type": "base"
+    },
+    {
+      "name": "Marine Corps Air Ground Combat Center Twentynine Palms",
+      "abbrev": "MCAGCC 29 Palms",
+      "address": "BOX 788100\nTWENTYNINE PALMS, CA 92278-8100",
+      "type": "base"
+    },
+    {
+      "name": "Marine Corps Base Hawaii",
+      "abbrev": "MCB Hawaii",
+      "address": "BOX 63002\nKANEOHE BAY, HI 96863-3002",
+      "type": "base"
+    },
+    {
+      "name": "Marine Corps Base Camp Butler",
+      "abbrev": "MCB Camp Butler",
+      "address": "UNIT 35001\nFPO AP 96373-5001",
+      "type": "base"
+    },
+    {
+      "name": "Marine Corps Air Station Miramar",
+      "abbrev": "MCAS Miramar",
+      "address": "BOX 452001\nSAN DIEGO, CA 92145-2001",
+      "type": "airstation"
+    },
+    {
+      "name": "Marine Corps Air Station Cherry Point",
+      "abbrev": "MCAS Cherry Point",
+      "address": "PSC BOX 8003\nCHERRY POINT, NC 28533-0003",
+      "type": "airstation"
+    },
+    {
+      "name": "Marine Corps Air Station Yuma",
+      "abbrev": "MCAS Yuma",
+      "address": "BOX 99100\nYUMA, AZ 85369-9100",
+      "type": "airstation"
+    },
+    {
+      "name": "Marine Corps Air Station Beaufort",
+      "abbrev": "MCAS Beaufort",
+      "address": "POSTAL SERVICE CENTER BOX 6010\nBEAUFORT, SC 29904-6010",
+      "type": "airstation"
+    },
+    {
+      "name": "Marine Corps Air Station New River",
+      "abbrev": "MCAS New River",
+      "address": "PSC BOX 21001\nJACKSONVILLE, NC 28545-1001",
+      "type": "airstation"
+    },
+    {
+      "name": "Marine Corps Air Station Iwakuni",
+      "abbrev": "MCAS Iwakuni",
+      "address": "UNIT 35604\nFPO AP 96604",
+      "type": "airstation"
+    },
+    {
+      "name": "Marine Corps Air Station Futenma",
+      "abbrev": "MCAS Futenma",
+      "address": "UNIT 35604\nFPO AP 96604",
+      "type": "airstation"
+    },
+    {
+      "name": "Marine Corps Logistics Base Albany",
+      "abbrev": "MCLB Albany",
+      "address": "814 RADFORD BOULEVARD\nALBANY, GA 31704-1128",
+      "type": "logisticsbase"
+    },
+    {
+      "name": "Marine Corps Logistics Base Barstow",
+      "abbrev": "MCLB Barstow",
+      "address": "BOX 110130\nBARSTOW, CA 92311-5020",
+      "type": "logisticsbase"
+    },
+    {
+      "name": "Marine Corps Recruit Depot San Diego",
+      "abbrev": "MCRD San Diego",
+      "address": "1600 HENDERSON AVENUE\nSAN DIEGO, CA 92140-5001",
+      "type": "recruitdepot"
+    },
+    {
+      "name": "Marine Corps Recruit Depot Parris Island",
+      "abbrev": "MCRD Parris Island",
+      "address": "BOX 19001\nPARRIS ISLAND, SC 29905-9001",
+      "type": "recruitdepot"
+    },
+    {
+      "name": "The Basic School",
+      "abbrev": "TBS",
+      "address": "24164 BELLEAU AVENUE\nQUANTICO, VA 22134-5019",
+      "type": "school"
+    },
+    {
+      "name": "Officer Candidates School",
+      "abbrev": "OCS",
+      "address": "2189 ELROD AVENUE\nQUANTICO, VA 22134-5003",
+      "type": "school"
+    },
+    {
+      "name": "Infantry Officer Course",
+      "abbrev": "IOC",
+      "address": "24164 BELLEAU AVENUE\nQUANTICO, VA 22134-5019",
+      "type": "school"
+    },
+    {
+      "name": "School of Infantry - West",
+      "abbrev": "SOI-W",
+      "address": "BOX 555190\nCAMP PENDLETON, CA 92055-5190",
+      "type": "school"
+    },
+    {
+      "name": "School of Infantry - East",
+      "abbrev": "SOI-E",
+      "address": "PSC BOX 20028\nCAMP LEJEUNE, NC 28542-0028",
+      "type": "school"
+    },
+    {
+      "name": "Expeditionary Warfare School",
+      "abbrev": "EWS",
+      "address": "2076 SOUTH STREET\nQUANTICO, VA 22134-5068",
+      "type": "school"
+    },
+    {
+      "name": "Command and Staff College",
+      "abbrev": "C&S",
+      "address": "2076 SOUTH STREET\nQUANTICO, VA 22134-5068",
+      "type": "school"
+    },
+    {
+      "name": "Marine Corps War College",
+      "abbrev": "MCWAR",
+      "address": "2076 SOUTH STREET\nQUANTICO, VA 22134-5068",
+      "type": "school"
+    },
+    {
+      "name": "Marine Corps University",
+      "abbrev": "MCU",
+      "address": "2076 SOUTH STREET\nQUANTICO, VA 22134-5068",
+      "type": "school"
+    },
+    {
+      "name": "Marine Corps Communication-Electronics School",
+      "abbrev": "MCCES",
+      "address": "BOX 788150\nTWENTYNINE PALMS, CA 92278-8150",
+      "type": "school"
+    },
+    {
+      "name": "Marine Corps Mountain Warfare Training Center",
+      "abbrev": "MCMWTC",
+      "address": "BRIDGEPORT, CA 93517",
+      "type": "school"
+    },
+    {
+      "name": "Marine Security Guard Battalion",
+      "abbrev": "MSG Bn",
+      "address": "3280 RUSSELL ROAD\nQUANTICO, VA 22134-5011",
+      "type": "special"
+    },
+    {
+      "name": "Chemical Biological Incident Response Force",
+      "abbrev": "CBIRF",
+      "address": "3581 CHOPAWAMSIC ROAD\nINDIAN HEAD, MD 20640",
+      "type": "special"
+    },
+    {
+      "name": "Marine Corps Security Force Regiment",
+      "abbrev": "SECFOR",
+      "address": "911 CHARLES MORRIS STREET SE\nWASHINGTON NAVY YARD, DC 20374-5037",
+      "type": "special"
+    },
+    {
+      "name": "Marine Barracks Washington",
+      "abbrev": "MBW 8th & I",
+      "address": "8TH AND I STREETS SE\nWASHINGTON, DC 20390-5000",
+      "type": "special"
+    },
+    {
+      "name": "Marine Corps Detachment, Defense Language Institute",
+      "abbrev": "MCD DLI",
+      "address": "229 GRUBER AVENUE\nPRESIDIO OF MONTEREY, CA 93944-5006",
+      "type": "detachment"
+    },
+    {
+      "name": "Marine Forces Pacific",
+      "abbrev": "MARFORPAC",
+      "address": "BOX 64108\nCAMP H.M. SMITH, HI 96861-4108",
+      "type": "marfor"
+    },
+    {
+      "name": "Marine Forces Atlantic / Fleet Marine Force Atlantic",
+      "abbrev": "MARFORLANT",
+      "address": "1785 MORRIS STREET\nNORFOLK, VA 23511-3489",
+      "type": "marfor"
+    },
+    {
+      "name": "Marine Forces Europe and Africa",
+      "abbrev": "MARFOREUR/AF",
+      "address": "UNIT 30401 BOX 60\nAPO AE 09107",
+      "type": "marfor"
+    },
+    {
+      "name": "Marine Forces Central Command",
+      "abbrev": "MARCENT",
+      "address": "7115 SOUTH BOUNDARY BLVD\nMACDILL AFB, FL 33621-5101",
+      "type": "marfor"
+    },
+    {
+      "name": "Marine Forces Southern Command",
+      "abbrev": "MARFORSOUTH",
+      "address": "9301 NW 33RD STREET\nDORAL, FL 33172",
+      "type": "marfor"
+    },
+    {
+      "name": "Marine Forces Special Operations Command",
+      "abbrev": "MARSOC",
+      "address": "PSC BOX 20123\nCAMP LEJEUNE, NC 28542-0123",
+      "type": "marfor"
+    },
+    {
+      "name": "Marine Forces Cyber Command",
+      "abbrev": "MARFORCYBER",
+      "address": "9800 SAVAGE ROAD\nFORT MEADE, MD 20755",
+      "type": "marfor"
+    },
+    {
+      "name": "11th Marine Expeditionary Unit",
+      "abbrev": "11th MEU",
+      "address": "BOX 555365\nCAMP PENDLETON, CA 92055-5365",
+      "type": "meu"
+    },
+    {
+      "name": "13th Marine Expeditionary Unit",
+      "abbrev": "13th MEU",
+      "address": "BOX 555366\nCAMP PENDLETON, CA 92055-5366",
+      "type": "meu"
+    },
+    {
+      "name": "15th Marine Expeditionary Unit",
+      "abbrev": "15th MEU",
+      "address": "BOX 555367\nCAMP PENDLETON, CA 92055-5367",
+      "type": "meu"
+    },
+    {
+      "name": "22nd Marine Expeditionary Unit",
+      "abbrev": "22nd MEU",
+      "address": "PSC BOX 20062\nCAMP LEJEUNE, NC 28542-0062",
+      "type": "meu"
+    },
+    {
+      "name": "24th Marine Expeditionary Unit",
+      "abbrev": "24th MEU",
+      "address": "PSC BOX 20063\nCAMP LEJEUNE, NC 28542-0063",
+      "type": "meu"
+    },
+    {
+      "name": "26th Marine Expeditionary Unit",
+      "abbrev": "26th MEU",
+      "address": "PSC BOX 20064\nCAMP LEJEUNE, NC 28542-0064",
+      "type": "meu"
+    },
+    {
+      "name": "31st Marine Expeditionary Unit",
+      "abbrev": "31st MEU",
+      "address": "UNIT 35623\nFPO AP 96373-5623",
+      "type": "meu"
+    }
+  ]
+}

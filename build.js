@@ -33,8 +33,12 @@ const files = {
   pdfGenerator: fs.readFileSync(path.join(ROOT, 'js', 'pdf-generator.js'), 'utf8'),
   app: fs.readFileSync(path.join(ROOT, 'js', 'app.js'), 'utf8'),
   ssicData: fs.readFileSync(path.join(ROOT, 'data', 'ssic.json'), 'utf8'),
-  unitsData: fs.readFileSync(path.join(ROOT, 'data', 'units.json'), 'utf8')
+  unitsData: fs.readFileSync(path.join(ROOT, 'data', 'units.json'), 'utf8'),
+  seal: fs.readFileSync(path.join(ROOT, 'assets', 'DOW-Seal-BW.jpg'))
 };
+
+// Convert seal to base64 data URL
+const sealBase64 = 'data:image/jpeg;base64,' + files.seal.toString('base64');
 
 console.log('Read source files:');
 console.log(`  - index.html: ${files.html.length} bytes`);
@@ -52,7 +56,7 @@ console.log(`  - units.json: ${files.unitsData.length} bytes`);
 const ssicData = JSON.parse(files.ssicData);
 const unitsData = JSON.parse(files.unitsData);
 
-// Create inline data script that pre-populates the databases
+// Create inline data script that pre-populates the databases and seal
 const inlineDataScript = `
 // Pre-loaded SSIC Database (${ssicData.codes.length} codes)
 SSIC_DATABASE = ${JSON.stringify(ssicData.codes.map(c => ({ code: c.code, desc: c.title })))};
@@ -60,9 +64,14 @@ SSIC_DATABASE = ${JSON.stringify(ssicData.codes.map(c => ({ code: c.code, desc: 
 // Pre-loaded Unit Database (${unitsData.units.length} units)
 UNIT_DATABASE = ${JSON.stringify(unitsData.units.map(u => ({ name: u.name, address: u.address, service: u.service })))};
 
+// Pre-loaded DON Seal (bundled as base64)
+sealData = '${sealBase64}';
+sealLoaded = true;
+
 // Mark data as loaded (skip async fetch)
 dataLoaded = true;
 console.log('Using bundled data: ' + SSIC_DATABASE.length + ' SSICs, ' + UNIT_DATABASE.length + ' units');
+console.log('Using bundled DON seal');
 `;
 
 // Combine all JS (excluding module.exports sections)

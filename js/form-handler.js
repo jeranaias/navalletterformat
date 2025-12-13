@@ -5,9 +5,39 @@
 
 // Global state
 let sealData = null;
-let sealFilename = null;
+let sealFilename = 'DOW-Seal-BW.jpg';
+let sealLoaded = false;
 let documentType = 'basic';
 let draggedItem = null;
+
+// Default seal path (bundled with app)
+const DEFAULT_SEAL_PATH = 'assets/DOW-Seal-BW.jpg';
+
+/**
+ * Pre-load the default Department of the Navy seal
+ * Called during app initialization
+ */
+async function loadDefaultSeal() {
+  try {
+    const response = await fetch(DEFAULT_SEAL_PATH);
+    if (response.ok) {
+      const blob = await response.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          sealData = e.target.result;
+          sealLoaded = true;
+          console.log('Default DON seal loaded successfully');
+          resolve(true);
+        };
+        reader.readAsDataURL(blob);
+      });
+    }
+  } catch (err) {
+    console.warn('Could not load default seal:', err);
+  }
+  return false;
+}
 
 /**
  * Select document type (basic or endorsement)
@@ -28,53 +58,6 @@ function selectDocType(type) {
 function toggleCollapsible(header) {
   header.classList.toggle('expanded');
   header.nextElementSibling.classList.toggle('show');
-}
-
-// ============================================================
-// SEAL UPLOAD
-// ============================================================
-
-/**
- * Handle seal image upload
- * @param {Event} event - File input change event
- */
-function handleSealUpload(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  if (!file.type.match(/image\/(png|jpeg|jpg)/)) {
-    showStatus('error', 'Please upload a PNG or JPG image');
-    return;
-  }
-
-  sealFilename = file.name;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    sealData = e.target.result;
-    document.getElementById('sealPlaceholder').style.display = 'none';
-    document.getElementById('sealPreview').style.display = 'block';
-    document.getElementById('sealPreview').innerHTML = `<img src="${sealData}" alt="Seal">`;
-    document.getElementById('sealUploadArea').classList.add('has-image');
-    document.getElementById('removeSeal').style.display = 'inline-block';
-    showStatus('success', 'Seal uploaded: ' + file.name);
-  };
-  reader.readAsDataURL(file);
-}
-
-/**
- * Remove uploaded seal
- * @param {Event} event - Click event
- */
-function removeSeal(event) {
-  event.stopPropagation();
-  sealData = null;
-  sealFilename = null;
-  document.getElementById('sealUpload').value = '';
-  document.getElementById('sealPlaceholder').style.display = 'block';
-  document.getElementById('sealPreview').style.display = 'none';
-  document.getElementById('sealPreview').innerHTML = '';
-  document.getElementById('sealUploadArea').classList.remove('has-image');
-  document.getElementById('removeSeal').style.display = 'none';
 }
 
 // ============================================================
@@ -378,7 +361,10 @@ function collectData() {
 /**
  * Initialize form event listeners
  */
-function initFormListeners() {
+async function initFormListeners() {
+  // Load the default DON seal
+  await loadDefaultSeal();
+
   // Letterhead toggle
   document.getElementById('useLetterhead').addEventListener('change', function() {
     document.getElementById('letterheadFields').style.display = this.checked ? 'block' : 'none';
@@ -399,10 +385,9 @@ function initFormListeners() {
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
+    loadDefaultSeal,
     selectDocType,
     toggleCollapsible,
-    handleSealUpload,
-    removeSeal,
     addVia,
     addRef,
     addEncl,
@@ -420,6 +405,7 @@ if (typeof module !== 'undefined' && module.exports) {
     initFormListeners,
     get sealData() { return sealData; },
     get sealFilename() { return sealFilename; },
+    get sealLoaded() { return sealLoaded; },
     get documentType() { return documentType; }
   };
 }
