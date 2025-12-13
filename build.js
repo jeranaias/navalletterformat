@@ -31,6 +31,7 @@ const files = {
   formHandler: fs.readFileSync(path.join(ROOT, 'js', 'form-handler.js'), 'utf8'),
   latexGenerator: fs.readFileSync(path.join(ROOT, 'js', 'latex-generator.js'), 'utf8'),
   pdfGenerator: fs.readFileSync(path.join(ROOT, 'js', 'pdf-generator.js'), 'utf8'),
+  draftManager: fs.readFileSync(path.join(ROOT, 'js', 'draft-manager.js'), 'utf8'),
   app: fs.readFileSync(path.join(ROOT, 'js', 'app.js'), 'utf8'),
   ssicData: fs.readFileSync(path.join(ROOT, 'data', 'ssic.json'), 'utf8'),
   unitsData: fs.readFileSync(path.join(ROOT, 'data', 'units.json'), 'utf8'),
@@ -48,6 +49,7 @@ console.log(`  - data-manager.js: ${files.dataManager.length} bytes`);
 console.log(`  - form-handler.js: ${files.formHandler.length} bytes`);
 console.log(`  - latex-generator.js: ${files.latexGenerator.length} bytes`);
 console.log(`  - pdf-generator.js: ${files.pdfGenerator.length} bytes`);
+console.log(`  - draft-manager.js: ${files.draftManager.length} bytes`);
 console.log(`  - app.js: ${files.app.length} bytes`);
 console.log(`  - ssic.json: ${files.ssicData.length} bytes`);
 console.log(`  - units.json: ${files.unitsData.length} bytes`);
@@ -86,6 +88,7 @@ const combinedJS = [
   stripModuleExports(files.formHandler),
   stripModuleExports(files.latexGenerator),
   stripModuleExports(files.pdfGenerator),
+  stripModuleExports(files.draftManager),
   stripModuleExports(files.app)
 ].join('\n\n');
 
@@ -135,8 +138,8 @@ fs.writeFileSync(outputPath, bundledHTML, 'utf8');
 // Calculate sizes
 const originalSize = files.html.length + files.css.length +
   files.utils.length + files.dataManager.length + files.formHandler.length +
-  files.latexGenerator.length + files.pdfGenerator.length + files.app.length +
-  files.ssicData.length + files.unitsData.length;
+  files.latexGenerator.length + files.pdfGenerator.length + files.draftManager.length +
+  files.app.length + files.ssicData.length + files.unitsData.length;
 const bundledSize = bundledHTML.length;
 
 console.log('\nBuild complete!');
