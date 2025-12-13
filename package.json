@@ -1,0 +1,33 @@
+{
+  "name": "naval-letter-generator",
+  "version": "2.0.0",
+  "description": "Free online tool for creating SECNAV M-5216.5 compliant naval correspondence for USMC and Navy",
+  "main": "index.html",
+  "scripts": {
+    "build": "node build.js",
+    "serve": "npx serve .",
+    "test": "echo \"Tests coming soon\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeranaias/navalletterformat.git"
+  },
+  "keywords": [
+    "naval-letter",
+    "SECNAV",
+    "M-5216.5",
+    "MCO-5216.20",
+    "USMC",
+    "Marine-Corps",
+    "Navy",
+    "military-correspondence",
+    "PDF-generator",
+    "LaTeX"
+  ],
+  "author": "Jesse Morgan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jeranaias/navalletterformat/issues"
+  },
+  "homepage": "https://jeranaias.github.io/navalletterformat/"
+}
