@@ -143,6 +143,16 @@ function handleUnitSearch() {
 }
 
 /**
+ * Map service abbreviation to full name for letterhead
+ */
+const SERVICE_FULL_NAMES = {
+  'USMC': 'UNITED STATES MARINE CORPS',
+  'USN': 'UNITED STATES NAVY',
+  'DOD': 'DEPARTMENT OF DEFENSE',
+  'DON': 'DEPARTMENT OF THE NAVY'
+};
+
+/**
  * Select unit from search results
  * @param {number} index - Index in filtered results
  * @param {string} query - Original search query
@@ -152,7 +162,8 @@ function selectUnit(index, query) {
   const unit = matches[index];
 
   if (unit) {
-    document.getElementById('unitName').value = unit.service;
+    const fullServiceName = SERVICE_FULL_NAMES[unit.service] || unit.service;
+    document.getElementById('unitName').value = fullServiceName;
     document.getElementById('unitAddress').value = unit.name + '\n' + unit.address;
     document.getElementById('unitSearch').value = '';
   }
