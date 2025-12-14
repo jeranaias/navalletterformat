@@ -30,6 +30,18 @@ function escapeLatex(str) {
 }
 
 /**
+ * Ensure double spaces after periods (military correspondence standard)
+ * @param {string} str - Input string
+ * @returns {string} - String with double spaces after periods
+ */
+function ensureDoubleSpaces(str) {
+  if (!str) return '';
+  // Replace period + single space (not at end) with period + double space
+  // Also handles multiple periods (e.g., "sentence. Another. Third.")
+  return str.replace(/\.(\s)(?=\S)/g, '.  ');
+}
+
+/**
  * Format date to naval standard (DD Mon YY)
  * @param {string} value - Input date string
  * @returns {string|null} - Formatted date or null if invalid
@@ -138,6 +150,7 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     LETTERS,
     escapeLatex,
+    ensureDoubleSpaces,
     formatDateValue,
     getTodayFormatted,
     showStatus,
