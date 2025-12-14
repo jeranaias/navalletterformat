@@ -82,7 +82,7 @@ function collectParagraphs() {
   const paragraphs = [];
   container.querySelectorAll('.para-item').forEach(item => {
     const textarea = item.querySelector('textarea');
-    const subjInput = item.querySelector('input[name="paraSubj[]"]');
+    const subjInput = item.querySelector('.para-subject-input');
     paragraphs.push({
       type: item.dataset.type || 'para',
       subject: subjInput?.value || '',
@@ -232,16 +232,16 @@ function addParagraphWithType(container, type, text, subject) {
 
   // Only top-level paragraphs can have subjects
   const subjectField = type === 'para' ? `
-    <div class="para-subject">
-      <input type="text" name="paraSubj[]" placeholder="Subject (optional, will be underlined)" value="${subject || ''}" />
-    </div>
+    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" value="${subject || ''}" />
   ` : '';
 
   div.innerHTML = `
     <span class="drag-handle">☰</span>
-    <span class="para-label"></span>
-    ${subjectField}
-    <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)">${text || ''}</textarea>
+    <div class="para-main">
+      <span class="para-label"></span>
+      ${subjectField}
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)">${text || ''}</textarea>
+    </div>
     <div class="para-actions">
       <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
       <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>

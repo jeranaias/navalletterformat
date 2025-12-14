@@ -167,16 +167,16 @@ function addParaAfter(afterEl, type) {
 
   // Only top-level paragraphs can have subjects
   const subjectField = type === 'para' ? `
-    <div class="para-subject">
-      <input type="text" name="paraSubj[]" placeholder="Subject (optional, will be underlined)" />
-    </div>
+    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" />
   ` : '';
 
   div.innerHTML = `
     <span class="drag-handle">☰</span>
-    <span class="para-label"></span>
-    ${subjectField}
-    <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)"></textarea>
+    <div class="para-main">
+      <span class="para-label"></span>
+      ${subjectField}
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)"></textarea>
+    </div>
     <div class="para-actions">
       <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
       <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>
@@ -357,7 +357,7 @@ function collectData() {
     encls: Array.from(document.querySelectorAll('input[name="encl[]"]')).map(i => i.value.trim()).filter(v => v),
     paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => {
       const paraItem = t.closest('.para-item');
-      const subjInput = paraItem?.querySelector('input[name="paraSubj[]"]');
+      const subjInput = paraItem?.querySelector('.para-subject-input');
       return {
         type: t.dataset.type,
         subject: subjInput?.value.trim() || '',
