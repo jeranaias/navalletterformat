@@ -34,9 +34,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive unit database (230 USMC/USN/DOD units with addresses)
 - Build script (`build.js`) for creating single-file bundled version
 - Auto-loading DON seal from `assets/DOW-Seal-BW.jpg` (no upload needed)
-- Jest testing infrastructure with 67 unit tests
+- Jest testing infrastructure with 111 unit tests
 - Example PDF generator for testing (`testing/generate_examples.js`)
 - Test draft files for QA (`testing/drafts/`)
+- **Memorandum document type**
+  - New document type option alongside Basic Letter and Endorsement
+  - Centered "MEMORANDUM" header
+  - Letterhead section hidden for memoranda
+- **Dark mode**
+  - Theme toggle button in header (sun/moon icon)
+  - Respects system preference (`prefers-color-scheme`) on first visit
+  - Saves preference to localStorage
+  - Full dark theme with inverted color scheme
+- **Print button**
+  - "Print" button next to "Download PDF"
+  - Opens PDF in new browser tab with print dialog
+  - Uses same PDF generation logic as download
+- **Accessibility improvements**
+  - Skip to main content link
+  - ARIA labels on all form elements
+  - Role attributes for screen readers (form, radiogroup, banner, main, contentinfo)
+  - Keyboard navigation for document type selector (Tab, Enter/Space)
+  - Focus-visible outlines for keyboard users
+  - Respects `prefers-reduced-motion` for animations
+- **PWA support (Progressive Web App)**
+  - Web manifest (`manifest.json`) for installability
+  - Service worker (`sw.js`) for offline caching
+  - App can be installed to home screen on mobile/desktop
 
 ### Changed
 - Refactored monolithic `index.html` (2,186 lines) into modular structure
@@ -90,5 +114,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
-| 2.0.0   | TBD  | Modular architecture, draft save/load, auto-seal, explicit paragraph subjects, comprehensive data, 67 tests |
+| 2.0.0   | TBD  | Modular architecture, draft save/load, memorandum format, dark mode, print button, accessibility, PWA support, 111 tests |
 | 1.3.0   | Dec 2024 | Initial GitHub Pages release |
