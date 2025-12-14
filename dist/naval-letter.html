@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v3.0 - Bundled Version
-  Built: 2025-12-14T09:30:35.855Z
+  Built: 2025-12-14T09:36:50.752Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -1140,38 +1140,69 @@ textarea {
   font-style: italic;
 }
 
-.para-actions {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--navy);
-  padding: 10px;
-  border-radius: 0 0 var(--radius) var(--radius);
-  z-index: 10;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: -1px;
-}
-
-.para-item.active .para-actions {
+/* Inline paragraph actions */
+.para-inline-actions {
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 8px;
+  opacity: 0.4;
+  transition: opacity 0.2s;
 }
 
-.para-actions .btn {
-  background: rgba(255,255,255,0.15);
-  color: var(--white);
-  padding: 6px 12px;
-  font-size: 0.75rem;
+.para-item:hover .para-inline-actions,
+.para-item:focus-within .para-inline-actions {
+  opacity: 1;
 }
 
-.para-actions .btn:hover {
-  background: rgba(255,255,255,0.25);
+.para-action-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--gray-300);
+  border-radius: 4px;
+  background: var(--white);
+  color: var(--gray-600);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  line-height: 1;
 }
 
-.para-actions .btn-remove {
-  background: rgba(220, 53, 69, 0.8);
+.para-action-btn:hover:not(:disabled) {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
+}
+
+.para-action-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.para-action-delete {
+  color: var(--danger);
+  border-color: var(--gray-300);
+}
+
+.para-action-delete:hover {
+  background: var(--danger) !important;
+  border-color: var(--danger) !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .para-action-btn {
+  background: var(--gray-200);
+  border-color: var(--gray-400);
+  color: var(--gray-600);
+}
+
+[data-theme="dark"] .para-action-btn:hover:not(:disabled) {
+  background: var(--navy);
+  color: white;
 }
 
 /* Actions Bar */
@@ -1623,7 +1654,7 @@ button:focus-visible,
           </div>
         </div>
         <p class="help-text" style="margin-bottom: 16px;">
-          <strong>1.</strong> → <strong>a.</strong> → <strong>(1)</strong> → <strong>(a)</strong> &nbsp;|&nbsp; Click paragraph for options &nbsp;|&nbsp; Drag to reorder &nbsp;|&nbsp; <strong>Ctrl+Z</strong> undo, <strong>Ctrl+Y</strong> redo
+          <strong>1.</strong> → <strong>a.</strong> → <strong>(1)</strong> → <strong>(a)</strong> &nbsp;|&nbsp; <strong>+</strong> add below &nbsp;|&nbsp; <strong>↳</strong> add sub &nbsp;|&nbsp; Drag ☰ to reorder &nbsp;|&nbsp; <strong>Ctrl+Z/Y</strong> undo/redo
         </p>
         <div class="para-container" id="paraContainer"></div>
         <button type="button" class="btn btn-add" onclick="addFirstPara()">+ Add Paragraph</button>
@@ -2343,18 +2374,17 @@ function addParaAfter(afterEl, type) {
   `;
 
   div.innerHTML = `
-    <span class="drag-handle">☰</span>
+    <span class="drag-handle" title="Drag to reorder">☰</span>
     <div class="para-main">
       ${portionSelector}
       <span class="para-label"></span>
       ${subjectField}
-      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)"></textarea>
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..."></textarea>
     </div>
-    <div class="para-actions">
-      <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
-      <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>
-      <button type="button" class="btn" onclick="addParent(this)" ${type === 'para' ? 'disabled' : ''}>← Outdent</button>
-      <button type="button" class="btn btn-remove" onclick="removePara(this)">Delete</button>
+    <div class="para-inline-actions">
+      <button type="button" class="para-action-btn" onclick="addSibling(this)" title="Add paragraph below">+</button>
+      <button type="button" class="para-action-btn" onclick="addChild(this)" title="Add sub-paragraph" ${type === 'subsubsubpara' ? 'disabled' : ''}>↳</button>
+      <button type="button" class="para-action-btn para-action-delete" onclick="removePara(this)" title="Delete paragraph">×</button>
     </div>
   `;
 
