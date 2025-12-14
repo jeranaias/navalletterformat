@@ -1,14 +1,11 @@
 # Dependencies
 node_modules/
-
-# Generated files
-testing/testing/examples/
-example_3page_letter.pdf
-tests/output/
-
-# Lock files (optional - can be committed for reproducibility)
 package-lock.json
-testing/testing/package-lock.json
+
+# Generated test output
+testing/testing/examples/
+tests/output/
+*.generated.pdf
 
 # OS files
 .DS_Store
@@ -19,3 +16,15 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Local development
+*.local
+*.log
+
+# =============================================================================
+# NOTE: dist/ is NOT ignored intentionally
+# =============================================================================
+# The built single-file HTML (dist/naval-letter.html) is committed so that
+# users on NMCI/government networks can download and use it directly without
+# needing npm, node, or git. This is a critical use case for military users
+# who cannot install development tools on their workstations.
