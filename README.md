@@ -39,6 +39,36 @@ Just open the link, fill in your information, and download your PDF.
 
 ## ✨ What's New
 
+### v2.0 In Development (v2 branch)
+
+A major architecture overhaul is in progress! Check the `v2` branch for the latest development version.
+
+**New Features:**
+- **Draft Save/Load** - Auto-saves every 2 seconds, export/import JSON files, restore on page reload
+- **Explicit Paragraph Subjects** - Optional subject field for top-level paragraphs (underlined in output)
+- **Auto Double Spacing** - Automatically enforces double spaces after periods (military standard)
+- **Auto Seal** - Department of War seal loads automatically (no more upload needed)
+- **2,240 SSIC Codes** - Complete database from SECNAV M-5210.2 (August 2018)
+- **230 Units** - Expanded unit database with full addresses
+
+**Architecture Improvements:**
+- Modular JavaScript (7 separate files instead of monolithic HTML)
+- External CSS and JSON data files
+- Build script for single-file distribution
+- 67 automated unit tests
+- Proper separation of concerns
+
+**Bug Fixes:**
+- Unit letterhead shows full name ("UNITED STATES MARINE CORPS" not "USMC")
+- Seal description corrected to "Department of War"
+- Paragraph label spacing now consistent (single space after 1., a., (1), (a))
+- Subject margins properly constrained within page boundaries
+- Date parsing fixed for "DD Mon YYYY" format
+
+See [CHANGELOG.md](CHANGELOG.md) for complete details.
+
+---
+
 ### v1.3 Beta (13 Dec 24)
 
 **Major formatting corrections based on community feedback** — Special thanks to **u/BorderlineSatisfied** on r/USMC for the detailed review!
@@ -127,7 +157,7 @@ Automatic hierarchical numbering with proper indentation:
 - **Sub-paragraphs:** a., b., c.
 - **Sub-sub-paragraphs:** (1), (2), (3)
 - **Sub-sub-sub-paragraphs:** (a), (b), (c)
-- **Paragraph titles** (like "Background." or "Recommendation.") are automatically underlined
+- **Paragraph subjects** (like "Purpose." or "Background.") - optional field for main paragraphs, underlined in output
 
 ### 🔄 Automatic Numbering
 - **Via addressees** auto-number as (1), (2), (3) only when multiple (single via has no number)
@@ -175,9 +205,10 @@ Click and drag paragraphs to reorganize. Numbering updates automatically.
 4. **Done.** Print or email your properly formatted letter.
 
 ### Tips
-- **Two spaces after periods** - Type them yourself; the tool preserves them
+- **Two spaces after periods** - v2.0 adds them automatically; v1.x requires typing them yourself
 - **Subject line** - Will be automatically capitalized
 - **Paragraphs** - Click any paragraph to see action buttons for adding siblings or children
+- **Paragraph subjects** - v2.0 has an optional subject field for main paragraphs (underlined in output)
 - **Drag to reorder** - Grab the ☰ handle to rearrange paragraphs
 
 ### Advanced Options
@@ -251,7 +282,7 @@ We're actively working on improvements. Current known issues:
 
 - [ ] Direct PDF may have minor spacing differences from LaTeX output on complex multi-page letters
 - [x] ~~Seal images only work through the Overleaf/ZIP workflow~~ **Fixed in v1.2!**
-- [ ] No save/load functionality yet (refresh = start over)
+- [x] ~~No save/load functionality yet (refresh = start over)~~ **Fixed in v2.0!** (auto-save + export/import)
 - [x] ~~Single letter format only (no endorsements or memoranda yet)~~ **Endorsements added in v1.2!**
 
 **See something else?** [Report it here](https://github.com/jeranaias/navalletterformat/issues)
@@ -264,30 +295,30 @@ We're prioritizing based on user feedback.
 
 ### v1.x - Near Term
 
-- [ ] Save/load letter drafts (localStorage)
+- [x] ~~Save/load letter drafts (localStorage)~~ **Done in v2.0!**
 - [x] ~~Seal support in direct PDF generation~~ **Done!**
 - [x] ~~Endorsement letter format~~ **Done!**
 - [ ] Memorandum format
-- [ ] More units and SSICs (request yours!)
+- [x] ~~More units and SSICs (request yours!)~~ **Done in v2.0!** (2,240 SSICs, 230 units)
 - [ ] Print directly from browser
 - [ ] Dark mode (for the night shift)
 
-### v2.0 - Architecture Overhaul
+### v2.0 - Architecture Overhaul *(In Progress - see v2 branch)*
 
 A complete rewrite focused on maintainability and scalability:
 
-- [ ] **Separate HTML/CSS/JS** - Break the monolithic single-file into proper separate files for easier maintenance and testing
-- [ ] **SSIC Database (Full Manual)** - Parse the complete SSIC manual into a searchable JSON database (currently ~100 codes, full manual has thousands)
-- [ ] **Complete Unit Database** - Import ALL Marine Corps units from authoritative source (rumor has it there's an Excel doc floating around the Corps with every unit - if you have it, we want it!)
-- [ ] **Modular Component Architecture** - Reusable components for form sections, PDF generation, and data management
-- [ ] **Unit Tests** - Automated testing for PDF output compliance
-- [ ] **Build Pipeline** - Proper build process while maintaining a "single-file portable" distribution option
+- [x] **Separate HTML/CSS/JS** - Monolithic file broken into 7 JS modules, external CSS, and JSON data files
+- [x] **SSIC Database (Full Manual)** - 2,240 codes from SECNAV M-5210.2 (August 2018 edition)
+- [x] **Complete Unit Database** - 230 USMC/USN/DOD units with full addresses
+- [x] **Modular Component Architecture** - Separate modules for utils, data, forms, PDF, LaTeX, and drafts
+- [x] **Unit Tests** - 67 automated tests with Jest (formatting, PDF output, utilities)
+- [x] **Build Pipeline** - `node build.js` creates single-file portable distribution with embedded assets
+- [x] **Draft Save/Load** - Auto-save to localStorage, export/import JSON files
+- [x] **Auto Seal** - Department of War seal loads automatically (base64 embedded in build)
 
-> **Note:** v1.x will remain available as the "it just works" single-file version. Some users need a file they can save and run offline forever without dependencies - we won't abandon that use case.
+> **Note:** v1.x will remain available as the "it just works" single-file version. The v2.0 build script produces a single-file distribution (`dist/naval-letter.html`) that works exactly like v1.x - save it and run offline forever without dependencies.
 
 **Want to influence priorities?** [Vote on issues](https://github.com/jeranaias/navalletterformat/issues) or open a new one describing what you need.
-
-**Have that unit Excel doc or know where to find the complete SSIC listing?** [Let us know!](https://github.com/jeranaias/navalletterformat/issues)
 
 ---
 
@@ -300,7 +331,7 @@ A: No. This is a personal project created to help service members format corresp
 A: Yes. It's a standard webpage that works in any browser. No installation or admin rights required.
 
 **Q: Is my data saved anywhere?**
-A: No. Everything runs in your browser. Nothing is transmitted to any server. When you close the page, your data is gone. (Save/load feature coming soon!)
+A: Everything runs in your browser - nothing is transmitted to any server. In v2.0, your work auto-saves to your browser's localStorage and you can export/import drafts as JSON files. In v1.x, closing the page loses your work.
 
 **Q: Can I use this for classified correspondence?**
 A: **No.** This is for UNCLASSIFIED use only. Never enter classified information into any web-based tool.
