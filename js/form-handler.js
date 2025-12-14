@@ -263,17 +263,19 @@ function addParaAfter(afterEl, type) {
   `;
 
   div.innerHTML = `
-    <span class="drag-handle" title="Drag to reorder">☰</span>
+    <div class="para-left-controls">
+      <span class="drag-handle" title="Drag to reorder">☰</span>
+      <div class="para-inline-actions">
+        <button type="button" class="para-action-btn" onclick="addSibling(this)" title="Add paragraph below">+</button>
+        <button type="button" class="para-action-btn" onclick="addChild(this)" title="Add sub-paragraph" ${type === 'subsubsubpara' ? 'disabled' : ''}>↳</button>
+        <button type="button" class="para-action-btn para-action-delete" onclick="removePara(this)" title="Delete paragraph">×</button>
+      </div>
+    </div>
     <div class="para-main">
       ${portionSelector}
       <span class="para-label"></span>
       ${subjectField}
       <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..."></textarea>
-    </div>
-    <div class="para-inline-actions">
-      <button type="button" class="para-action-btn" onclick="addSibling(this)" title="Add paragraph below">+</button>
-      <button type="button" class="para-action-btn" onclick="addChild(this)" title="Add sub-paragraph" ${type === 'subsubsubpara' ? 'disabled' : ''}>↳</button>
-      <button type="button" class="para-action-btn para-action-delete" onclick="removePara(this)" title="Delete paragraph">×</button>
     </div>
   `;
 
