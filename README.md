@@ -76,14 +76,8 @@ See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 
 ## Features
 
-### Live PDF Preview
-Toggle real-time preview to see your formatted letter as you type. Debounced updates for smooth performance.
-
 ### One-Click PDF Generation
 Click "Download PDF" and get your formatted letter instantly. No external tools, no accounts, no waiting.
-
-### 20 Pre-Built Templates
-Start from common letter types instead of blank. Search by name or filter by category.
 
 ### SSIC Search (2,240 Codes)
 Complete database from SECNAV M-5210.2 (August 2018). Type a subject and get matching codes:
