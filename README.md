@@ -165,7 +165,7 @@ ARIA labels, keyboard navigation, skip links, focus styles, reduced motion suppo
 
 ### Quick Start (Under 2 Minutes)
 
-1. **Open the tool:** [https://bit.ly/navalletter](https://bit.ly/navalletter)
+1. **Open the tool:** [https://jeranaias.github.io/navalletterformat/](https://jeranaias.github.io/navalletterformat/)
 
 2. **Optional: Start from a template** — Click "Templates" and choose a starting point
 
