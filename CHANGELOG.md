@@ -5,6 +5,21 @@ All notable changes to the Naval Letter Generator will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - Planned (v3 branch)
+
+### Planned Features - Medium Effort
+- **Live preview pane** - Real-time PDF preview as you type
+- **Template library** - Pre-built templates for common letter types (leave request, request mast, award recommendation, etc.)
+- **Undo/redo for paragraphs** - Full edit history with Ctrl+Z/Ctrl+Y support
+- **CUI/FOUO portion markings** - Detailed classification handling with portion markings per DoDM 5200.01
+
+### Planned Features - High Effort
+- **Import from Word/PDF** - Parse existing correspondence documents
+- **Multi-letter batch generation** - Generate multiple letters from spreadsheet data
+- **Collaboration/sharing** - Share drafts with others (requires backend infrastructure)
+
+---
+
 ## [2.0.0] - Unreleased (v2 branch)
 
 ### Added
@@ -61,6 +76,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Web manifest (`manifest.json`) for installability
   - Service worker (`sw.js`) for offline caching
   - App can be installed to home screen on mobile/desktop
+  - SVG icons (192px, 512px) with NL branding
+- **Keyboard shortcuts**
+  - `Ctrl+S` / `Cmd+S` - Export draft to file
+  - `Ctrl+P` / `Cmd+P` - Print PDF
+  - `Ctrl+D` / `Cmd+D` - Download PDF
+  - `Escape` - Close preview/modals
+- **Offline indicator**
+  - Shows service worker status in header
+  - Green dot when ready for offline use
+  - Red dot when offline or online-only
+- **Formal memo option**
+  - Checkbox to use letterhead on memorandums (Letterhead Memorandum per Figure 10-4)
+  - Plain-paper memo (default) vs formal letterhead memo
+- **Classification marking fix**
+  - Classification now appears at very top of page (y=18) per DoD 5200.01
+  - Does not push down letterhead
 
 ### Changed
 - Refactored monolithic `index.html` (2,186 lines) into modular structure
@@ -114,5 +145,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
-| 2.0.0   | TBD  | Modular architecture, draft save/load, memorandum format, dark mode, print button, accessibility, PWA support, 111 tests |
+| 3.0.0   | TBD  | Live preview, templates, undo/redo, CUI markings, import, batch generation |
+| 2.0.0   | TBD  | Modular architecture, draft save/load, memorandum, dark mode, PWA, keyboard shortcuts, 111 tests |
 | 1.3.0   | Dec 2024 | Initial GitHub Pages release |
