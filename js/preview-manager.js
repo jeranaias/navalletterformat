@@ -217,17 +217,21 @@ async function generatePDFBlob() {
     y = Math.max(y, 130);
   }
 
-  // Sender's symbols
-  const ssicLine = [d.ssic, d.officeCode].filter(Boolean).join('/');
-  if (ssicLine) {
-    pdf.setFont('times', 'normal');
-    pdf.setFontSize(12);
-    pdf.text(ssicLine, ML, y);
+  // Sender's symbols (right side, left-aligned)
+  const senderX = PW - MR - 72;
+  pdf.setFont('times', 'normal');
+  pdf.setFontSize(12);
+
+  if (d.ssic) {
+    pdf.text(d.ssic, senderX, y);
     y += LH;
   }
-
+  if (d.officeCode) {
+    pdf.text(d.officeCode, senderX, y);
+    y += LH;
+  }
   if (d.date) {
-    pdf.text(d.date, ML, y);
+    pdf.text(d.date, senderX, y);
     y += LH * 2;
   }
 
