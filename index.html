@@ -65,6 +65,15 @@
   <a href="#letterForm" class="skip-link">Skip to main content</a>
   <div class="container" role="main">
     <header role="banner">
+      <div class="header-controls">
+        <span id="offlineIndicator" class="offline-indicator" title="App status">
+          <span class="indicator-dot"></span>
+          <span class="indicator-text">Loading...</span>
+        </span>
+        <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+          <span id="themeIcon">☀</span>
+        </button>
+      </div>
       <h1>NAVAL LETTER GENERATOR</h1>
       <p class="subtitle">SECNAV M-5216.5 Compliant Correspondence</p>
     </header>
