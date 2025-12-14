@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-14T04:23:06.458Z
+  Built: 2025-12-14T04:24:34.821Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -913,6 +913,9 @@ button:focus-visible,
 }
 
   </style>
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
 </head>
 <body>
   <a href="#letterForm" class="skip-link">Skip to main content</a>
@@ -3226,6 +3229,24 @@ function getTimeAgo(date) {
  * Version: 2.0
  * Author: Jesse Morgan
  */
+
+/**
+ * Register service worker for offline support
+ */
+function registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered:', registration.scope);
+        })
+        .catch((error) => {
+          console.warn('Service Worker registration failed:', error);
+        });
+    });
+  }
+}
+
 /**
  * Theme toggle functionality
  */
@@ -3264,6 +3285,9 @@ async function initApp() {
 
   // Initialize theme
   initTheme();
+
+  // Register service worker for offline support
+  registerServiceWorker();
 
   // Load external data (SSIC and unit databases)
   await loadData();
