@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-14T07:52:21.808Z
+  Built: 2025-12-14T08:54:44.351Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -184,18 +184,25 @@
 
 /* Theme Toggle Button */
 .theme-toggle {
-  background: rgba(255,255,255,0.15);
-  border: none;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.3);
   border-radius: var(--radius);
-  padding: 8px 12px;
+  padding: 6px 14px;
   cursor: pointer;
-  font-size: 1rem;
-  color: var(--white);
-  transition: background 0.2s;
+  font-size: 1.4rem;
+  color: #fff;
+  transition: all 0.2s;
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .theme-toggle:hover {
-  background: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.35);
+  transform: scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
 }
 
 header {
@@ -961,7 +968,7 @@ button:focus-visible,
   <div class="container" role="main">
     <header role="banner">
       <div class="header-controls">
-        <span id="offlineIndicator" class="offline-indicator" title="App status">
+        <span id="offlineIndicator" class="offline-indicator" title="Shows if app can work offline. Green = cached and ready, Red = online only">
           <span class="indicator-dot"></span>
           <span class="indicator-text">Loading...</span>
         </span>
