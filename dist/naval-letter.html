@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-13T23:46:32.537Z
+  Built: 2025-12-14T00:12:01.045Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -574,34 +574,45 @@ textarea {
   font-size: 0.9rem;
 }
 
-.para-item textarea {
+.para-main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.para-main .para-label {
+  display: inline;
+  font-weight: bold;
+  margin-right: 8px;
+  padding: 0;
+  min-width: auto;
+}
+
+.para-item textarea {
+  width: 100%;
   min-height: 70px;
   font-size: 0.9rem;
 }
 
-.para-subject {
-  width: 100%;
-  margin-bottom: 8px;
-}
-
-.para-subject input {
-  width: 100%;
-  padding: 6px 10px;
+.para-subject-input {
+  width: 200px;
+  padding: 4px 8px;
   border: 1px dashed var(--gray-300);
   border-radius: var(--radius);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   background: var(--gray-50);
+  margin-left: 0;
 }
 
-.para-subject input:focus {
+.para-subject-input:focus {
   border-style: solid;
   border-color: var(--navy);
   background: var(--white);
   outline: none;
 }
 
-.para-subject input::placeholder {
+.para-subject-input::placeholder {
   color: var(--gray-400);
   font-style: italic;
 }
@@ -1568,16 +1579,16 @@ function addParaAfter(afterEl, type) {
 
   // Only top-level paragraphs can have subjects
   const subjectField = type === 'para' ? `
-    <div class="para-subject">
-      <input type="text" name="paraSubj[]" placeholder="Subject (optional, will be underlined)" />
-    </div>
+    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" />
   ` : '';
 
   div.innerHTML = `
     <span class="drag-handle">☰</span>
-    <span class="para-label"></span>
-    ${subjectField}
-    <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)"></textarea>
+    <div class="para-main">
+      <span class="para-label"></span>
+      ${subjectField}
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)"></textarea>
+    </div>
     <div class="para-actions">
       <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
       <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>
@@ -1758,7 +1769,7 @@ function collectData() {
     encls: Array.from(document.querySelectorAll('input[name="encl[]"]')).map(i => i.value.trim()).filter(v => v),
     paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => {
       const paraItem = t.closest('.para-item');
-      const subjInput = paraItem?.querySelector('input[name="paraSubj[]"]');
+      const subjInput = paraItem?.querySelector('.para-subject-input');
       return {
         type: t.dataset.type,
         subject: subjInput?.value.trim() || '',
@@ -2512,7 +2523,7 @@ function collectParagraphs() {
   const paragraphs = [];
   container.querySelectorAll('.para-item').forEach(item => {
     const textarea = item.querySelector('textarea');
-    const subjInput = item.querySelector('input[name="paraSubj[]"]');
+    const subjInput = item.querySelector('.para-subject-input');
     paragraphs.push({
       type: item.dataset.type || 'para',
       subject: subjInput?.value || '',
@@ -2662,16 +2673,16 @@ function addParagraphWithType(container, type, text, subject) {
 
   // Only top-level paragraphs can have subjects
   const subjectField = type === 'para' ? `
-    <div class="para-subject">
-      <input type="text" name="paraSubj[]" placeholder="Subject (optional, will be underlined)" value="${subject || ''}" />
-    </div>
+    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" value="${subject || ''}" />
   ` : '';
 
   div.innerHTML = `
     <span class="drag-handle">☰</span>
-    <span class="para-label"></span>
-    ${subjectField}
-    <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)">${text || ''}</textarea>
+    <div class="para-main">
+      <span class="para-label"></span>
+      ${subjectField}
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)">${text || ''}</textarea>
+    </div>
     <div class="para-actions">
       <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
       <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>

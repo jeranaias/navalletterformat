@@ -7,7 +7,6 @@
   "date": "13 Dec 24",
   "classification": "CUI",
   "branch": "USMC",
-  "useLetterhead": true,
   "unitName": "UNITED STATES MARINE CORPS",
   "unitAddress": "MARINE CORPS DETACHMENT\nDEFENSE LANGUAGE INSTITUTE FOREIGN LANGUAGE CENTER\nPRESIDIO OF MONTEREY, CA 93944-5006",
   "from": "Commanding Officer, Marine Corps Detachment, Defense Language Institute",
@@ -34,77 +33,89 @@
   ],
   "paragraphs": [
     {
-      "text": "Per references (a) through (c), this command formally requests approval for extension of special liberty for Marines assigned to this detachment who are traveling more than 400 miles during the upcoming holiday period from 20 December 2024 through 02 January 2025. This request encompasses 47 Marines currently enrolled in resident language training programs who have expressed intent to travel to their homes of record for the holiday period. The geographic dispersion of our personnel, combined with the unique operational requirements of maintaining language proficiency during extended breaks, necessitates careful coordination of liberty periods to ensure both personnel welfare and mission readiness are appropriately balanced.",
-      "children": [
-        {
-          "text": "The extended travel distances involved require additional transit time that cannot be reasonably accommodated within the standard 96-hour liberty period authorized under reference (a). Analysis of personnel travel requirements indicates that 32 Marines must travel distances exceeding 1,000 miles one-way to reach their homes of record, with 15 of those Marines requiring commercial air travel with multiple connecting flights due to the rural locations of their destinations. Current commercial airline schedules during the peak holiday travel period further complicate timely departure and return, with many routes showing limited availability and significant delays anticipated due to seasonal weather patterns.",
-          "children": []
-        },
-        {
-          "text": "All affected personnel have demonstrated exemplary performance in their respective language training programs and maintain good standing within the command. A comprehensive review of service record books and unit punishment logs confirms that none of the Marines requesting extended liberty have any pending adverse administrative actions, non-judicial punishment within the past 12 months, or derogatory information that would preclude approval of this request. Furthermore, all personnel have been counseled on the expectations for conduct during the liberty period and have acknowledged their responsibilities in writing.",
-          "children": [
-            {
-              "text": "Current leave balance verification conducted through Marine Corps Total Force System confirms that all 47 Marines requesting extended liberty maintain accrued leave balances exceeding 15 days. This ensures that any emergency extension of the liberty period, should it become necessary due to unforeseen circumstances such as weather-related travel delays or family emergencies, can be properly charged against existing leave balances without creating negative leave situations or administrative complications upon return to duty.",
-              "children": []
-            },
-            {
-              "text": "Emergency recall procedures have been thoroughly briefed to all personnel and acknowledged in writing per enclosure (4). Each Marine has provided current contact information including cellular telephone numbers, email addresses, and emergency contact information for family members at their destination locations. The Staff Duty Officer has been provided comprehensive recall rosters and has conducted communications checks with all personnel to verify the accuracy of contact information. Recall exercises conducted during the previous liberty period demonstrated 100 percent accountability within four hours of initiation.",
-              "children": [
-                {
-                  "text": "The command duty officer will maintain a status board tracking the location and contact status of all personnel on extended liberty, with mandatory check-ins required every 48 hours via the unit's automated accountability system or direct telephone contact with the staff duty office.",
-                  "children": []
-                },
-                {
-                  "text": "In the event of a recall, personnel will be expected to return to the duty station within 72 hours or provide documented justification for any delays, with the understanding that commercial travel during peak holiday periods may require flexibility in return timelines.",
-                  "children": []
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      "type": "para",
+      "subject": "",
+      "text": "Per references (a) through (c), this command formally requests approval for extension of special liberty for Marines assigned to this detachment who are traveling more than 400 miles during the upcoming holiday period from 20 December 2024 through 02 January 2025. This request encompasses 47 Marines currently enrolled in resident language training programs who have expressed intent to travel to their homes of record for the holiday period. The geographic dispersion of our personnel, combined with the unique operational requirements of maintaining language proficiency during extended breaks, necessitates careful coordination of liberty periods to ensure both personnel welfare and mission readiness are appropriately balanced."
     },
     {
-      "text": "Enclosure (1) provides detailed travel itineraries for each Marine requesting the extension, including specific departure and return transportation arrangements, intermediate stopping points, and estimated arrival times at final destinations. This information has been verified against commercial airline reservations where applicable, and all personnel have been directed to notify the command immediately of any changes to their travel plans. The S-3 section has reviewed all itineraries to ensure that training schedules have been appropriately adjusted and that no conflicts exist with mandatory training events scheduled for the period immediately following the holiday stand-down.",
-      "children": [
-        {
-          "text": "Marines traveling by privately owned vehicle have submitted vehicle inspection documentation confirming that their vehicles meet safety standards for extended travel. Additionally, these Marines have been briefed on winter driving safety, provided with emergency roadside kits, and counseled on the importance of rest stops during long-distance travel. Route planning has been reviewed to ensure personnel are aware of potential hazardous weather areas and have contingency plans for overnight stops if conditions become dangerous.",
-          "children": []
-        },
-        {
-          "text": "Marines traveling by commercial air have been advised to purchase travel insurance and have been provided guidance on procedures for rebooking flights in the event of cancellations or delays. The command has established a travel assistance fund to provide emergency financial support to any Marine who encounters unexpected travel expenses that would otherwise strand them away from either their destination or their duty station during the holiday period.",
-          "children": []
-        }
-      ]
+      "type": "subpara",
+      "subject": "",
+      "text": "The extended travel distances involved require additional transit time that cannot be reasonably accommodated within the standard 96-hour liberty period authorized under reference (a). Analysis of personnel travel requirements indicates that 32 Marines must travel distances exceeding 1,000 miles one-way to reach their homes of record, with 15 of those Marines requiring commercial air travel with multiple connecting flights due to the rural locations of their destinations. Current commercial airline schedules during the peak holiday travel period further complicate timely departure and return, with many routes showing limited availability and significant delays anticipated due to seasonal weather patterns."
     },
     {
-      "text": "Reference (d) requires commands to maintain personnel accountability at all times and to have procedures in place for rapid recall of personnel during periods of increased liberty. This command has implemented enhanced accountability procedures that exceed the minimum requirements specified in the reference. These procedures include daily status checks of the automated accountability system, redundant communication pathways through both military and civilian networks, and coordination with installation security forces to assist with any necessary emergency notifications.",
-      "children": [
-        {
-          "text": "The command has established a liberty risk management program that categorizes personnel based on travel distance, mode of transportation, and destination accessibility. High-risk travelers, defined as those traveling more than 1,500 miles or to locations with limited transportation infrastructure, have been assigned battle buddies who will maintain contact throughout the liberty period and serve as secondary points of contact for accountability purposes.",
-          "children": []
-        },
-        {
-          "text": "Coordination with the Naval Postgraduate School and Presidio of Monterey garrison commands has been completed to ensure that emergency services and base access procedures are clearly understood by all personnel who may need to return to the installation during non-duty hours. Gate access rosters have been updated to reflect current personnel assignments, and all Marines have been issued current identification cards with proper access privileges.",
-          "children": []
-        }
-      ]
+      "type": "subpara",
+      "subject": "",
+      "text": "All affected personnel have demonstrated exemplary performance in their respective language training programs and maintain good standing within the command. A comprehensive review of service record books and unit punishment logs confirms that none of the Marines requesting extended liberty have any pending adverse administrative actions, non-judicial punishment within the past 12 months, or derogatory information that would preclude approval of this request. Furthermore, all personnel have been counseled on the expectations for conduct during the liberty period and have acknowledged their responsibilities in writing."
     },
     {
-      "text": "Reference (e) outlines Training and Education Command policy regarding academic progression and the impact of extended absences on language acquisition. All personnel requesting extended liberty are currently meeting or exceeding academic performance standards, and language instructors have confirmed that the requested liberty period will not adversely impact scheduled proficiency testing or graduation timelines. Marines who are within 60 days of scheduled Defense Language Proficiency Testing have been provided supplemental study materials and encouraged to maintain language exposure during the liberty period through approved mobile applications and media resources.",
-      "children": []
+      "type": "subsubpara",
+      "subject": "",
+      "text": "Current leave balance verification conducted through Marine Corps Total Force System confirms that all 47 Marines requesting extended liberty maintain accrued leave balances exceeding 15 days. This ensures that any emergency extension of the liberty period, should it become necessary due to unforeseen circumstances such as weather-related travel delays or family emergencies, can be properly charged against existing leave balances without creating negative leave situations or administrative complications upon return to duty."
     },
     {
-      "text": "The fiscal impact of this request has been analyzed and determined to be minimal. No additional funding is required to support the extended liberty period, and any costs associated with emergency recall or travel assistance will be absorbed within existing operational budgets. The command has coordinated with the supporting disbursing office to ensure that all Marines have received their December mid-month pay and will have access to emergency pay services if required during the holiday period.",
-      "children": []
+      "type": "subsubpara",
+      "subject": "",
+      "text": "Emergency recall procedures have been thoroughly briefed to all personnel and acknowledged in writing per enclosure (4). Each Marine has provided current contact information including cellular telephone numbers, email addresses, and emergency contact information for family members at their destination locations. The Staff Duty Officer has been provided comprehensive recall rosters and has conducted communications checks with all personnel to verify the accuracy of contact information. Recall exercises conducted during the previous liberty period demonstrated 100 percent accountability within four hours of initiation."
     },
     {
-      "text": "This command strongly recommends approval of this request based on the comprehensive risk mitigation measures implemented, the exemplary performance record of the personnel involved, and the positive impact that time with family during the holiday period will have on morale and retention. Marines assigned to this detachment face unique challenges associated with extended training pipelines and geographic separation from family support networks, and the opportunity to spend quality time with family during major holidays is critical to maintaining the psychological resilience necessary for success in demanding language training programs.",
-      "children": []
+      "type": "subsubsubpara",
+      "subject": "",
+      "text": "The command duty officer will maintain a status board tracking the location and contact status of all personnel on extended liberty, with mandatory check-ins required every 48 hours via the unit's automated accountability system or direct telephone contact with the staff duty office."
     },
     {
-      "text": "Point of contact for this matter is GySgt Marcus T. Johnson, Administration Chief, at DSN 878-5555 or commercial (831) 242-5555, email: marcus.johnson@usmc.mil. Secondary point of contact is SSgt Patricia R. Williams, Personnel Administrative Center liaison, at DSN 878-5556 or commercial (831) 242-5556, email: patricia.williams@usmc.mil. Both points of contact will be available during normal working hours throughout the holiday period, with the Staff Duty Officer available for after-hours emergencies at DSN 878-5000.",
-      "children": []
+      "type": "subsubsubpara",
+      "subject": "",
+      "text": "In the event of a recall, personnel will be expected to return to the duty station within 72 hours or provide documented justification for any delays, with the understanding that commercial travel during peak holiday periods may require flexibility in return timelines."
+    },
+    {
+      "type": "para",
+      "subject": "",
+      "text": "Enclosure (1) provides detailed travel itineraries for each Marine requesting the extension, including specific departure and return transportation arrangements, intermediate stopping points, and estimated arrival times at final destinations. This information has been verified against commercial airline reservations where applicable, and all personnel have been directed to notify the command immediately of any changes to their travel plans. The S-3 section has reviewed all itineraries to ensure that training schedules have been appropriately adjusted and that no conflicts exist with mandatory training events scheduled for the period immediately following the holiday stand-down."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Marines traveling by privately owned vehicle have submitted vehicle inspection documentation confirming that their vehicles meet safety standards for extended travel. Additionally, these Marines have been briefed on winter driving safety, provided with emergency roadside kits, and counseled on the importance of rest stops during long-distance travel. Route planning has been reviewed to ensure personnel are aware of potential hazardous weather areas and have contingency plans for overnight stops if conditions become dangerous."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Marines traveling by commercial air have been advised to purchase travel insurance and have been provided guidance on procedures for rebooking flights in the event of cancellations or delays. The command has established a travel assistance fund to provide emergency financial support to any Marine who encounters unexpected travel expenses that would otherwise strand them away from either their destination or their duty station during the holiday period."
+    },
+    {
+      "type": "para",
+      "subject": "",
+      "text": "Reference (d) requires commands to maintain personnel accountability at all times and to have procedures in place for rapid recall of personnel during periods of increased liberty. This command has implemented enhanced accountability procedures that exceed the minimum requirements specified in the reference. These procedures include daily status checks of the automated accountability system, redundant communication pathways through both military and civilian networks, and coordination with installation security forces to assist with any necessary emergency notifications."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "The command has established a liberty risk management program that categorizes personnel based on travel distance, mode of transportation, and destination accessibility. High-risk travelers, defined as those traveling more than 1,500 miles or to locations with limited transportation infrastructure, have been assigned battle buddies who will maintain contact throughout the liberty period and serve as secondary points of contact for accountability purposes."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Coordination with the Naval Postgraduate School and Presidio of Monterey garrison commands has been completed to ensure that emergency services and base access procedures are clearly understood by all personnel who may need to return to the installation during non-duty hours. Gate access rosters have been updated to reflect current personnel assignments, and all Marines have been issued current identification cards with proper access privileges."
+    },
+    {
+      "type": "para",
+      "subject": "",
+      "text": "Reference (e) outlines Training and Education Command policy regarding academic progression and the impact of extended absences on language acquisition. All personnel requesting extended liberty are currently meeting or exceeding academic performance standards, and language instructors have confirmed that the requested liberty period will not adversely impact scheduled proficiency testing or graduation timelines. Marines who are within 60 days of scheduled Defense Language Proficiency Testing have been provided supplemental study materials and encouraged to maintain language exposure during the liberty period through approved mobile applications and media resources."
+    },
+    {
+      "type": "para",
+      "subject": "",
+      "text": "The fiscal impact of this request has been analyzed and determined to be minimal. No additional funding is required to support the extended liberty period, and any costs associated with emergency recall or travel assistance will be absorbed within existing operational budgets. The command has coordinated with the supporting disbursing office to ensure that all Marines have received their December mid-month pay and will have access to emergency pay services if required during the holiday period."
+    },
+    {
+      "type": "para",
+      "subject": "",
+      "text": "This command strongly recommends approval of this request based on the comprehensive risk mitigation measures implemented, the exemplary performance record of the personnel involved, and the positive impact that time with family during the holiday period will have on morale and retention. Marines assigned to this detachment face unique challenges associated with extended training pipelines and geographic separation from family support networks, and the opportunity to spend quality time with family during major holidays is critical to maintaining the psychological resilience necessary for success in demanding language training programs."
+    },
+    {
+      "type": "para",
+      "subject": "",
+      "text": "Point of contact for this matter is GySgt Marcus T. Johnson, Administration Chief, at DSN 878-5555 or commercial (831) 242-5555, email: marcus.johnson@usmc.mil. Secondary point of contact is SSgt Patricia R. Williams, Personnel Administrative Center liaison, at DSN 878-5556 or commercial (831) 242-5556, email: patricia.williams@usmc.mil. Both points of contact will be available during normal working hours throughout the holiday period, with the Staff Duty Officer available for after-hours emergencies at DSN 878-5000."
     }
   ],
   "sigName": "R. M. THOMPSON",
