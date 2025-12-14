@@ -59,8 +59,9 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="container">
-    <header>
+  <a href="#letterForm" class="skip-link">Skip to main content</a>
+  <div class="container" role="main">
+    <header role="banner">
       <h1>NAVAL LETTER GENERATOR</h1>
       <p class="subtitle">SECNAV M-5216.5 Compliant Correspondence</p>
     </header>
@@ -69,20 +70,20 @@
       Free tool for Marines &amp; Sailors · <a href="https://github.com/jeranaias/navalletterformat#readme" target="_blank">Full Guide &amp; Documentation →</a>
     </p>
 
-    <form id="letterForm">
+    <form id="letterForm" role="form" aria-label="Naval letter form">
       <!-- Document Type -->
       <div class="form-section">
         <h2 class="section-title">Document Type</h2>
-        <div class="doc-type-selector">
-          <div class="doc-type-option selected" data-type="basic" onclick="selectDocType('basic')">
+        <div class="doc-type-selector" role="radiogroup" aria-label="Document type selection">
+          <div class="doc-type-option selected" data-type="basic" onclick="selectDocType('basic')" tabindex="0" role="radio" aria-checked="true" onkeydown="if(event.key==='Enter'||event.key===' ')selectDocType('basic')">
             <h3>Basic Letter</h3>
             <p>Standard correspondence format</p>
           </div>
-          <div class="doc-type-option" data-type="endorsement" onclick="selectDocType('endorsement')">
+          <div class="doc-type-option" data-type="endorsement" onclick="selectDocType('endorsement')" tabindex="0" role="radio" aria-checked="false" onkeydown="if(event.key==='Enter'||event.key===' ')selectDocType('endorsement')">
             <h3>Endorsement</h3>
             <p>Forward with comments</p>
           </div>
-          <div class="doc-type-option" data-type="memorandum" onclick="selectDocType('memorandum')">
+          <div class="doc-type-option" data-type="memorandum" onclick="selectDocType('memorandum')" tabindex="0" role="radio" aria-checked="false" onkeydown="if(event.key==='Enter'||event.key===' ')selectDocType('memorandum')">
             <h3>Memorandum</h3>
             <p>Internal correspondence</p>
           </div>
@@ -96,23 +97,23 @@
           <div class="form-group medium">
             <label>SSIC</label>
             <div class="search-container">
-              <input type="text" id="ssicSearch" placeholder="Search or enter code..." autocomplete="off">
+              <input type="text" id="ssicSearch" aria-label="SSIC code search" placeholder="Search or enter code..." autocomplete="off">
               <div class="search-results" id="ssicResults"></div>
             </div>
             <p class="help-text">e.g., "leave" or "1050"</p>
           </div>
           <div class="form-group small">
             <label>Office Code</label>
-            <input type="text" id="officeCode" placeholder="S-1">
+            <input type="text" id="officeCode" aria-label="Office code" placeholder="S-1">
           </div>
           <div class="form-group small">
             <label>Date</label>
-            <input type="text" id="date" placeholder="Auto-formats">
+            <input type="text" id="date" aria-label="Date" placeholder="Auto-formats">
             <p class="help-text">Any format works</p>
           </div>
           <div class="form-group" style="flex: 0 0 160px;">
             <label>Classification</label>
-            <select id="classification">
+            <select id="classification" aria-label="Classification level">
               <option value="">UNCLASSIFIED</option>
               <option value="CUI">CUI</option>
               <option value="FOUO">FOR OFFICIAL USE ONLY</option>
@@ -138,7 +139,7 @@
             <div class="form-group">
               <label>Find Unit (Optional)</label>
               <div class="search-container">
-                <input type="text" id="unitSearch" placeholder="Search units..." autocomplete="off">
+                <input type="text" id="unitSearch" aria-label="Unit search" placeholder="Search units..." autocomplete="off">
                 <div class="search-results" id="unitResults"></div>
               </div>
               <p class="help-text">Search or manually enter below</p>
@@ -147,13 +148,13 @@
           <div class="form-row">
             <div class="form-group">
               <label>Service/Organization</label>
-              <input type="text" id="unitName" placeholder="UNITED STATES MARINE CORPS">
+              <input type="text" id="unitName" aria-label="Service or organization name" placeholder="UNITED STATES MARINE CORPS">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>Unit Name &amp; Address</label>
-              <textarea id="unitAddress" rows="3" placeholder="MARINE CORPS DETACHMENT&#10;DEFENSE LANGUAGE INSTITUTE&#10;PRESIDIO OF MONTEREY, CA 93944"></textarea>
+              <textarea id="unitAddress" aria-label="Unit name and address" rows="3" placeholder="MARINE CORPS DETACHMENT&#10;DEFENSE LANGUAGE INSTITUTE&#10;PRESIDIO OF MONTEREY, CA 93944"></textarea>
             </div>
           </div>
           <p class="help-text" style="margin-top: 12px;">
@@ -168,19 +169,19 @@
         <div class="form-row">
           <div class="form-group">
             <label>From</label>
-            <input type="text" id="from" placeholder="Commanding Officer, Marine Corps Detachment">
+            <input type="text" id="from" aria-label="From addressee" placeholder="Commanding Officer, Marine Corps Detachment">
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>To</label>
-            <input type="text" id="to" placeholder="Commandant of the Marine Corps">
+            <input type="text" id="to" aria-label="To addressee" placeholder="Commandant of the Marine Corps">
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>Subject</label>
-            <input type="text" id="subj" placeholder="REQUEST FOR ADDITIONAL PERSONNEL">
+            <input type="text" id="subj" aria-label="Subject line" placeholder="REQUEST FOR ADDITIONAL PERSONNEL">
             <p class="help-text">Auto-capitalizes</p>
           </div>
         </div>
@@ -253,11 +254,11 @@
         <div class="form-row">
           <div class="form-group">
             <label>Name</label>
-            <input type="text" id="sigName" placeholder="J. M. SMITH">
+            <input type="text" id="sigName" aria-label="Signature name" placeholder="J. M. SMITH">
           </div>
         </div>
         <div class="toggle-group" style="margin-top: 12px;">
-          <input type="checkbox" id="byDirection">
+          <input type="checkbox" id="byDirection" aria-label="By direction checkbox">
           <label for="byDirection">By direction</label>
         </div>
       </div>
@@ -305,7 +306,7 @@
       <div id="previewContent" class="preview-content"></div>
     </div>
 
-    <footer>
+    <footer role="contentinfo">
       <p><strong>Naval Letter Generator v2.0</strong> · SECNAV M-5216.5</p>
       <p>Created by Jesse Morgan · Personal project, not officially endorsed</p>
       <p><a href="https://github.com/jeranaias/navalletterformat">GitHub</a> · <a href="https://github.com/jeranaias/navalletterformat/issues">Report Issues</a></p>
