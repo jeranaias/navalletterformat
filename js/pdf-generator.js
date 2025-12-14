@@ -273,16 +273,25 @@ async function generatePDF() {
 
       // Check for explicit paragraph subject (only for top-level paragraphs)
       if (p.subject && p.type === 'para') {
-        // Draw subject with underline
-        const subjectWidth = pdf.getTextWidth(p.subject);
-        pdf.text(p.subject, tx, y);
+        // Calculate right margin edge and max subject width
+        const rightEdge = PW - MR;
+        const maxSubjectWidth = rightEdge - tx - 6;  // Leave space for gap after subject
+
+        // Draw subject with underline, constrained to margins
+        const subjectWidth = Math.min(pdf.getTextWidth(p.subject), maxSubjectWidth);
+        const displaySubject = subjectWidth < pdf.getTextWidth(p.subject)
+          ? p.subject.substring(0, Math.floor(p.subject.length * (subjectWidth / pdf.getTextWidth(p.subject)))) + '...'
+          : p.subject;
+
+        pdf.text(displaySubject, tx, y);
         pdf.setLineWidth(0.5);
-        pdf.line(tx, y + 2, tx + subjectWidth, y + 2);
+        const underlineEnd = Math.min(tx + subjectWidth, rightEdge);
+        pdf.line(tx, y + 2, underlineEnd, y + 2);
 
         const afterSubjectX = tx + subjectWidth + 6;
         const remainingWidth = firstLineWidth - subjectWidth - 6;
 
-        if (pText && remainingWidth > 50) {
+        if (pText && remainingWidth > 50 && afterSubjectX < rightEdge - 50) {
           const firstLinePart = pdf.splitTextToSize(pText, remainingWidth);
           pdf.text(firstLinePart[0], afterSubjectX, y);
           y += LH;
