@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-14T04:24:34.821Z
+  Built: 2025-12-14T05:58:11.561Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -1072,6 +1072,20 @@ button:focus-visible,
         </div>
       </div>
 
+      <!-- Memorandum Fields -->
+      <div class="form-section" id="memorandumFields" style="display: none;">
+        <h2 class="section-title">Memorandum Options</h2>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="formalMemo">
+            <span>Use formal letterhead (Letterhead Memorandum per SECNAV M-5216.5 Figure 10-4)</span>
+          </label>
+          <p class="help-text" style="margin-top: 5px; font-size: 0.85em; color: var(--gray);">
+            Check this for external correspondence. Leave unchecked for internal plain-paper memos.
+          </p>
+        </div>
+      </div>
+
       <!-- Optional Items -->
       <div class="form-section">
         <div class="collapsible-header" onclick="toggleCollapsible(this)">
@@ -1605,10 +1619,30 @@ function selectDocType(type) {
   // Show/hide endorsement fields
   document.getElementById('endorsementFields').style.display = type === 'endorsement' ? 'block' : 'none';
 
-  // Show/hide letterhead section for memorandum (memos don't use letterhead)
+  // Show/hide memorandum fields
+  const memoFields = document.getElementById('memorandumFields');
+  if (memoFields) {
+    memoFields.style.display = type === 'memorandum' ? 'block' : 'none';
+  }
+
+  // Show/hide letterhead section based on document type and formal memo checkbox
+  updateLetterheadVisibility();
+}
+
+/**
+ * Update letterhead section visibility based on document type and formal memo option
+ */
+function updateLetterheadVisibility() {
   const letterheadSection = document.getElementById('letterheadFields')?.closest('.form-section');
-  if (letterheadSection) {
-    letterheadSection.style.display = type === 'memorandum' ? 'none' : 'block';
+  if (!letterheadSection) return;
+
+  if (documentType === 'memorandum') {
+    // For memos, show letterhead only if formal memo is checked
+    const formalMemo = document.getElementById('formalMemo');
+    letterheadSection.style.display = (formalMemo && formalMemo.checked) ? 'block' : 'none';
+  } else {
+    // For basic letters and endorsements, always show letterhead
+    letterheadSection.style.display = 'block';
   }
 }
 
@@ -1897,6 +1931,10 @@ function handleDrop(e) {
  * @returns {Object} - Form data object
  */
 function collectData() {
+  // For memos, check if formal letterhead is requested
+  const formalMemo = document.getElementById('formalMemo');
+  const isFormalMemo = documentType === 'memorandum' && formalMemo && formalMemo.checked;
+
   return {
     documentType,
     ssic: document.getElementById('ssicSearch').value.trim().split(/\s/)[0] || '',
@@ -1904,7 +1942,9 @@ function collectData() {
     date: document.getElementById('date').value.trim(),
     classification: document.getElementById('classification').value,
     branch: document.querySelector('input[name="branch"]:checked').value,
-    useLetterhead: documentType !== "memorandum", // Letters have letterhead, memos don't
+    // Letterhead: always for basic/endorsement, optional for memo (formal only)
+    useLetterhead: documentType !== "memorandum" || isFormalMemo,
+    isFormalMemo, // Track if this is a formal letterhead memo
     unitName: document.getElementById('unitName').value.trim(),
     unitAddress: document.getElementById('unitAddress').value.trim(),
     hasSeal: sealData !== null,
@@ -1950,6 +1990,12 @@ async function initFormListeners() {
 
   // Set today's date
   document.getElementById('date').value = getTodayFormatted();
+
+  // Formal memo checkbox - toggle letterhead visibility
+  const formalMemoCheckbox = document.getElementById('formalMemo');
+  if (formalMemoCheckbox) {
+    formalMemoCheckbox.addEventListener('change', updateLetterheadVisibility);
+  }
 }
 
 
@@ -2001,12 +2047,17 @@ function generateTex() {
 
 `;
 
-  // Classification at top
+  // Classification at VERY TOP of page (above everything) - per DoD 5200.01
   if (d.classification) {
     tex += `\\begin{center}\\textbf{${escapeLatex(d.classification)}}\\end{center}\\vspace{6pt}\n`;
   }
 
-  // Letterhead
+  // Memorandum header - appears for ALL memos (plain-paper and letterhead)
+  if (d.documentType === 'memorandum') {
+    tex += `\\begin{center}\\textbf{MEMORANDUM}\\end{center}\\vspace{6pt}\n`;
+  }
+
+  // Letterhead (for basic letters, endorsements, and formal memos)
   if (d.useLetterhead) {
     if (d.hasSeal) {
       tex += `\\AddToShipoutPictureBG*{\\AtPageUpperLeft{\\put(0.5in,-1.5in){\\includegraphics[width=1in]{${d.sealFilename}}}}}\n`;
@@ -2021,11 +2072,6 @@ function generateTex() {
       });
     }
     tex += `\\end{center}\\vspace{6pt}\n`;
-  }
-
-  // Memorandum header (instead of letterhead)
-  if (d.documentType === 'memorandum') {
-    tex += `\\begin{center}\\textbf{MEMORANDUM}\\end{center}\\vspace{6pt}\n`;
   }
 
   // Sender's symbols block
@@ -2251,7 +2297,7 @@ async function generatePDF() {
   const ISS = 14;       // Sub-sub paragraph indent (after "(1)")
   const ISSS = 14;      // Sub-sub-sub paragraph indent (after "(a)")
 
-  let y = 54;           // Current Y position
+  let y = 54;           // Current Y position (start of letterhead area)
   let pageNum = 1;
   const subjText = d.subj.toUpperCase();
 
@@ -2264,6 +2310,13 @@ async function generatePDF() {
       pdf.addPage();
       pageNum++;
       y = MT;
+
+      // Classification at top of continuation pages
+      if (d.classification) {
+        pdf.setFont('times', 'bold');
+        pdf.setFontSize(12);
+        pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+      }
 
       // Add continuation header
       pdf.setFont('times', 'normal');
@@ -2280,15 +2333,15 @@ async function generatePDF() {
     }
   }
 
-  // Classification at top
+  // Classification at VERY TOP of page (above letterhead) - per DoD 5200.01
   if (d.classification) {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
-    pdf.text(d.classification, PW / 2, y, { align: 'center' });
-    y += LH + 4;
+    pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+    // Note: Classification does NOT push down letterhead - it's in a fixed position
   }
 
-  // Memorandum header (instead of letterhead)
+  // Memorandum header - appears for ALL memos (plain-paper and letterhead)
   if (d.documentType === 'memorandum') {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
@@ -2296,7 +2349,7 @@ async function generatePDF() {
     y += LH * 2;
   }
 
-  // Letterhead
+  // Letterhead (for basic letters, endorsements, and formal memos)
   if (d.useLetterhead) {
     // Seal image
     if (d.hasSeal && d.sealData) {
@@ -2637,6 +2690,12 @@ async function printPDF() {
       pdf.addPage();
       pageNum++;
       y = MT;
+      // Classification at top of continuation pages
+      if (d.classification) {
+        pdf.setFont('times', 'bold');
+        pdf.setFontSize(12);
+        pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+      }
       pdf.setFont('times', 'normal');
       pdf.setFontSize(12);
       pdf.text('Subj:', ML, y);
@@ -2646,13 +2705,14 @@ async function printPDF() {
     }
   }
 
+  // Classification at VERY TOP of page (above letterhead) - per DoD 5200.01
   if (d.classification) {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
-    pdf.text(d.classification, PW / 2, y, { align: 'center' });
-    y += LH + 4;
+    pdf.text(d.classification, PW / 2, 18, { align: 'center' });
   }
 
+  // Memorandum header - appears for ALL memos (plain-paper and letterhead)
   if (d.documentType === 'memorandum') {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
@@ -2660,6 +2720,7 @@ async function printPDF() {
     y += LH * 2;
   }
 
+  // Letterhead (for basic letters, endorsements, and formal memos)
   if (d.useLetterhead) {
     if (d.hasSeal && d.sealData) {
       try { pdf.addImage(d.sealData, 'JPEG', 36, 36, 72, 72); } catch (e) {}

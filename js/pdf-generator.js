@@ -30,7 +30,7 @@ async function generatePDF() {
   const ISS = 14;       // Sub-sub paragraph indent (after "(1)")
   const ISSS = 14;      // Sub-sub-sub paragraph indent (after "(a)")
 
-  let y = 54;           // Current Y position
+  let y = 54;           // Current Y position (start of letterhead area)
   let pageNum = 1;
   const subjText = d.subj.toUpperCase();
 
@@ -43,6 +43,13 @@ async function generatePDF() {
       pdf.addPage();
       pageNum++;
       y = MT;
+
+      // Classification at top of continuation pages
+      if (d.classification) {
+        pdf.setFont('times', 'bold');
+        pdf.setFontSize(12);
+        pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+      }
 
       // Add continuation header
       pdf.setFont('times', 'normal');
@@ -59,15 +66,15 @@ async function generatePDF() {
     }
   }
 
-  // Classification at top
+  // Classification at VERY TOP of page (above letterhead) - per DoD 5200.01
   if (d.classification) {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
-    pdf.text(d.classification, PW / 2, y, { align: 'center' });
-    y += LH + 4;
+    pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+    // Note: Classification does NOT push down letterhead - it's in a fixed position
   }
 
-  // Memorandum header (instead of letterhead)
+  // Memorandum header - appears for ALL memos (plain-paper and letterhead)
   if (d.documentType === 'memorandum') {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
@@ -75,7 +82,7 @@ async function generatePDF() {
     y += LH * 2;
   }
 
-  // Letterhead
+  // Letterhead (for basic letters, endorsements, and formal memos)
   if (d.useLetterhead) {
     // Seal image
     if (d.hasSeal && d.sealData) {
@@ -416,6 +423,12 @@ async function printPDF() {
       pdf.addPage();
       pageNum++;
       y = MT;
+      // Classification at top of continuation pages
+      if (d.classification) {
+        pdf.setFont('times', 'bold');
+        pdf.setFontSize(12);
+        pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+      }
       pdf.setFont('times', 'normal');
       pdf.setFontSize(12);
       pdf.text('Subj:', ML, y);
@@ -425,13 +438,14 @@ async function printPDF() {
     }
   }
 
+  // Classification at VERY TOP of page (above letterhead) - per DoD 5200.01
   if (d.classification) {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
-    pdf.text(d.classification, PW / 2, y, { align: 'center' });
-    y += LH + 4;
+    pdf.text(d.classification, PW / 2, 18, { align: 'center' });
   }
 
+  // Memorandum header - appears for ALL memos (plain-paper and letterhead)
   if (d.documentType === 'memorandum') {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
@@ -439,6 +453,7 @@ async function printPDF() {
     y += LH * 2;
   }
 
+  // Letterhead (for basic letters, endorsements, and formal memos)
   if (d.useLetterhead) {
     if (d.hasSeal && d.sealData) {
       try { pdf.addImage(d.sealData, 'JPEG', 36, 36, 72, 72); } catch (e) {}

@@ -42,12 +42,17 @@ function generateTex() {
 
 `;
 
-  // Classification at top
+  // Classification at VERY TOP of page (above everything) - per DoD 5200.01
   if (d.classification) {
     tex += `\\begin{center}\\textbf{${escapeLatex(d.classification)}}\\end{center}\\vspace{6pt}\n`;
   }
 
-  // Letterhead
+  // Memorandum header - appears for ALL memos (plain-paper and letterhead)
+  if (d.documentType === 'memorandum') {
+    tex += `\\begin{center}\\textbf{MEMORANDUM}\\end{center}\\vspace{6pt}\n`;
+  }
+
+  // Letterhead (for basic letters, endorsements, and formal memos)
   if (d.useLetterhead) {
     if (d.hasSeal) {
       tex += `\\AddToShipoutPictureBG*{\\AtPageUpperLeft{\\put(0.5in,-1.5in){\\includegraphics[width=1in]{${d.sealFilename}}}}}\n`;
@@ -62,11 +67,6 @@ function generateTex() {
       });
     }
     tex += `\\end{center}\\vspace{6pt}\n`;
-  }
-
-  // Memorandum header (instead of letterhead)
-  if (d.documentType === 'memorandum') {
-    tex += `\\begin{center}\\textbf{MEMORANDUM}\\end{center}\\vspace{6pt}\n`;
   }
 
   // Sender's symbols block
