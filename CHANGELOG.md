@@ -5,13 +5,35 @@ All notable changes to the Naval Letter Generator will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.0] - Planned (v3 branch)
+## [3.0.0] - Unreleased (v3 branch)
 
-### Planned Features - Medium Effort
-- **Live preview pane** - Real-time PDF preview as you type
-- **Template library** - Pre-built templates for common letter types (leave request, request mast, award recommendation, etc.)
-- **Undo/redo for paragraphs** - Full edit history with Ctrl+Z/Ctrl+Y support
-- **CUI/FOUO portion markings** - Detailed classification handling with portion markings per DoDM 5200.01
+### Added
+- **Live preview pane** (`js/preview-manager.js`)
+  - Real-time PDF preview as you type
+  - Split-screen layout with form on left, preview on right
+  - Toggle button to show/hide preview pane
+  - Debounced updates (500ms) for smooth performance
+  - Remembers preference in localStorage
+- **Template library** (`js/template-manager.js`, `data/templates.json`)
+  - 12 pre-built templates for common letter types
+  - Leave Request, Request Mast, Award Recommendation (NAM)
+  - Letter of Appreciation, Page 11 Entry Request
+  - Counseling (Positive and Corrective)
+  - Endorsement (Recommend Approval/Disapproval)
+  - Request for Orders Modification, Transfer Information
+  - Report of Findings
+  - Searchable modal with category filter
+  - One-click template application
+- **Undo/redo for paragraphs** (`js/undo-manager.js`)
+  - Full edit history with up to 50 undo states
+  - Keyboard shortcuts: Ctrl+Z (undo), Ctrl+Y/Ctrl+Shift+Z (redo)
+  - Undo/redo buttons in paragraph section header
+  - Tracks paragraph additions, deletions, reordering, and text changes
+- **CUI/FOUO portion markings**
+  - Per-paragraph classification marking per DoDM 5200.01
+  - Portion marking selector: (U), (CUI), (FOUO)
+  - Checkbox to enable/disable portion marking
+  - Portion marks appear in PDF output before paragraph labels
 
 ### Planned Features - High Effort
 - **Import from Word/PDF** - Parse existing correspondence documents
@@ -145,6 +167,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
-| 3.0.0   | TBD  | Live preview, templates, undo/redo, CUI markings, import, batch generation |
+| 3.0.0   | TBD  | Live preview pane, template library (12 templates), undo/redo, CUI/FOUO portion markings |
 | 2.0.0   | TBD  | Modular architecture, draft save/load, memorandum, dark mode, PWA, keyboard shortcuts, 111 tests |
 | 1.3.0   | Dec 2024 | Initial GitHub Pages release |

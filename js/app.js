@@ -145,6 +145,9 @@ async function initApp() {
   // Load external data (SSIC and unit databases)
   await loadData();
 
+  // Load templates
+  await loadTemplates();
+
   // Initialize form event listeners
   initFormListeners();
 
@@ -157,7 +160,17 @@ async function initApp() {
   // Initialize keyboard shortcuts
   initKeyboardShortcuts();
 
-  console.log('Naval Letter Generator v2.0 ready!');
+  // Initialize live preview manager
+  initPreviewManager();
+  restorePreviewState();
+
+  // Initialize template manager
+  initTemplateManager();
+
+  // Initialize undo/redo manager
+  initUndoManager();
+
+  console.log('Naval Letter Generator v3.0 ready!');
 }
 
 // Initialize when DOM is ready

@@ -32,9 +32,13 @@ const files = {
   latexGenerator: fs.readFileSync(path.join(ROOT, 'js', 'latex-generator.js'), 'utf8'),
   pdfGenerator: fs.readFileSync(path.join(ROOT, 'js', 'pdf-generator.js'), 'utf8'),
   draftManager: fs.readFileSync(path.join(ROOT, 'js', 'draft-manager.js'), 'utf8'),
+  previewManager: fs.readFileSync(path.join(ROOT, 'js', 'preview-manager.js'), 'utf8'),
+  templateManager: fs.readFileSync(path.join(ROOT, 'js', 'template-manager.js'), 'utf8'),
+  undoManager: fs.readFileSync(path.join(ROOT, 'js', 'undo-manager.js'), 'utf8'),
   app: fs.readFileSync(path.join(ROOT, 'js', 'app.js'), 'utf8'),
   ssicData: fs.readFileSync(path.join(ROOT, 'data', 'ssic.json'), 'utf8'),
   unitsData: fs.readFileSync(path.join(ROOT, 'data', 'units.json'), 'utf8'),
+  templatesData: fs.readFileSync(path.join(ROOT, 'data', 'templates.json'), 'utf8'),
   seal: fs.readFileSync(path.join(ROOT, 'assets', 'DOW-Seal-BW.jpg'))
 };
 
@@ -50,13 +54,18 @@ console.log(`  - form-handler.js: ${files.formHandler.length} bytes`);
 console.log(`  - latex-generator.js: ${files.latexGenerator.length} bytes`);
 console.log(`  - pdf-generator.js: ${files.pdfGenerator.length} bytes`);
 console.log(`  - draft-manager.js: ${files.draftManager.length} bytes`);
+console.log(`  - preview-manager.js: ${files.previewManager.length} bytes`);
+console.log(`  - template-manager.js: ${files.templateManager.length} bytes`);
+console.log(`  - undo-manager.js: ${files.undoManager.length} bytes`);
 console.log(`  - app.js: ${files.app.length} bytes`);
 console.log(`  - ssic.json: ${files.ssicData.length} bytes`);
 console.log(`  - units.json: ${files.unitsData.length} bytes`);
+console.log(`  - templates.json: ${files.templatesData.length} bytes`);
 
 // Parse JSON data
 const ssicData = JSON.parse(files.ssicData);
 const unitsData = JSON.parse(files.unitsData);
+const templatesData = JSON.parse(files.templatesData);
 
 // Create inline data script that pre-populates the databases and seal
 const inlineDataScript = `
@@ -70,9 +79,13 @@ UNIT_DATABASE = ${JSON.stringify(unitsData.units.map(u => ({ name: u.name, addre
 sealData = '${sealBase64}';
 sealLoaded = true;
 
+// Pre-loaded Templates (${templatesData.templates.length} templates)
+TEMPLATE_DATABASE = ${JSON.stringify(templatesData.templates)};
+templateCategories = ${JSON.stringify(templatesData.categories)};
+
 // Mark data as loaded (skip async fetch)
 dataLoaded = true;
-console.log('Using bundled data: ' + SSIC_DATABASE.length + ' SSICs, ' + UNIT_DATABASE.length + ' units');
+console.log('Using bundled data: ' + SSIC_DATABASE.length + ' SSICs, ' + UNIT_DATABASE.length + ' units, ' + TEMPLATE_DATABASE.length + ' templates');
 console.log('Using bundled DON seal');
 `;
 
@@ -89,6 +102,9 @@ const combinedJS = [
   stripModuleExports(files.latexGenerator),
   stripModuleExports(files.pdfGenerator),
   stripModuleExports(files.draftManager),
+  stripModuleExports(files.previewManager),
+  stripModuleExports(files.templateManager),
+  stripModuleExports(files.undoManager),
   stripModuleExports(files.app)
 ].join('\n\n');
 
@@ -120,7 +136,7 @@ ${combinedJS}
 
 // Add build info comment
 const buildInfo = `<!--
-  Naval Letter Generator v2.0 - Bundled Version
+  Naval Letter Generator v3.0 - Bundled Version
   Built: ${new Date().toISOString()}
   Source: https://github.com/jeranaias/navalletterformat
 
@@ -139,7 +155,8 @@ fs.writeFileSync(outputPath, bundledHTML, 'utf8');
 const originalSize = files.html.length + files.css.length +
   files.utils.length + files.dataManager.length + files.formHandler.length +
   files.latexGenerator.length + files.pdfGenerator.length + files.draftManager.length +
-  files.app.length + files.ssicData.length + files.unitsData.length;
+  files.previewManager.length + files.templateManager.length + files.undoManager.length +
+  files.app.length + files.ssicData.length + files.unitsData.length + files.templatesData.length;
 const bundledSize = bundledHTML.length;
 
 console.log('\nBuild complete!');

@@ -1,0 +1,452 @@
+/**
+ * Naval Letter Generator - Live Preview Manager
+ * Real-time PDF preview as you type
+ */
+
+let previewDebounceTimer = null;
+let previewEnabled = false;
+let lastPreviewData = null;
+
+/**
+ * Initialize the live preview system
+ */
+function initPreviewManager() {
+  const toggleBtn = document.getElementById('previewToggle');
+  const previewPane = document.getElementById('livePreviewPane');
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', toggleLivePreview);
+  }
+
+  // Listen for form changes to trigger preview updates
+  const form = document.getElementById('letterForm');
+  if (form) {
+    form.addEventListener('input', schedulePreviewUpdate);
+    form.addEventListener('change', schedulePreviewUpdate);
+  }
+
+  // Listen for paragraph changes (custom event from form-handler)
+  document.addEventListener('paragraphsChanged', schedulePreviewUpdate);
+
+  // Listen for dynamic list changes
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.btn-add') || e.target.closest('.btn-remove')) {
+      setTimeout(schedulePreviewUpdate, 100);
+    }
+  });
+}
+
+/**
+ * Toggle the live preview pane
+ */
+function toggleLivePreview() {
+  const container = document.querySelector('.container');
+  const previewPane = document.getElementById('livePreviewPane');
+  const toggleBtn = document.getElementById('previewToggle');
+
+  previewEnabled = !previewEnabled;
+
+  if (previewEnabled) {
+    container.classList.add('preview-active');
+    previewPane.classList.add('show');
+    toggleBtn.textContent = 'Hide Preview';
+    toggleBtn.classList.add('active');
+    updateLivePreview(); // Generate initial preview
+  } else {
+    container.classList.remove('preview-active');
+    previewPane.classList.remove('show');
+    toggleBtn.textContent = 'Live Preview';
+    toggleBtn.classList.remove('active');
+  }
+
+  // Save preference
+  localStorage.setItem('livePreviewEnabled', previewEnabled);
+}
+
+/**
+ * Schedule a preview update (debounced)
+ */
+function schedulePreviewUpdate() {
+  if (!previewEnabled) return;
+
+  if (previewDebounceTimer) {
+    clearTimeout(previewDebounceTimer);
+  }
+
+  previewDebounceTimer = setTimeout(updateLivePreview, 500);
+}
+
+/**
+ * Update the live preview
+ */
+async function updateLivePreview() {
+  if (!previewEnabled) return;
+
+  const previewFrame = document.getElementById('previewFrame');
+  const previewLoading = document.getElementById('previewLoading');
+
+  if (!previewFrame) return;
+
+  try {
+    // Show loading indicator
+    if (previewLoading) {
+      previewLoading.style.display = 'flex';
+    }
+
+    // Generate PDF blob
+    const pdfBlob = await generatePDFBlob();
+
+    if (pdfBlob) {
+      // Create blob URL and display in iframe
+      const blobUrl = URL.createObjectURL(pdfBlob);
+
+      // Revoke old blob URL to prevent memory leaks
+      if (previewFrame.dataset.blobUrl) {
+        URL.revokeObjectURL(previewFrame.dataset.blobUrl);
+      }
+
+      previewFrame.src = blobUrl;
+      previewFrame.dataset.blobUrl = blobUrl;
+    }
+  } catch (error) {
+    console.error('Preview generation error:', error);
+  } finally {
+    // Hide loading indicator
+    if (previewLoading) {
+      previewLoading.style.display = 'none';
+    }
+  }
+}
+
+/**
+ * Generate PDF as blob (without downloading)
+ * Returns a Blob object
+ */
+async function generatePDFBlob() {
+  const { jsPDF } = window.jspdf;
+  const d = collectData();
+
+  // Page dimensions (in points)
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+  const PW = 612;
+  const PH = 792;
+  const ML = 72;
+  const MR = 72;
+  const MT = 72;
+  const MB = 72;
+  const CW = PW - ML - MR;
+  const LH = 14;
+  const TAB = 45;
+
+  const IM = 14;
+  const IS = 14;
+  const ISS = 14;
+  const ISSS = 14;
+
+  let y = 54;
+  let pageNum = 1;
+  const subjText = d.subj.toUpperCase();
+
+  function pageBreak(need) {
+    if (y + need > PH - MB) {
+      pdf.addPage();
+      pageNum++;
+      y = MT;
+
+      if (d.classification) {
+        pdf.setFont('times', 'bold');
+        pdf.setFontSize(12);
+        pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+      }
+
+      pdf.setFont('times', 'normal');
+      pdf.setFontSize(12);
+      pdf.text('Subj:', ML, y);
+
+      const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
+      subjLines.forEach((line, i) => {
+        pdf.text(line, ML + TAB, y);
+        y += LH;
+      });
+      y += LH;
+    }
+  }
+
+  // Classification at top
+  if (d.classification) {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+  }
+
+  // Memorandum header
+  if (d.documentType === 'memorandum') {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
+    y += LH * 2;
+  }
+
+  // Letterhead
+  if (d.useLetterhead) {
+    if (d.hasSeal && d.sealData) {
+      try {
+        pdf.addImage(d.sealData, 'JPEG', 36, 36, 72, 72);
+      } catch (e) {
+        console.warn('Could not add seal image:', e);
+      }
+    }
+
+    if (d.unitName) {
+      pdf.setFont('times', 'bold');
+      pdf.setFontSize(10);
+      pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
+      y += 12;
+    }
+
+    if (d.unitAddress) {
+      pdf.setFont('times', 'normal');
+      pdf.setFontSize(10);
+      const addrLines = d.unitAddress.split('\n');
+      addrLines.forEach(line => {
+        pdf.text(line.toUpperCase(), PW / 2, y, { align: 'center' });
+        y += 12;
+      });
+    }
+
+    y = Math.max(y, 130);
+  }
+
+  // Sender's symbols
+  const ssicLine = [d.ssic, d.officeCode].filter(Boolean).join('/');
+  if (ssicLine) {
+    pdf.setFont('times', 'normal');
+    pdf.setFontSize(12);
+    pdf.text(ssicLine, ML, y);
+    y += LH;
+  }
+
+  if (d.date) {
+    pdf.text(d.date, ML, y);
+    y += LH * 2;
+  }
+
+  // Endorsement header
+  if (d.documentType === 'endorsement') {
+    pdf.setFont('times', 'bold');
+    pdf.text(`${d.endorseNumber} ENDORSEMENT on ${d.endorseRef || '[basic letter reference]'}`, ML, y);
+    y += LH * 2;
+    pdf.setFont('times', 'normal');
+  }
+
+  // From
+  pdf.setFont('times', 'normal');
+  pdf.text('From:', ML, y);
+  pdf.text(d.from, ML + TAB, y);
+  y += LH;
+
+  // To
+  pdf.text('To:', ML, y);
+  pdf.text(d.to, ML + TAB, y);
+  y += LH;
+
+  // Via
+  if (d.via && d.via.length > 0) {
+    d.via.forEach((v, i) => {
+      const label = d.via.length > 1 ? `Via: (${i + 1})` : 'Via:';
+      pdf.text(label, ML, y);
+      pdf.text(v, ML + TAB, y);
+      y += LH;
+    });
+  }
+
+  y += LH;
+
+  // Subject
+  pdf.text('Subj:', ML, y);
+  const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
+  subjLines.forEach((line, i) => {
+    pdf.text(line, ML + TAB, y);
+    y += LH;
+  });
+
+  // References
+  if (d.refs && d.refs.length > 0) {
+    y += LH;
+    d.refs.forEach((r, i) => {
+      const letter = String.fromCharCode(97 + i);
+      const label = i === 0 ? `Ref:  (${letter})` : `      (${letter})`;
+      pdf.text(label, ML, y);
+      const refLines = pdf.splitTextToSize(r, CW - TAB - 20);
+      refLines.forEach((line, j) => {
+        pdf.text(line, ML + TAB + 20, y);
+        y += LH;
+      });
+    });
+  }
+
+  // Enclosures
+  if (d.encls && d.encls.length > 0) {
+    y += LH;
+    d.encls.forEach((e, i) => {
+      const label = i === 0 ? `Encl: (${i + 1})` : `      (${i + 1})`;
+      pdf.text(label, ML, y);
+      pdf.text(e, ML + TAB + 20, y);
+      y += LH;
+    });
+  }
+
+  y += LH * 2;
+
+  // Endorsement action
+  if (d.documentType === 'endorsement' && d.endorseAction) {
+    pdf.text(`1.  ${d.endorseAction}.`, ML, y);
+    y += LH * 2;
+  }
+
+  // Body paragraphs
+  function renderParagraph(para, level, parentNum) {
+    const labels = ['', 'a', '(1)', '(a)'];
+    const prefixes = ['', '', '    ', '        '];
+
+    let label = '';
+    if (level === 0) {
+      label = `${parentNum}.`;
+    } else if (level === 1) {
+      label = `${String.fromCharCode(96 + para.index)}.`;
+    } else if (level === 2) {
+      label = `(${para.index})`;
+    } else if (level === 3) {
+      label = `(${String.fromCharCode(96 + para.index)})`;
+    }
+
+    const indent = level * 28;
+    const labelWidth = pdf.getTextWidth(label) + 4;
+
+    pageBreak(LH * 2);
+
+    // Paragraph subject (if present)
+    if (para.subject && level === 0) {
+      pdf.setFont('times', 'normal');
+      pdf.text(label, ML + indent, y);
+      pdf.setFont('times', 'bold');
+      const subjX = ML + indent + labelWidth;
+      const maxSubjWidth = CW - indent - labelWidth;
+      let displaySubj = para.subject;
+      if (pdf.getTextWidth(displaySubj) > maxSubjWidth) {
+        while (pdf.getTextWidth(displaySubj + '...') > maxSubjWidth && displaySubj.length > 0) {
+          displaySubj = displaySubj.slice(0, -1);
+        }
+        displaySubj += '...';
+      }
+      pdf.text(displaySubj, subjX, y);
+      const underlineY = y + 2;
+      pdf.setLineWidth(0.5);
+      pdf.line(subjX, underlineY, subjX + pdf.getTextWidth(displaySubj), underlineY);
+      y += LH;
+      pdf.setFont('times', 'normal');
+    }
+
+    // Paragraph text
+    if (para.text) {
+      const textX = ML + indent + labelWidth;
+      const textWidth = CW - indent - labelWidth;
+      const lines = pdf.splitTextToSize(para.text, textWidth);
+
+      pdf.setFont('times', 'normal');
+      if (!para.subject || level !== 0) {
+        pdf.text(label, ML + indent, y);
+      }
+
+      lines.forEach((line, i) => {
+        pageBreak(LH);
+        if (i === 0 && (!para.subject || level !== 0)) {
+          pdf.text(line, textX, y);
+        } else if (i === 0 && para.subject && level === 0) {
+          pdf.text(line, ML + indent, y);
+        } else {
+          pdf.text(line, ML + indent, y);
+        }
+        y += LH;
+      });
+    }
+
+    // Render children
+    if (para.children && para.children.length > 0) {
+      para.children.forEach((child, i) => {
+        child.index = i + 1;
+        renderParagraph(child, level + 1, parentNum);
+      });
+    }
+  }
+
+  if (d.paragraphs && d.paragraphs.length > 0) {
+    d.paragraphs.forEach((para, i) => {
+      para.index = i + 1;
+      renderParagraph(para, 0, i + 1);
+      y += LH;
+    });
+  }
+
+  // Signature block
+  y += LH * 2;
+  pageBreak(LH * 4);
+
+  const sigX = PW / 2 + 36;
+  if (d.byDirection) {
+    pdf.text('By direction', sigX, y);
+    y += LH * 4;
+  } else {
+    y += LH * 3;
+  }
+
+  if (d.sigName) {
+    pdf.setFont('times', 'bold');
+    pdf.text(d.sigName.toUpperCase(), sigX, y);
+  }
+
+  // Copy to
+  if (d.copyTo && d.copyTo.length > 0) {
+    y += LH * 3;
+    pageBreak(LH * (d.copyTo.length + 1));
+    pdf.setFont('times', 'normal');
+    pdf.text('Copy to:', ML, y);
+    y += LH;
+    d.copyTo.forEach(c => {
+      pdf.text(c, ML + 36, y);
+      y += LH;
+    });
+  }
+
+  // Classification at bottom
+  if (d.classification) {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text(d.classification, PW / 2, PH - 18, { align: 'center' });
+  }
+
+  // Return as blob
+  return pdf.output('blob');
+}
+
+/**
+ * Restore preview state from localStorage
+ */
+function restorePreviewState() {
+  const savedState = localStorage.getItem('livePreviewEnabled');
+  if (savedState === 'true') {
+    // Delay to ensure DOM is ready
+    setTimeout(() => {
+      toggleLivePreview();
+    }, 500);
+  }
+}
+
+// Export for use in other modules
+if (typeof window !== 'undefined') {
+  window.initPreviewManager = initPreviewManager;
+  window.toggleLivePreview = toggleLivePreview;
+  window.updateLivePreview = updateLivePreview;
+  window.generatePDFBlob = generatePDFBlob;
+  window.restorePreviewState = restorePreviewState;
+}

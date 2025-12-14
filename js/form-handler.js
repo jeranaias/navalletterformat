@@ -9,6 +9,7 @@ let sealFilename = 'DOW-Seal-BW.jpg';
 let sealLoaded = false;
 let documentType = 'basic';
 let draggedItem = null;
+let portionMarkingEnabled = false;
 
 // Default seal path (bundled with app)
 const DEFAULT_SEAL_PATH = 'assets/DOW-Seal-BW.jpg';
@@ -61,6 +62,58 @@ function selectDocType(type) {
 
   // Show/hide letterhead section based on document type and formal memo checkbox
   updateLetterheadVisibility();
+}
+
+/**
+ * Toggle portion marking option visibility based on classification
+ */
+function togglePortionMarking() {
+  const classification = document.getElementById('classification').value;
+  const portionOption = document.getElementById('portionMarkingOption');
+  const portionCheckbox = document.getElementById('enablePortionMarking');
+
+  if (portionOption) {
+    // Show portion marking option for CUI/FOUO
+    portionOption.style.display = classification ? 'block' : 'none';
+
+    // If classification is cleared, disable portion marking
+    if (!classification && portionCheckbox) {
+      portionCheckbox.checked = false;
+      portionMarkingEnabled = false;
+      updatePortionMarkingUI();
+    }
+  }
+}
+
+/**
+ * Handle portion marking checkbox change
+ */
+function handlePortionMarkingChange() {
+  const checkbox = document.getElementById('enablePortionMarking');
+  portionMarkingEnabled = checkbox ? checkbox.checked : false;
+  updatePortionMarkingUI();
+}
+
+/**
+ * Update portion marking UI on all paragraphs
+ */
+function updatePortionMarkingUI() {
+  const classification = document.getElementById('classification').value;
+  const portionSelectors = document.querySelectorAll('.portion-selector');
+
+  portionSelectors.forEach(selector => {
+    selector.style.display = portionMarkingEnabled ? 'inline-block' : 'none';
+  });
+
+  // Update default values based on classification
+  if (portionMarkingEnabled && classification) {
+    portionSelectors.forEach(selector => {
+      if (!selector.value) {
+        // Default to unclassified for new paragraphs
+        selector.value = 'U';
+      }
+    });
+  }
 }
 
 /**
@@ -199,9 +252,20 @@ function addParaAfter(afterEl, type) {
     <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" />
   ` : '';
 
+  // Portion marking selector (shown when enabled)
+  const portionDisplay = portionMarkingEnabled ? 'inline-block' : 'none';
+  const portionSelector = `
+    <select class="portion-selector" style="display: ${portionDisplay};" title="Portion marking">
+      <option value="U">(U)</option>
+      <option value="CUI">(CUI)</option>
+      <option value="FOUO">(FOUO)</option>
+    </select>
+  `;
+
   div.innerHTML = `
     <span class="drag-handle">☰</span>
     <div class="para-main">
+      ${portionSelector}
       <span class="para-label"></span>
       ${subjectField}
       <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)"></textarea>
@@ -229,6 +293,9 @@ function addParaAfter(afterEl, type) {
 
   updateParaLabels();
   div.querySelector('textarea').focus();
+
+  // Fire paragraphsChanged event for undo/redo tracking
+  dispatchParagraphsChanged();
 }
 
 /**
@@ -282,6 +349,9 @@ function addParent(btn) {
 function removePara(btn) {
   btn.closest('.para-item').remove();
   updateParaLabels();
+
+  // Fire paragraphsChanged event for undo/redo tracking
+  dispatchParagraphsChanged();
 }
 
 /**
@@ -352,8 +422,46 @@ function handleDrop(e) {
       this.before(draggedItem);
     }
     updateParaLabels();
+
+    // Fire paragraphsChanged event for undo/redo tracking
+    dispatchParagraphsChanged();
   }
   this.style.borderTop = '';
+}
+
+// Debounce timer for paragraph text changes
+let paragraphChangeDebounce = null;
+
+/**
+ * Dispatch paragraphsChanged event (debounced for text changes)
+ */
+function dispatchParagraphsChanged() {
+  if (paragraphChangeDebounce) {
+    clearTimeout(paragraphChangeDebounce);
+  }
+  paragraphChangeDebounce = setTimeout(() => {
+    document.dispatchEvent(new CustomEvent('paragraphsChanged'));
+  }, 300);
+}
+
+/**
+ * Collect paragraph data for undo/redo
+ */
+function collectParagraphData() {
+  const container = document.getElementById('paraContainer');
+  if (!container) return [];
+
+  const data = [];
+  container.querySelectorAll('.para-item').forEach(item => {
+    const textarea = item.querySelector('textarea');
+    const subjInput = item.querySelector('.para-subject-input');
+    data.push({
+      type: item.dataset.type,
+      text: textarea ? textarea.value : '',
+      subject: subjInput ? subjInput.value : ''
+    });
+  });
+  return data;
 }
 
 // ============================================================
@@ -390,13 +498,16 @@ function collectData() {
     subj: document.getElementById('subj').value.trim(),
     refs: Array.from(document.querySelectorAll('input[name="ref[]"]')).map(i => i.value.trim()).filter(v => v),
     encls: Array.from(document.querySelectorAll('input[name="encl[]"]')).map(i => i.value.trim()).filter(v => v),
+    portionMarkingEnabled,
     paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => {
       const paraItem = t.closest('.para-item');
       const subjInput = paraItem?.querySelector('.para-subject-input');
+      const portionSelect = paraItem?.querySelector('.portion-selector');
       return {
         type: t.dataset.type,
         subject: subjInput?.value.trim() || '',
-        text: t.value.trim()
+        text: t.value.trim(),
+        portionMark: portionSelect?.value || 'U'
       };
     }).filter(p => p.text),
     sigName: document.getElementById('sigName').value.trim(),
@@ -429,6 +540,22 @@ async function initFormListeners() {
   const formalMemoCheckbox = document.getElementById('formalMemo');
   if (formalMemoCheckbox) {
     formalMemoCheckbox.addEventListener('change', updateLetterheadVisibility);
+  }
+
+  // Portion marking checkbox
+  const portionCheckbox = document.getElementById('enablePortionMarking');
+  if (portionCheckbox) {
+    portionCheckbox.addEventListener('change', handlePortionMarkingChange);
+  }
+
+  // Listen for paragraph text changes (using event delegation)
+  const paraContainer = document.getElementById('paraContainer');
+  if (paraContainer) {
+    paraContainer.addEventListener('input', (e) => {
+      if (e.target.matches('textarea, .para-subject-input')) {
+        dispatchParagraphsChanged();
+      }
+    });
   }
 }
 

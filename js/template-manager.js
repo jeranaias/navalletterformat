@@ -1,0 +1,286 @@
+/**
+ * Naval Letter Generator - Template Manager
+ * Pre-built templates for common letter types
+ */
+
+let TEMPLATE_DATABASE = [];
+let templateCategories = [];
+
+/**
+ * Load templates from JSON file
+ */
+async function loadTemplates() {
+  try {
+    const response = await fetch('data/templates.json');
+    const data = await response.json();
+    TEMPLATE_DATABASE = data.templates || [];
+    templateCategories = data.categories || [];
+    console.log(`Loaded ${TEMPLATE_DATABASE.length} templates`);
+    return true;
+  } catch (error) {
+    console.warn('Could not load templates:', error);
+    return false;
+  }
+}
+
+/**
+ * Initialize the template manager
+ */
+function initTemplateManager() {
+  const templateBtn = document.getElementById('templateBtn');
+  const templateModal = document.getElementById('templateModal');
+  const templateClose = document.getElementById('templateClose');
+  const templateSearch = document.getElementById('templateSearch');
+  const categoryFilter = document.getElementById('categoryFilter');
+
+  if (templateBtn) {
+    templateBtn.addEventListener('click', openTemplateModal);
+  }
+
+  if (templateClose) {
+    templateClose.addEventListener('click', closeTemplateModal);
+  }
+
+  if (templateModal) {
+    templateModal.addEventListener('click', (e) => {
+      if (e.target === templateModal) {
+        closeTemplateModal();
+      }
+    });
+  }
+
+  if (templateSearch) {
+    templateSearch.addEventListener('input', filterTemplates);
+  }
+
+  if (categoryFilter) {
+    categoryFilter.addEventListener('change', filterTemplates);
+  }
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && templateModal && templateModal.classList.contains('show')) {
+      closeTemplateModal();
+    }
+  });
+
+  // Populate category filter
+  populateCategoryFilter();
+}
+
+/**
+ * Populate the category filter dropdown
+ */
+function populateCategoryFilter() {
+  const categoryFilter = document.getElementById('categoryFilter');
+  if (!categoryFilter) return;
+
+  categoryFilter.innerHTML = '<option value="">All Categories</option>';
+  templateCategories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    categoryFilter.appendChild(option);
+  });
+}
+
+/**
+ * Open the template selection modal
+ */
+function openTemplateModal() {
+  const modal = document.getElementById('templateModal');
+  if (modal) {
+    modal.classList.add('show');
+    renderTemplateList();
+    document.getElementById('templateSearch')?.focus();
+  }
+}
+
+/**
+ * Close the template selection modal
+ */
+function closeTemplateModal() {
+  const modal = document.getElementById('templateModal');
+  if (modal) {
+    modal.classList.remove('show');
+  }
+}
+
+/**
+ * Filter templates based on search and category
+ */
+function filterTemplates() {
+  renderTemplateList();
+}
+
+/**
+ * Render the template list
+ */
+function renderTemplateList() {
+  const container = document.getElementById('templateList');
+  if (!container) return;
+
+  const searchTerm = document.getElementById('templateSearch')?.value.toLowerCase() || '';
+  const category = document.getElementById('categoryFilter')?.value || '';
+
+  const filtered = TEMPLATE_DATABASE.filter(t => {
+    const matchesSearch = !searchTerm ||
+      t.name.toLowerCase().includes(searchTerm) ||
+      t.description.toLowerCase().includes(searchTerm);
+    const matchesCategory = !category || t.category === category;
+    return matchesSearch && matchesCategory;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="template-empty">No templates found</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(t => `
+    <div class="template-card" onclick="applyTemplate('${t.id}')">
+      <div class="template-card-header">
+        <h4>${t.name}</h4>
+        <span class="template-category">${t.category}</span>
+      </div>
+      <p class="template-desc">${t.description}</p>
+      ${t.ssic ? `<span class="template-ssic">SSIC: ${t.ssic}</span>` : ''}
+    </div>
+  `).join('');
+}
+
+/**
+ * Apply a template to the form
+ */
+function applyTemplate(templateId) {
+  const template = TEMPLATE_DATABASE.find(t => t.id === templateId);
+  if (!template) {
+    console.error('Template not found:', templateId);
+    return;
+  }
+
+  // Confirm if form has data
+  const currentData = collectData();
+  const hasData = currentData.subj || currentData.from || currentData.to ||
+    (currentData.paragraphs && currentData.paragraphs.length > 0);
+
+  if (hasData) {
+    if (!confirm('This will replace your current form data. Continue?')) {
+      return;
+    }
+  }
+
+  // Apply document type
+  if (template.documentType) {
+    selectDocType(template.documentType);
+  }
+
+  // Apply SSIC
+  if (template.ssic) {
+    const ssicInput = document.getElementById('ssicSearch');
+    if (ssicInput) ssicInput.value = template.ssic;
+  }
+
+  // Apply subject
+  if (template.subj) {
+    const subjInput = document.getElementById('subj');
+    if (subjInput) subjInput.value = template.subj;
+  }
+
+  // Apply endorsement action
+  if (template.endorseAction) {
+    const actionSelect = document.getElementById('endorseAction');
+    if (actionSelect) {
+      for (let i = 0; i < actionSelect.options.length; i++) {
+        if (actionSelect.options[i].value === template.endorseAction) {
+          actionSelect.selectedIndex = i;
+          break;
+        }
+      }
+    }
+  }
+
+  // Clear and apply references
+  clearDynamicList('refList');
+  if (template.refs && template.refs.length > 0) {
+    template.refs.forEach(ref => {
+      addRef();
+      const inputs = document.querySelectorAll('#refList input');
+      const lastInput = inputs[inputs.length - 1];
+      if (lastInput) lastInput.value = ref;
+    });
+  }
+
+  // Clear and apply enclosures
+  clearDynamicList('enclList');
+  if (template.encls && template.encls.length > 0) {
+    template.encls.forEach(encl => {
+      addEncl();
+      const inputs = document.querySelectorAll('#enclList input');
+      const lastInput = inputs[inputs.length - 1];
+      if (lastInput) lastInput.value = encl;
+    });
+  }
+
+  // Clear and apply paragraphs
+  clearParagraphs();
+  if (template.paragraphs && template.paragraphs.length > 0) {
+    template.paragraphs.forEach((para, i) => {
+      addFirstPara();
+      const container = document.getElementById('paraContainer');
+      const paraItems = container.querySelectorAll('.para-item');
+      const lastPara = paraItems[paraItems.length - 1];
+
+      if (lastPara) {
+        const textArea = lastPara.querySelector('textarea');
+        const subjectInput = lastPara.querySelector('.para-subject');
+
+        if (textArea) textArea.value = para.text || '';
+        if (subjectInput && para.subject) subjectInput.value = para.subject;
+      }
+    });
+  }
+
+  // Close modal
+  closeTemplateModal();
+
+  // Show success message
+  showStatus('success', `Template "${template.name}" applied`);
+
+  // Trigger preview update if enabled
+  if (typeof schedulePreviewUpdate === 'function') {
+    schedulePreviewUpdate();
+  }
+}
+
+/**
+ * Clear a dynamic list
+ */
+function clearDynamicList(listId) {
+  const list = document.getElementById(listId);
+  if (list) {
+    list.innerHTML = '';
+  }
+}
+
+/**
+ * Clear all paragraphs
+ */
+function clearParagraphs() {
+  const container = document.getElementById('paraContainer');
+  if (container) {
+    container.innerHTML = '';
+  }
+  // Reset paragraph state if available
+  if (typeof paragraphs !== 'undefined') {
+    paragraphs.length = 0;
+  }
+}
+
+// Export for use in other modules
+if (typeof window !== 'undefined') {
+  window.loadTemplates = loadTemplates;
+  window.initTemplateManager = initTemplateManager;
+  window.openTemplateModal = openTemplateModal;
+  window.closeTemplateModal = closeTemplateModal;
+  window.applyTemplate = applyTemplate;
+}

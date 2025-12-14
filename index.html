@@ -63,6 +63,37 @@
 </head>
 <body>
   <a href="#letterForm" class="skip-link">Skip to main content</a>
+
+  <!-- Template Modal -->
+  <div id="templateModal" class="modal">
+    <div class="modal-content template-modal">
+      <div class="modal-header">
+        <h2>Choose a Template</h2>
+        <button type="button" id="templateClose" class="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="template-filters">
+        <input type="text" id="templateSearch" placeholder="Search templates..." class="template-search">
+        <select id="categoryFilter" class="category-filter">
+          <option value="">All Categories</option>
+        </select>
+      </div>
+      <div id="templateList" class="template-list"></div>
+    </div>
+  </div>
+
+  <!-- Live Preview Pane -->
+  <div id="livePreviewPane" class="live-preview-pane">
+    <div class="preview-header">
+      <span>Live Preview</span>
+      <button type="button" class="preview-close" onclick="toggleLivePreview()" aria-label="Close preview">&times;</button>
+    </div>
+    <div id="previewLoading" class="preview-loading">
+      <div class="spinner"></div>
+      <span>Generating preview...</span>
+    </div>
+    <iframe id="previewFrame" class="preview-frame" title="PDF Preview"></iframe>
+  </div>
+
   <div class="container" role="main">
     <header role="banner">
       <div class="header-controls">
@@ -123,13 +154,19 @@
             <input type="text" id="date" aria-label="Date" placeholder="Auto-formats">
             <p class="help-text">Any format works</p>
           </div>
-          <div class="form-group" style="flex: 0 0 160px;">
+          <div class="form-group" style="flex: 0 0 180px;">
             <label>Classification</label>
-            <select id="classification" aria-label="Classification level">
+            <select id="classification" aria-label="Classification level" onchange="togglePortionMarking()">
               <option value="">UNCLASSIFIED</option>
               <option value="CUI">CUI</option>
               <option value="FOUO">FOR OFFICIAL USE ONLY</option>
             </select>
+          </div>
+          <div class="form-group portion-marking-option" id="portionMarkingOption" style="display: none; flex: 0 0 auto;">
+            <label class="checkbox-label" style="margin-top: 24px;">
+              <input type="checkbox" id="enablePortionMarking">
+              <span>Enable portion marking</span>
+            </label>
           </div>
         </div>
         <div class="form-row">
@@ -266,9 +303,19 @@
 
       <!-- Body Paragraphs -->
       <div class="form-section">
-        <h2 class="section-title">Body Paragraphs</h2>
+        <div class="section-header-with-actions">
+          <h2 class="section-title">Body Paragraphs</h2>
+          <div class="undo-redo-buttons">
+            <button type="button" id="undoBtn" class="btn btn-icon" onclick="undo()" title="Undo (Ctrl+Z)" disabled>
+              <span class="icon-undo">↶</span>
+            </button>
+            <button type="button" id="redoBtn" class="btn btn-icon" onclick="redo()" title="Redo (Ctrl+Y)" disabled>
+              <span class="icon-redo">↷</span>
+            </button>
+          </div>
+        </div>
         <p class="help-text" style="margin-bottom: 16px;">
-          <strong>1.</strong> → <strong>a.</strong> → <strong>(1)</strong> → <strong>(a)</strong> &nbsp;|&nbsp; Click paragraph for options &nbsp;|&nbsp; Drag to reorder
+          <strong>1.</strong> → <strong>a.</strong> → <strong>(1)</strong> → <strong>(a)</strong> &nbsp;|&nbsp; Click paragraph for options &nbsp;|&nbsp; Drag to reorder &nbsp;|&nbsp; <strong>Ctrl+Z</strong> undo, <strong>Ctrl+Y</strong> redo
         </p>
         <div class="para-container" id="paraContainer"></div>
         <button type="button" class="btn btn-add" onclick="addFirstPara()">+ Add Paragraph</button>
@@ -305,6 +352,8 @@
     <!-- Actions -->
     <div class="actions-bar">
       <div class="actions">
+        <button type="button" id="templateBtn" class="btn btn-secondary">Templates</button>
+        <button type="button" id="previewToggle" class="btn btn-primary">Live Preview</button>
         <button type="button" class="btn btn-success" onclick="generatePDF()">Download PDF</button>
         <button type="button" class="btn btn-secondary" onclick="printPDF()">Print</button>
         <button type="button" class="btn btn-secondary" onclick="previewTex()">Preview LaTeX</button>
@@ -350,6 +399,9 @@
   <script src="js/latex-generator.js"></script>
   <script src="js/pdf-generator.js"></script>
   <script src="js/draft-manager.js"></script>
+  <script src="js/preview-manager.js"></script>
+  <script src="js/template-manager.js"></script>
+  <script src="js/undo-manager.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

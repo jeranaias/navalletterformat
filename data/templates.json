@@ -1,0 +1,339 @@
+{
+  "version": "1.0",
+  "templates": [
+    {
+      "id": "leave-request",
+      "name": "Leave Request",
+      "category": "Personnel",
+      "description": "Standard request for annual, emergency, or special liberty",
+      "ssic": "1050",
+      "documentType": "basic",
+      "subj": "REQUEST FOR LEAVE",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request [ANNUAL/EMERGENCY/SPECIAL] leave for the period of [START DATE] to [END DATE] ([NUMBER] days)."
+        },
+        {
+          "subject": "Purpose",
+          "text": "[Briefly describe the purpose of leave, e.g., family vacation, personal matter, emergency circumstances]."
+        },
+        {
+          "subject": "Contact Information",
+          "text": "While on leave, I can be reached at [PHONE NUMBER] or [EMAIL]. My leave address will be [ADDRESS]."
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact for this request is the undersigned at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "MCO 1050.3J (Leave, Liberty, and Administrative Absence)"
+      ]
+    },
+    {
+      "id": "request-mast",
+      "name": "Request Mast",
+      "category": "Personnel",
+      "description": "Formal request to speak with commanding officer",
+      "ssic": "1700",
+      "documentType": "basic",
+      "subj": "REQUEST MAST",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request mast with the Commanding Officer."
+        },
+        {
+          "subject": "Purpose",
+          "text": "[Describe the matter you wish to discuss with the CO. Be specific but professional.]"
+        },
+        {
+          "subject": "Previous Actions",
+          "text": "[Describe any previous attempts to resolve this matter through the chain of command]."
+        }
+      ],
+      "refs": [
+        "Article 1150, U.S. Navy Regulations"
+      ]
+    },
+    {
+      "id": "award-nam",
+      "name": "Award Recommendation (NAM)",
+      "category": "Awards",
+      "description": "Navy and Marine Corps Achievement Medal recommendation",
+      "ssic": "1650",
+      "documentType": "basic",
+      "subj": "RECOMMENDATION FOR NAVY AND MARINE CORPS ACHIEVEMENT MEDAL",
+      "paragraphs": [
+        {
+          "subject": "Recommendation",
+          "text": "Per references (a) and (b), [RANK NAME] is recommended for the Navy and Marine Corps Achievement Medal (Gold Star in lieu of [NUMBER] Award) for meritorious service/achievement while serving as [BILLET] from [START DATE] to [END DATE]."
+        },
+        {
+          "subject": "Justification",
+          "text": "[Describe specific achievements, accomplishments, and impact. Use quantifiable metrics where possible. Focus on actions above and beyond normal duties.]"
+        },
+        {
+          "subject": "Supporting Information",
+          "text": "[Additional supporting information, such as impact on unit readiness, cost savings achieved, or recognition received]."
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact for this matter is the undersigned at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "SECNAVINST 1650.1H (Navy and Marine Corps Awards Manual)",
+        "MCO 1650.19J (Marine Corps Awards Manual)"
+      ],
+      "encls": [
+        "Proposed Citation",
+        "Award Recommendation Worksheet"
+      ]
+    },
+    {
+      "id": "award-loa",
+      "name": "Letter of Appreciation",
+      "category": "Awards",
+      "description": "Formal letter of appreciation for outstanding service",
+      "ssic": "1650",
+      "documentType": "basic",
+      "subj": "LETTER OF APPRECIATION",
+      "paragraphs": [
+        {
+          "text": "I would like to express my sincere appreciation for your outstanding performance and dedication while serving as [BILLET] from [START DATE] to [END DATE]."
+        },
+        {
+          "text": "[Describe specific accomplishments and their impact on the unit/mission]."
+        },
+        {
+          "text": "Your professionalism and commitment to excellence have made a lasting positive impact on [UNIT/ORGANIZATION]. I wish you continued success in your future endeavors."
+        }
+      ]
+    },
+    {
+      "id": "page11-request",
+      "name": "Page 11 Entry Request",
+      "category": "Personnel",
+      "description": "Request for administrative remarks entry",
+      "ssic": "1070",
+      "documentType": "basic",
+      "subj": "REQUEST FOR PAGE 11 ENTRY",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), request the following entry be made in the service record book of [RANK NAME]:"
+        },
+        {
+          "subject": "Proposed Entry",
+          "text": "\"[DATE]: [TEXT OF PROPOSED PAGE 11 ENTRY]\""
+        },
+        {
+          "subject": "Justification",
+          "text": "[Explain why this entry is necessary and appropriate]."
+        }
+      ],
+      "refs": [
+        "MCO P1070.12K (Marine Corps Individual Records Administration Manual)"
+      ]
+    },
+    {
+      "id": "counseling-positive",
+      "name": "Counseling (Positive)",
+      "category": "Leadership",
+      "description": "Documented positive counseling for outstanding performance",
+      "ssic": "1610",
+      "documentType": "memorandum",
+      "subj": "COUNSELING - POSITIVE",
+      "paragraphs": [
+        {
+          "subject": "Purpose",
+          "text": "The purpose of this counseling is to formally recognize and document your outstanding performance."
+        },
+        {
+          "subject": "Observation",
+          "text": "[Describe the specific positive behavior, accomplishment, or performance observed]."
+        },
+        {
+          "subject": "Impact",
+          "text": "[Explain the positive impact this had on the unit, mission, or Marines]."
+        },
+        {
+          "subject": "Expectation",
+          "text": "Your dedication and professionalism are commendable. Continue to maintain this high standard of performance."
+        }
+      ]
+    },
+    {
+      "id": "counseling-negative",
+      "name": "Counseling (Corrective)",
+      "category": "Leadership",
+      "description": "Documented corrective counseling for deficiencies",
+      "ssic": "1610",
+      "documentType": "memorandum",
+      "subj": "COUNSELING - CORRECTIVE",
+      "paragraphs": [
+        {
+          "subject": "Purpose",
+          "text": "The purpose of this counseling is to formally document a deficiency in your performance/conduct and establish expectations for improvement."
+        },
+        {
+          "subject": "Observation",
+          "text": "[Describe the specific deficiency observed, including date, time, and circumstances]."
+        },
+        {
+          "subject": "Standard",
+          "text": "[Cite the applicable standard, order, or regulation that was not met]."
+        },
+        {
+          "subject": "Impact",
+          "text": "[Explain the negative impact this had or could have on the unit, mission, or Marines]."
+        },
+        {
+          "subject": "Expectation",
+          "text": "You are expected to correct this deficiency immediately. Failure to improve may result in adverse administrative or disciplinary action."
+        },
+        {
+          "subject": "Assistance",
+          "text": "[Identify any assistance, resources, or training that will be provided to help the Marine improve]."
+        }
+      ]
+    },
+    {
+      "id": "endorsement-approve",
+      "name": "Endorsement (Recommend Approval)",
+      "category": "Endorsements",
+      "description": "Endorsement recommending approval of a request",
+      "ssic": "",
+      "documentType": "endorsement",
+      "endorseAction": "Forwarded, recommending approval",
+      "paragraphs": [
+        {
+          "text": "[Brief statement supporting the request and any additional relevant information]."
+        }
+      ]
+    },
+    {
+      "id": "endorsement-disapprove",
+      "name": "Endorsement (Recommend Disapproval)",
+      "category": "Endorsements",
+      "description": "Endorsement recommending disapproval of a request",
+      "ssic": "",
+      "documentType": "endorsement",
+      "endorseAction": "Forwarded, recommending disapproval",
+      "paragraphs": [
+        {
+          "text": "[Brief statement explaining the reason for recommending disapproval]."
+        }
+      ]
+    },
+    {
+      "id": "request-orders",
+      "name": "Request for Orders Modification",
+      "category": "Personnel",
+      "description": "Request to modify existing orders",
+      "ssic": "1320",
+      "documentType": "basic",
+      "subj": "REQUEST FOR ORDERS MODIFICATION",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per references (a) and (b), request modification to my orders [ORDERS NUMBER] dated [DATE]."
+        },
+        {
+          "subject": "Current Orders",
+          "text": "[Describe current orders, including reporting date and duty station]."
+        },
+        {
+          "subject": "Requested Change",
+          "text": "[Describe the specific modification requested and the reason for the request]."
+        },
+        {
+          "subject": "Justification",
+          "text": "[Provide detailed justification for the request, including any supporting documentation]."
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact for this request is the undersigned at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "MCO 1320.11 (Permanent Change of Station Orders)",
+        "[Applicable orders document]"
+      ]
+    },
+    {
+      "id": "transfer-info",
+      "name": "Transfer Information Sheet",
+      "category": "Personnel",
+      "description": "Letter providing information to transferring Marine",
+      "ssic": "1320",
+      "documentType": "memorandum",
+      "subj": "TRANSFER INFORMATION",
+      "paragraphs": [
+        {
+          "subject": "Purpose",
+          "text": "This memorandum provides information regarding your upcoming transfer to [NEW DUTY STATION]."
+        },
+        {
+          "subject": "Checkout Procedures",
+          "text": "You are required to complete the unit checkout sheet and obtain all required signatures prior to your departure date. Ensure all gear and equipment is turned in to the appropriate sections."
+        },
+        {
+          "subject": "Records",
+          "text": "Verify your service record is complete and accurate. Any discrepancies should be reported to Admin immediately."
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "For questions regarding your transfer, contact the Admin section at [PHONE/EMAIL]."
+        }
+      ]
+    },
+    {
+      "id": "report-findings",
+      "name": "Report of Findings",
+      "category": "Investigations",
+      "description": "Formal report documenting investigation findings",
+      "ssic": "5830",
+      "documentType": "basic",
+      "subj": "REPORT OF FINDINGS",
+      "paragraphs": [
+        {
+          "subject": "Purpose",
+          "text": "Per reference (a), this letter documents the findings of the [preliminary inquiry/investigation] into [SUBJECT OF INVESTIGATION]."
+        },
+        {
+          "subject": "Background",
+          "text": "[Provide background information and circumstances that led to the investigation]."
+        },
+        {
+          "subject": "Findings",
+          "text": "[Document specific findings of fact based on evidence and witness statements]."
+        },
+        {
+          "subject": "Conclusion",
+          "text": "[State conclusions drawn from the findings]."
+        },
+        {
+          "subject": "Recommendation",
+          "text": "[Provide recommendations for action, if any]."
+        }
+      ],
+      "refs": [
+        "[Applicable convening authority order or directive]"
+      ],
+      "encls": [
+        "Witness statements",
+        "Documentary evidence"
+      ]
+    }
+  ],
+  "categories": [
+    "Personnel",
+    "Awards",
+    "Leadership",
+    "Endorsements",
+    "Investigations"
+  ]
+}
