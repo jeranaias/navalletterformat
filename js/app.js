@@ -5,6 +5,24 @@
  * Version: 2.0
  * Author: Jesse Morgan
  */
+
+/**
+ * Register service worker for offline support
+ */
+function registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered:', registration.scope);
+        })
+        .catch((error) => {
+          console.warn('Service Worker registration failed:', error);
+        });
+    });
+  }
+}
+
 /**
  * Theme toggle functionality
  */
@@ -43,6 +61,9 @@ async function initApp() {
 
   // Initialize theme
   initTheme();
+
+  // Register service worker for offline support
+  registerServiceWorker();
 
   // Load external data (SSIC and unit databases)
   await loadData();
