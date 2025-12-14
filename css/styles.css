@@ -1072,38 +1072,69 @@ textarea {
   font-style: italic;
 }
 
-.para-actions {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--navy);
-  padding: 10px;
-  border-radius: 0 0 var(--radius) var(--radius);
-  z-index: 10;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: -1px;
-}
-
-.para-item.active .para-actions {
+/* Inline paragraph actions */
+.para-inline-actions {
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 8px;
+  opacity: 0.4;
+  transition: opacity 0.2s;
 }
 
-.para-actions .btn {
-  background: rgba(255,255,255,0.15);
-  color: var(--white);
-  padding: 6px 12px;
-  font-size: 0.75rem;
+.para-item:hover .para-inline-actions,
+.para-item:focus-within .para-inline-actions {
+  opacity: 1;
 }
 
-.para-actions .btn:hover {
-  background: rgba(255,255,255,0.25);
+.para-action-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--gray-300);
+  border-radius: 4px;
+  background: var(--white);
+  color: var(--gray-600);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  line-height: 1;
 }
 
-.para-actions .btn-remove {
-  background: rgba(220, 53, 69, 0.8);
+.para-action-btn:hover:not(:disabled) {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
+}
+
+.para-action-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.para-action-delete {
+  color: var(--danger);
+  border-color: var(--gray-300);
+}
+
+.para-action-delete:hover {
+  background: var(--danger) !important;
+  border-color: var(--danger) !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .para-action-btn {
+  background: var(--gray-200);
+  border-color: var(--gray-400);
+  color: var(--gray-600);
+}
+
+[data-theme="dark"] .para-action-btn:hover:not(:disabled) {
+  background: var(--navy);
+  color: white;
 }
 
 /* Actions Bar */
