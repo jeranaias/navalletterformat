@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-14T00:37:07.107Z
+  Built: 2025-12-14T00:47:16.140Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -2103,11 +2103,11 @@ async function generatePDF() {
   const LH = 14;        // Line height
   const TAB = 45;       // Tab width for labels
 
-  // Paragraph indentation
-  const IM = 14;        // Main paragraph indent
-  const IS = 12;        // Sub paragraph indent
-  const ISS = 18;       // Sub-sub paragraph indent
-  const ISSS = 18;      // Sub-sub-sub paragraph indent
+  // Paragraph indentation (space between label and text)
+  const IM = 14;        // Main paragraph indent (after "1.")
+  const IS = 14;        // Sub paragraph indent (after "a.")
+  const ISS = 14;       // Sub-sub paragraph indent (after "(1)")
+  const ISSS = 14;      // Sub-sub-sub paragraph indent (after "(a)")
 
   let y = 54;           // Current Y position
   let pageNum = 1;

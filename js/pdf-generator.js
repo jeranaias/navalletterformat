@@ -24,11 +24,11 @@ async function generatePDF() {
   const LH = 14;        // Line height
   const TAB = 45;       // Tab width for labels
 
-  // Paragraph indentation
-  const IM = 14;        // Main paragraph indent
-  const IS = 12;        // Sub paragraph indent
-  const ISS = 18;       // Sub-sub paragraph indent
-  const ISSS = 18;      // Sub-sub-sub paragraph indent
+  // Paragraph indentation (space between label and text)
+  const IM = 14;        // Main paragraph indent (after "1.")
+  const IS = 14;        // Sub paragraph indent (after "a.")
+  const ISS = 14;       // Sub-sub paragraph indent (after "(1)")
+  const ISSS = 14;      // Sub-sub-sub paragraph indent (after "(a)")
 
   let y = 54;           // Current Y position
   let pageNum = 1;
