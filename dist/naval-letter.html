@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-14T02:48:33.699Z
+  Built: 2025-12-14T04:15:51.657Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -819,6 +819,10 @@ footer p {
             <h3>Endorsement</h3>
             <p>Forward with comments</p>
           </div>
+          <div class="doc-type-option" data-type="memorandum" onclick="selectDocType('memorandum')">
+            <h3>Memorandum</h3>
+            <p>Internal correspondence</p>
+          </div>
         </div>
       </div>
 
@@ -1464,7 +1468,7 @@ async function loadDefaultSeal() {
 }
 
 /**
- * Select document type (basic or endorsement)
+ * Select document type (basic, endorsement, or memorandum)
  * @param {string} type - Document type
  */
 function selectDocType(type) {
@@ -1472,7 +1476,15 @@ function selectDocType(type) {
   document.querySelectorAll('.doc-type-option').forEach(opt => {
     opt.classList.toggle('selected', opt.dataset.type === type);
   });
+
+  // Show/hide endorsement fields
   document.getElementById('endorsementFields').style.display = type === 'endorsement' ? 'block' : 'none';
+
+  // Show/hide letterhead section for memorandum (memos don't use letterhead)
+  const letterheadSection = document.getElementById('letterheadFields')?.closest('.form-section');
+  if (letterheadSection) {
+    letterheadSection.style.display = type === 'memorandum' ? 'none' : 'block';
+  }
 }
 
 /**
@@ -1767,7 +1779,7 @@ function collectData() {
     date: document.getElementById('date').value.trim(),
     classification: document.getElementById('classification').value,
     branch: document.querySelector('input[name="branch"]:checked').value,
-    useLetterhead: true, // Always include letterhead
+    useLetterhead: documentType !== "memorandum", // Letters have letterhead, memos don't
     unitName: document.getElementById('unitName').value.trim(),
     unitAddress: document.getElementById('unitAddress').value.trim(),
     hasSeal: sealData !== null,
@@ -1884,6 +1896,11 @@ function generateTex() {
       });
     }
     tex += `\\end{center}\\vspace{6pt}\n`;
+  }
+
+  // Memorandum header (instead of letterhead)
+  if (d.documentType === 'memorandum') {
+    tex += `\\begin{center}\\textbf{MEMORANDUM}\\end{center}\\vspace{6pt}\n`;
   }
 
   // Sender's symbols block
@@ -2144,6 +2161,14 @@ async function generatePDF() {
     pdf.setFontSize(12);
     pdf.text(d.classification, PW / 2, y, { align: 'center' });
     y += LH + 4;
+  }
+
+  // Memorandum header (instead of letterhead)
+  if (d.documentType === 'memorandum') {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
+    y += LH * 2;
   }
 
   // Letterhead

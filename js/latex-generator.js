@@ -64,6 +64,11 @@ function generateTex() {
     tex += `\\end{center}\\vspace{6pt}\n`;
   }
 
+  // Memorandum header (instead of letterhead)
+  if (d.documentType === 'memorandum') {
+    tex += `\\begin{center}\\textbf{MEMORANDUM}\\end{center}\\vspace{6pt}\n`;
+  }
+
   // Sender's symbols block
   tex += `\\begin{flushright}\n${escapeLatex(d.ssic)}\\\\\n`;
   if (d.officeCode) {

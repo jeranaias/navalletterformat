@@ -9,6 +9,7 @@ testing/
 ├── drafts/           # Sample draft JSON files for testing draft save/load
 │   ├── test-draft-3page.json
 │   ├── test-draft-endorsement.json
+│   ├── test-draft-memorandum.json
 │   └── test-draft-with-subjects.json
 │
 └── testing/          # PDF generation tool for verification
@@ -23,6 +24,7 @@ The `drafts/` folder contains sample JSON files that can be loaded via the "Load
 
 - **test-draft-3page.json** - Multi-page basic letter
 - **test-draft-endorsement.json** - Endorsement format example
+- **test-draft-memorandum.json** - Memorandum format (internal correspondence)
 - **test-draft-with-subjects.json** - Letter with paragraph subjects
 
 ## PDF Generation Tool

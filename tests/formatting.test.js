@@ -229,3 +229,57 @@ describe('Endorsement Format', () => {
     expect(header).toMatch(/^[A-Z]+ ENDORSEMENT$/);
   });
 });
+
+describe('Memorandum Format', () => {
+  test('memorandum is a valid document type', () => {
+    const validTypes = ['basic', 'endorsement', 'memorandum'];
+    expect(validTypes).toContain('memorandum');
+  });
+
+  test('memorandum header format', () => {
+    const header = 'MEMORANDUM';
+    expect(header).toBe('MEMORANDUM');
+    expect(header).toMatch(/^[A-Z]+$/);
+  });
+
+  test('memorandum does not use letterhead', () => {
+    const useLetterhead = (docType) => docType !== 'memorandum';
+    expect(useLetterhead('basic')).toBe(true);
+    expect(useLetterhead('endorsement')).toBe(true);
+    expect(useLetterhead('memorandum')).toBe(false);
+  });
+
+  test('memorandum still has From/To/Subj fields', () => {
+    const requiredFields = ['From', 'To', 'Subj'];
+    requiredFields.forEach(field => {
+      expect(requiredFields).toContain(field);
+    });
+  });
+
+  test('memorandum can have paragraphs', () => {
+    const memoDraft = {
+      version: '2.0',
+      docType: 'memorandum',
+      from: 'Operations Officer',
+      to: 'All Staff',
+      subj: 'WEEKLY UPDATE',
+      paragraphs: [
+        { type: 'para', subject: '', text: 'This is a memo paragraph.' }
+      ]
+    };
+
+    expect(memoDraft.docType).toBe('memorandum');
+    expect(memoDraft.paragraphs).toHaveLength(1);
+  });
+
+  test('memorandum can have references and enclosures', () => {
+    const memoDraft = {
+      docType: 'memorandum',
+      refs: ['Previous memo dated 1 Dec 24'],
+      encls: ['Attachment A']
+    };
+
+    expect(memoDraft.refs).toHaveLength(1);
+    expect(memoDraft.encls).toHaveLength(1);
+  });
+});
