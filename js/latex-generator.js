@@ -31,10 +31,10 @@ function generateTex() {
 \\pagestyle{continuation}
 
 \\newlength{\\labeltab}\\setlength{\\labeltab}{0.625in}
-\\newlength{\\Lmain}\\settowidth{\\Lmain}{1.\\ \\ }
-\\newlength{\\Lsub}\\settowidth{\\Lsub}{a.\\ \\ }
-\\newlength{\\Lsubsub}\\settowidth{\\Lsubsub}{(1)\\ \\ }
-\\newlength{\\Lsubsubsub}\\settowidth{\\Lsubsubsub}{(a)\\ \\ }
+\\newlength{\\Lmain}\\settowidth{\\Lmain}{1.\\ }
+\\newlength{\\Lsub}\\settowidth{\\Lsub}{a.\\ }
+\\newlength{\\Lsubsub}\\settowidth{\\Lsubsub}{(1)\\ }
+\\newlength{\\Lsubsubsub}\\settowidth{\\Lsubsubsub}{(a)\\ }
 
 \\begin{document}
 \\thispagestyle{firstpage}
@@ -124,19 +124,19 @@ function generateTex() {
         sssn = 0;
         // Add underlined subject if present
         const subjectPart = p.subject ? `\\underline{${escapeLatex(p.subject)}}  ` : '';
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${subjectPart}${text}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ ${subjectPart}${text}\n\n`;
       } else if (p.type === 'subpara') {
         sn++;
         ssn = 0;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${LETTERS[sn - 1]}.\\ \\ ${text}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${LETTERS[sn - 1]}.\\ ${text}\n\n`;
       } else if (p.type === 'subsubpara') {
         ssn++;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${ssn})\\ \\ ${text}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${ssn})\\ ${text}\n\n`;
       } else if (p.type === 'subsubsubpara') {
         sssn++;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${LETTERS[sssn - 1]})\\ \\ ${text}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${LETTERS[sssn - 1]})\\ ${text}\n\n`;
       }
     }
   }
