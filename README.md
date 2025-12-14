@@ -50,12 +50,17 @@ A major architecture overhaul is in progress! Check the `v2` branch for the late
 - **Auto Seal** - Department of War seal loads automatically (no more upload needed)
 - **2,240 SSIC Codes** - Complete database from SECNAV M-5210.2 (August 2018)
 - **230 Units** - Expanded unit database with full addresses
+- **Memorandum Format** - New document type for internal correspondence
+- **Dark Mode** - Theme toggle with system preference detection, saved to localStorage
+- **Print Button** - Print directly from browser (opens PDF in new tab)
+- **Accessibility** - ARIA labels, keyboard navigation, skip links, focus styles
+- **PWA Support** - Install to home screen, works offline via service worker
 
 **Architecture Improvements:**
 - Modular JavaScript (7 separate files instead of monolithic HTML)
 - External CSS and JSON data files
 - Build script for single-file distribution
-- 67 automated unit tests
+- 111 automated unit tests
 - Proper separation of concerns
 
 **Bug Fixes:**
@@ -283,7 +288,7 @@ We're actively working on improvements. Current known issues:
 - [ ] Direct PDF may have minor spacing differences from LaTeX output on complex multi-page letters
 - [x] ~~Seal images only work through the Overleaf/ZIP workflow~~ **Fixed in v1.2!**
 - [x] ~~No save/load functionality yet (refresh = start over)~~ **Fixed in v2.0!** (auto-save + export/import)
-- [x] ~~Single letter format only (no endorsements or memoranda yet)~~ **Endorsements added in v1.2!**
+- [x] ~~Single letter format only (no endorsements or memoranda yet)~~ **Endorsements in v1.2, Memoranda in v2.0!**
 
 **See something else?** [Report it here](https://github.com/jeranaias/navalletterformat/issues)
 
@@ -298,12 +303,12 @@ We're prioritizing based on user feedback.
 - [x] ~~Save/load letter drafts (localStorage)~~ **Done in v2.0!**
 - [x] ~~Seal support in direct PDF generation~~ **Done!**
 - [x] ~~Endorsement letter format~~ **Done!**
-- [ ] Memorandum format
+- [x] ~~Memorandum format~~ **Done in v2.0!**
 - [x] ~~More units and SSICs (request yours!)~~ **Done in v2.0!** (2,240 SSICs, 230 units)
-- [ ] Print directly from browser
-- [ ] Dark mode (for the night shift)
+- [x] ~~Print directly from browser~~ **Done in v2.0!**
+- [x] ~~Dark mode (for the night shift)~~ **Done in v2.0!**
 
-### v2.0 - Architecture Overhaul *(In Progress - see v2 branch)*
+### v2.0 - Architecture Overhaul *(Complete - see v2 branch)*
 
 A complete rewrite focused on maintainability and scalability:
 
@@ -311,10 +316,15 @@ A complete rewrite focused on maintainability and scalability:
 - [x] **SSIC Database (Full Manual)** - 2,240 codes from SECNAV M-5210.2 (August 2018 edition)
 - [x] **Complete Unit Database** - 230 USMC/USN/DOD units with full addresses
 - [x] **Modular Component Architecture** - Separate modules for utils, data, forms, PDF, LaTeX, and drafts
-- [x] **Unit Tests** - 67 automated tests with Jest (formatting, PDF output, utilities)
+- [x] **Unit Tests** - 111 automated tests with Jest (formatting, PDF output, utilities)
 - [x] **Build Pipeline** - `node build.js` creates single-file portable distribution with embedded assets
 - [x] **Draft Save/Load** - Auto-save to localStorage, export/import JSON files
 - [x] **Auto Seal** - Department of War seal loads automatically (base64 embedded in build)
+- [x] **Memorandum Format** - Internal correspondence document type
+- [x] **Dark Mode** - Theme toggle with system preference detection
+- [x] **Print Button** - Direct browser printing via new tab
+- [x] **Accessibility** - ARIA labels, keyboard nav, skip links, reduced motion support
+- [x] **PWA Support** - Service worker, manifest, installable to home screen
 
 > **Note:** v1.x will remain available as the "it just works" single-file version. The v2.0 build script produces a single-file distribution (`dist/naval-letter.html`) that works exactly like v1.x - save it and run offline forever without dependencies.
 
