@@ -393,6 +393,213 @@ async function generatePDF() {
   showStatus('success', 'Downloaded ' + filename);
 }
 
+
+/**
+ * Generate PDF and open print dialog
+ */
+async function printPDF() {
+  const { jsPDF } = window.jspdf;
+  const d = collectData();
+
+  showStatus('loading', 'Preparing print preview...');
+
+  // Generate the PDF using same logic as generatePDF
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+  const PW = 612, PH = 792, ML = 72, MR = 72, MT = 72, MB = 72;
+  const CW = PW - ML - MR, LH = 14, TAB = 45;
+  const IM = 14, IS = 14, ISS = 14, ISSS = 14;
+  let y = 54, pageNum = 1;
+  const subjText = d.subj.toUpperCase();
+
+  function pageBreak(need) {
+    if (y + need > PH - MB) {
+      pdf.addPage();
+      pageNum++;
+      y = MT;
+      pdf.setFont('times', 'normal');
+      pdf.setFontSize(12);
+      pdf.text('Subj:', ML, y);
+      const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
+      subjLines.forEach((line) => { pdf.text(line, ML + TAB, y); y += LH; });
+      y += LH;
+    }
+  }
+
+  if (d.classification) {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text(d.classification, PW / 2, y, { align: 'center' });
+    y += LH + 4;
+  }
+
+  if (d.documentType === 'memorandum') {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
+    y += LH * 2;
+  }
+
+  if (d.useLetterhead) {
+    if (d.hasSeal && d.sealData) {
+      try { pdf.addImage(d.sealData, 'JPEG', 36, 36, 72, 72); } catch (e) {}
+    }
+    if (d.unitName) {
+      pdf.setFont('times', 'bold');
+      pdf.setFontSize(10);
+      pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
+      y += 11;
+    }
+    if (d.unitAddress) {
+      pdf.setFont('times', 'normal');
+      pdf.setFontSize(8);
+      d.unitAddress.split('\n').filter(l => l.trim()).forEach(line => {
+        pdf.text(line.trim(), PW / 2, y, { align: 'center' });
+        y += 9;
+      });
+    }
+    y += LH * 2;
+  }
+
+  pdf.setFont('times', 'normal');
+  pdf.setFontSize(12);
+  const senderX = PW - MR - 72;
+  if (d.ssic) { pdf.text(d.ssic, senderX, y); y += LH; }
+  if (d.officeCode) { pdf.text(d.officeCode, senderX, y); y += LH; }
+  pdf.text(d.date, senderX, y);
+  y += LH * 2;
+
+  if (d.documentType === 'endorsement') {
+    pdf.setFont('times', 'bold');
+    pdf.text(d.endorseNumber + ' ENDORSEMENT', PW / 2, y, { align: 'center' });
+    y += LH * 2;
+    pdf.setFont('times', 'normal');
+  }
+
+  pdf.text('From:', ML, y);
+  pdf.splitTextToSize(d.from, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+  pdf.text('To:', ML, y);
+  pdf.splitTextToSize(d.to, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+
+  if (d.via.length > 0) {
+    pdf.text('Via:', ML, y);
+    d.via.forEach((v, i) => {
+      const viaText = d.via.length > 1 ? '(' + (i + 1) + ')  ' + v : v;
+      pdf.splitTextToSize(viaText, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+    });
+  }
+
+  y += LH;
+  pageBreak(LH * 2);
+  pdf.text('Subj:', ML, y);
+  pdf.splitTextToSize(subjText, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+
+  if (d.refs.length > 0) {
+    y += LH;
+    pageBreak(LH * (d.refs.length + 1));
+    pdf.text('Ref:', ML, y);
+    d.refs.forEach((r, i) => {
+      pdf.splitTextToSize('(' + LETTERS[i] + ')  ' + r, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+    });
+  }
+
+  if (d.encls.length > 0) {
+    y += LH;
+    pageBreak(LH * (d.encls.length + 1));
+    pdf.text('Encl:', ML, y);
+    d.encls.forEach((e, i) => {
+      pdf.splitTextToSize('(' + (i + 1) + ')  ' + e, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+    });
+  }
+
+  if (d.paras.length > 0) {
+    let pn = 0, sn = 0, ssn = 0, sssn = 0;
+    for (let pIdx = 0; pIdx < d.paras.length; pIdx++) {
+      const p = d.paras[pIdx];
+      const pText = ensureDoubleSpaces(p.text);
+      y += LH;
+      let label, indent;
+      if (p.type === 'para') { pn++; sn = 0; ssn = 0; sssn = 0; label = pn + '.'; indent = 0; }
+      else if (p.type === 'subpara') { sn++; ssn = 0; sssn = 0; label = LETTERS[sn - 1] + '.'; indent = IM; }
+      else if (p.type === 'subsubpara') { ssn++; sssn = 0; label = '(' + ssn + ')'; indent = IM + IS; }
+      else { sssn++; label = '(' + LETTERS[sssn - 1] + ')'; indent = IM + IS + ISS; }
+      const lx = ML + indent;
+      const labelWidth = pdf.getTextWidth(label);
+      const tx = lx + labelWidth + 4;
+      pageBreak(LH * 2);
+      pdf.text(label, lx, y);
+      if (p.subject && p.type === 'para') {
+        const rightEdge = PW - MR;
+        const subjectWidth = Math.min(pdf.getTextWidth(p.subject), rightEdge - tx - 6);
+        pdf.text(p.subject, tx, y);
+        pdf.setLineWidth(0.5);
+        pdf.line(tx, y + 2, tx + subjectWidth, y + 2);
+        y += LH;
+        if (pText) {
+          pdf.splitTextToSize(pText, CW).forEach(line => { pageBreak(LH); pdf.text(line, ML, y); y += LH; });
+        }
+      } else {
+        const lines = pdf.splitTextToSize(pText, CW - indent - labelWidth - 4);
+        pdf.text(lines[0] || '', tx, y);
+        y += LH;
+        if (lines.length > 1) {
+          const remaining = pText.substring(lines[0].length).trim();
+          if (remaining) {
+            pdf.splitTextToSize(remaining, CW).forEach(line => { pageBreak(LH); pdf.text(line, ML, y); y += LH; });
+          }
+        }
+      }
+    }
+  }
+
+  if (d.sigName) {
+    y += LH * 4;
+    pdf.text(d.sigName.toUpperCase(), PW / 2, y);
+    y += LH;
+    if (d.byDirection) { pdf.text('By direction', PW / 2, y); y += LH; }
+  }
+
+  if (d.copies.length > 0) {
+    y += LH * 2;
+    pdf.text('Copy to:', ML, y);
+    y += LH;
+    d.copies.forEach(c => { pdf.text(c, ML, y); y += LH; });
+  }
+
+  if (d.classification) {
+    for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
+      pdf.setPage(i);
+      pdf.setFont('times', 'bold');
+      pdf.setFontSize(12);
+      pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
+    }
+  }
+
+  if (pdf.getNumberOfPages() > 1) {
+    const pageNumY = d.classification ? PH - 50 : PH - 36;
+    for (let i = 2; i <= pdf.getNumberOfPages(); i++) {
+      pdf.setPage(i);
+      pdf.setFont('times', 'normal');
+      pdf.setFontSize(12);
+      pdf.text(String(i), PW / 2, pageNumY, { align: 'center' });
+    }
+  }
+
+  // Open PDF in new window for printing
+  const pdfBlob = pdf.output('blob');
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+  const printWindow = window.open(pdfUrl, '_blank');
+
+  if (printWindow) {
+    printWindow.onload = function() {
+      printWindow.focus();
+      setTimeout(function() { printWindow.print(); }, 500);
+    };
+    showStatus('success', 'Print preview opened in new tab');
+  } else {
+    showStatus('error', 'Popup blocked - please allow popups and try again');
+  }
+}
+
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
