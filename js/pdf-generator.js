@@ -245,7 +245,15 @@ async function generatePDF() {
         tIndent = ISSS;
       }
 
-      const lx = ML + indent;
+      // Add portion marking if enabled
+      let portionMark = '';
+      let portionWidth = 0;
+      if (d.portionMarkingEnabled && p.portionMark) {
+        portionMark = `(${p.portionMark}) `;
+        portionWidth = pdf.getTextWidth(portionMark);
+      }
+
+      const lx = ML + indent + portionWidth;
       const labelWidth = pdf.getTextWidth(label);
       const tx = lx + labelWidth + 4;  // Single space gap after label
       const firstLineWidth = CW - indent - labelWidth - 4;
@@ -284,6 +292,14 @@ async function generatePDF() {
       }
 
       pageBreak(LH * 2);
+
+      // Draw portion marking if enabled
+      if (portionMark) {
+        pdf.setFont('times', 'bold');
+        pdf.text(portionMark, ML + indent, y);
+        pdf.setFont('times', 'normal');
+      }
+
       pdf.text(label, lx, y);
 
       // Check for explicit paragraph subject (only for top-level paragraphs)
