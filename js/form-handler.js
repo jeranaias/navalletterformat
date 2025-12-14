@@ -65,6 +65,26 @@ function selectDocType(type) {
 }
 
 /**
+ * Select memo style (plain paper vs letterhead)
+ */
+function selectMemoStyle(isFormal) {
+  const hiddenInput = document.getElementById('formalMemo');
+  if (hiddenInput) {
+    hiddenInput.value = isFormal ? 'true' : 'false';
+  }
+
+  // Update toggle UI
+  document.querySelectorAll('.memo-option').forEach(opt => {
+    const optFormal = opt.dataset.formal === 'true';
+    opt.classList.toggle('selected', optFormal === isFormal);
+    opt.setAttribute('aria-checked', optFormal === isFormal);
+  });
+
+  // Update letterhead visibility
+  updateLetterheadVisibility();
+}
+
+/**
  * Toggle portion marking option visibility based on classification
  */
 function togglePortionMarking() {
@@ -124,9 +144,10 @@ function updateLetterheadVisibility() {
   if (!letterheadSection) return;
 
   if (documentType === 'memorandum') {
-    // For memos, show letterhead only if formal memo is checked
+    // For memos, show letterhead only if formal memo is selected
     const formalMemo = document.getElementById('formalMemo');
-    letterheadSection.style.display = (formalMemo && formalMemo.checked) ? 'block' : 'none';
+    const isFormal = formalMemo && formalMemo.value === 'true';
+    letterheadSection.style.display = isFormal ? 'block' : 'none';
   } else {
     // For basic letters and endorsements, always show letterhead
     letterheadSection.style.display = 'block';
@@ -476,7 +497,7 @@ function collectParagraphData() {
 function collectData() {
   // For memos, check if formal letterhead is requested
   const formalMemo = document.getElementById('formalMemo');
-  const isFormalMemo = documentType === 'memorandum' && formalMemo && formalMemo.checked;
+  const isFormalMemo = documentType === 'memorandum' && formalMemo && formalMemo.value === 'true';
 
   return {
     documentType,
@@ -484,7 +505,7 @@ function collectData() {
     officeCode: document.getElementById('officeCode').value.trim(),
     date: document.getElementById('date').value.trim(),
     classification: document.getElementById('classification').value,
-    branch: document.querySelector('input[name="branch"]:checked').value,
+    branch: 'USMC', // Marine Corps only
     // Letterhead: always for basic/endorsement, optional for memo (formal only)
     useLetterhead: documentType !== "memorandum" || isFormalMemo,
     isFormalMemo, // Track if this is a formal letterhead memo
@@ -536,12 +557,6 @@ async function initFormListeners() {
 
   // Set today's date
   document.getElementById('date').value = getTodayFormatted();
-
-  // Formal memo checkbox - toggle letterhead visibility
-  const formalMemoCheckbox = document.getElementById('formalMemo');
-  if (formalMemoCheckbox) {
-    formalMemoCheckbox.addEventListener('change', updateLetterheadVisibility);
-  }
 
   // Portion marking checkbox
   const portionCheckbox = document.getElementById('enablePortionMarking');

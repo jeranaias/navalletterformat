@@ -110,7 +110,7 @@
     </header>
 
     <p class="intro-link">
-      Free tool for Marines &amp; Sailors · <a href="https://github.com/jeranaias/navalletterformat#readme" target="_blank">Full Guide &amp; Documentation →</a>
+      Free tool for Marines · <a href="https://github.com/jeranaias/navalletterformat#readme" target="_blank">Full Guide &amp; Documentation →</a>
     </p>
 
     <form id="letterForm" role="form" aria-label="Naval letter form">
@@ -130,6 +130,28 @@
             <h3>Memorandum</h3>
             <p>Internal correspondence</p>
           </div>
+        </div>
+
+        <!-- Memorandum Style (shown when memorandum selected) -->
+        <div id="memorandumFields" style="display: none; margin-top: 16px; text-align: center;">
+          <label style="font-weight: 600; margin-bottom: 8px; display: block;">Memorandum Style</label>
+          <div class="memo-style-toggle" style="justify-content: center;">
+            <div class="memo-option selected" data-formal="false" onclick="selectMemoStyle(false)" tabindex="0" role="radio" aria-checked="true">
+              <span class="memo-option-title">Plain Paper</span>
+              <span class="memo-option-desc">Internal use</span>
+            </div>
+            <div class="memo-option" data-formal="true" onclick="selectMemoStyle(true)" tabindex="0" role="radio" aria-checked="false">
+              <span class="memo-option-title">Letterhead</span>
+              <span class="memo-option-desc">External/formal</span>
+            </div>
+          </div>
+          <input type="hidden" id="formalMemo" value="false">
+        </div>
+
+        <!-- Quick Actions Toolbar -->
+        <div class="quick-toolbar">
+          <button type="button" id="templateBtn" class="btn btn-secondary">Templates</button>
+          <button type="button" id="previewToggle" class="btn btn-primary">Live Preview</button>
         </div>
       </div>
 
@@ -169,15 +191,6 @@
             </label>
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Branch</label>
-            <div class="branch-toggle">
-              <label><input type="radio" name="branch" value="USMC" checked> USMC</label>
-              <label><input type="radio" name="branch" value="USN"> USN</label>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Letterhead -->
@@ -197,7 +210,7 @@
           <div class="form-row">
             <div class="form-group">
               <label>Service/Organization</label>
-              <input type="text" id="unitName" aria-label="Service or organization name" placeholder="UNITED STATES MARINE CORPS">
+              <input type="text" id="unitName" aria-label="Service or organization name" value="UNITED STATES MARINE CORPS">
             </div>
           </div>
           <div class="form-row">
@@ -259,20 +272,6 @@
               <option value="Forwarded, recommending disapproval">Forwarded, recommending disapproval</option>
             </select>
           </div>
-        </div>
-      </div>
-
-      <!-- Memorandum Fields -->
-      <div class="form-section" id="memorandumFields" style="display: none;">
-        <h2 class="section-title">Memorandum Options</h2>
-        <div class="form-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="formalMemo">
-            <span>Use formal letterhead (Letterhead Memorandum per SECNAV M-5216.5 Figure 10-4)</span>
-          </label>
-          <p class="help-text" style="margin-top: 5px; font-size: 0.85em; color: var(--gray);">
-            Check this for external correspondence. Leave unchecked for internal plain-paper memos.
-          </p>
         </div>
       </div>
 
@@ -351,38 +350,23 @@
 
     <!-- Actions -->
     <div class="actions-bar">
-      <div class="actions">
-        <button type="button" id="templateBtn" class="btn btn-secondary">Templates</button>
-        <button type="button" id="previewToggle" class="btn btn-primary">Live Preview</button>
-        <button type="button" class="btn btn-success" onclick="generatePDF()">Download PDF</button>
+      <div class="actions actions-primary">
+        <button type="button" class="btn btn-success btn-large" onclick="generatePDF()">Download PDF</button>
         <button type="button" class="btn btn-secondary" onclick="printPDF()">Print</button>
-        <button type="button" class="btn btn-secondary" onclick="previewTex()">Preview LaTeX</button>
+      </div>
+      <div class="actions actions-secondary">
         <button type="button" class="btn btn-secondary" onclick="downloadTex()">Download .tex</button>
         <button type="button" class="btn btn-secondary" onclick="downloadZip()">Download ZIP</button>
-        <button type="button" class="btn btn-primary" onclick="openInOverleafDirect()">Open in Overleaf</button>
-      </div>
-      <div class="actions" style="margin-top: 8px;">
         <button type="button" class="btn btn-secondary" onclick="exportDraft()">Save Draft</button>
         <button type="button" class="btn btn-secondary" onclick="importDraft()">Load Draft</button>
       </div>
     </div>
 
-    <div class="info-box">
-      <strong>Quick:</strong> "Download PDF" for instant results &nbsp;|&nbsp;
-      <strong>Advanced:</strong> Use Overleaf for precise LaTeX control
-    </div>
-
     <!-- Status -->
     <div id="status" class="status"></div>
 
-    <!-- Preview -->
-    <div id="previewSection" class="preview-section">
-      <h3>Generated LaTeX Code</h3>
-      <div id="previewContent" class="preview-content"></div>
-    </div>
-
     <footer role="contentinfo">
-      <p><strong>Naval Letter Generator v2.0</strong> · SECNAV M-5216.5</p>
+      <p><strong>Naval Letter Generator v3.0</strong> · SECNAV M-5216.5</p>
       <p>Created by Jesse Morgan · Personal project, not officially endorsed</p>
       <p><a href="https://github.com/jeranaias/navalletterformat">GitHub</a> · <a href="https://github.com/jeranaias/navalletterformat/issues">Report Issues</a></p>
     </footer>

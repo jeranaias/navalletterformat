@@ -53,48 +53,32 @@ function handleUndoRedoKeyboard(e) {
  * Get current paragraph state
  */
 function getParagraphState() {
-  // Get paragraph data from the form
+  // Get paragraph data from the form (preferred - uses flat structure)
   if (typeof collectParagraphData === 'function') {
     return JSON.stringify(collectParagraphData());
   }
 
-  // Fallback: manually collect paragraph data
+  // Fallback: manually collect paragraph data (flat structure)
   const container = document.getElementById('paraContainer');
   if (!container) return null;
 
   const state = [];
-  const paraItems = container.querySelectorAll('.para-item[data-level="0"]');
+  const paraItems = container.querySelectorAll('.para-item');
 
   paraItems.forEach(item => {
-    state.push(collectParagraphItemState(item));
+    const textarea = item.querySelector('textarea');
+    const subjectInput = item.querySelector('.para-subject-input');
+    const portionSelector = item.querySelector('.portion-selector');
+
+    state.push({
+      type: item.dataset.type || 'para',
+      text: textarea ? textarea.value : '',
+      subject: subjectInput ? subjectInput.value : '',
+      portionMark: portionSelector ? portionSelector.value : 'U'
+    });
   });
 
   return JSON.stringify(state);
-}
-
-/**
- * Collect state from a paragraph item
- */
-function collectParagraphItemState(item) {
-  const textarea = item.querySelector('textarea');
-  const subjectInput = item.querySelector('.para-subject');
-
-  const result = {
-    text: textarea ? textarea.value : '',
-    subject: subjectInput ? subjectInput.value : '',
-    children: []
-  };
-
-  // Collect children
-  const childContainer = item.querySelector('.para-children');
-  if (childContainer) {
-    const children = childContainer.querySelectorAll(':scope > .para-item');
-    children.forEach(child => {
-      result.children.push(collectParagraphItemState(child));
-    });
-  }
-
-  return result;
 }
 
 /**
@@ -143,10 +127,15 @@ function restoreParagraphState(stateJson) {
       paragraphs.length = 0;
     }
 
-    // Rebuild paragraphs from state
-    state.forEach((paraData, index) => {
-      rebuildParagraph(container, paraData, 0, index + 1);
+    // Rebuild paragraphs from state (flat structure with type property)
+    state.forEach((paraData) => {
+      rebuildParagraphFromFlat(container, paraData);
     });
+
+    // Update paragraph labels (numbering)
+    if (typeof updateParaLabels === 'function') {
+      updateParaLabels();
+    }
 
     // Trigger preview update if enabled
     if (typeof schedulePreviewUpdate === 'function') {
@@ -161,55 +150,58 @@ function restoreParagraphState(stateJson) {
 }
 
 /**
- * Rebuild a paragraph from state data
+ * Rebuild a paragraph from flat state data (type property indicates level)
  */
-function rebuildParagraph(container, paraData, level, index) {
-  // Use existing addParagraph function if available
-  if (typeof addParagraphToContainer === 'function') {
-    const paraItem = addParagraphToContainer(container, level, paraData.text, paraData.subject);
+function rebuildParagraphFromFlat(container, paraData) {
+  const type = paraData.type || 'para';
+  const types = ['para', 'subpara', 'subsubpara', 'subsubsubpara'];
+  const level = types.indexOf(type);
 
-    // Rebuild children recursively
-    if (paraData.children && paraData.children.length > 0) {
-      const childContainer = paraItem.querySelector('.para-children') || createChildContainer(paraItem);
-      paraData.children.forEach((childData, childIndex) => {
-        rebuildParagraph(childContainer, childData, level + 1, childIndex + 1);
-      });
-    }
-
-    return paraItem;
-  }
-
-  // Fallback: create paragraph element manually
   const paraItem = document.createElement('div');
   paraItem.className = 'para-item';
-  paraItem.setAttribute('data-level', level);
+  paraItem.dataset.type = type;
   paraItem.draggable = true;
 
-  const labels = ['1.', 'a.', '(1)', '(a)'];
-  const label = labels[Math.min(level, 3)];
+  // Subject field only for top-level paragraphs
+  const subjectField = type === 'para' ? `
+    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" value="${escapeHtml(paraData.subject || '')}" />
+  ` : '';
 
-  paraItem.innerHTML = `
-    <div class="para-header">
-      <span class="para-label">${label}</span>
-      <div class="para-controls">
-        <button type="button" class="para-btn" onclick="addSubPara(this)" title="Add sub-paragraph">+Sub</button>
-        <button type="button" class="para-btn para-btn-danger" onclick="removePara(this)" title="Remove">&times;</button>
-      </div>
-    </div>
-    ${level === 0 ? `<input type="text" class="para-subject" placeholder="Paragraph subject (optional)" value="${escapeHtml(paraData.subject || '')}">` : ''}
-    <textarea placeholder="Enter paragraph text..." rows="3">${escapeHtml(paraData.text || '')}</textarea>
-    <div class="para-children"></div>
+  // Portion marking selector (hidden by default, shown when enabled)
+  const portionDisplay = (typeof portionMarkingEnabled !== 'undefined' && portionMarkingEnabled) ? 'inline-block' : 'none';
+  const portionValue = paraData.portionMark || 'U';
+  const portionSelector = `
+    <select class="portion-selector" style="display: ${portionDisplay};" title="Portion marking">
+      <option value="U" ${portionValue === 'U' ? 'selected' : ''}>(U)</option>
+      <option value="CUI" ${portionValue === 'CUI' ? 'selected' : ''}>(CUI)</option>
+      <option value="FOUO" ${portionValue === 'FOUO' ? 'selected' : ''}>(FOUO)</option>
+    </select>
   `;
 
-  container.appendChild(paraItem);
+  paraItem.innerHTML = `
+    <div class="para-left-controls">
+      <span class="drag-handle" title="Drag to reorder">☰</span>
+      <div class="para-inline-actions">
+        <button type="button" class="para-action-btn" onclick="addSibling(this)" title="Add paragraph below">+</button>
+        <button type="button" class="para-action-btn" onclick="addChild(this)" title="Add sub-paragraph" ${level >= 3 ? 'disabled' : ''}>↳</button>
+        <button type="button" class="para-action-btn para-action-delete" onclick="removePara(this)" title="Delete paragraph">×</button>
+      </div>
+    </div>
+    <div class="para-main">
+      ${portionSelector}
+      <span class="para-label"></span>
+      ${subjectField}
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text...">${escapeHtml(paraData.text || '')}</textarea>
+    </div>
+  `;
 
-  // Rebuild children
-  if (paraData.children && paraData.children.length > 0) {
-    const childContainer = paraItem.querySelector('.para-children');
-    paraData.children.forEach((childData, childIndex) => {
-      rebuildParagraph(childContainer, childData, level + 1, childIndex + 1);
-    });
-  }
+  // Add drag-drop event listeners
+  paraItem.addEventListener('dragstart', handleDragStart);
+  paraItem.addEventListener('dragover', handleDragOver);
+  paraItem.addEventListener('drop', handleDrop);
+  paraItem.addEventListener('dragend', handleDragEnd);
+
+  container.appendChild(paraItem);
 
   return paraItem;
 }
