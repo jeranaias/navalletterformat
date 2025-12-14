@@ -304,87 +304,79 @@ async function generatePDFBlob() {
     y += LH * 2;
   }
 
-  // Body paragraphs
-  function renderParagraph(para, level, parentNum) {
-    const labels = ['', 'a', '(1)', '(a)'];
-    const prefixes = ['', '', '    ', '        '];
+  // Body paragraphs (flat structure with type: para, subpara, subsubpara, subsubsubpara)
+  if (d.paras && d.paras.length > 0) {
+    let pn = 0, sn = 0, ssn = 0, sssn = 0;
 
-    let label = '';
-    if (level === 0) {
-      label = `${parentNum}.`;
-    } else if (level === 1) {
-      label = `${String.fromCharCode(96 + para.index)}.`;
-    } else if (level === 2) {
-      label = `(${para.index})`;
-    } else if (level === 3) {
-      label = `(${String.fromCharCode(96 + para.index)})`;
-    }
+    d.paras.forEach((p) => {
+      const pText = p.text || '';
+      let label, indent;
 
-    const indent = level * 28;
-    const labelWidth = pdf.getTextWidth(label) + 4;
-
-    pageBreak(LH * 2);
-
-    // Paragraph subject (if present)
-    if (para.subject && level === 0) {
-      pdf.setFont('times', 'normal');
-      pdf.text(label, ML + indent, y);
-      pdf.setFont('times', 'bold');
-      const subjX = ML + indent + labelWidth;
-      const maxSubjWidth = CW - indent - labelWidth;
-      let displaySubj = para.subject;
-      if (pdf.getTextWidth(displaySubj) > maxSubjWidth) {
-        while (pdf.getTextWidth(displaySubj + '...') > maxSubjWidth && displaySubj.length > 0) {
-          displaySubj = displaySubj.slice(0, -1);
-        }
-        displaySubj += '...';
+      if (p.type === 'para') {
+        pn++;
+        sn = 0; ssn = 0; sssn = 0;
+        label = pn + '.';
+        indent = 0;
+      } else if (p.type === 'subpara') {
+        sn++;
+        ssn = 0; sssn = 0;
+        label = String.fromCharCode(96 + sn) + '.';
+        indent = IM;
+      } else if (p.type === 'subsubpara') {
+        ssn++;
+        sssn = 0;
+        label = '(' + ssn + ')';
+        indent = IM + IS;
+      } else {
+        sssn++;
+        label = '(' + String.fromCharCode(96 + sssn) + ')';
+        indent = IM + IS + ISS;
       }
-      pdf.text(displaySubj, subjX, y);
-      const underlineY = y + 2;
-      pdf.setLineWidth(0.5);
-      pdf.line(subjX, underlineY, subjX + pdf.getTextWidth(displaySubj), underlineY);
-      y += LH;
-      pdf.setFont('times', 'normal');
-    }
 
-    // Paragraph text
-    if (para.text) {
-      const textX = ML + indent + labelWidth;
+      const lx = ML + indent;
+      const labelWidth = pdf.getTextWidth(label) + 4;
+      const tx = lx + labelWidth;
       const textWidth = CW - indent - labelWidth;
-      const lines = pdf.splitTextToSize(para.text, textWidth);
 
-      pdf.setFont('times', 'normal');
-      if (!para.subject || level !== 0) {
-        pdf.text(label, ML + indent, y);
-      }
-
-      lines.forEach((line, i) => {
-        pageBreak(LH);
-        if (i === 0 && (!para.subject || level !== 0)) {
-          pdf.text(line, textX, y);
-        } else if (i === 0 && para.subject && level === 0) {
-          pdf.text(line, ML + indent, y);
-        } else {
-          pdf.text(line, ML + indent, y);
-        }
-        y += LH;
-      });
-    }
-
-    // Render children
-    if (para.children && para.children.length > 0) {
-      para.children.forEach((child, i) => {
-        child.index = i + 1;
-        renderParagraph(child, level + 1, parentNum);
-      });
-    }
-  }
-
-  if (d.paragraphs && d.paragraphs.length > 0) {
-    d.paragraphs.forEach((para, i) => {
-      para.index = i + 1;
-      renderParagraph(para, 0, i + 1);
       y += LH;
+      pageBreak(LH * 2);
+
+      // Draw label
+      pdf.setFont('times', 'normal');
+      pdf.text(label, lx, y);
+
+      // Paragraph subject (only for top-level)
+      if (p.subject && p.type === 'para') {
+        pdf.setFont('times', 'bold');
+        pdf.text(p.subject, tx, y);
+        pdf.setLineWidth(0.5);
+        pdf.line(tx, y + 2, tx + pdf.getTextWidth(p.subject), y + 2);
+        y += LH;
+        pdf.setFont('times', 'normal');
+
+        if (pText) {
+          const lines = pdf.splitTextToSize(pText, CW);
+          lines.forEach((line) => {
+            pageBreak(LH);
+            pdf.text(line, ML, y);
+            y += LH;
+          });
+        }
+      } else {
+        // Regular paragraph text
+        if (pText) {
+          const lines = pdf.splitTextToSize(pText, textWidth);
+          lines.forEach((line, i) => {
+            if (i === 0) {
+              pdf.text(line, tx, y);
+            } else {
+              pdf.text(line, ML, y);
+            }
+            y += LH;
+            pageBreak(LH);
+          });
+        }
+      }
     });
   }
 
@@ -406,13 +398,13 @@ async function generatePDFBlob() {
   }
 
   // Copy to
-  if (d.copyTo && d.copyTo.length > 0) {
+  if (d.copies && d.copies.length > 0) {
     y += LH * 3;
-    pageBreak(LH * (d.copyTo.length + 1));
+    pageBreak(LH * (d.copies.length + 1));
     pdf.setFont('times', 'normal');
     pdf.text('Copy to:', ML, y);
     y += LH;
-    d.copyTo.forEach(c => {
+    d.copies.forEach(c => {
       pdf.text(c, ML + 36, y);
       y += LH;
     });
