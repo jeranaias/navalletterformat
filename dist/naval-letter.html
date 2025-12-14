@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-14T00:47:16.140Z
+  Built: 2025-12-14T01:18:04.559Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -2310,8 +2310,9 @@ async function generatePDF() {
       }
 
       const lx = ML + indent;
-      const tx = lx + tIndent;
-      const firstLineWidth = CW - indent - tIndent;
+      const labelWidth = pdf.getTextWidth(label);
+      const tx = lx + labelWidth + 8;  // 8pt gap after label
+      const firstLineWidth = CW - indent - labelWidth - 8;
       const wrapWidth = CW;
 
       // Calculate total lines this paragraph will need
