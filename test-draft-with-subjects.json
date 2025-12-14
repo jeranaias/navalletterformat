@@ -1,0 +1,152 @@
+{
+  "version": "2.0",
+  "savedAt": "2024-12-13T12:00:00.000Z",
+  "docType": "basic",
+  "ssic": "1000",
+  "officeCode": "CO",
+  "date": "13 Dec 24",
+  "classification": "",
+  "branch": "USMC",
+  "unitName": "UNITED STATES MARINE CORPS",
+  "unitAddress": "MARINE CORPS BASE\nCAMP PENDLETON, CA 92055-5001",
+  "from": "Commanding General, I Marine Expeditionary Force",
+  "to": "Commandant of the Marine Corps (PP&O)",
+  "subj": "ANNUAL TRAINING AND READINESS ASSESSMENT FOR FISCAL YEAR 2025",
+  "endorseNumber": "FIRST",
+  "endorseAction": "Forwarded",
+  "viaList": [
+    "Commander, U.S. Marine Corps Forces Pacific"
+  ],
+  "refList": [
+    "MCO 3000.18B",
+    "MCO 3501.2E",
+    "CJCS GUIDANCE FOR FY25 TRAINING",
+    "I MEF OPORD 01-25"
+  ],
+  "enclList": [
+    "Training Readiness Summary",
+    "Equipment Status Report",
+    "Personnel Manning Document",
+    "Risk Assessment Matrix"
+  ],
+  "paragraphs": [
+    {
+      "type": "para",
+      "subject": "Purpose.",
+      "text": "This letter provides the annual training and readiness assessment for I Marine Expeditionary Force (I MEF) in accordance with reference (a). The assessment covers all training activities conducted during Fiscal Year 2024 and outlines projected training requirements and readiness goals for Fiscal Year 2025."
+    },
+    {
+      "type": "para",
+      "subject": "Background.",
+      "text": "I MEF serves as the Marine Corps' premier crisis response force in the Pacific theater, maintaining forward-deployed forces capable of rapid response to contingencies across the Indo-Pacific region. The command comprises over 45,000 Marines and Sailors organized into ground, air, and logistics combat elements, supported by a robust command element capable of commanding and controlling joint and combined operations."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "During Fiscal Year 2024, I MEF participated in 12 major exercises with allies and partners, including bilateral training with Japan, Republic of Korea, Australia, and the Philippines. These exercises validated interoperability procedures and strengthened alliance relationships critical to regional stability."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "The command also responded to three real-world contingencies requiring rapid deployment of Marine Air-Ground Task Forces, demonstrating the flexibility and responsiveness that define Marine Corps expeditionary capabilities."
+    },
+    {
+      "type": "para",
+      "subject": "Current Readiness.",
+      "text": "Enclosure (1) provides a detailed breakdown of training readiness across all warfare areas. Overall, I MEF maintains a high state of readiness suitable for deployment in support of operational plans. However, several areas require continued emphasis and resource allocation to sustain current readiness levels."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Ground combat element readiness remains strong, with all infantry battalions having completed their required training progressions and maintaining deployment certification. Artillery units have achieved qualification rates exceeding 95 percent across all weapons systems."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Aviation combat element readiness has improved significantly following the introduction of new maintenance procedures and increased parts availability. Flight hour execution rates have increased by 12 percent compared to the previous fiscal year."
+    },
+    {
+      "type": "subsubpara",
+      "subject": "",
+      "text": "Rotary wing assets maintain the highest readiness rates, with CH-53E and UH-1Y communities exceeding mission capable rate goals for six consecutive months."
+    },
+    {
+      "type": "subsubpara",
+      "subject": "",
+      "text": "Fixed wing readiness continues to improve as F-35B integration matures and maintenance personnel gain proficiency with fifth-generation aircraft systems."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Logistics combat element readiness remains adequate, though continued investment in expeditionary logistics capabilities is essential to support distributed maritime operations as outlined in current operational concepts."
+    },
+    {
+      "type": "para",
+      "subject": "Equipment Status.",
+      "text": "Enclosure (2) details equipment readiness across all major end items. Equipment availability has improved following focused maintenance efforts and timely receipt of repair parts through enhanced supply chain management initiatives."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Ground equipment availability rates average 87 percent across the command, exceeding the Marine Corps standard of 85 percent. Light armored vehicles and assault amphibious vehicles remain priorities for depot-level maintenance scheduling."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Communication and information systems readiness has been enhanced through modernization efforts, with 90 percent of units now fielding current-generation tactical radios and data systems."
+    },
+    {
+      "type": "para",
+      "subject": "Personnel Readiness.",
+      "text": "Enclosure (3) provides manning data for all subordinate commands. Personnel readiness remains the most significant challenge facing the command, with critical military occupational specialties experiencing shortfalls that impact unit capabilities."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Overall manning stands at 94 percent of authorized strength. However, specific skill sets including cyber operations, intelligence analysis, and aviation maintenance remain undermanned relative to requirements."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Retention initiatives implemented during the fiscal year have shown positive results, with first-term reenlistment rates increasing by 8 percentage points compared to the previous year."
+    },
+    {
+      "type": "para",
+      "subject": "Training Plan.",
+      "text": "Reference (d) outlines the I MEF training plan for Fiscal Year 2025, which emphasizes realistic, scenario-based training that prepares Marines for the full range of military operations. The plan incorporates lessons learned from recent exercises and real-world operations."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Major exercises planned for Fiscal Year 2025 include participation in three large-scale Pacific exercises designed to exercise joint and combined capabilities in contested maritime environments."
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Unit-level training will emphasize combined arms integration, expeditionary advanced base operations, and information warfare capabilities essential to success in great power competition scenarios."
+    },
+    {
+      "type": "para",
+      "subject": "Risk Assessment.",
+      "text": "Enclosure (4) provides a detailed risk assessment identifying areas where readiness gaps create operational risk. The most significant risks relate to personnel shortfalls in critical specialties and competing demands for limited training resources and ranges."
+    },
+    {
+      "type": "para",
+      "subject": "Recommendation.",
+      "text": "This command recommends continued investment in training infrastructure, personnel retention programs, and equipment modernization to sustain readiness levels required to meet operational commitments. Specific resource requirements are detailed in the attached enclosures."
+    },
+    {
+      "type": "para",
+      "subject": "Point of Contact.",
+      "text": "The point of contact for this assessment is the I MEF G-3 Training Officer, LtCol James R. Harrison, at DSN 365-1234 or commercial (760) 725-1234, email: james.harrison@usmc.mil."
+    }
+  ],
+  "sigName": "T. D. PARKINSON",
+  "byDirection": false,
+  "copyList": [
+    "CG, MARFORPAC",
+    "CG, II MEF",
+    "CG, III MEF",
+    "I MEF G-3"
+  ]
+}
