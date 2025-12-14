@@ -7,7 +7,7 @@
 [![Version](https://img.shields.io/badge/Version-3.0.0-green)](https://github.com/jeranaias/navalletterformat/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Live Tool: [https://bit.ly/navalletter](https://bit.ly/navalletter)**
+**Live Tool: [https://jeranaias.github.io/navalletterformat/](https://jeranaias.github.io/navalletterformat/)**
 
 ---
 
@@ -145,7 +145,7 @@ ARIA labels, keyboard navigation, skip links, focus styles, reduced motion suppo
 
 ### Quick Start (Under 2 Minutes)
 
-1. **Open the tool:** [https://bit.ly/navalletter](https://bit.ly/navalletter)
+1. **Open the tool:** [https://jeranaias.github.io/navalletterformat/](https://jeranaias.github.io/navalletterformat/)
 
 2. **Optional: Start from a template** — Click "Templates" and choose a starting point
 
