@@ -114,6 +114,9 @@ function generateTex() {
   if (d.paras.length > 0) {
     let pn = 0, sn = 0, ssn = 0, sssn = 0;
     for (const p of d.paras) {
+      // Ensure double spaces after periods (military standard)
+      const text = escapeLatex(ensureDoubleSpaces(p.text));
+
       if (p.type === 'para') {
         pn++;
         sn = 0;
@@ -121,19 +124,19 @@ function generateTex() {
         sssn = 0;
         // Add underlined subject if present
         const subjectPart = p.subject ? `\\underline{${escapeLatex(p.subject)}}  ` : '';
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${subjectPart}${escapeLatex(p.text)}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${subjectPart}${text}\n\n`;
       } else if (p.type === 'subpara') {
         sn++;
         ssn = 0;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${LETTERS[sn - 1]}.\\ \\ ${escapeLatex(p.text)}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${LETTERS[sn - 1]}.\\ \\ ${text}\n\n`;
       } else if (p.type === 'subsubpara') {
         ssn++;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${ssn})\\ \\ ${escapeLatex(p.text)}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${ssn})\\ \\ ${text}\n\n`;
       } else if (p.type === 'subsubsubpara') {
         sssn++;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${LETTERS[sssn - 1]})\\ \\ ${escapeLatex(p.text)}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${LETTERS[sssn - 1]})\\ \\ ${text}\n\n`;
       }
     }
   }

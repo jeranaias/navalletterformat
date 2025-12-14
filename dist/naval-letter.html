@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-14T00:12:01.045Z
+  Built: 2025-12-14T00:37:07.107Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -1085,6 +1085,18 @@ function escapeLatex(str) {
 }
 
 /**
+ * Ensure double spaces after periods (military correspondence standard)
+ * @param {string} str - Input string
+ * @returns {string} - String with double spaces after periods
+ */
+function ensureDoubleSpaces(str) {
+  if (!str) return '';
+  // Replace period + single space (not at end) with period + double space
+  // Also handles multiple periods (e.g., "sentence. Another. Third.")
+  return str.replace(/\.(\s)(?=\S)/g, '.  ');
+}
+
+/**
  * Format date to naval standard (DD Mon YY)
  * @param {string} value - Input date string
  * @returns {string|null} - Formatted date or null if invalid
@@ -1924,6 +1936,9 @@ function generateTex() {
   if (d.paras.length > 0) {
     let pn = 0, sn = 0, ssn = 0, sssn = 0;
     for (const p of d.paras) {
+      // Ensure double spaces after periods (military standard)
+      const text = escapeLatex(ensureDoubleSpaces(p.text));
+
       if (p.type === 'para') {
         pn++;
         sn = 0;
@@ -1931,19 +1946,19 @@ function generateTex() {
         sssn = 0;
         // Add underlined subject if present
         const subjectPart = p.subject ? `\\underline{${escapeLatex(p.subject)}}  ` : '';
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${subjectPart}${escapeLatex(p.text)}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${subjectPart}${text}\n\n`;
       } else if (p.type === 'subpara') {
         sn++;
         ssn = 0;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${LETTERS[sn - 1]}.\\ \\ ${escapeLatex(p.text)}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${LETTERS[sn - 1]}.\\ \\ ${text}\n\n`;
       } else if (p.type === 'subsubpara') {
         ssn++;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${ssn})\\ \\ ${escapeLatex(p.text)}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${ssn})\\ \\ ${text}\n\n`;
       } else if (p.type === 'subsubsubpara') {
         sssn++;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${LETTERS[sssn - 1]})\\ \\ ${escapeLatex(p.text)}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${LETTERS[sssn - 1]})\\ \\ ${text}\n\n`;
       }
     }
   }
@@ -2260,6 +2275,8 @@ async function generatePDF() {
     for (let pIdx = 0; pIdx < d.paras.length; pIdx++) {
       const p = d.paras[pIdx];
       const isLastPara = (pIdx === d.paras.length - 1);
+      // Ensure double spaces after periods (military standard)
+      const pText = ensureDoubleSpaces(p.text);
 
       y += LH;
       let label, indent, tIndent;
@@ -2298,10 +2315,10 @@ async function generatePDF() {
       const wrapWidth = CW;
 
       // Calculate total lines this paragraph will need
-      const firstLineText = pdf.splitTextToSize(p.text, firstLineWidth);
+      const firstLineText = pdf.splitTextToSize(pText, firstLineWidth);
       let totalLines = 1;
       if (firstLineText.length > 1) {
-        const remainingText = p.text.substring(firstLineText[0].length).trim();
+        const remainingText = pText.substring(firstLineText[0].length).trim();
         if (remainingText) {
           totalLines += pdf.splitTextToSize(remainingText, wrapWidth).length;
         }
@@ -2343,13 +2360,13 @@ async function generatePDF() {
         const afterSubjectX = tx + subjectWidth + 6;
         const remainingWidth = firstLineWidth - subjectWidth - 6;
 
-        if (p.text && remainingWidth > 50) {
-          const firstLinePart = pdf.splitTextToSize(p.text, remainingWidth);
+        if (pText && remainingWidth > 50) {
+          const firstLinePart = pdf.splitTextToSize(pText, remainingWidth);
           pdf.text(firstLinePart[0], afterSubjectX, y);
           y += LH;
 
-          if (firstLinePart.length > 1 || p.text.length > firstLinePart[0].length) {
-            const leftover = p.text.substring(firstLinePart[0].length).trim();
+          if (firstLinePart.length > 1 || pText.length > firstLinePart[0].length) {
+            const leftover = pText.substring(firstLinePart[0].length).trim();
             if (leftover) {
               pdf.splitTextToSize(leftover, wrapWidth).forEach(line => {
                 pageBreak(LH);
@@ -2360,8 +2377,8 @@ async function generatePDF() {
           }
         } else {
           y += LH;
-          if (p.text) {
-            pdf.splitTextToSize(p.text, wrapWidth).forEach(line => {
+          if (pText) {
+            pdf.splitTextToSize(pText, wrapWidth).forEach(line => {
               pageBreak(LH);
               pdf.text(line, ML, y);
               y += LH;
@@ -2374,7 +2391,7 @@ async function generatePDF() {
         y += LH;
 
         if (firstLineText.length > 1) {
-          const remainingText = p.text.substring(firstLineText[0].length).trim();
+          const remainingText = pText.substring(firstLineText[0].length).trim();
           if (remainingText) {
             pdf.splitTextToSize(remainingText, wrapWidth).forEach(line => {
               pageBreak(LH);

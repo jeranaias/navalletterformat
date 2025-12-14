@@ -196,6 +196,8 @@ async function generatePDF() {
     for (let pIdx = 0; pIdx < d.paras.length; pIdx++) {
       const p = d.paras[pIdx];
       const isLastPara = (pIdx === d.paras.length - 1);
+      // Ensure double spaces after periods (military standard)
+      const pText = ensureDoubleSpaces(p.text);
 
       y += LH;
       let label, indent, tIndent;
@@ -234,10 +236,10 @@ async function generatePDF() {
       const wrapWidth = CW;
 
       // Calculate total lines this paragraph will need
-      const firstLineText = pdf.splitTextToSize(p.text, firstLineWidth);
+      const firstLineText = pdf.splitTextToSize(pText, firstLineWidth);
       let totalLines = 1;
       if (firstLineText.length > 1) {
-        const remainingText = p.text.substring(firstLineText[0].length).trim();
+        const remainingText = pText.substring(firstLineText[0].length).trim();
         if (remainingText) {
           totalLines += pdf.splitTextToSize(remainingText, wrapWidth).length;
         }
@@ -279,13 +281,13 @@ async function generatePDF() {
         const afterSubjectX = tx + subjectWidth + 6;
         const remainingWidth = firstLineWidth - subjectWidth - 6;
 
-        if (p.text && remainingWidth > 50) {
-          const firstLinePart = pdf.splitTextToSize(p.text, remainingWidth);
+        if (pText && remainingWidth > 50) {
+          const firstLinePart = pdf.splitTextToSize(pText, remainingWidth);
           pdf.text(firstLinePart[0], afterSubjectX, y);
           y += LH;
 
-          if (firstLinePart.length > 1 || p.text.length > firstLinePart[0].length) {
-            const leftover = p.text.substring(firstLinePart[0].length).trim();
+          if (firstLinePart.length > 1 || pText.length > firstLinePart[0].length) {
+            const leftover = pText.substring(firstLinePart[0].length).trim();
             if (leftover) {
               pdf.splitTextToSize(leftover, wrapWidth).forEach(line => {
                 pageBreak(LH);
@@ -296,8 +298,8 @@ async function generatePDF() {
           }
         } else {
           y += LH;
-          if (p.text) {
-            pdf.splitTextToSize(p.text, wrapWidth).forEach(line => {
+          if (pText) {
+            pdf.splitTextToSize(pText, wrapWidth).forEach(line => {
               pageBreak(LH);
               pdf.text(line, ML, y);
               y += LH;
@@ -310,7 +312,7 @@ async function generatePDF() {
         y += LH;
 
         if (firstLineText.length > 1) {
-          const remainingText = p.text.substring(firstLineText[0].length).trim();
+          const remainingText = pText.substring(firstLineText[0].length).trim();
           if (remainingText) {
             pdf.splitTextToSize(remainingText, wrapWidth).forEach(line => {
               pageBreak(LH);
