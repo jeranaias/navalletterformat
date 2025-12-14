@@ -40,7 +40,7 @@ async function loadDefaultSeal() {
 }
 
 /**
- * Select document type (basic or endorsement)
+ * Select document type (basic, endorsement, or memorandum)
  * @param {string} type - Document type
  */
 function selectDocType(type) {
@@ -48,7 +48,15 @@ function selectDocType(type) {
   document.querySelectorAll('.doc-type-option').forEach(opt => {
     opt.classList.toggle('selected', opt.dataset.type === type);
   });
+
+  // Show/hide endorsement fields
   document.getElementById('endorsementFields').style.display = type === 'endorsement' ? 'block' : 'none';
+
+  // Show/hide letterhead section for memorandum (memos don't use letterhead)
+  const letterheadSection = document.getElementById('letterheadFields')?.closest('.form-section');
+  if (letterheadSection) {
+    letterheadSection.style.display = type === 'memorandum' ? 'none' : 'block';
+  }
 }
 
 /**
@@ -343,7 +351,7 @@ function collectData() {
     date: document.getElementById('date').value.trim(),
     classification: document.getElementById('classification').value,
     branch: document.querySelector('input[name="branch"]:checked').value,
-    useLetterhead: true, // Always include letterhead
+    useLetterhead: documentType !== "memorandum", // Letters have letterhead, memos don't
     unitName: document.getElementById('unitName').value.trim(),
     unitAddress: document.getElementById('unitAddress').value.trim(),
     hasSeal: sealData !== null,

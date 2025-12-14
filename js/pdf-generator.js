@@ -67,6 +67,14 @@ async function generatePDF() {
     y += LH + 4;
   }
 
+  // Memorandum header (instead of letterhead)
+  if (d.documentType === 'memorandum') {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
+    y += LH * 2;
+  }
+
   // Letterhead
   if (d.useLetterhead) {
     // Seal image
