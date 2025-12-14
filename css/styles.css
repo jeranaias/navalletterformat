@@ -25,6 +25,77 @@
   --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
 }
 
+/* Dark Mode */
+[data-theme="dark"] {
+  --navy: #4488cc;
+  --navy-light: #5599dd;
+  --gold: #d4b86a;
+  --gold-light: #e5c87a;
+  --bg: #1a1a1a;
+  --white: #2d2d2d;
+  --gray-100: #3a3a3a;
+  --gray-200: #4a4a4a;
+  --gray-300: #5a5a5a;
+  --gray-400: #6a6a6a;
+  --gray-500: #8a8a8a;
+  --gray-600: #aaaaaa;
+  --gray-700: #cccccc;
+  --gray-800: #e5e5e5;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+[data-theme="dark"] header {
+  background: linear-gradient(135deg, #1a3a5c 0%, #2a4a6c 100%);
+}
+
+[data-theme="dark"] .status.success {
+  background: #1d3d2b;
+  border-color: #2d5d3b;
+  color: #7dc99d;
+}
+
+[data-theme="dark"] .status.error {
+  background: #3d1d2b;
+  border-color: #5d2d3b;
+  color: #dc8d9d;
+}
+
+[data-theme="dark"] .status.loading {
+  background: #3d3d1d;
+  border-color: #5d5d2d;
+  color: #dcdc8d;
+}
+
+[data-theme="dark"] .info-box.warning {
+  background: #3d3a2d;
+  border-color: #8d8a4d;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--white);
+  transition: background 0.2s;
+}
+
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+header {
+  position: relative;
+}
+
+
 * {
   box-sizing: border-box;
   margin: 0;
