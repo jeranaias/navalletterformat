@@ -24,7 +24,7 @@ function collectFormData() {
     officeCode: document.getElementById('officeCode')?.value || '',
     date: document.getElementById('date')?.value || '',
     classification: document.getElementById('classification')?.value || '',
-    branch: document.querySelector('input[name="branch"]:checked')?.value || 'USMC',
+    branch: 'USMC', // Marine Corps only
 
     // Letterhead (always true)
     unitName: document.getElementById('unitName')?.value || '',

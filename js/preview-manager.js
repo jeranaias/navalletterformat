@@ -156,7 +156,7 @@ async function generatePDFBlob() {
       if (d.classification) {
         pdf.setFont('times', 'bold');
         pdf.setFontSize(12);
-        pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+        pdf.text(d.classification, PW / 2, 20, { align: 'center' });
       }
 
       pdf.setFont('times', 'normal');
@@ -176,18 +176,10 @@ async function generatePDFBlob() {
   if (d.classification) {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
-    pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+    pdf.text(d.classification, PW / 2, 20, { align: 'center' });
   }
 
-  // Memorandum header
-  if (d.documentType === 'memorandum') {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
-    y += LH * 2;
-  }
-
-  // Letterhead
+  // Letterhead (before MEMORANDUM header for formal memos)
   if (d.useLetterhead) {
     if (d.hasSeal && d.sealData) {
       try {
@@ -206,15 +198,23 @@ async function generatePDFBlob() {
 
     if (d.unitAddress) {
       pdf.setFont('times', 'normal');
-      pdf.setFontSize(10);
+      pdf.setFontSize(8);
       const addrLines = d.unitAddress.split('\n');
       addrLines.forEach(line => {
         pdf.text(line.toUpperCase(), PW / 2, y, { align: 'center' });
-        y += 12;
+        y += 10;
       });
     }
 
     y = Math.max(y, 130);
+  }
+
+  // Memorandum header (after letterhead)
+  if (d.documentType === 'memorandum') {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
+    y += LH * 2;
   }
 
   // Sender's symbols (right side, left-aligned)
@@ -238,7 +238,7 @@ async function generatePDFBlob() {
   // Endorsement header
   if (d.documentType === 'endorsement') {
     pdf.setFont('times', 'bold');
-    pdf.text(`${d.endorseNumber} ENDORSEMENT on ${d.endorseRef || '[basic letter reference]'}`, ML, y);
+    pdf.text(`${d.endorseNumber} ENDORSEMENT`, PW / 2, y, { align: 'center' });
     y += LH * 2;
     pdf.setFont('times', 'normal');
   }
@@ -277,13 +277,12 @@ async function generatePDFBlob() {
   // References
   if (d.refs && d.refs.length > 0) {
     y += LH;
+    pdf.text('Ref:', ML, y);
     d.refs.forEach((r, i) => {
       const letter = String.fromCharCode(97 + i);
-      const label = i === 0 ? `Ref:  (${letter})` : `      (${letter})`;
-      pdf.text(label, ML, y);
-      const refLines = pdf.splitTextToSize(r, CW - TAB - 20);
-      refLines.forEach((line, j) => {
-        pdf.text(line, ML + TAB + 20, y);
+      const refLines = pdf.splitTextToSize(`(${letter})  ${r}`, CW - TAB);
+      refLines.forEach((line) => {
+        pdf.text(line, ML + TAB, y);
         y += LH;
       });
     });
@@ -292,11 +291,13 @@ async function generatePDFBlob() {
   // Enclosures
   if (d.encls && d.encls.length > 0) {
     y += LH;
+    pdf.text('Encl:', ML, y);
     d.encls.forEach((e, i) => {
-      const label = i === 0 ? `Encl: (${i + 1})` : `      (${i + 1})`;
-      pdf.text(label, ML, y);
-      pdf.text(e, ML + TAB + 20, y);
-      y += LH;
+      const enclLines = pdf.splitTextToSize(`(${i + 1})  ${e}`, CW - TAB);
+      enclLines.forEach((line) => {
+        pdf.text(line, ML + TAB, y);
+        y += LH;
+      });
     });
   }
 
@@ -414,11 +415,11 @@ async function generatePDFBlob() {
     });
   }
 
-  // Classification at bottom
+  // Classification at bottom (symmetric with top)
   if (d.classification) {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
-    pdf.text(d.classification, PW / 2, PH - 18, { align: 'center' });
+    pdf.text(d.classification, PW / 2, PH - 10, { align: 'center' });
   }
 
   // Return as blob

@@ -48,7 +48,7 @@ async function generatePDF() {
       if (d.classification) {
         pdf.setFont('times', 'bold');
         pdf.setFontSize(12);
-        pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+        pdf.text(d.classification, PW / 2, 20, { align: 'center' });
       }
 
       // Add continuation header
@@ -70,19 +70,11 @@ async function generatePDF() {
   if (d.classification) {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
-    pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+    pdf.text(d.classification, PW / 2, 20, { align: 'center' });
     // Note: Classification does NOT push down letterhead - it's in a fixed position
   }
 
-  // Memorandum header - appears for ALL memos (plain-paper and letterhead)
-  if (d.documentType === 'memorandum') {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
-    y += LH * 2;
-  }
-
-  // Letterhead (for basic letters, endorsements, and formal memos)
+  // Letterhead (for basic letters, endorsements, and formal memos) - before MEMORANDUM for formal memos
   if (d.useLetterhead) {
     // Seal image
     if (d.hasSeal && d.sealData) {
@@ -98,7 +90,7 @@ async function generatePDF() {
       pdf.setFont('times', 'bold');
       pdf.setFontSize(10);
       pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
-      y += 11;
+      y += 12;
     }
 
     // Unit address
@@ -107,10 +99,18 @@ async function generatePDF() {
       pdf.setFontSize(8);
       d.unitAddress.split('\n').filter(l => l.trim()).forEach(line => {
         pdf.text(line.trim(), PW / 2, y, { align: 'center' });
-        y += 9;
+        y += 10;
       });
     }
-    y += LH * 2;  // 2 blank lines after letterhead
+    y = Math.max(y, 130);
+  }
+
+  // Memorandum header - appears for ALL memos (after letterhead for formal memos)
+  if (d.documentType === 'memorandum') {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
+    y += LH * 2;
   }
 
   // Header block - sender's symbols left-aligned under first character
@@ -389,13 +389,13 @@ async function generatePDF() {
     });
   }
 
-  // Classification at bottom of every page
+  // Classification at bottom of every page (symmetric with top)
   if (d.classification) {
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
       pdf.setFont('times', 'bold');
       pdf.setFontSize(12);
-      pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
+      pdf.text(d.classification, PW / 2, PH - 10, { align: 'center' });
     }
   }
 
@@ -443,7 +443,7 @@ async function printPDF() {
       if (d.classification) {
         pdf.setFont('times', 'bold');
         pdf.setFontSize(12);
-        pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+        pdf.text(d.classification, PW / 2, 20, { align: 'center' });
       }
       pdf.setFont('times', 'normal');
       pdf.setFontSize(12);
@@ -458,18 +458,10 @@ async function printPDF() {
   if (d.classification) {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
-    pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+    pdf.text(d.classification, PW / 2, 20, { align: 'center' });
   }
 
-  // Memorandum header - appears for ALL memos (plain-paper and letterhead)
-  if (d.documentType === 'memorandum') {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
-    y += LH * 2;
-  }
-
-  // Letterhead (for basic letters, endorsements, and formal memos)
+  // Letterhead (for basic letters, endorsements, and formal memos) - before MEMORANDUM for formal memos
   if (d.useLetterhead) {
     if (d.hasSeal && d.sealData) {
       try { pdf.addImage(d.sealData, 'JPEG', 36, 36, 72, 72); } catch (e) {}
@@ -478,16 +470,24 @@ async function printPDF() {
       pdf.setFont('times', 'bold');
       pdf.setFontSize(10);
       pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
-      y += 11;
+      y += 12;
     }
     if (d.unitAddress) {
       pdf.setFont('times', 'normal');
       pdf.setFontSize(8);
       d.unitAddress.split('\n').filter(l => l.trim()).forEach(line => {
         pdf.text(line.trim(), PW / 2, y, { align: 'center' });
-        y += 9;
+        y += 10;
       });
     }
+    y = Math.max(y, 130);
+  }
+
+  // Memorandum header - appears for ALL memos (after letterhead for formal memos)
+  if (d.documentType === 'memorandum') {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
     y += LH * 2;
   }
 
@@ -596,15 +596,17 @@ async function printPDF() {
     d.copies.forEach(c => { pdf.text(c, ML, y); y += LH; });
   }
 
+  // Classification at bottom of every page (symmetric with top)
   if (d.classification) {
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
       pdf.setFont('times', 'bold');
       pdf.setFontSize(12);
-      pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
+      pdf.text(d.classification, PW / 2, PH - 10, { align: 'center' });
     }
   }
 
+  // Page numbers (above classification if present) - only on page 2+
   if (pdf.getNumberOfPages() > 1) {
     const pageNumY = d.classification ? PH - 50 : PH - 36;
     for (let i = 2; i <= pdf.getNumberOfPages(); i++) {

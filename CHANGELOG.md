@@ -5,35 +5,63 @@ All notable changes to the Naval Letter Generator will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.0] - Unreleased (v3 branch)
+## [3.0.0] - 2024-12-14
 
 ### Added
 - **Live preview pane** (`js/preview-manager.js`)
   - Real-time PDF preview as you type
   - Split-screen layout with form on left, preview on right
-  - Toggle button to show/hide preview pane
+  - Toggle button moved to quick toolbar at top for easy access
   - Debounced updates (500ms) for smooth performance
   - Remembers preference in localStorage
 - **Template library** (`js/template-manager.js`, `data/templates.json`)
-  - 12 pre-built templates for common letter types
-  - Leave Request, Request Mast, Award Recommendation (NAM)
-  - Letter of Appreciation, Page 11 Entry Request
-  - Counseling (Positive and Corrective)
-  - Endorsement (Recommend Approval/Disapproval)
-  - Request for Orders Modification, Transfer Information
-  - Report of Findings
+  - **20 pre-built Marine-centric templates** for common letter types
+  - Personnel: Leave Request, Special Liberty, Request Mast, Page 11 Entry, PFT/CFT Waiver, Orders Modification, Checkout Letter, SGLI Update, Fitness Report Cover
+  - Awards: NAM Recommendation, Letter of Appreciation
+  - Leadership: Positive Counseling, Corrective Counseling, Command Interest
+  - Endorsements: Recommend Approval, Recommend Disapproval, For Information
+  - Training: Training Request
+  - Administrative: Government Travel Card Request
+  - Investigations: Report of Findings
   - Searchable modal with category filter
-  - One-click template application
+  - Templates button moved to quick toolbar at top for discoverability
 - **Undo/redo for paragraphs** (`js/undo-manager.js`)
   - Full edit history with up to 50 undo states
   - Keyboard shortcuts: Ctrl+Z (undo), Ctrl+Y/Ctrl+Shift+Z (redo)
   - Undo/redo buttons in paragraph section header
   - Tracks paragraph additions, deletions, reordering, and text changes
+  - Fixed: Restored paragraphs now have correct HTML structure and styling
 - **CUI/FOUO portion markings**
   - Per-paragraph classification marking per DoDM 5200.01
   - Portion marking selector: (U), (CUI), (FOUO)
-  - Checkbox to enable/disable portion marking
+  - Checkbox to enable/disable portion marking (appears when CUI/FOUO classification selected)
   - Portion marks appear in PDF output before paragraph labels
+- **Quick toolbar** - Templates and Live Preview buttons at top of form for easy access
+- **Improved paragraph editing**
+  - Inline action buttons (+, ↳, ×) on left side below drag handle
+  - Cleaner, more intuitive paragraph management
+  - Removed confusing "Outdent" button terminology
+- **Improved memorandum style toggle**
+  - Visual toggle cards (Plain Paper / Letterhead) instead of checkbox
+  - Cleaner, more intuitive selection matching document type selector style
+
+### Changed
+- **Marine Corps focused** - Removed Navy branch selector, now exclusively USMC
+- **Streamlined UI**
+  - Service/Organization pre-filled with "UNITED STATES MARINE CORPS"
+  - Bottom action panel reduced from 10 to 6 buttons
+  - Removed "Preview LaTeX" button (niche feature)
+  - Removed "Open in Overleaf" button (redundant with live preview)
+  - Removed info box mentioning Overleaf
+  - Cleaner two-row layout: Primary actions (Download PDF, Print) and Secondary actions (Download .tex, Download ZIP, Save/Load Draft)
+- Intro text updated: "Free tool for Marines"
+- Removed LaTeX preview section from HTML
+
+### Fixed
+- **Undo/redo paragraph restoration** - Restored paragraphs now have correct HTML structure matching new inline button design
+- **Live preview paragraphs** - Fixed `d.paragraphs` → `d.paras` property name
+- **Live preview Copy To** - Fixed `d.copyTo` → `d.copies` property name
+- **Live preview SSIC/date position** - Now correctly positioned on right side of page
 
 ### Planned Features - High Effort
 - **Import from Word/PDF** - Parse existing correspondence documents
@@ -167,6 +195,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
-| 3.0.0   | TBD  | Live preview pane, template library (12 templates), undo/redo, CUI/FOUO portion markings |
+| 3.0.0   | Dec 2024 | Live preview, 20 Marine-centric templates, undo/redo, portion markings, streamlined UI |
 | 2.0.0   | TBD  | Modular architecture, draft save/load, memorandum, dark mode, PWA, keyboard shortcuts, 111 tests |
 | 1.3.0   | Dec 2024 | Initial GitHub Pages release |
