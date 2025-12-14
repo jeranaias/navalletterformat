@@ -47,6 +47,7 @@ function selectDocType(type) {
   documentType = type;
   document.querySelectorAll('.doc-type-option').forEach(opt => {
     opt.classList.toggle('selected', opt.dataset.type === type);
+    opt.setAttribute('aria-checked', opt.dataset.type === type);
   });
 
   // Show/hide endorsement fields
