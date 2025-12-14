@@ -53,10 +53,30 @@ function selectDocType(type) {
   // Show/hide endorsement fields
   document.getElementById('endorsementFields').style.display = type === 'endorsement' ? 'block' : 'none';
 
-  // Show/hide letterhead section for memorandum (memos don't use letterhead)
+  // Show/hide memorandum fields
+  const memoFields = document.getElementById('memorandumFields');
+  if (memoFields) {
+    memoFields.style.display = type === 'memorandum' ? 'block' : 'none';
+  }
+
+  // Show/hide letterhead section based on document type and formal memo checkbox
+  updateLetterheadVisibility();
+}
+
+/**
+ * Update letterhead section visibility based on document type and formal memo option
+ */
+function updateLetterheadVisibility() {
   const letterheadSection = document.getElementById('letterheadFields')?.closest('.form-section');
-  if (letterheadSection) {
-    letterheadSection.style.display = type === 'memorandum' ? 'none' : 'block';
+  if (!letterheadSection) return;
+
+  if (documentType === 'memorandum') {
+    // For memos, show letterhead only if formal memo is checked
+    const formalMemo = document.getElementById('formalMemo');
+    letterheadSection.style.display = (formalMemo && formalMemo.checked) ? 'block' : 'none';
+  } else {
+    // For basic letters and endorsements, always show letterhead
+    letterheadSection.style.display = 'block';
   }
 }
 
@@ -345,6 +365,10 @@ function handleDrop(e) {
  * @returns {Object} - Form data object
  */
 function collectData() {
+  // For memos, check if formal letterhead is requested
+  const formalMemo = document.getElementById('formalMemo');
+  const isFormalMemo = documentType === 'memorandum' && formalMemo && formalMemo.checked;
+
   return {
     documentType,
     ssic: document.getElementById('ssicSearch').value.trim().split(/\s/)[0] || '',
@@ -352,7 +376,9 @@ function collectData() {
     date: document.getElementById('date').value.trim(),
     classification: document.getElementById('classification').value,
     branch: document.querySelector('input[name="branch"]:checked').value,
-    useLetterhead: documentType !== "memorandum", // Letters have letterhead, memos don't
+    // Letterhead: always for basic/endorsement, optional for memo (formal only)
+    useLetterhead: documentType !== "memorandum" || isFormalMemo,
+    isFormalMemo, // Track if this is a formal letterhead memo
     unitName: document.getElementById('unitName').value.trim(),
     unitAddress: document.getElementById('unitAddress').value.trim(),
     hasSeal: sealData !== null,
@@ -398,6 +424,12 @@ async function initFormListeners() {
 
   // Set today's date
   document.getElementById('date').value = getTodayFormatted();
+
+  // Formal memo checkbox - toggle letterhead visibility
+  const formalMemoCheckbox = document.getElementById('formalMemo');
+  if (formalMemoCheckbox) {
+    formalMemoCheckbox.addEventListener('change', updateLetterheadVisibility);
+  }
 }
 
 // Export for module usage
@@ -405,6 +437,7 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     loadDefaultSeal,
     selectDocType,
+    updateLetterheadVisibility,
     toggleCollapsible,
     addVia,
     addRef,
