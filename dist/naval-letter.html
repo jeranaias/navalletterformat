@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-14T05:58:11.561Z
+  Built: 2025-12-14T07:38:30.130Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -140,17 +140,56 @@
   border-color: #8d8a4d;
 }
 
-/* Theme Toggle Button */
-.theme-toggle {
+/* Header Controls (offline indicator + theme toggle) */
+.header-controls {
   position: absolute;
   top: 12px;
   right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Offline Indicator */
+.offline-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.8);
+  padding: 4px 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: var(--radius);
+}
+
+.offline-indicator .indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gray-500);
+  transition: background 0.3s;
+}
+
+.offline-indicator.ready .indicator-dot {
+  background: #4ade80;
+}
+
+.offline-indicator.offline .indicator-dot {
+  background: #f87171;
+}
+
+.offline-indicator .indicator-text {
+  white-space: nowrap;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
   background: rgba(255,255,255,0.15);
   border: none;
   border-radius: var(--radius);
   padding: 8px 12px;
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--white);
   transition: background 0.2s;
 }
@@ -921,6 +960,15 @@ button:focus-visible,
   <a href="#letterForm" class="skip-link">Skip to main content</a>
   <div class="container" role="main">
     <header role="banner">
+      <div class="header-controls">
+        <span id="offlineIndicator" class="offline-indicator" title="App status">
+          <span class="indicator-dot"></span>
+          <span class="indicator-text">Loading...</span>
+        </span>
+        <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+          <span id="themeIcon">☀</span>
+        </button>
+      </div>
       <h1>NAVAL LETTER GENERATOR</h1>
       <p class="subtitle">SECNAV M-5216.5 Compliant Correspondence</p>
     </header>
@@ -3292,6 +3340,19 @@ function getTimeAgo(date) {
  */
 
 /**
+ * Update offline indicator status
+ */
+function updateOfflineIndicator(status, text) {
+  const indicator = document.getElementById('offlineIndicator');
+  if (!indicator) return;
+
+  indicator.classList.remove('ready', 'offline');
+  indicator.classList.add(status);
+  const textEl = indicator.querySelector('.indicator-text');
+  if (textEl) textEl.textContent = text;
+}
+
+/**
  * Register service worker for offline support
  */
 function registerServiceWorker() {
@@ -3300,11 +3361,30 @@ function registerServiceWorker() {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
           console.log('Service Worker registered:', registration.scope);
+          updateOfflineIndicator('ready', 'Ready offline');
         })
         .catch((error) => {
           console.warn('Service Worker registration failed:', error);
+          updateOfflineIndicator('offline', 'Online only');
         });
     });
+  } else {
+    updateOfflineIndicator('offline', 'Online only');
+  }
+
+  // Listen for online/offline events
+  window.addEventListener('online', () => {
+    updateOfflineIndicator('ready', 'Back online');
+    setTimeout(() => updateOfflineIndicator('ready', 'Ready offline'), 2000);
+  });
+
+  window.addEventListener('offline', () => {
+    updateOfflineIndicator('offline', 'Offline mode');
+  });
+
+  // Set initial status based on navigator.onLine
+  if (!navigator.onLine) {
+    updateOfflineIndicator('offline', 'Offline mode');
   }
 }
 
@@ -3339,6 +3419,51 @@ function initTheme() {
 }
 
 /**
+ * Keyboard shortcuts handler
+ */
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    // Check for Ctrl/Cmd key
+    const isMod = e.ctrlKey || e.metaKey;
+
+    if (isMod && !e.shiftKey && !e.altKey) {
+      switch (e.key.toLowerCase()) {
+        case 's':
+          // Ctrl+S - Export draft to file
+          e.preventDefault();
+          if (typeof exportDraft === 'function') {
+            exportDraft();
+            showStatus('success', 'Draft exported (Ctrl+S)');
+          }
+          break;
+        case 'p':
+          // Ctrl+P - Print PDF
+          e.preventDefault();
+          if (typeof printPDF === 'function') {
+            printPDF();
+          }
+          break;
+        case 'd':
+          // Ctrl+D - Download PDF
+          e.preventDefault();
+          if (typeof generatePDF === 'function') {
+            generatePDF();
+          }
+          break;
+      }
+    }
+
+    // Escape key - close preview/modals
+    if (e.key === 'Escape') {
+      const preview = document.getElementById('previewSection');
+      if (preview && preview.classList.contains('show')) {
+        preview.classList.remove('show');
+      }
+    }
+  });
+}
+
+/**
  * Initialize the application
  */
 async function initApp() {
@@ -3361,6 +3486,9 @@ async function initApp() {
 
   // Initialize draft auto-save and restore
   initDraftManager();
+
+  // Initialize keyboard shortcuts
+  initKeyboardShortcuts();
 
   console.log('Naval Letter Generator v2.0 ready!');
 }

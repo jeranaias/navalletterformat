@@ -7,6 +7,19 @@
  */
 
 /**
+ * Update offline indicator status
+ */
+function updateOfflineIndicator(status, text) {
+  const indicator = document.getElementById('offlineIndicator');
+  if (!indicator) return;
+
+  indicator.classList.remove('ready', 'offline');
+  indicator.classList.add(status);
+  const textEl = indicator.querySelector('.indicator-text');
+  if (textEl) textEl.textContent = text;
+}
+
+/**
  * Register service worker for offline support
  */
 function registerServiceWorker() {
@@ -15,11 +28,30 @@ function registerServiceWorker() {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
           console.log('Service Worker registered:', registration.scope);
+          updateOfflineIndicator('ready', 'Ready offline');
         })
         .catch((error) => {
           console.warn('Service Worker registration failed:', error);
+          updateOfflineIndicator('offline', 'Online only');
         });
     });
+  } else {
+    updateOfflineIndicator('offline', 'Online only');
+  }
+
+  // Listen for online/offline events
+  window.addEventListener('online', () => {
+    updateOfflineIndicator('ready', 'Back online');
+    setTimeout(() => updateOfflineIndicator('ready', 'Ready offline'), 2000);
+  });
+
+  window.addEventListener('offline', () => {
+    updateOfflineIndicator('offline', 'Offline mode');
+  });
+
+  // Set initial status based on navigator.onLine
+  if (!navigator.onLine) {
+    updateOfflineIndicator('offline', 'Offline mode');
   }
 }
 
@@ -54,6 +86,51 @@ function initTheme() {
 }
 
 /**
+ * Keyboard shortcuts handler
+ */
+function initKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    // Check for Ctrl/Cmd key
+    const isMod = e.ctrlKey || e.metaKey;
+
+    if (isMod && !e.shiftKey && !e.altKey) {
+      switch (e.key.toLowerCase()) {
+        case 's':
+          // Ctrl+S - Export draft to file
+          e.preventDefault();
+          if (typeof exportDraft === 'function') {
+            exportDraft();
+            showStatus('success', 'Draft exported (Ctrl+S)');
+          }
+          break;
+        case 'p':
+          // Ctrl+P - Print PDF
+          e.preventDefault();
+          if (typeof printPDF === 'function') {
+            printPDF();
+          }
+          break;
+        case 'd':
+          // Ctrl+D - Download PDF
+          e.preventDefault();
+          if (typeof generatePDF === 'function') {
+            generatePDF();
+          }
+          break;
+      }
+    }
+
+    // Escape key - close preview/modals
+    if (e.key === 'Escape') {
+      const preview = document.getElementById('previewSection');
+      if (preview && preview.classList.contains('show')) {
+        preview.classList.remove('show');
+      }
+    }
+  });
+}
+
+/**
  * Initialize the application
  */
 async function initApp() {
@@ -76,6 +153,9 @@ async function initApp() {
 
   // Initialize draft auto-save and restore
   initDraftManager();
+
+  // Initialize keyboard shortcuts
+  initKeyboardShortcuts();
 
   console.log('Naval Letter Generator v2.0 ready!');
 }
