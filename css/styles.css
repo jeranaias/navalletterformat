@@ -1013,8 +1013,15 @@ textarea {
 .para-item .drag-handle {
   cursor: grab;
   color: var(--gray-400);
-  padding: 4px;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+
+.para-item .drag-handle:hover {
+  background: var(--gray-200);
+  color: var(--gray-600);
 }
 
 .para-item .drag-handle:active {
@@ -1072,12 +1079,20 @@ textarea {
   font-style: italic;
 }
 
+/* Left controls container (drag handle + action buttons) */
+.para-left-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-right: 8px;
+}
+
 /* Inline paragraph actions */
 .para-inline-actions {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-left: 8px;
+  gap: 3px;
   opacity: 0.4;
   transition: opacity 0.2s;
 }
