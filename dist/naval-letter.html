@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Naval Letter Generator v2.0 - Bundled Version
-  Built: 2025-12-14T01:18:04.559Z
+  Built: 2025-12-14T01:36:00.058Z
   Source: https://github.com/jeranaias/navalletterformat
 
   This is a self-contained single-file version for offline/NMCI use.
@@ -1853,10 +1853,10 @@ function generateTex() {
 \\pagestyle{continuation}
 
 \\newlength{\\labeltab}\\setlength{\\labeltab}{0.625in}
-\\newlength{\\Lmain}\\settowidth{\\Lmain}{1.\\ \\ }
-\\newlength{\\Lsub}\\settowidth{\\Lsub}{a.\\ \\ }
-\\newlength{\\Lsubsub}\\settowidth{\\Lsubsub}{(1)\\ \\ }
-\\newlength{\\Lsubsubsub}\\settowidth{\\Lsubsubsub}{(a)\\ \\ }
+\\newlength{\\Lmain}\\settowidth{\\Lmain}{1.\\ }
+\\newlength{\\Lsub}\\settowidth{\\Lsub}{a.\\ }
+\\newlength{\\Lsubsub}\\settowidth{\\Lsubsub}{(1)\\ }
+\\newlength{\\Lsubsubsub}\\settowidth{\\Lsubsubsub}{(a)\\ }
 
 \\begin{document}
 \\thispagestyle{firstpage}
@@ -1946,19 +1946,19 @@ function generateTex() {
         sssn = 0;
         // Add underlined subject if present
         const subjectPart = p.subject ? `\\underline{${escapeLatex(p.subject)}}  ` : '';
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ \\ ${subjectPart}${text}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent ${pn}.\\ ${subjectPart}${text}\n\n`;
       } else if (p.type === 'subpara') {
         sn++;
         ssn = 0;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${LETTERS[sn - 1]}.\\ \\ ${text}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${LETTERS[sn - 1]}.\\ ${text}\n\n`;
       } else if (p.type === 'subsubpara') {
         ssn++;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${ssn})\\ \\ ${text}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${ssn})\\ ${text}\n\n`;
       } else if (p.type === 'subsubsubpara') {
         sssn++;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${LETTERS[sssn - 1]})\\ \\ ${text}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${LETTERS[sssn - 1]})\\ ${text}\n\n`;
       }
     }
   }
@@ -2311,8 +2311,8 @@ async function generatePDF() {
 
       const lx = ML + indent;
       const labelWidth = pdf.getTextWidth(label);
-      const tx = lx + labelWidth + 8;  // 8pt gap after label
-      const firstLineWidth = CW - indent - labelWidth - 8;
+      const tx = lx + labelWidth + 4;  // Single space gap after label
+      const firstLineWidth = CW - indent - labelWidth - 4;
       const wrapWidth = CW;
 
       // Calculate total lines this paragraph will need

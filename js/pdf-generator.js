@@ -232,8 +232,8 @@ async function generatePDF() {
 
       const lx = ML + indent;
       const labelWidth = pdf.getTextWidth(label);
-      const tx = lx + labelWidth + 8;  // 8pt gap after label
-      const firstLineWidth = CW - indent - labelWidth - 8;
+      const tx = lx + labelWidth + 4;  // Single space gap after label
+      const firstLineWidth = CW - indent - labelWidth - 4;
       const wrapWidth = CW;
 
       // Calculate total lines this paragraph will need
