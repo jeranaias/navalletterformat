@@ -1,6 +1,7 @@
 /**
  * Naval Letter Generator - Batch Generator
  * Generate multiple letters from CSV data
+ * Supports both CSV upload and inline table editing
  */
 
 // ============================================================
@@ -9,6 +10,21 @@
 
 let batchData = null;
 let batchTemplate = null;
+
+// Default columns for the editable table
+const BATCH_COLUMNS = ['name', 'rank', 'to', 'subject', 'date', 'ssic', 'reason', 'period'];
+
+// Column display names
+const COLUMN_LABELS = {
+  name: 'Name',
+  rank: 'Rank',
+  to: 'To',
+  subject: 'Subject',
+  date: 'Date',
+  ssic: 'SSIC',
+  reason: 'Reason',
+  period: 'Period'
+};
 
 /**
  * Initialize batch generation modal and handlers
@@ -42,6 +58,23 @@ function initBatchGenerator() {
       if (e.target === modal) closeBatchModal();
     });
   }
+
+  // Make signature options mutually exclusive
+  const keepSigCheckbox = document.getElementById('batchKeepSignature');
+  const nameIsSigCheckbox = document.getElementById('batchNameIsSignature');
+
+  if (keepSigCheckbox && nameIsSigCheckbox) {
+    keepSigCheckbox.addEventListener('change', () => {
+      if (keepSigCheckbox.checked) {
+        nameIsSigCheckbox.checked = false;
+      }
+    });
+    nameIsSigCheckbox.addEventListener('change', () => {
+      if (nameIsSigCheckbox.checked) {
+        keepSigCheckbox.checked = false;
+      }
+    });
+  }
 }
 
 /**
@@ -54,6 +87,14 @@ function openBatchModal() {
     batchTemplate = collectData();
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
+
+    // Initialize editable table if not already populated
+    if (!batchData || batchData.length === 0) {
+      initEditableTable(3);
+    } else {
+      renderEditableTable();
+      updateBatchCount();
+    }
   }
 }
 
@@ -69,7 +110,7 @@ function closeBatchModal() {
 }
 
 /**
- * Handle CSV file upload
+ * Handle CSV file upload - populates the editable table
  * @param {Event} e
  */
 function handleBatchCsvUpload(e) {
@@ -79,8 +120,26 @@ function handleBatchCsvUpload(e) {
   const reader = new FileReader();
   reader.onload = (event) => {
     try {
-      batchData = parseCSV(event.target.result);
-      displayBatchPreview();
+      const csvData = parseCSV(event.target.result);
+
+      // Map CSV columns to our standard columns
+      batchData = csvData.map(row => {
+        const mappedRow = createEmptyRow();
+        BATCH_COLUMNS.forEach(col => {
+          if (row[col] !== undefined) {
+            mappedRow[col] = row[col];
+          }
+        });
+        return mappedRow;
+      });
+
+      // Render the editable table with imported data
+      renderEditableTable();
+      updateBatchCount();
+      showStatus('success', `Imported ${batchData.length} rows from CSV`);
+
+      // Reset file input so same file can be re-uploaded
+      e.target.value = '';
     } catch (error) {
       showStatus('error', 'Failed to parse CSV file');
       console.error('CSV parse error:', error);
@@ -151,6 +210,185 @@ function parseCSVLine(line) {
   return result;
 }
 
+// ============================================================
+// EDITABLE TABLE FUNCTIONS
+// ============================================================
+
+/**
+ * Initialize the editable batch table with empty rows
+ * @param {number} initialRows - Number of rows to start with
+ */
+function initEditableTable(initialRows = 3) {
+  batchData = [];
+  for (let i = 0; i < initialRows; i++) {
+    batchData.push(createEmptyRow());
+  }
+  renderEditableTable();
+  updateBatchCount();
+}
+
+/**
+ * Create an empty row object
+ * @returns {Object}
+ */
+function createEmptyRow() {
+  const row = {};
+  BATCH_COLUMNS.forEach(col => {
+    row[col] = '';
+  });
+  return row;
+}
+
+/**
+ * Render the editable table
+ */
+function renderEditableTable() {
+  const container = document.getElementById('batchTableEditor');
+  if (!container || !batchData) return;
+
+  let html = '<table class="batch-edit-table">';
+
+  // Header row
+  html += '<thead><tr>';
+  html += '<th class="row-num">#</th>';
+  BATCH_COLUMNS.forEach(col => {
+    html += `<th>${COLUMN_LABELS[col]}</th>`;
+  });
+  html += '<th class="row-actions"></th>';
+  html += '</tr></thead>';
+
+  // Data rows
+  html += '<tbody>';
+  batchData.forEach((row, rowIdx) => {
+    html += `<tr data-row="${rowIdx}">`;
+    html += `<td class="row-num">${rowIdx + 1}</td>`;
+    BATCH_COLUMNS.forEach(col => {
+      const value = row[col] || '';
+      const placeholder = col === 'name' ? 'Smith J.M.' :
+                         col === 'rank' ? 'Cpl' :
+                         col === 'to' ? 'Commanding Officer' :
+                         col === 'subject' ? 'REQUEST FOR...' :
+                         col === 'date' ? '16 Dec 24' :
+                         col === 'ssic' ? '1050' :
+                         col === 'reason' ? 'Holiday leave' :
+                         col === 'period' ? '20-31 Dec 24' : '';
+      html += `<td><input type="text" class="batch-cell" data-row="${rowIdx}" data-col="${col}" value="${escapeHtml(value)}" placeholder="${placeholder}" onchange="updateBatchCell(${rowIdx}, '${col}', this.value)"></td>`;
+    });
+    html += `<td class="row-actions"><button type="button" class="btn-icon btn-remove-row" onclick="removeBatchRow(${rowIdx})" title="Remove row" aria-label="Remove row ${rowIdx + 1}">&times;</button></td>`;
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+
+  container.innerHTML = html;
+}
+
+/**
+ * Escape HTML entities for safe display
+ * @param {string} str
+ * @returns {string}
+ */
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+}
+
+/**
+ * Update a cell in batchData
+ * @param {number} rowIdx
+ * @param {string} col
+ * @param {string} value
+ */
+function updateBatchCell(rowIdx, col, value) {
+  if (batchData && batchData[rowIdx]) {
+    batchData[rowIdx][col] = value;
+  }
+  updateBatchCount();
+}
+
+/**
+ * Add a new row to the batch table
+ */
+function addBatchRow() {
+  if (!batchData) batchData = [];
+  batchData.push(createEmptyRow());
+  renderEditableTable();
+  updateBatchCount();
+
+  // Focus the first cell of the new row
+  setTimeout(() => {
+    const lastRow = batchData.length - 1;
+    const firstInput = document.querySelector(`input[data-row="${lastRow}"][data-col="name"]`);
+    if (firstInput) firstInput.focus();
+  }, 50);
+}
+
+/**
+ * Remove a row from the batch table
+ * @param {number} rowIdx
+ */
+function removeBatchRow(rowIdx) {
+  if (!batchData || batchData.length <= 1) {
+    showStatus('info', 'Need at least one row');
+    return;
+  }
+  batchData.splice(rowIdx, 1);
+  renderEditableTable();
+  updateBatchCount();
+}
+
+/**
+ * Clear all rows and start fresh
+ */
+function clearBatchTable() {
+  if (confirm('Clear all rows and start fresh?')) {
+    initEditableTable(3);
+  }
+}
+
+/**
+ * Update the batch count display
+ */
+function updateBatchCount() {
+  const countEl = document.getElementById('batchCount');
+  const generateBtn = document.getElementById('batchGenerateSubmit');
+
+  if (!batchData) {
+    if (countEl) countEl.textContent = '';
+    if (generateBtn) generateBtn.disabled = true;
+    return;
+  }
+
+  // Count non-empty rows (rows with at least name or to filled)
+  const validRows = batchData.filter(row =>
+    (row.name && row.name.trim()) || (row.to && row.to.trim())
+  );
+
+  if (countEl) {
+    countEl.textContent = validRows.length > 0
+      ? `${validRows.length} letter${validRows.length !== 1 ? 's' : ''} ready`
+      : 'Fill in at least one row';
+  }
+
+  if (generateBtn) {
+    generateBtn.disabled = validRows.length === 0;
+  }
+}
+
+/**
+ * Collect data from editable table (filters empty rows)
+ * @returns {Array}
+ */
+function collectValidBatchData() {
+  if (!batchData) return [];
+  return batchData.filter(row =>
+    (row.name && row.name.trim()) || (row.to && row.to.trim())
+  );
+}
+
 /**
  * Display batch data preview
  */
@@ -206,8 +444,10 @@ function displayBatchPreview() {
  * Generate batch letters
  */
 async function generateBatchLetters() {
-  if (!batchData || batchData.length === 0) {
-    showStatus('error', 'No batch data loaded');
+  const validData = collectValidBatchData();
+
+  if (!validData || validData.length === 0) {
+    showStatus('error', 'No valid rows - fill in at least name or to field');
     return;
   }
 
@@ -216,7 +456,7 @@ async function generateBatchLetters() {
     return;
   }
 
-  showStatus('loading', `Generating ${batchData.length} letters...`);
+  showStatus('loading', `Generating ${validData.length} letters...`);
 
   try {
     if (!window.jspdf) {
@@ -226,8 +466,8 @@ async function generateBatchLetters() {
     const { jsPDF } = window.jspdf;
     const zip = new JSZip();
 
-    for (let i = 0; i < batchData.length; i++) {
-      const rowData = batchData[i];
+    for (let i = 0; i < validData.length; i++) {
+      const rowData = validData[i];
 
       // Merge template with row data
       const letterData = mergeTemplateData(batchTemplate, rowData);
@@ -243,7 +483,7 @@ async function generateBatchLetters() {
       zip.file(filename, pdfBlob);
 
       // Update progress
-      showStatus('loading', `Generating ${i + 1} of ${batchData.length}...`);
+      showStatus('loading', `Generating ${i + 1} of ${validData.length}...`);
     }
 
     // Download ZIP
@@ -255,7 +495,7 @@ async function generateBatchLetters() {
     a.click();
     URL.revokeObjectURL(url);
 
-    showStatus('success', `Generated ${batchData.length} letters!`);
+    showStatus('success', `Generated ${validData.length} letters!`);
     closeBatchModal();
 
   } catch (error) {
@@ -273,6 +513,10 @@ async function generateBatchLetters() {
 function mergeTemplateData(template, rowData) {
   const merged = JSON.parse(JSON.stringify(template));
 
+  // Check signature options
+  const keepSignature = document.getElementById('batchKeepSignature')?.checked ?? true;
+  const nameIsSignature = document.getElementById('batchNameIsSignature')?.checked ?? false;
+
   // Replace placeholders in string fields
   const replaceInString = (str) => {
     if (typeof str !== 'string') return str;
@@ -281,7 +525,7 @@ function mergeTemplateData(template, rowData) {
     });
   };
 
-  // Process all string fields
+  // Process all string fields (for {{placeholder}} replacement)
   Object.keys(merged).forEach(key => {
     if (typeof merged[key] === 'string') {
       merged[key] = replaceInString(merged[key]);
@@ -304,8 +548,8 @@ function mergeTemplateData(template, rowData) {
   });
 
   // Direct field mappings (override if CSV has these columns)
+  // Note: 'name' handling depends on checkbox options
   const directMappings = {
-    'name': 'sigName',
     'to': 'to',
     'from': 'from',
     'subject': 'subj',
@@ -318,6 +562,17 @@ function mergeTemplateData(template, rowData) {
       merged[formKey] = rowData[csvKey];
     }
   });
+
+  // Handle signature based on options
+  if (nameIsSignature && rowData.name) {
+    // "Name = Signature" mode: each person signs their own letter
+    merged.sigName = rowData.name;
+    // Also set From to the name if not explicitly provided
+    if (!rowData.from) {
+      merged.from = rowData.name;
+    }
+  }
+  // If "Keep my signature" is checked, we don't touch sigName - it stays from template
 
   return merged;
 }
@@ -658,6 +913,148 @@ function initBatchGeneratorModule() {
   initBatchGenerator();
 }
 
+// ============================================================
+// BATCH HELP MODAL
+// ============================================================
+
+/**
+ * Show the batch generator help/explanation modal
+ */
+function showBatchHelp() {
+  let modal = document.getElementById('batchHelpModal');
+  if (!modal) {
+    modal = createBatchHelpModal();
+    document.body.appendChild(modal);
+  }
+  modal.classList.add('show');
+}
+
+/**
+ * Close the batch help modal
+ */
+function closeBatchHelp() {
+  const modal = document.getElementById('batchHelpModal');
+  if (modal) modal.classList.remove('show');
+}
+
+/**
+ * Create the batch help modal
+ */
+function createBatchHelpModal() {
+  const modal = document.createElement('div');
+  modal.id = 'batchHelpModal';
+  modal.className = 'modal';
+  modal.style.zIndex = '2100'; // Above the batch modal
+
+  modal.innerHTML = `
+    <div class="modal-content batch-help-modal">
+      <div class="modal-header">
+        <h2>Batch Generator Guide</h2>
+        <button type="button" class="modal-close" onclick="closeBatchHelp()">&times;</button>
+      </div>
+      <div class="batch-help-content">
+        <section class="help-section">
+          <h3>What is Batch Generation?</h3>
+          <p>Generate multiple letters at once from a single template. Perfect for:</p>
+          <ul>
+            <li>Block leave requests for an entire platoon</li>
+            <li>Award recommendations for multiple Marines</li>
+            <li>Counseling entries (6105s) for several individuals</li>
+            <li>Mass notifications or instructions</li>
+          </ul>
+        </section>
+
+        <section class="help-section">
+          <h3>The Two Modes</h3>
+          <div class="help-modes">
+            <div class="help-mode">
+              <h4>Keep My Signature</h4>
+              <p><strong>You</strong> are the author of all letters. Your signature stays the same on every letter.</p>
+              <p><em>Use for:</em> Awards you're writing FOR Marines, counseling entries, notifications you're sending.</p>
+            </div>
+            <div class="help-mode">
+              <h4>Name = Signature</h4>
+              <p>Each person in the table "signs" their own letter. The name becomes the From line and signature.</p>
+              <p><em>Use for:</em> Leave requests, special liberty requests - letters written BY each Marine.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="help-section">
+          <h3>Using Placeholders</h3>
+          <p>Placeholders let you insert data from each row into your letter text. Wrap column names in double curly braces:</p>
+          <div class="help-placeholders">
+            <code>{{name}}</code> <code>{{rank}}</code> <code>{{reason}}</code> <code>{{period}}</code> <code>{{to}}</code> <code>{{subject}}</code>
+          </div>
+        </section>
+
+        <section class="help-section">
+          <h3>Example: NAM Recommendations</h3>
+          <p>You're a Platoon Sergeant writing 5 Navy Achievement Medal recommendations.</p>
+
+          <h4>Step 1: Fill out the main form</h4>
+          <div class="help-example">
+            <div class="example-field"><strong>From:</strong> Platoon Sergeant, 2nd Platoon, Alpha Company</div>
+            <div class="example-field"><strong>To:</strong> Commanding Officer, Alpha Company</div>
+            <div class="example-field"><strong>Subject:</strong> NAVY ACHIEVEMENT MEDAL RECOMMENDATION FOR {{rank}} {{name}}</div>
+            <div class="example-field"><strong>Signature:</strong> SMITH J.M.</div>
+          </div>
+
+          <h4>Step 2: Write your paragraph with placeholders</h4>
+          <div class="help-example example-para">
+            <p>1. {{rank}} {{name}} is recommended for the Navy Achievement Medal for superior performance of duty while serving as a Rifleman, 2nd Platoon, Alpha Company from {{period}}. During this period, {{rank}} {{name}} demonstrated exceptional dedication to duty and professionalism. Specifically, {{rank}} {{name}} {{reason}}.</p>
+          </div>
+
+          <h4>Step 3: Add recipients in the table</h4>
+          <table class="help-table">
+            <thead>
+              <tr><th>Name</th><th>Rank</th><th>Reason</th><th>Period</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Johnson R.T.</td><td>LCpl</td><td>led 3 convoys without incident</td><td>Jan-Jun 2024</td></tr>
+              <tr><td>Williams K.A.</td><td>Cpl</td><td>trained 12 new joins on weapon systems</td><td>Feb-Jul 2024</td></tr>
+              <tr><td>Davis M.J.</td><td>PFC</td><td>maintained 100% accountability of gear</td><td>Mar-Aug 2024</td></tr>
+            </tbody>
+          </table>
+
+          <h4>Step 4: Select "Keep my signature" and Generate</h4>
+          <p>You'll get 5 PDFs, each with:</p>
+          <ul>
+            <li>Your signature (SMITH J.M.) on all letters</li>
+            <li>Each Marine's name/rank in the subject and body</li>
+            <li>Their specific reason and period filled in</li>
+          </ul>
+        </section>
+
+        <section class="help-section">
+          <h3>Example: Leave Requests</h3>
+          <p>Collecting leave requests from 30 Marines for block leave.</p>
+
+          <h4>Set up the template</h4>
+          <div class="help-example">
+            <div class="example-field"><strong>To:</strong> Commanding Officer</div>
+            <div class="example-field"><strong>Subject:</strong> REQUEST FOR ANNUAL LEAVE</div>
+            <div class="example-field"><strong>Paragraph:</strong> I request annual leave from {{period}} for the purpose of {{reason}}.</div>
+          </div>
+
+          <h4>Select "Name = Signature"</h4>
+          <p>Each Marine's name becomes the From line and signature. Add their names, leave dates, and reasons in the table. Each PDF is a complete leave request "from" that Marine.</p>
+        </section>
+
+        <div class="help-footer">
+          <button type="button" class="btn btn-primary" onclick="closeBatchHelp()">Got It</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeBatchHelp();
+  });
+
+  return modal;
+}
+
 // Export for module usage
 if (typeof window !== 'undefined') {
   window.initBatchGeneratorModule = initBatchGeneratorModule;
@@ -665,6 +1062,15 @@ if (typeof window !== 'undefined') {
   window.closeBatchModal = closeBatchModal;
   window.generateBatchLetters = generateBatchLetters;
   window.handleBatchCsvUpload = handleBatchCsvUpload;
+  // Editable table functions
+  window.addBatchRow = addBatchRow;
+  window.removeBatchRow = removeBatchRow;
+  window.updateBatchCell = updateBatchCell;
+  window.clearBatchTable = clearBatchTable;
+  window.initEditableTable = initEditableTable;
+  // Help modal
+  window.showBatchHelp = showBatchHelp;
+  window.closeBatchHelp = closeBatchHelp;
 }
 
 /**

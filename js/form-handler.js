@@ -93,8 +93,8 @@ function togglePortionMarking() {
   const portionCheckbox = document.getElementById('enablePortionMarking');
 
   if (portionOption) {
-    // Show portion marking option for CUI/FOUO
-    portionOption.style.display = classification ? 'block' : 'none';
+    // Show portion marking option for CUI/FOUO (inline-flex for options panel)
+    portionOption.style.display = classification ? 'inline-flex' : 'none';
 
     // If classification is cleared, disable portion marking
     if (!classification && portionCheckbox) {
@@ -296,7 +296,7 @@ function addParaAfter(afterEl, type) {
       ${portionSelector}
       <span class="para-label" aria-hidden="true"></span>
       ${subjectField}
-      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text"></textarea>
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text" spellcheck="true"></textarea>
     </div>
   `;
 

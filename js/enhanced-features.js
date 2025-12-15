@@ -23,31 +23,26 @@ const MILITARY_TERMS = new Set([
   'LIMDU', 'MEDEVAC', 'CASEVAC', 'KIA', 'WIA', 'MIA', 'AWOL', 'CUI', 'FOUO'
 ]);
 
-let spellCheckEnabled = false;
 let spellCheckTimeout = null;
 
 /**
- * Initialize spell check functionality
+ * Initialize spell check functionality - always enabled
  */
 function initSpellCheck() {
-  const toggle = document.getElementById('spellCheckToggle');
-  if (toggle) {
-    toggle.addEventListener('change', (e) => {
-      spellCheckEnabled = e.target.checked;
-      if (spellCheckEnabled) {
-        runSpellCheckOnAll();
-      } else {
-        clearAllSpellCheckHighlights();
-      }
-    });
-  }
-
   // Listen for paragraph changes
   document.getElementById('paraContainer')?.addEventListener('input', (e) => {
-    if (spellCheckEnabled && e.target.matches('textarea')) {
+    if (e.target.matches('textarea')) {
       scheduleSpellCheck(e.target);
     }
   });
+
+  // Also run when paragraphs are added
+  document.addEventListener('paragraphsChanged', () => {
+    setTimeout(() => runSpellCheckOnAll(), 100);
+  });
+
+  // Run spell check on existing paragraphs
+  setTimeout(() => runSpellCheckOnAll(), 600);
 }
 
 /**
@@ -153,40 +148,27 @@ function clearAllSpellCheckHighlights() {
 }
 
 // ============================================================
-// CHARACTER COUNT
+// CHARACTER COUNT (Always On)
 // ============================================================
 
-let charCountEnabled = false;
-
 /**
- * Initialize character count functionality
+ * Initialize character count functionality - always enabled
  */
 function initCharacterCount() {
-  const toggle = document.getElementById('charCountToggle');
-  if (toggle) {
-    toggle.addEventListener('change', (e) => {
-      charCountEnabled = e.target.checked;
-      if (charCountEnabled) {
-        showCharacterCounts();
-      } else {
-        hideCharacterCounts();
-      }
-    });
-  }
-
   // Listen for paragraph changes
   document.getElementById('paraContainer')?.addEventListener('input', (e) => {
-    if (charCountEnabled && e.target.matches('textarea')) {
+    if (e.target.matches('textarea')) {
       updateCharacterCount(e.target);
     }
   });
 
   // Also update when paragraphs are added
   document.addEventListener('paragraphsChanged', () => {
-    if (charCountEnabled) {
-      showCharacterCounts();
-    }
+    showCharacterCounts();
   });
+
+  // Show counts on any existing paragraphs
+  setTimeout(() => showCharacterCounts(), 500);
 }
 
 /**

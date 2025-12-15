@@ -11,6 +11,12 @@ async function generatePDF() {
     showStatus('error', 'PDF library not loaded. Please refresh the page.');
     return;
   }
+
+  // Run validation before generating
+  if (typeof validateBeforeDownload === 'function' && !validateBeforeDownload()) {
+    return;
+  }
+
   const { jsPDF } = window.jspdf;
   const d = collectData();
 

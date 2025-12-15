@@ -66,50 +66,201 @@
 
   <!-- Template Modal -->
   <div id="templateModal" class="modal">
-    <div class="modal-content template-modal">
+    <div class="modal-content template-modal template-modal-wide">
       <div class="modal-header">
         <h2>Choose a Template</h2>
         <button type="button" id="templateClose" class="modal-close" aria-label="Close">&times;</button>
       </div>
-      <div class="template-filters">
-        <input type="text" id="templateSearch" placeholder="Search templates..." class="template-search">
-        <select id="categoryFilter" class="category-filter">
-          <option value="">All Categories</option>
-        </select>
+      <div class="template-body">
+        <div class="template-list-pane">
+          <div class="template-filters">
+            <input type="text" id="templateSearch" placeholder="Search templates..." class="template-search">
+            <select id="categoryFilter" class="category-filter">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+          <div id="templateList" class="template-list"></div>
+        </div>
+        <div class="template-preview-pane" id="templatePreviewPane">
+          <div class="template-preview-empty">
+            <p>Select a template to preview</p>
+          </div>
+        </div>
       </div>
-      <div id="templateList" class="template-list"></div>
+    </div>
+  </div>
+
+  <!-- Reference Library Modal -->
+  <div id="refLibraryModal" class="modal">
+    <div class="modal-content ref-library-modal">
+      <div class="modal-header">
+        <h2>Reference Library</h2>
+        <button type="button" class="modal-close" onclick="closeReferenceLibrary()" aria-label="Close">&times;</button>
+      </div>
+      <div class="ref-library-content">
+        <div class="ref-search-box">
+          <input type="text" id="refLibrarySearch" placeholder="Search MCOs, SECNAVINSTs, topics..." aria-label="Search references">
+        </div>
+        <div id="refLibraryResults" class="ref-library-results">
+          <!-- Results populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Profile Modal -->
+  <div id="profileModal" class="modal">
+    <div class="modal-content profile-modal">
+      <div class="modal-header">
+        <h2>My Profile</h2>
+        <button type="button" class="modal-close" onclick="closeProfileModal()" aria-label="Close">&times;</button>
+      </div>
+      <div class="profile-content">
+        <div class="profile-disclaimer">
+          <strong>Data Security Notice:</strong> Profile data is stored in your browser's session only and is automatically cleared when you close the browser. No data is stored permanently on this computer or transmitted anywhere. Use "Export to File" to save your profile to your personal storage device.
+        </div>
+
+        <div class="profile-file-actions">
+          <button type="button" class="btn btn-secondary" onclick="importProfileFromFile()">Load from File</button>
+          <button type="button" class="btn btn-secondary" onclick="exportProfileToFile()">Export to File</button>
+        </div>
+
+        <div class="profile-section">
+          <h3>Personal Information</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Signature Name</label>
+              <input type="text" id="profileName" placeholder="J. M. SMITH" aria-label="Signature name">
+              <p class="help-text">How your name appears in signature block</p>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group small">
+              <label>Rank</label>
+              <input type="text" id="profileRank" placeholder="Capt" aria-label="Rank">
+            </div>
+            <div class="form-group">
+              <label>Billet/Title</label>
+              <input type="text" id="profileBillet" placeholder="Commanding Officer" aria-label="Billet or title">
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Unit Information</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Service/Organization</label>
+              <input type="text" id="profileUnitService" value="UNITED STATES MARINE CORPS" aria-label="Service or organization">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Unit Name</label>
+              <input type="text" id="profileUnitName" placeholder="MARINE CORPS DETACHMENT" aria-label="Unit name">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Unit Address</label>
+              <textarea id="profileUnitAddress" rows="2" placeholder="DEFENSE LANGUAGE INSTITUTE&#10;PRESIDIO OF MONTEREY, CA 93944" aria-label="Unit address"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Default From Line</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>From</label>
+              <input type="text" id="profileFromLine" placeholder="Commanding Officer, Marine Corps Detachment" aria-label="Default from line">
+              <p class="help-text">Auto-generates from Billet + Unit, or customize</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Contact &amp; Preferences</h3>
+          <div class="form-row">
+            <div class="form-group small">
+              <label>Office Code</label>
+              <input type="text" id="profileOfficeCode" placeholder="S-1" aria-label="Default office code">
+            </div>
+            <div class="form-group small">
+              <label>Phone</label>
+              <input type="text" id="profilePhone" placeholder="DSN 555-1234" aria-label="Phone number">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="text" id="profileEmail" placeholder="john.smith@usmc.mil" aria-label="Email address">
+            </div>
+          </div>
+          <div class="toggle-group" style="margin-top: 12px;">
+            <input type="checkbox" id="profileByDirection" aria-label="Default by direction">
+            <label for="profileByDirection">Default to "By direction"</label>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button type="button" class="btn btn-success" onclick="saveProfileFromModal()">Apply to Session</button>
+          <button type="button" class="btn btn-secondary" onclick="captureFormToProfile()">Capture from Form</button>
+          <button type="button" class="btn btn-danger-outline" onclick="if(confirm('Clear profile from this session?')){clearUserProfile();closeProfileModal();}">Clear Session</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Live Preview Pane -->
   <!-- Batch Generation Modal -->
   <div id="batchModal" class="modal">
-    <div class="modal-content batch-modal">
+    <div class="modal-content batch-modal batch-modal-wide">
       <div class="modal-header">
         <h2>Batch Generate Letters</h2>
         <button type="button" id="batchModalClose" class="modal-close" aria-label="Close">&times;</button>
       </div>
       <div class="batch-content">
-        <div class="batch-guide" style="background: var(--gray-100); padding: 16px; border-radius: var(--radius); margin-bottom: 20px;">
-          <h3 style="margin: 0 0 12px 0; font-size: 1rem;">How It Works</h3>
-          <ol style="margin: 0; padding-left: 20px; font-size: 0.9rem; line-height: 1.6;">
-            <li><strong>Set up your template</strong> - Fill out the form with placeholders like <code>{{name}}</code>, <code>{{rank}}</code>, <code>{{subject}}</code></li>
-            <li><strong>Upload CSV</strong> - Each row becomes a letter. Column headers must match your placeholders.</li>
-            <li><strong>Generate</strong> - Downloads a ZIP file with all PDFs.</li>
-          </ol>
-          <p style="margin: 12px 0 0 0; font-size: 0.85rem; color: var(--gray-600);">
-            <strong>Available placeholders:</strong> <code>{{name}}</code> <code>{{rank}}</code> <code>{{to}}</code> <code>{{from}}</code> <code>{{subject}}</code> <code>{{date}}</code> <code>{{ssic}}</code> - or any column name from your CSV
-          </p>
+        <div class="batch-guide">
+          <div class="batch-guide-header">
+            <h3>How It Works</h3>
+            <button type="button" class="batch-help-btn" onclick="showBatchHelp()" title="Full explanation with examples">?</button>
+          </div>
+          <p>Your current letter is the template. Add recipients below - each row generates a separate letter.</p>
+          <div class="batch-options">
+            <label class="batch-option" title="Use for awards, counseling, notifications - you sign all letters">
+              <input type="checkbox" id="batchKeepSignature" checked>
+              <span>Keep my signature</span>
+            </label>
+            <label class="batch-option" title="Use for leave requests - each person signs their own letter">
+              <input type="checkbox" id="batchNameIsSignature">
+              <span>Name = Signature</span>
+            </label>
+          </div>
         </div>
-        <div class="batch-actions" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-          <button type="button" class="btn btn-secondary" onclick="downloadBatchTemplate()">Download Template CSV</button>
-          <label for="batchCsvInput" class="btn btn-primary" style="cursor: pointer; margin: 0;">Upload Your CSV</label>
-          <input type="file" id="batchCsvInput" accept=".csv" style="display: none;">
-          <span id="batchCount" style="color: var(--gray-600);"></span>
+
+        <!-- Editable Table Section -->
+        <div class="batch-table-section">
+          <div class="batch-table-header">
+            <h3>Recipients <span id="batchCount" class="batch-count-badge"></span></h3>
+            <div class="batch-table-actions">
+              <button type="button" class="btn btn-sm btn-primary" onclick="addBatchRow()">+ Add Row</button>
+              <label for="batchCsvInput" class="btn btn-sm btn-secondary" style="cursor: pointer; margin: 0;">Import CSV</label>
+              <input type="file" id="batchCsvInput" accept=".csv" style="display: none;">
+              <button type="button" class="btn btn-sm btn-secondary" onclick="downloadBatchTemplate()" title="Download a sample CSV template">Template</button>
+              <button type="button" class="btn btn-sm btn-danger-outline" onclick="clearBatchTable()" title="Clear all rows">Clear</button>
+            </div>
+          </div>
+          <div id="batchTableEditor" class="batch-table-editor">
+            <!-- Editable table renders here -->
+          </div>
         </div>
-        <div id="batchPreview" style="display: none; margin-top: 16px; max-height: 250px; overflow: auto;"></div>
-        <div style="margin-top: 20px; text-align: right;">
-          <button type="button" id="batchGenerateSubmit" class="btn btn-success" disabled>Generate All Letters</button>
+
+        <div class="batch-placeholders-hint">
+          <strong>Auto-mapped:</strong> To &rarr; To line, Subject &rarr; Subject, Date &rarr; Date, SSIC &rarr; SSIC<br>
+          <strong>In paragraphs:</strong> Use <code>{{name}}</code>, <code>{{rank}}</code>, <code>{{reason}}</code>, <code>{{period}}</code> to insert values mid-sentence
+        </div>
+
+        <div class="batch-footer">
+          <button type="button" id="batchGenerateSubmit" class="btn btn-success btn-lg" disabled>Generate All Letters</button>
         </div>
       </div>
     </div>
@@ -128,6 +279,12 @@
 
   <div class="container" role="main">
     <header role="banner">
+      <div class="header-profile">
+        <button type="button" class="btn btn-profile" onclick="openProfileModal()" title="Save your info for auto-fill">
+          <span class="profile-icon">👤</span>
+          <span class="profile-text">My Profile</span>
+        </button>
+      </div>
       <div class="header-controls">
         <span id="offlineIndicator" class="offline-indicator" title="Shows if app can work offline. Green = cached and ready, Red = online only">
           <span class="indicator-dot"></span>
@@ -202,38 +359,47 @@
       <!-- Basic Info -->
       <div class="form-section">
         <h2 class="section-title">Header Information</h2>
-        <div class="form-row">
-          <div class="form-group medium">
+        <div class="form-row header-info-row">
+          <div class="form-group">
             <label>SSIC</label>
             <div class="search-container">
-              <input type="text" id="ssicSearch" aria-label="SSIC code search" placeholder="Search or enter code..." autocomplete="off">
+              <input type="text" id="ssicSearch" aria-label="SSIC code search" placeholder="1050" autocomplete="off" title="Search by keyword (e.g., 'leave') or enter code directly">
               <div class="search-results" id="ssicResults"></div>
             </div>
-            <p class="help-text">e.g., "leave" or "1050"</p>
           </div>
-          <div class="form-group small">
+          <div class="form-group">
             <label>Office Code</label>
-            <input type="text" id="officeCode" aria-label="Office code" placeholder="S-1">
+            <input type="text" id="officeCode" aria-label="Office code" placeholder="S-1" title="Your office symbol (e.g., S-1, G-3, Adj)">
           </div>
-          <div class="form-group small">
+          <div class="form-group">
             <label>Date</label>
-            <input type="text" id="date" aria-label="Date" placeholder="Auto-formats">
-            <p class="help-text">Any format works</p>
+            <input type="text" id="date" aria-label="Date" placeholder="Auto-formats" title="Enter any format - auto-converts to military format">
           </div>
-          <div class="form-group" style="flex: 0 0 180px;">
+          <div class="form-group">
             <label>Classification</label>
-            <select id="classification" aria-label="Classification level" onchange="togglePortionMarking()">
+            <select id="classification" aria-label="Classification level" onchange="togglePortionMarking()" title="Document classification level">
               <option value="">UNCLASSIFIED</option>
               <option value="CUI">CUI</option>
               <option value="FOUO">FOR OFFICIAL USE ONLY</option>
             </select>
           </div>
-          <div class="form-group portion-marking-option" id="portionMarkingOption" style="display: none; flex: 0 0 auto;">
-            <label class="checkbox-label" style="margin-top: 24px;">
-              <input type="checkbox" id="enablePortionMarking">
-              <span>Enable portion marking</span>
-            </label>
-          </div>
+        </div>
+        <button type="button" class="header-options-toggle" onclick="toggleHeaderOptions()" title="Serial number, DTG format, portion marking">
+          <span class="toggle-icon">⚙</span> <span id="headerOptionsText">More options</span>
+        </button>
+        <div id="headerOptionsPanel" class="header-options-panel" style="display: none;">
+          <label class="option-toggle" title="Format as Office Code + sequential number (e.g., S-1/0045)">
+            <input type="checkbox" id="useSerialNumber" onchange="toggleSerialNumber()">
+            <span>Serial number format</span>
+          </label>
+          <label class="option-toggle" title="Use Date-Time Group format (e.g., 141200ZDEC25)">
+            <input type="checkbox" id="useDTGFormat" onchange="toggleDTGMode()">
+            <span>DTG format</span>
+          </label>
+          <label class="option-toggle portion-option" id="portionMarkingOption" style="display: none;" title="Add (U), (CUI), or (FOUO) marks to each paragraph">
+            <input type="checkbox" id="enablePortionMarking">
+            <span>Portion marking</span>
+          </label>
         </div>
       </div>
 
@@ -286,9 +452,9 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Subject</label>
+            <label>Subject <span id="subjCharCount" class="char-count">0/100</span></label>
             <input type="text" id="subj" aria-label="Subject line" placeholder="REQUEST FOR ADDITIONAL PERSONNEL">
-            <p class="help-text">Auto-capitalizes</p>
+            <p class="help-text">Auto-capitalizes · Keep under 100 chars</p>
           </div>
         </div>
       </div>
@@ -334,7 +500,10 @@
           <div style="margin-bottom: 20px;">
             <label style="margin-bottom: 10px; display: block;">References <span style="font-weight: 400; color: var(--gray-500);">— auto-letters (a), (b), (c)</span></label>
             <div class="dynamic-list" id="refList"></div>
-            <button type="button" class="btn btn-add" onclick="addRef()">+ Add Reference</button>
+            <div class="ref-buttons">
+              <button type="button" class="btn btn-add" onclick="addRef()">+ Add Reference</button>
+              <button type="button" class="btn btn-secondary btn-library" onclick="openReferenceLibrary()">📚 Browse Library</button>
+            </div>
           </div>
           <div>
             <label style="margin-bottom: 10px; display: block;">Enclosures <span style="font-weight: 400; color: var(--gray-500);">— auto-numbers (1), (2), (3)</span></label>
@@ -355,10 +524,6 @@
             <button type="button" id="redoBtn" class="btn btn-icon" onclick="redo()" title="Redo (Ctrl+Y)" disabled>
               <span class="icon-redo">↷</span>
             </button>
-          </div>
-          <div class="para-options" style="display: flex; gap: 16px; margin-left: auto;">
-            <label class="toggle-label" title="Highlight potential spelling issues" style="display: flex; align-items: center; gap: 4px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" id="spellCheckToggle"> Spell Check</label>
-            <label class="toggle-label" title="Show character and word count" style="display: flex; align-items: center; gap: 4px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" id="charCountToggle"> Char Count</label>
           </div>
         </div>
         <p class="help-text" style="margin-bottom: 16px;">
@@ -399,7 +564,7 @@
     <!-- Actions -->
     <div class="actions-bar">
       <div class="actions actions-primary">
-        <button type="button" class="btn btn-success btn-large" onclick="generatePDF()">Download PDF</button>
+        <button type="button" class="btn btn-success btn-large" onclick="generatePDFSafe()">Download PDF</button>
         <button type="button" class="btn btn-secondary" onclick="printPDF()">Print</button>
       </div>
       <div class="actions actions-secondary">
@@ -407,9 +572,18 @@
         <button type="button" class="btn btn-secondary" onclick="downloadZip()">Download ZIP</button>
         <button type="button" class="btn btn-secondary" onclick="exportDraft()">Save Draft</button>
         <button type="button" class="btn btn-secondary" onclick="importDraft()">Load Draft</button>
+        <button type="button" class="btn btn-secondary" onclick="duplicateLetter()">Duplicate</button>
         <button type="button" class="btn btn-secondary" onclick="exportToWord()">Download Word</button>
         <button type="button" class="btn btn-secondary" onclick="copyAsPlainText()">Copy Text</button>
         <button type="button" id="batchGenerateBtn" class="btn btn-secondary">Batch Generate</button>
+      </div>
+    </div>
+
+    <!-- Recent Drafts (Session Only) -->
+    <div class="recent-drafts-section">
+      <h3 class="recent-drafts-title">Recent Drafts (This Session)</h3>
+      <div id="recentDraftsContainer">
+        <p class="recent-drafts-empty">No recent drafts in this session</p>
       </div>
     </div>
 
@@ -419,7 +593,7 @@
     <footer role="contentinfo">
       <p><strong>Naval Letter Generator v3.1</strong> · SECNAV M-5216.5</p>
       <p>Created by Jesse Morgan · Personal project, not officially endorsed</p>
-      <p><a href="https://github.com/jeranaias/navalletterformat">GitHub</a> · <a href="https://github.com/jeranaias/navalletterformat/issues">Report Issues</a></p>
+      <p><a href="https://github.com/jeranaias/navalletterformat">GitHub</a> · <a href="https://github.com/jeranaias/navalletterformat/issues">Report Issues</a> · <a href="#" onclick="showTipsAgain();return false;">Show Tips</a></p>
     </footer>
   </div>
 
@@ -442,6 +616,11 @@
   <script src="js/import-export-manager.js"></script>
   <script src="js/enhanced-features.js"></script>
   <script src="js/batch-generator.js"></script>
+  <script src="js/user-profile.js"></script>
+  <script src="js/reference-library.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/enhancements.js"></script>
+  <script src="js/welcome.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

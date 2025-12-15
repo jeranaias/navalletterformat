@@ -21,23 +21,55 @@ Just open the link, fill in your information, and download your PDF.
 
 ---
 
-## What's New in v3.1
+## 🚀 What's New in v3.1 — Major Release
 
-### Document Import/Export
-- **Word Document Import** — Drop a .docx file to import existing letters
-- **Word Document Export** — Download as editable Word document
-- **Copy as Plain Text** — Copy formatted letter to clipboard for email
+**This is the biggest update yet.** We've added user profiles, a massive reference library, 37 total templates, smart validation, and polished every corner of the UI.
 
-### Smart Features
-- **Recently Used Memory** — From/To/Unit fields remember your entries
-- **Spell Check** — Toggle to highlight potential spelling issues
-- **Character Count** — See char/word count per paragraph
-- **Auto-format References** — Paste "MCO 1500.52A" and get proper formatting
+### User Profile System
+- **Session-only storage** — Profile clears when browser closes (no PII on shared computers)
+- **Import/Export profiles** — Save your settings to JSON, load on any computer
+- **Auto-populate forms** — Your name, unit, office code auto-fill every time
+- **Capture from Form** — One click saves current form values to your profile
 
-### Batch Generation
-- **CSV Upload** — Generate multiple letters from spreadsheet data
-- **ZIP Download** — Get all letters in one download
-- **Template Variables** — Use \`{{name}}\`, \`{{unit}}\` placeholders in your template
+### Reference Library — 100+ Military References
+- **Searchable database** of MCOs, SECNAVINSTs, DoD Directives, Navy Regs
+- **12 categories:** Personnel, Training, Safety, Operations, Supply, Admin, Legal, Medical, Awards, Intel, Comms
+- **One-click insert** — Click any reference to add it to your letter
+- **Keyword search** — Find references by topic, not just number
+
+### 37 Pre-Built Templates
+Expanded from 20 to **37 Marine-centric templates** including:
+- **NEW:** Appointment as Investigating Officer, Collateral Duty, Board/Committee
+- **NEW:** Meritorious Mast, TAD Request, Duty Status Change, Safety Officer
+- **NEW:** Personal Award Recommendation, Statement Under Oath, Extension Endorsement
+- **NEW:** 6105 Counseling, Meritorious Promotion, Humanitarian Transfer, LOI, Legal Hold
+
+### Smart Validation & Security
+- **PII/PHI Detection** — Warns before generating if SSN, EDIPI, DOB, or medical info detected
+- **CUI Classification Reminder** — Confirms you've properly marked CUI/FOUO documents
+- **Subject length warning** — Alerts when subject exceeds 100 characters
+- **Required field validation** — Blocks generation if critical fields missing
+
+### Batch Generator Enhancements
+- **Inline editable table** — Enter data directly, no Excel/CSV required
+- **Two signature modes:** "Keep my signature" (awards/counseling) vs "Name = Signature" (leave requests)
+- **Built-in help** — "?" button with detailed examples and use cases
+- **Placeholder system** — `{{name}}`, `{{rank}}`, `{{reason}}`, `{{period}}` in paragraphs
+
+### First-Time User Experience
+- **Welcome modal** — Highlights key features for new users
+- **Feature cards** — Quick overview of Templates, References, Batch, Security
+- **"Show Tips" link** — Access welcome screen anytime from footer
+
+### Template Preview
+- **Preview before applying** — See full template content before loading
+- **Split-pane layout** — Browse templates on left, preview on right
+
+### UI Polish
+- **Header Information redesigned** — Clean 4-column grid with expandable "More options"
+- **Always-on features** — Spell check and character count enabled by default
+- **Tooltips everywhere** — Hover for help instead of cluttered help text
+- **Dark mode improvements** — Better contrast throughout
 
 ---
 
@@ -80,8 +112,8 @@ Toggle real-time preview to see your formatted letter as you type. Debounced upd
 ### One-Click PDF Generation
 Click "Download PDF" and get your formatted letter instantly. No external tools, no accounts, no waiting.
 
-### 20 Pre-Built Templates
-Start from common letter types instead of blank. Search by name or filter by category.
+### 37 Pre-Built Templates
+Start from common letter types instead of blank. Search by name or filter by category. Categories include Personnel, Awards, Leadership, Endorsements, Training, Administrative, Investigations, and Legal.
 
 ### SSIC Search (2,240 Codes)
 Complete database from SECNAV M-5210.2 (August 2018). Type a subject and get matching codes:
@@ -256,9 +288,11 @@ CG, TECOM (C 469)
 
 ## Roadmap
 
-### Planned Features
+### Coming Soon
+- **PDF Import** — Parse existing PDF correspondence documents (in development)
+
+### Future Considerations
 - **Collaboration/sharing** — Share drafts with others (requires backend)
-- **PDF Import** — Parse existing PDF correspondence documents
 - **Navy letterhead support** — Additional unit databases for USN commands
 
 **Want to influence priorities?** [Vote on issues](https://github.com/jeranaias/navalletterformat/issues) or open a new one.
