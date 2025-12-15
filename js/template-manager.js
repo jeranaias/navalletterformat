@@ -90,6 +90,15 @@ function populateCategoryFilter() {
 function openTemplateModal() {
   const modal = document.getElementById('templateModal');
   if (modal) {
+    // Reset selection
+    selectedTemplateId = null;
+
+    // Reset preview pane
+    const previewPane = document.getElementById('templatePreviewPane');
+    if (previewPane) {
+      previewPane.innerHTML = '<div class="template-preview-empty"><p>Select a template to preview</p></div>';
+    }
+
     modal.classList.add('show');
     renderTemplateList();
     document.getElementById('templateSearch')?.focus();
@@ -112,6 +121,9 @@ function closeTemplateModal() {
 function filterTemplates() {
   renderTemplateList();
 }
+
+// Track currently selected template for preview
+let selectedTemplateId = null;
 
 /**
  * Render the template list
@@ -137,7 +149,7 @@ function renderTemplateList() {
   }
 
   container.innerHTML = filtered.map(t => `
-    <div class="template-card" onclick="applyTemplate('${t.id}')">
+    <div class="template-card ${selectedTemplateId === t.id ? 'selected' : ''}" onclick="previewTemplate('${t.id}')">
       <div class="template-card-header">
         <h4>${t.name}</h4>
         <span class="template-category">${t.category}</span>
@@ -146,6 +158,98 @@ function renderTemplateList() {
       ${t.ssic ? `<span class="template-ssic">SSIC: ${t.ssic}</span>` : ''}
     </div>
   `).join('');
+}
+
+/**
+ * Preview a template (show in preview pane)
+ */
+function previewTemplate(templateId) {
+  const template = TEMPLATE_DATABASE.find(t => t.id === templateId);
+  if (!template) return;
+
+  selectedTemplateId = templateId;
+
+  // Update list to show selection
+  renderTemplateList();
+
+  // Render preview
+  const previewPane = document.getElementById('templatePreviewPane');
+  if (!previewPane) return;
+
+  let html = `
+    <div class="template-preview-content">
+      <div class="template-preview-header">
+        <h3>${template.name}</h3>
+        <span class="template-category">${template.category}</span>
+      </div>
+      <p class="template-preview-desc">${template.description}</p>
+  `;
+
+  // Document type
+  if (template.documentType) {
+    html += `<div class="template-preview-field">
+      <strong>Document Type:</strong> ${template.documentType === 'basic' ? 'Basic Letter' : template.documentType === 'endorsement' ? 'Endorsement' : 'Memorandum'}
+    </div>`;
+  }
+
+  // SSIC
+  if (template.ssic) {
+    html += `<div class="template-preview-field">
+      <strong>SSIC:</strong> ${template.ssic}
+    </div>`;
+  }
+
+  // Subject
+  if (template.subj) {
+    html += `<div class="template-preview-field">
+      <strong>Subject:</strong> ${template.subj}
+    </div>`;
+  }
+
+  // References
+  if (template.refs && template.refs.length > 0) {
+    html += `<div class="template-preview-field">
+      <strong>References:</strong>
+      <ul class="template-preview-list">
+        ${template.refs.map(r => `<li>${r}</li>`).join('')}
+      </ul>
+    </div>`;
+  }
+
+  // Enclosures
+  if (template.encls && template.encls.length > 0) {
+    html += `<div class="template-preview-field">
+      <strong>Enclosures:</strong>
+      <ul class="template-preview-list">
+        ${template.encls.map(e => `<li>${e}</li>`).join('')}
+      </ul>
+    </div>`;
+  }
+
+  // Paragraphs
+  if (template.paragraphs && template.paragraphs.length > 0) {
+    html += `<div class="template-preview-field">
+      <strong>Body:</strong>
+      <div class="template-preview-body">
+        ${template.paragraphs.map((p, i) => `
+          <div class="template-preview-para">
+            <span class="para-num">${i + 1}.</span>
+            ${p.subject ? `<span class="para-subj">${p.subject}</span> ` : ''}
+            <span class="para-text">${p.text}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+
+  html += `
+      <div class="template-preview-actions">
+        <button type="button" class="btn btn-primary btn-lg" onclick="applyTemplate('${templateId}')">Use This Template</button>
+      </div>
+    </div>
+  `;
+
+  previewPane.innerHTML = html;
 }
 
 /**
@@ -283,4 +387,5 @@ if (typeof window !== 'undefined') {
   window.openTemplateModal = openTemplateModal;
   window.closeTemplateModal = closeTemplateModal;
   window.applyTemplate = applyTemplate;
+  window.previewTemplate = previewTemplate;
 }

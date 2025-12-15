@@ -191,7 +191,7 @@ function rebuildParagraphFromFlat(container, paraData) {
       ${portionSelector}
       <span class="para-label" aria-hidden="true"></span>
       ${subjectField}
-      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text">${escapeHtml(paraData.text || '')}</textarea>
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text" spellcheck="true">${escapeHtml(paraData.text || '')}</textarea>
     </div>
   `;
 
