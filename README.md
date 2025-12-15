@@ -4,7 +4,7 @@
 
 [![SECNAV M-5216.5](https://img.shields.io/badge/SECNAV-M--5216.5-blue)](https://www.secnav.navy.mil/doni/SECNAV%20Manuals1/5216.5%20DON%20Correspondence%20Manual.pdf)
 [![MCO 5216.20](https://img.shields.io/badge/MCO-5216.20-red)](https://www.marines.mil/News/Publications/MCPEL/Electronic-Library-Display/Article/899678/mco-521620/)
-[![Version](https://img.shields.io/badge/Version-3.0.0-green)](https://github.com/jeranaias/navalletterformat/releases)
+[![Version](https://img.shields.io/badge/Version-3.1.0-green)](https://github.com/jeranaias/navalletterformat/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **Live Tool: [https://jeranaias.github.io/navalletterformat/](https://jeranaias.github.io/navalletterformat/)**
@@ -18,6 +18,26 @@ The **Naval Letter Generator** is a free, browser-based tool that creates proper
 **No software installation. No account. No Overleaf required.**
 
 Just open the link, fill in your information, and download your PDF.
+
+---
+
+## What's New in v3.1
+
+### Document Import/Export
+- **Word Document Import** — Drop a .docx file to import existing letters
+- **Word Document Export** — Download as editable Word document
+- **Copy as Plain Text** — Copy formatted letter to clipboard for email
+
+### Smart Features
+- **Recently Used Memory** — From/To/Unit fields remember your entries
+- **Spell Check** — Toggle to highlight potential spelling issues
+- **Character Count** — See char/word count per paragraph
+- **Auto-format References** — Paste "MCO 1500.52A" and get proper formatting
+
+### Batch Generation
+- **CSV Upload** — Generate multiple letters from spreadsheet data
+- **ZIP Download** — Get all letters in one download
+- **Template Variables** — Use \`{{name}}\`, \`{{unit}}\` placeholders in your template
 
 ---
 
@@ -236,10 +256,10 @@ CG, TECOM (C 469)
 
 ## Roadmap
 
-### Planned Features (High Effort)
-- **Import from Word/PDF** — Parse existing correspondence documents
-- **Multi-letter batch generation** — Generate multiple letters from spreadsheet data
+### Planned Features
 - **Collaboration/sharing** — Share drafts with others (requires backend)
+- **PDF Import** — Parse existing PDF correspondence documents
+- **Navy letterhead support** — Additional unit databases for USN commands
 
 **Want to influence priorities?** [Vote on issues](https://github.com/jeranaias/navalletterformat/issues) or open a new one.
 
@@ -307,7 +327,7 @@ Thanks to the Marines who've provided feedback:
 ## About
 
 **Created by:** Jesse Morgan
-**Version:** 3.0.0
+**Version:** 3.1.0
 **Status:** Active development
 
 *Personal project, not officially endorsed by any military branch.*

@@ -82,6 +82,38 @@
   </div>
 
   <!-- Live Preview Pane -->
+  <!-- Batch Generation Modal -->
+  <div id="batchModal" class="modal">
+    <div class="modal-content batch-modal">
+      <div class="modal-header">
+        <h2>Batch Generate Letters</h2>
+        <button type="button" id="batchModalClose" class="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="batch-content">
+        <div class="batch-guide" style="background: var(--gray-100); padding: 16px; border-radius: var(--radius); margin-bottom: 20px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 1rem;">How It Works</h3>
+          <ol style="margin: 0; padding-left: 20px; font-size: 0.9rem; line-height: 1.6;">
+            <li><strong>Set up your template</strong> - Fill out the form with placeholders like <code>{{name}}</code>, <code>{{rank}}</code>, <code>{{subject}}</code></li>
+            <li><strong>Upload CSV</strong> - Each row becomes a letter. Column headers must match your placeholders.</li>
+            <li><strong>Generate</strong> - Downloads a ZIP file with all PDFs.</li>
+          </ol>
+          <p style="margin: 12px 0 0 0; font-size: 0.85rem; color: var(--gray-600);">
+            <strong>Available placeholders:</strong> <code>{{name}}</code> <code>{{rank}}</code> <code>{{to}}</code> <code>{{from}}</code> <code>{{subject}}</code> <code>{{date}}</code> <code>{{ssic}}</code> - or any column name from your CSV
+          </p>
+        </div>
+        <div class="batch-actions" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary" onclick="downloadBatchTemplate()">Download Template CSV</button>
+          <label for="batchCsvInput" class="btn btn-primary" style="cursor: pointer; margin: 0;">Upload Your CSV</label>
+          <input type="file" id="batchCsvInput" accept=".csv" style="display: none;">
+          <span id="batchCount" style="color: var(--gray-600);"></span>
+        </div>
+        <div id="batchPreview" style="display: none; margin-top: 16px; max-height: 250px; overflow: auto;"></div>
+        <div style="margin-top: 20px; text-align: right;">
+          <button type="button" id="batchGenerateSubmit" class="btn btn-success" disabled>Generate All Letters</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div id="livePreviewPane" class="live-preview-pane">
     <div class="preview-header">
       <span>Live Preview</span>
@@ -111,6 +143,18 @@
 
     <p class="intro-link">
       Free tool for Marines · <a href="https://github.com/jeranaias/navalletterformat#readme" target="_blank">Full Guide &amp; Documentation →</a>
+    </p>
+
+    <!-- Document Import Drop Zone -->
+    <div id="docDropZone" class="doc-drop-zone" title="Drop a Word document or click to upload">
+      <div class="drop-zone-content">
+        <span class="drop-icon">📄</span>
+        <span class="drop-text">Drop Word doc here or click to import existing letter</span>
+      </div>
+      <input type="file" id="docFileInput" accept=".docx,.doc,.txt" style="display: none;">
+    </div>
+
+
     </p>
 
     <form id="letterForm" role="form" aria-label="Naval letter form">
@@ -312,6 +356,10 @@
               <span class="icon-redo">↷</span>
             </button>
           </div>
+          <div class="para-options" style="display: flex; gap: 16px; margin-left: auto;">
+            <label class="toggle-label" title="Highlight potential spelling issues" style="display: flex; align-items: center; gap: 4px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" id="spellCheckToggle"> Spell Check</label>
+            <label class="toggle-label" title="Show character and word count" style="display: flex; align-items: center; gap: 4px; font-size: 0.85rem; cursor: pointer;"><input type="checkbox" id="charCountToggle"> Char Count</label>
+          </div>
         </div>
         <p class="help-text" style="margin-bottom: 16px;">
           <strong>1.</strong> → <strong>a.</strong> → <strong>(1)</strong> → <strong>(a)</strong> &nbsp;|&nbsp; <strong>+</strong> add below &nbsp;|&nbsp; <strong>↳</strong> add sub &nbsp;|&nbsp; Drag ☰ to reorder &nbsp;|&nbsp; <strong>Ctrl+Z/Y</strong> undo/redo
@@ -359,6 +407,9 @@
         <button type="button" class="btn btn-secondary" onclick="downloadZip()">Download ZIP</button>
         <button type="button" class="btn btn-secondary" onclick="exportDraft()">Save Draft</button>
         <button type="button" class="btn btn-secondary" onclick="importDraft()">Load Draft</button>
+        <button type="button" class="btn btn-secondary" onclick="exportToWord()">Download Word</button>
+        <button type="button" class="btn btn-secondary" onclick="copyAsPlainText()">Copy Text</button>
+        <button type="button" id="batchGenerateBtn" class="btn btn-secondary">Batch Generate</button>
       </div>
     </div>
 
@@ -366,7 +417,7 @@
     <div id="status" class="status"></div>
 
     <footer role="contentinfo">
-      <p><strong>Naval Letter Generator v3.0</strong> · SECNAV M-5216.5</p>
+      <p><strong>Naval Letter Generator v3.1</strong> · SECNAV M-5216.5</p>
       <p>Created by Jesse Morgan · Personal project, not officially endorsed</p>
       <p><a href="https://github.com/jeranaias/navalletterformat">GitHub</a> · <a href="https://github.com/jeranaias/navalletterformat/issues">Report Issues</a></p>
     </footer>
@@ -375,6 +426,8 @@
   <!-- External Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
 
   <!-- Application Scripts -->
   <script src="js/utils.js"></script>
@@ -386,6 +439,9 @@
   <script src="js/preview-manager.js"></script>
   <script src="js/template-manager.js"></script>
   <script src="js/undo-manager.js"></script>
+  <script src="js/import-export-manager.js"></script>
+  <script src="js/enhanced-features.js"></script>
+  <script src="js/batch-generator.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
