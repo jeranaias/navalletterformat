@@ -232,21 +232,33 @@ function addParagraphWithType(container, type, text, subject) {
 
   // Only top-level paragraphs can have subjects
   const subjectField = type === 'para' ? `
-    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" value="${subject || ''}" />
+    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" aria-label="Paragraph subject" value="${subject || ''}" />
   ` : '';
 
+  // Portion marking selector (check global setting)
+  const portionDisplay = (typeof portionMarkingEnabled !== 'undefined' && portionMarkingEnabled) ? 'inline-block' : 'none';
+  const portionSelector = `
+    <select class="portion-selector" style="display: ${portionDisplay};" title="Portion marking" aria-label="Portion marking">
+      <option value="U">(U)</option>
+      <option value="CUI">(CUI)</option>
+      <option value="FOUO">(FOUO)</option>
+    </select>
+  `;
+
   div.innerHTML = `
-    <span class="drag-handle">☰</span>
-    <div class="para-main">
-      <span class="para-label"></span>
-      ${subjectField}
-      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)">${text || ''}</textarea>
+    <div class="para-left-controls">
+      <span class="drag-handle" title="Drag to reorder" aria-hidden="true">☰</span>
+      <div class="para-inline-actions">
+        <button type="button" class="para-action-btn" onclick="addSibling(this)" title="Add paragraph below" aria-label="Add paragraph below">+</button>
+        <button type="button" class="para-action-btn" onclick="addChild(this)" title="Add sub-paragraph" aria-label="Add sub-paragraph" ${type === 'subsubsubpara' ? 'disabled' : ''}>↳</button>
+        <button type="button" class="para-action-btn para-action-delete" onclick="removePara(this)" title="Delete paragraph" aria-label="Delete paragraph">×</button>
+      </div>
     </div>
-    <div class="para-actions">
-      <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
-      <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>
-      <button type="button" class="btn" onclick="addParent(this)" ${type === 'para' ? 'disabled' : ''}>← Outdent</button>
-      <button type="button" class="btn btn-remove" onclick="removePara(this)">Delete</button>
+    <div class="para-main">
+      ${portionSelector}
+      <span class="para-label" aria-hidden="true"></span>
+      ${subjectField}
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text">${text || ''}</textarea>
     </div>
   `;
 

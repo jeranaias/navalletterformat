@@ -164,14 +164,14 @@ function rebuildParagraphFromFlat(container, paraData) {
 
   // Subject field only for top-level paragraphs
   const subjectField = type === 'para' ? `
-    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" value="${escapeHtml(paraData.subject || '')}" />
+    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" aria-label="Paragraph subject" value="${escapeHtml(paraData.subject || '')}" />
   ` : '';
 
   // Portion marking selector (hidden by default, shown when enabled)
   const portionDisplay = (typeof portionMarkingEnabled !== 'undefined' && portionMarkingEnabled) ? 'inline-block' : 'none';
   const portionValue = paraData.portionMark || 'U';
   const portionSelector = `
-    <select class="portion-selector" style="display: ${portionDisplay};" title="Portion marking">
+    <select class="portion-selector" style="display: ${portionDisplay};" title="Portion marking" aria-label="Portion marking">
       <option value="U" ${portionValue === 'U' ? 'selected' : ''}>(U)</option>
       <option value="CUI" ${portionValue === 'CUI' ? 'selected' : ''}>(CUI)</option>
       <option value="FOUO" ${portionValue === 'FOUO' ? 'selected' : ''}>(FOUO)</option>
@@ -180,18 +180,18 @@ function rebuildParagraphFromFlat(container, paraData) {
 
   paraItem.innerHTML = `
     <div class="para-left-controls">
-      <span class="drag-handle" title="Drag to reorder">☰</span>
+      <span class="drag-handle" title="Drag to reorder" aria-hidden="true">☰</span>
       <div class="para-inline-actions">
-        <button type="button" class="para-action-btn" onclick="addSibling(this)" title="Add paragraph below">+</button>
-        <button type="button" class="para-action-btn" onclick="addChild(this)" title="Add sub-paragraph" ${level >= 3 ? 'disabled' : ''}>↳</button>
-        <button type="button" class="para-action-btn para-action-delete" onclick="removePara(this)" title="Delete paragraph">×</button>
+        <button type="button" class="para-action-btn" onclick="addSibling(this)" title="Add paragraph below" aria-label="Add paragraph below">+</button>
+        <button type="button" class="para-action-btn" onclick="addChild(this)" title="Add sub-paragraph" aria-label="Add sub-paragraph" ${level >= 3 ? 'disabled' : ''}>↳</button>
+        <button type="button" class="para-action-btn para-action-delete" onclick="removePara(this)" title="Delete paragraph" aria-label="Delete paragraph">×</button>
       </div>
     </div>
     <div class="para-main">
       ${portionSelector}
-      <span class="para-label"></span>
+      <span class="para-label" aria-hidden="true"></span>
       ${subjectField}
-      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text...">${escapeHtml(paraData.text || '')}</textarea>
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text">${escapeHtml(paraData.text || '')}</textarea>
     </div>
   `;
 
