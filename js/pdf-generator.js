@@ -7,6 +7,16 @@
  * Generate PDF document from form data
  */
 async function generatePDF() {
+  if (!window.jspdf) {
+    showStatus('error', 'PDF library not loaded. Please refresh the page.');
+    return;
+  }
+
+  // Run validation before generating
+  if (typeof validateBeforeDownload === 'function' && !validateBeforeDownload()) {
+    return;
+  }
+
   const { jsPDF } = window.jspdf;
   const d = collectData();
 
@@ -48,7 +58,7 @@ async function generatePDF() {
       if (d.classification) {
         pdf.setFont('times', 'bold');
         pdf.setFontSize(12);
-        pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+        pdf.text(d.classification, PW / 2, 20, { align: 'center' });
       }
 
       // Add continuation header
@@ -70,19 +80,11 @@ async function generatePDF() {
   if (d.classification) {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
-    pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+    pdf.text(d.classification, PW / 2, 20, { align: 'center' });
     // Note: Classification does NOT push down letterhead - it's in a fixed position
   }
 
-  // Memorandum header - appears for ALL memos (plain-paper and letterhead)
-  if (d.documentType === 'memorandum') {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
-    y += LH * 2;
-  }
-
-  // Letterhead (for basic letters, endorsements, and formal memos)
+  // Letterhead (for basic letters, endorsements, and formal memos) - before MEMORANDUM for formal memos
   if (d.useLetterhead) {
     // Seal image
     if (d.hasSeal && d.sealData) {
@@ -98,7 +100,7 @@ async function generatePDF() {
       pdf.setFont('times', 'bold');
       pdf.setFontSize(10);
       pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
-      y += 11;
+      y += 12;
     }
 
     // Unit address
@@ -107,10 +109,18 @@ async function generatePDF() {
       pdf.setFontSize(8);
       d.unitAddress.split('\n').filter(l => l.trim()).forEach(line => {
         pdf.text(line.trim(), PW / 2, y, { align: 'center' });
-        y += 9;
+        y += 10;
       });
     }
-    y += LH * 2;  // 2 blank lines after letterhead
+    y = Math.max(y, 130);
+  }
+
+  // Memorandum header - appears for ALL memos (after letterhead for formal memos)
+  if (d.documentType === 'memorandum') {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
+    y += LH * 2;
   }
 
   // Header block - sender's symbols left-aligned under first character
@@ -178,7 +188,7 @@ async function generatePDF() {
     pageBreak(LH * (d.refs.length + 1));
     pdf.text('Ref:', ML, y);
     d.refs.forEach((r, i) => {
-      pdf.splitTextToSize(`(${LETTERS[i]})  ${r}`, CW - TAB).forEach(line => {
+      pdf.splitTextToSize(`(${getLetter(i)})  ${r}`, CW - TAB).forEach(line => {
         pdf.text(line, ML + TAB, y);
         y += LH;
       });
@@ -198,14 +208,16 @@ async function generatePDF() {
     });
   }
 
-  // Body paragraphs with orphan prevention
+  // Body paragraphs with enhanced orphan/widow prevention
   if (d.paras.length > 0) {
     let pn = 0, sn = 0, ssn = 0, sssn = 0;
-    const MIN_LINES_ON_PAGE = 2;
+    const MIN_LINES_ON_PAGE = 2;    // Minimum lines to leave on current page (widows)
+    const MIN_LINES_TO_CARRY = 2;   // Minimum lines to carry to next page (orphans)
+    const END_BLOCK_KEEP_LINES = 3; // Last N lines of final paragraph to keep with signature
 
     // Pre-calculate signature + copy-to height for last paragraph check
     const sigHeight = d.sigName ? (LH * 5 + (d.byDirection ? LH : 0)) : 0;
-    const copyHeight = d.copies.length > 0 ? (LH * 2 + LH * (d.copies.length + 1)) : 0;
+    const copyHeight = d.copies.length > 0 ? (LH * 2 + LH * d.copies.length) : 0;
     const endBlockHeight = sigHeight + copyHeight;
 
     for (let pIdx = 0; pIdx < d.paras.length; pIdx++) {
@@ -229,7 +241,7 @@ async function generatePDF() {
         sn++;
         ssn = 0;
         sssn = 0;
-        label = LETTERS[sn - 1] + '.';
+        label = getLetter(sn - 1) + '.';
         indent = IM;
         tIndent = IS;
       } else if (p.type === 'subsubpara') {
@@ -240,12 +252,20 @@ async function generatePDF() {
         tIndent = ISS;
       } else {
         sssn++;
-        label = '(' + LETTERS[sssn - 1] + ')';
+        label = '(' + getLetter(sssn - 1) + ')';
         indent = IM + IS + ISS;
         tIndent = ISSS;
       }
 
-      const lx = ML + indent;
+      // Add portion marking if enabled
+      let portionMark = '';
+      let portionWidth = 0;
+      if (d.portionMarkingEnabled && p.portionMark) {
+        portionMark = `(${p.portionMark}) `;
+        portionWidth = pdf.getTextWidth(portionMark);
+      }
+
+      const lx = ML + indent + portionWidth;
       const labelWidth = pdf.getTextWidth(label);
       const tx = lx + labelWidth + 4;  // Single space gap after label
       const firstLineWidth = CW - indent - labelWidth - 4;
@@ -264,26 +284,53 @@ async function generatePDF() {
       // Calculate paragraph height
       const paraHeight = totalLines * LH;
 
-      // For LAST paragraph: include signature + copy-to in orphan check
-      const totalHeightNeeded = isLastPara ? (paraHeight + endBlockHeight) : paraHeight;
-
       // Calculate space remaining on current page
       const spaceRemaining = PH - MB - y;
 
-      // For last paragraph: if entire end block won't fit, push ALL to next page
-      if (isLastPara && totalHeightNeeded > spaceRemaining) {
-        pageBreak(PH);
+      // For LAST paragraph: keep last N lines grouped with signature + copy-to
+      if (isLastPara) {
+        const linesToKeepWithEnd = Math.min(END_BLOCK_KEEP_LINES, totalLines);
+        const endGroupHeight = (linesToKeepWithEnd * LH) + endBlockHeight;
+
+        // If paragraph spans pages, check if end group would be orphaned
+        if (paraHeight > spaceRemaining) {
+          const linesOnCurrentPage = Math.floor(spaceRemaining / LH);
+          const linesOnNextPage = totalLines - linesOnCurrentPage;
+
+          // Check if we'd leave too few lines on current page (widow)
+          // OR if end group (last N lines + sig + copy) would be alone on next page
+          if (linesOnCurrentPage < MIN_LINES_ON_PAGE ||
+              (linesOnNextPage <= linesToKeepWithEnd && endGroupHeight > (PH - MT - MB))) {
+            // Push entire paragraph to next page
+            pageBreak(PH);
+          }
+        }
+        // If entire para + end block fits, no problem; if not and it's short, push to next page
+        else if (paraHeight + endBlockHeight > spaceRemaining && totalLines <= END_BLOCK_KEEP_LINES + 2) {
+          pageBreak(PH);
+        }
       }
-      // For other paragraphs: standard orphan check
-      else if (!isLastPara && totalHeightNeeded > spaceRemaining && spaceRemaining > 0) {
+      // For other paragraphs: standard orphan/widow check
+      else if (paraHeight > spaceRemaining && spaceRemaining > 0) {
         const linesOnCurrentPage = Math.floor(spaceRemaining / LH);
         const linesOnNextPage = totalLines - linesOnCurrentPage;
-        if (linesOnCurrentPage < MIN_LINES_ON_PAGE || linesOnNextPage < MIN_LINES_ON_PAGE) {
+
+        // Prevent widows (too few lines left on current page)
+        // Prevent orphans (too few lines carried to next page)
+        if (linesOnCurrentPage < MIN_LINES_ON_PAGE || linesOnNextPage < MIN_LINES_TO_CARRY) {
           pageBreak(PH);
         }
       }
 
       pageBreak(LH * 2);
+
+      // Draw portion marking if enabled
+      if (portionMark) {
+        pdf.setFont('times', 'bold');
+        pdf.text(portionMark, ML + indent, y);
+        pdf.setFont('times', 'normal');
+      }
+
       pdf.text(label, lx, y);
 
       // Check for explicit paragraph subject (only for top-level paragraphs)
@@ -350,10 +397,24 @@ async function generatePDF() {
     }
   }
 
-  // Signature - DoN standard: name only, no rank or title
+  // Signature and Copy-to block - keep together as a group
+  const sigBlockHeight = d.sigName ? (LH * 5 + (d.byDirection ? LH : 0)) : 0;
+  const copyBlockHeight = d.copies.length > 0 ? (LH * 2 + LH * d.copies.length) : 0;
+  const totalEndBlockHeight = sigBlockHeight + copyBlockHeight;
+
+  // Check if signature + copy-to block needs to move to next page together
+  if (totalEndBlockHeight > 0) {
+    const spaceForEndBlock = PH - MB - y;
+    if (spaceForEndBlock < totalEndBlockHeight) {
+      pageBreak(totalEndBlockHeight);
+    }
+  }
+
+  // Signature - DoN standard: name only, no rank or title (ALL CAPS, not bold)
   if (d.sigName) {
     y += LH * 4;
     const sx = PW / 2;
+    pdf.setFont('times', 'normal');
     pdf.text(d.sigName.toUpperCase(), sx, y);
     y += LH;
     if (d.byDirection) {
@@ -362,24 +423,24 @@ async function generatePDF() {
     }
   }
 
-  // Copy to
+  // Copy to (numbered if multiple)
   if (d.copies.length > 0) {
     y += LH * 2;
     pdf.text('Copy to:', ML, y);
-    y += LH;
-    d.copies.forEach(c => {
-      pdf.text(c, ML, y);
+    d.copies.forEach((c, i) => {
+      const copyText = d.copies.length > 1 ? `(${i + 1})  ${c}` : c;
+      pdf.text(copyText, ML + TAB, y);
       y += LH;
     });
   }
 
-  // Classification at bottom of every page
+  // Classification at bottom of every page (symmetric with top at y=20)
   if (d.classification) {
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
       pdf.setFont('times', 'bold');
       pdf.setFontSize(12);
-      pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
+      pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
     }
   }
 
@@ -405,6 +466,10 @@ async function generatePDF() {
  * Generate PDF and open print dialog
  */
 async function printPDF() {
+  if (!window.jspdf) {
+    showStatus('error', 'PDF library not loaded. Please refresh the page.');
+    return;
+  }
   const { jsPDF } = window.jspdf;
   const d = collectData();
 
@@ -427,7 +492,7 @@ async function printPDF() {
       if (d.classification) {
         pdf.setFont('times', 'bold');
         pdf.setFontSize(12);
-        pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+        pdf.text(d.classification, PW / 2, 20, { align: 'center' });
       }
       pdf.setFont('times', 'normal');
       pdf.setFontSize(12);
@@ -442,18 +507,10 @@ async function printPDF() {
   if (d.classification) {
     pdf.setFont('times', 'bold');
     pdf.setFontSize(12);
-    pdf.text(d.classification, PW / 2, 18, { align: 'center' });
+    pdf.text(d.classification, PW / 2, 20, { align: 'center' });
   }
 
-  // Memorandum header - appears for ALL memos (plain-paper and letterhead)
-  if (d.documentType === 'memorandum') {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
-    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
-    y += LH * 2;
-  }
-
-  // Letterhead (for basic letters, endorsements, and formal memos)
+  // Letterhead (for basic letters, endorsements, and formal memos) - before MEMORANDUM for formal memos
   if (d.useLetterhead) {
     if (d.hasSeal && d.sealData) {
       try { pdf.addImage(d.sealData, 'JPEG', 36, 36, 72, 72); } catch (e) {}
@@ -462,16 +519,24 @@ async function printPDF() {
       pdf.setFont('times', 'bold');
       pdf.setFontSize(10);
       pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
-      y += 11;
+      y += 12;
     }
     if (d.unitAddress) {
       pdf.setFont('times', 'normal');
       pdf.setFontSize(8);
       d.unitAddress.split('\n').filter(l => l.trim()).forEach(line => {
         pdf.text(line.trim(), PW / 2, y, { align: 'center' });
-        y += 9;
+        y += 10;
       });
     }
+    y = Math.max(y, 130);
+  }
+
+  // Memorandum header - appears for ALL memos (after letterhead for formal memos)
+  if (d.documentType === 'memorandum') {
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
     y += LH * 2;
   }
 
@@ -513,7 +578,7 @@ async function printPDF() {
     pageBreak(LH * (d.refs.length + 1));
     pdf.text('Ref:', ML, y);
     d.refs.forEach((r, i) => {
-      pdf.splitTextToSize('(' + LETTERS[i] + ')  ' + r, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+      pdf.splitTextToSize('(' + getLetter(i) + ')  ' + r, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
     });
   }
 
@@ -526,20 +591,66 @@ async function printPDF() {
     });
   }
 
+  // Body paragraphs with enhanced orphan/widow prevention
   if (d.paras.length > 0) {
     let pn = 0, sn = 0, ssn = 0, sssn = 0;
+    const MIN_LINES_ON_PAGE = 2;
+    const MIN_LINES_TO_CARRY = 2;
+    const END_BLOCK_KEEP_LINES = 3;
+
+    const sigHeight = d.sigName ? (LH * 5 + (d.byDirection ? LH : 0)) : 0;
+    const copyHeight = d.copies.length > 0 ? (LH * 2 + LH * d.copies.length) : 0;
+    const endBlockHeight = sigHeight + copyHeight;
+
     for (let pIdx = 0; pIdx < d.paras.length; pIdx++) {
       const p = d.paras[pIdx];
+      const isLastPara = (pIdx === d.paras.length - 1);
       const pText = ensureDoubleSpaces(p.text);
       y += LH;
       let label, indent;
       if (p.type === 'para') { pn++; sn = 0; ssn = 0; sssn = 0; label = pn + '.'; indent = 0; }
-      else if (p.type === 'subpara') { sn++; ssn = 0; sssn = 0; label = LETTERS[sn - 1] + '.'; indent = IM; }
+      else if (p.type === 'subpara') { sn++; ssn = 0; sssn = 0; label = getLetter(sn - 1) + '.'; indent = IM; }
       else if (p.type === 'subsubpara') { ssn++; sssn = 0; label = '(' + ssn + ')'; indent = IM + IS; }
-      else { sssn++; label = '(' + LETTERS[sssn - 1] + ')'; indent = IM + IS + ISS; }
+      else { sssn++; label = '(' + getLetter(sssn - 1) + ')'; indent = IM + IS + ISS; }
       const lx = ML + indent;
       const labelWidth = pdf.getTextWidth(label);
       const tx = lx + labelWidth + 4;
+      const firstLineWidth = CW - indent - labelWidth - 4;
+
+      // Calculate total lines
+      const firstLineText = pdf.splitTextToSize(pText, firstLineWidth);
+      let totalLines = 1;
+      if (firstLineText.length > 1) {
+        const remainingText = pText.substring(firstLineText[0].length).trim();
+        if (remainingText) {
+          totalLines += pdf.splitTextToSize(remainingText, CW).length;
+        }
+      }
+
+      const paraHeight = totalLines * LH;
+      const spaceRemaining = PH - MB - y;
+
+      // Orphan/widow prevention
+      if (isLastPara) {
+        const linesToKeepWithEnd = Math.min(END_BLOCK_KEEP_LINES, totalLines);
+        if (paraHeight > spaceRemaining) {
+          const linesOnCurrentPage = Math.floor(spaceRemaining / LH);
+          const linesOnNextPage = totalLines - linesOnCurrentPage;
+          if (linesOnCurrentPage < MIN_LINES_ON_PAGE ||
+              linesOnNextPage <= linesToKeepWithEnd) {
+            pageBreak(PH);
+          }
+        } else if (paraHeight + endBlockHeight > spaceRemaining && totalLines <= END_BLOCK_KEEP_LINES + 2) {
+          pageBreak(PH);
+        }
+      } else if (paraHeight > spaceRemaining && spaceRemaining > 0) {
+        const linesOnCurrentPage = Math.floor(spaceRemaining / LH);
+        const linesOnNextPage = totalLines - linesOnCurrentPage;
+        if (linesOnCurrentPage < MIN_LINES_ON_PAGE || linesOnNextPage < MIN_LINES_TO_CARRY) {
+          pageBreak(PH);
+        }
+      }
+
       pageBreak(LH * 2);
       pdf.text(label, lx, y);
       if (p.subject && p.type === 'para') {
@@ -566,29 +677,48 @@ async function printPDF() {
     }
   }
 
+  // Signature and Copy-to block - keep together
+  const sigBlockHeight = d.sigName ? (LH * 5 + (d.byDirection ? LH : 0)) : 0;
+  const copyBlockHeight = d.copies.length > 0 ? (LH * 2 + LH * d.copies.length) : 0;
+  const totalEndBlockHeight = sigBlockHeight + copyBlockHeight;
+
+  if (totalEndBlockHeight > 0) {
+    const spaceForEndBlock = PH - MB - y;
+    if (spaceForEndBlock < totalEndBlockHeight) {
+      pageBreak(totalEndBlockHeight);
+    }
+  }
+
   if (d.sigName) {
     y += LH * 4;
+    pdf.setFont('times', 'normal');
     pdf.text(d.sigName.toUpperCase(), PW / 2, y);
     y += LH;
     if (d.byDirection) { pdf.text('By direction', PW / 2, y); y += LH; }
   }
 
+  // Copy to (numbered if multiple)
   if (d.copies.length > 0) {
     y += LH * 2;
     pdf.text('Copy to:', ML, y);
-    y += LH;
-    d.copies.forEach(c => { pdf.text(c, ML, y); y += LH; });
+    d.copies.forEach((c, i) => {
+      const copyText = d.copies.length > 1 ? `(${i + 1})  ${c}` : c;
+      pdf.text(copyText, ML + TAB, y);
+      y += LH;
+    });
   }
 
+  // Classification at bottom of every page (symmetric with top at y=20)
   if (d.classification) {
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
       pdf.setFont('times', 'bold');
       pdf.setFontSize(12);
-      pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
+      pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
     }
   }
 
+  // Page numbers (above classification if present) - only on page 2+
   if (pdf.getNumberOfPages() > 1) {
     const pageNumY = d.classification ? PH - 50 : PH - 36;
     for (let i = 2; i <= pdf.getNumberOfPages(); i++) {

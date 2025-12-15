@@ -4,30 +4,10 @@
 
 [![SECNAV M-5216.5](https://img.shields.io/badge/SECNAV-M--5216.5-blue)](https://www.secnav.navy.mil/doni/SECNAV%20Manuals1/5216.5%20DON%20Correspondence%20Manual.pdf)
 [![MCO 5216.20](https://img.shields.io/badge/MCO-5216.20-red)](https://www.marines.mil/News/Publications/MCPEL/Electronic-Library-Display/Article/899678/mco-521620/)
-[![Version](https://img.shields.io/badge/Version-2.0.0-green)](https://github.com/jeranaias/navalletterformat/releases)
+[![Version](https://img.shields.io/badge/Version-3.1.0-green)](https://github.com/jeranaias/navalletterformat/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **Live Tool: [https://jeranaias.github.io/navalletterformat/](https://jeranaias.github.io/navalletterformat/)**
-
----
-
-## V2.0 NOW LIVE!
-
-**The biggest update yet is here.** Complete architecture overhaul with major new features:
-
-| New in v2.0 | Description |
-|-------------|-------------|
-| **Draft Save/Load** | Auto-saves every 2 seconds, export/import JSON, restore on reload |
-| **2,240 SSIC Codes** | Complete SECNAV M-5210.2 database (August 2018) |
-| **230 Units** | Expanded database with full addresses |
-| **Memorandum Format** | New document type for internal correspondence |
-| **Dark Mode** | Theme toggle with system preference detection |
-| **Print Button** | Print directly from browser |
-| **Auto Seal** | Department of War seal loads automatically |
-| **PWA Support** | Install to home screen, works offline |
-| **Accessibility** | ARIA labels, keyboard navigation, screen reader support |
-
-**v3.0 in development** on the [v3 branch](https://github.com/jeranaias/navalletterformat/tree/v3) with live preview, templates, and more!
 
 ---
 
@@ -41,34 +21,84 @@ Just open the link, fill in your information, and download your PDF.
 
 ---
 
-## What's New in v2.0
+## 🚀 What's New in v3.1 — Major Release
 
-### Draft Save/Load
-Your work is automatically saved every 2 seconds. Export drafts as JSON files to share or backup. Import saved drafts anytime. If you accidentally close the page, your work will be waiting when you return.
+**This is the biggest update yet.** We've added user profiles, a massive reference library, 37 total templates, smart validation, and polished every corner of the UI.
 
-### Complete SSIC Database (2,240 Codes)
-The full SECNAV M-5210.2 (August 2018) database is now searchable. Type any subject and find the right code instantly.
+### User Profile System
+- **Session-only storage** — Profile clears when browser closes (no PII on shared computers)
+- **Import/Export profiles** — Save your settings to JSON, load on any computer
+- **Auto-populate forms** — Your name, unit, office code auto-fill every time
+- **Capture from Form** — One click saves current form values to your profile
 
-### Expanded Unit Database (230 Units)
-All major USMC/USN/DOD units with complete addresses. Search and auto-fill your letterhead in seconds.
+### Reference Library — 100+ Military References
+- **Searchable database** of MCOs, SECNAVINSTs, DoD Directives, Navy Regs
+- **12 categories:** Personnel, Training, Safety, Operations, Supply, Admin, Legal, Medical, Awards, Intel, Comms
+- **One-click insert** — Click any reference to add it to your letter
+- **Keyword search** — Find references by topic, not just number
 
-### Memorandum Format
-New document type for internal correspondence. Choose between plain-paper memo or formal letterhead memo.
+### 37 Pre-Built Templates
+Expanded from 20 to **37 Marine-centric templates** including:
+- **NEW:** Appointment as Investigating Officer, Collateral Duty, Board/Committee
+- **NEW:** Meritorious Mast, TAD Request, Duty Status Change, Safety Officer
+- **NEW:** Personal Award Recommendation, Statement Under Oath, Extension Endorsement
+- **NEW:** 6105 Counseling, Meritorious Promotion, Humanitarian Transfer, LOI, Legal Hold
 
-### Dark Mode
-Toggle between light and dark themes. Automatically detects your system preference. Your choice is saved.
+### Smart Validation & Security
+- **PII/PHI Detection** — Warns before generating if SSN, EDIPI, DOB, or medical info detected
+- **CUI Classification Reminder** — Confirms you've properly marked CUI/FOUO documents
+- **Subject length warning** — Alerts when subject exceeds 100 characters
+- **Required field validation** — Blocks generation if critical fields missing
 
-### Print Button
-Print directly from your browser. Opens PDF in new tab with print dialog ready.
+### Batch Generator Enhancements
+- **Inline editable table** — Enter data directly, no Excel/CSV required
+- **Two signature modes:** "Keep my signature" (awards/counseling) vs "Name = Signature" (leave requests)
+- **Built-in help** — "?" button with detailed examples and use cases
+- **Placeholder system** — `{{name}}`, `{{rank}}`, `{{reason}}`, `{{period}}` in paragraphs
 
-### Auto Seal
-The Department of War seal is automatically included on letterhead. No more uploading seal images.
+### First-Time User Experience
+- **Welcome modal** — Highlights key features for new users
+- **Feature cards** — Quick overview of Templates, References, Batch, Security
+- **"Show Tips" link** — Access welcome screen anytime from footer
 
-### PWA Support
-Install the app to your home screen on mobile or desktop. Works completely offline once installed.
+### Template Preview
+- **Preview before applying** — See full template content before loading
+- **Split-pane layout** — Browse templates on left, preview on right
 
-### Accessibility
-Full keyboard navigation, ARIA labels for screen readers, skip links, and reduced motion support.
+### UI Polish
+- **Header Information redesigned** — Clean 4-column grid with expandable "More options"
+- **Always-on features** — Spell check and character count enabled by default
+- **Tooltips everywhere** — Hover for help instead of cluttered help text
+- **Dark mode improvements** — Better contrast throughout
+
+---
+
+## What's New in v3.0
+
+### Live Preview
+See your letter formatted in real-time as you type. Split-screen layout with form on left, PDF preview on right. Toggle on/off with one click.
+
+### 20 Marine-Centric Templates
+Pre-built templates for common correspondence types:
+- **Personnel:** Leave Request, Special Liberty, Request Mast, Page 11 Entry, PFT/CFT Waiver, Orders Modification, Checkout Letter, SGLI Update, Fitness Report Cover
+- **Awards:** NAM Recommendation, Letter of Appreciation
+- **Leadership:** Positive Counseling, Corrective Counseling, Command Interest
+- **Endorsements:** Recommend Approval, Recommend Disapproval, For Information
+- **Training:** Training Request
+- **Administrative:** Government Travel Card Request
+- **Investigations:** Report of Findings
+
+### Undo/Redo for Paragraphs
+Full edit history with up to 50 states. Keyboard shortcuts: `Ctrl+Z` (undo), `Ctrl+Y` (redo).
+
+### CUI/FOUO Portion Markings
+Per-paragraph classification marking per DoDM 5200.01. Portion marks (U), (CUI), (FOUO) appear before paragraph labels.
+
+### Streamlined UI
+- Quick toolbar with Templates and Live Preview at the top
+- Cleaner action panel: Download PDF, Print, Download .tex, Download ZIP, Save/Load Draft
+- Visual toggle cards for memorandum style (Plain Paper / Letterhead)
+- Service/Organization pre-filled with "UNITED STATES MARINE CORPS"
 
 See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 
@@ -76,8 +106,14 @@ See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 
 ## Features
 
+### Live PDF Preview
+Toggle real-time preview to see your formatted letter as you type. Debounced updates for smooth performance.
+
 ### One-Click PDF Generation
 Click "Download PDF" and get your formatted letter instantly. No external tools, no accounts, no waiting.
+
+### 37 Pre-Built Templates
+Start from common letter types instead of blank. Search by name or filter by category. Categories include Personnel, Awards, Leadership, Endorsements, Training, Administrative, Investigations, and Legal.
 
 ### SSIC Search (2,240 Codes)
 Complete database from SECNAV M-5210.2 (August 2018). Type a subject and get matching codes:
@@ -145,7 +181,9 @@ Theme toggle with system preference detection. Saved to localStorage.
 - `Ctrl+S` / `Cmd+S` — Export draft to file
 - `Ctrl+P` / `Cmd+P` — Print PDF
 - `Ctrl+D` / `Cmd+D` — Download PDF
-- `Escape` — Close preview/modals
+- `Ctrl+Z` — Undo paragraph changes
+- `Ctrl+Y` / `Ctrl+Shift+Z` — Redo paragraph changes
+- `Escape` — Close modals
 
 ### PWA Support
 Install to home screen on mobile/desktop. Works offline via service worker.
@@ -175,10 +213,12 @@ ARIA labels, keyboard navigation, skip links, focus styles, reduced motion suppo
 5. **Done.** Print or email your properly formatted letter.
 
 ### Tips
+- **Live Preview** — Toggle on to see formatting as you type
+- **Templates** — Start from common letter types instead of blank
 - **Two spaces after periods** — Added automatically
 - **Subject line** — Automatically capitalized
 - **Drag to reorder** — Grab the handle to rearrange paragraphs
-- **Save your work** — Auto-saves, but use Save Draft to export a backup
+- **Undo/Redo** — Use Ctrl+Z/Ctrl+Y or the buttons in the paragraph header
 
 ---
 
@@ -248,10 +288,12 @@ CG, TECOM (C 469)
 
 ## Roadmap
 
-### Planned Features (High Effort)
-- **Import from Word/PDF** — Parse existing correspondence documents
-- **Multi-letter batch generation** — Generate multiple letters from spreadsheet data
+### Coming Soon
+- **PDF Import** — Parse existing PDF correspondence documents (in development)
+
+### Future Considerations
 - **Collaboration/sharing** — Share drafts with others (requires backend)
+- **Navy letterhead support** — Additional unit databases for USN commands
 
 **Want to influence priorities?** [Vote on issues](https://github.com/jeranaias/navalletterformat/issues) or open a new one.
 
@@ -319,7 +361,7 @@ Thanks to the Marines who've provided feedback:
 ## About
 
 **Created by:** Jesse Morgan
-**Version:** 2.0.0
+**Version:** 3.1.0
 **Status:** Active development
 
 *Personal project, not officially endorsed by any military branch.*

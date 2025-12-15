@@ -1,0 +1,1201 @@
+{
+  "version": "2.0",
+  "templates": [
+    {
+      "id": "leave-request",
+      "name": "Leave Request",
+      "category": "Personnel",
+      "description": "Standard request for annual, emergency, or special leave",
+      "ssic": "1050",
+      "documentType": "basic",
+      "subj": "REQUEST FOR LEAVE",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request annual leave for the period of [START DATE] to [END DATE], for a total of [NUMBER] days of chargeable leave."
+        },
+        {
+          "subject": "Purpose",
+          "text": "[State the purpose of leave - e.g., family vacation, wedding, personal matters, etc.]"
+        },
+        {
+          "subject": "Leave Balance",
+          "text": "My current leave balance is [NUMBER] days.  Upon completion of this leave, my balance will be [NUMBER] days."
+        },
+        {
+          "subject": "Contact Information",
+          "text": "While on leave, I can be reached at [PHONE NUMBER].  My leave address will be [FULL ADDRESS INCLUDING CITY, STATE, ZIP]."
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact for this request is the undersigned at [DSN/COMMERCIAL PHONE] or [EMAIL]."
+        }
+      ],
+      "refs": [
+        "MCO 1050.3J"
+      ]
+    },
+    {
+      "id": "special-liberty",
+      "name": "Special Liberty Request",
+      "category": "Personnel",
+      "description": "Request for special liberty (72/96 hour)",
+      "ssic": "1050",
+      "documentType": "basic",
+      "subj": "REQUEST FOR SPECIAL LIBERTY",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request [72/96] hour special liberty for the period of [START DATE/TIME] to [END DATE/TIME]."
+        },
+        {
+          "subject": "Purpose",
+          "text": "[Provide justification for the special liberty request - e.g., family event, personal matter requiring travel, etc.]"
+        },
+        {
+          "subject": "Travel",
+          "text": "I [will/will not] be traveling outside the local liberty area.  [If traveling: destination is (CITY, STATE), approximately (X) miles from base.]"
+        },
+        {
+          "subject": "Contact Information",
+          "text": "I can be reached at [PHONE NUMBER] during the liberty period."
+        }
+      ],
+      "refs": [
+        "MCO 1050.3J"
+      ]
+    },
+    {
+      "id": "request-mast",
+      "name": "Request Mast",
+      "category": "Personnel",
+      "description": "Formal request to speak with commanding officer",
+      "ssic": "1700",
+      "documentType": "basic",
+      "subj": "REQUEST MAST",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I respectfully request mast with the Commanding Officer."
+        },
+        {
+          "subject": "Nature of Request",
+          "text": "[Clearly state the issue or matter you wish to discuss.  Be specific but professional.  Include relevant dates and circumstances.]"
+        },
+        {
+          "subject": "Chain of Command Actions",
+          "text": "[Describe what actions you have taken to resolve this matter through the chain of command, including dates and outcomes of those discussions.]"
+        },
+        {
+          "subject": "Desired Resolution",
+          "text": "[State what outcome or resolution you are seeking from the Commanding Officer.]"
+        }
+      ],
+      "refs": [
+        "Article 1150, U.S. Navy Regulations"
+      ]
+    },
+    {
+      "id": "award-nam",
+      "name": "Award Recommendation (NAM)",
+      "category": "Awards",
+      "description": "Navy and Marine Corps Achievement Medal recommendation",
+      "ssic": "1650",
+      "documentType": "basic",
+      "subj": "RECOMMENDATION FOR NAVY AND MARINE CORPS ACHIEVEMENT MEDAL",
+      "paragraphs": [
+        {
+          "subject": "Recommendation",
+          "text": "Per references (a) and (b), [RANK FULL NAME] is recommended for the Navy and Marine Corps Achievement Medal for meritorious [service/achievement] while serving as [BILLET TITLE], [UNIT NAME], from [START DATE] to [END DATE]."
+        },
+        {
+          "subject": "Background",
+          "text": "[Provide context about the Marine's duties and responsibilities during the award period.]"
+        },
+        {
+          "subject": "Justification",
+          "text": "[Describe specific achievements that warrant recognition.  Use quantifiable metrics where possible.  Focus on actions that exceeded normal expectations.  Examples: led X Marines, trained X personnel, saved $X, improved readiness by X%, etc.]"
+        },
+        {
+          "subject": "Impact",
+          "text": "[Explain the positive impact these achievements had on unit readiness, mission accomplishment, or Marine Corps operations.]"
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact for this matter is the undersigned at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "SECNAVINST 1650.1H",
+        "MCO 1650.19J"
+      ],
+      "encls": [
+        "Proposed Citation",
+        "Summary of Action"
+      ]
+    },
+    {
+      "id": "award-loa",
+      "name": "Letter of Appreciation",
+      "category": "Awards",
+      "description": "Formal letter of appreciation for outstanding service",
+      "ssic": "1650",
+      "documentType": "basic",
+      "subj": "LETTER OF APPRECIATION",
+      "paragraphs": [
+        {
+          "text": "I would like to express my sincere appreciation for your outstanding performance and dedication to duty while serving as [BILLET] from [START DATE] to [END DATE]."
+        },
+        {
+          "text": "[Describe specific accomplishments, highlighting 2-3 key achievements and their positive impact on the unit or mission.]"
+        },
+        {
+          "text": "Your professionalism, initiative, and commitment to excellence reflect great credit upon yourself and [UNIT NAME].  I wish you continued success and Semper Fidelis."
+        }
+      ]
+    },
+    {
+      "id": "counseling-positive",
+      "name": "Counseling (Positive)",
+      "category": "Leadership",
+      "description": "Documented positive counseling for outstanding performance",
+      "ssic": "1610",
+      "documentType": "memorandum",
+      "subj": "POSITIVE COUNSELING",
+      "paragraphs": [
+        {
+          "subject": "Purpose",
+          "text": "To formally recognize and document your outstanding performance and positive contributions to the unit."
+        },
+        {
+          "subject": "Observation",
+          "text": "[Describe the specific positive behavior, accomplishment, or performance observed.  Include date(s) and circumstances.]"
+        },
+        {
+          "subject": "Impact",
+          "text": "[Explain the positive impact this had on the unit, mission accomplishment, or fellow Marines.]"
+        },
+        {
+          "subject": "Recommendation",
+          "text": "Continue to maintain this high standard of performance.  Your dedication and professionalism set the example for others to follow."
+        }
+      ]
+    },
+    {
+      "id": "counseling-negative",
+      "name": "Counseling (Corrective)",
+      "category": "Leadership",
+      "description": "Documented corrective counseling for deficiencies",
+      "ssic": "1610",
+      "documentType": "memorandum",
+      "subj": "CORRECTIVE COUNSELING",
+      "paragraphs": [
+        {
+          "subject": "Purpose",
+          "text": "To formally document a deficiency in your performance/conduct and establish clear expectations for immediate improvement."
+        },
+        {
+          "subject": "Observation",
+          "text": "[Describe the specific deficiency observed.  Include date, time, location, and circumstances.  Be factual and specific.]"
+        },
+        {
+          "subject": "Standard",
+          "text": "[Cite the applicable standard, order, regulation, or policy that was not met.  Reference specific MCO, unit SOP, or UCMJ article if applicable.]"
+        },
+        {
+          "subject": "Impact",
+          "text": "[Explain how this deficiency negatively affected or could affect unit readiness, good order and discipline, or mission accomplishment.]"
+        },
+        {
+          "subject": "Expectation",
+          "text": "You are expected to correct this deficiency immediately and ensure it does not recur.  Failure to improve may result in adverse administrative or disciplinary action."
+        },
+        {
+          "subject": "Assistance",
+          "text": "[Identify any assistance, resources, or training available to help the Marine improve.  Include mentor assignment if applicable.]"
+        },
+        {
+          "subject": "Acknowledgment",
+          "text": "Your signature below acknowledges receipt of this counseling.  It does not indicate agreement or disagreement with its contents."
+        }
+      ]
+    },
+    {
+      "id": "page11-request",
+      "name": "Page 11 Entry Request",
+      "category": "Personnel",
+      "description": "Request for administrative remarks entry in service record",
+      "ssic": "1070",
+      "documentType": "basic",
+      "subj": "REQUEST FOR PAGE 11 ENTRY",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), request the following administrative remarks entry be made in the official military personnel file of [RANK FULL NAME]."
+        },
+        {
+          "subject": "Proposed Entry",
+          "text": "\"[DATE]: [VERBATIM TEXT OF PROPOSED PAGE 11 ENTRY.  Use proper format per IRAM.]\""
+        },
+        {
+          "subject": "Justification",
+          "text": "[Explain why this entry is necessary and appropriate.  Reference supporting documentation if applicable.]"
+        }
+      ],
+      "refs": [
+        "MCO P1070.12K"
+      ]
+    },
+    {
+      "id": "endorsement-approve",
+      "name": "Endorsement (Recommend Approval)",
+      "category": "Endorsements",
+      "description": "Endorsement recommending approval of a request",
+      "ssic": "",
+      "documentType": "endorsement",
+      "endorseAction": "Forwarded, recommending approval",
+      "paragraphs": [
+        {
+          "text": "[Provide supporting justification for approval.  Include any relevant information not contained in the basic letter that supports the request.]"
+        }
+      ]
+    },
+    {
+      "id": "endorsement-disapprove",
+      "name": "Endorsement (Recommend Disapproval)",
+      "category": "Endorsements",
+      "description": "Endorsement recommending disapproval of a request",
+      "ssic": "",
+      "documentType": "endorsement",
+      "endorseAction": "Forwarded, recommending disapproval",
+      "paragraphs": [
+        {
+          "text": "[Provide specific reasons for recommending disapproval.  Be factual and professional.  Reference applicable policies or regulations if relevant.]"
+        }
+      ]
+    },
+    {
+      "id": "endorsement-info",
+      "name": "Endorsement (For Information)",
+      "category": "Endorsements",
+      "description": "Endorsement forwarding without recommendation",
+      "ssic": "",
+      "documentType": "endorsement",
+      "endorseAction": "Forwarded",
+      "paragraphs": [
+        {
+          "text": "[Provide any additional information or context relevant to the basic letter.  State if no additional comments or recommendations are required at this level.]"
+        }
+      ]
+    },
+    {
+      "id": "fitrep-cover",
+      "name": "Fitness Report Cover Letter",
+      "category": "Personnel",
+      "description": "Cover letter for fitness report submission",
+      "ssic": "1610",
+      "documentType": "basic",
+      "subj": "FITNESS REPORT",
+      "paragraphs": [
+        {
+          "text": "Enclosure (1) is submitted for [RANK FULL NAME] for the reporting period [START DATE] to [END DATE].  This is a [REGULAR/TRANSFER/DETACHMENT/SPECIAL] fitness report."
+        },
+        {
+          "text": "[If applicable: Provide any amplifying information regarding the report, such as explanation of adverse marks, comments on Marine's potential, or other relevant context.]"
+        }
+      ],
+      "encls": [
+        "Fitness Report (NAVMC 10835)"
+      ]
+    },
+    {
+      "id": "pft-waiver",
+      "name": "PFT/CFT Waiver Request",
+      "category": "Personnel",
+      "description": "Request for waiver of physical fitness test",
+      "ssic": "6100",
+      "documentType": "basic",
+      "subj": "REQUEST FOR PFT/CFT WAIVER",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request a waiver from the [PFT/CFT] scheduled for [DATE] due to [MEDICAL/ADMINISTRATIVE] reasons."
+        },
+        {
+          "subject": "Justification",
+          "text": "[Explain the circumstances requiring the waiver.  If medical, reference medical documentation.  If administrative, explain the situation.]"
+        },
+        {
+          "subject": "Alternative Date",
+          "text": "I request to complete the [PFT/CFT] on or about [PROPOSED DATE] when [explain when condition will be resolved or situation permits]."
+        },
+        {
+          "subject": "Supporting Documentation",
+          "text": "Enclosure (1) provides [medical documentation/supporting documentation] for this request."
+        }
+      ],
+      "refs": [
+        "MCO 6100.13A"
+      ],
+      "encls": [
+        "[Medical documentation or other supporting documents]"
+      ]
+    },
+    {
+      "id": "training-request",
+      "name": "Training Request",
+      "category": "Training",
+      "description": "Request for formal school or training course",
+      "ssic": "1500",
+      "documentType": "basic",
+      "subj": "REQUEST FOR TRAINING",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request authorization to attend [COURSE NAME] ([COURSE NUMBER if applicable]) conducted at [LOCATION] from [START DATE] to [END DATE]."
+        },
+        {
+          "subject": "Justification",
+          "text": "[Explain how this training supports your current billet, MOS requirements, or career development.  Describe how the unit will benefit from this training.]"
+        },
+        {
+          "subject": "Funding",
+          "text": "[Address funding requirements: TDY costs, course fees, etc.  Identify source of funding if known.]"
+        },
+        {
+          "subject": "Impact",
+          "text": "My absence during this training period [will/will not] impact unit operations.  [If applicable: explain how duties will be covered.]"
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact for this request is the undersigned at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "MCO 1500.52"
+      ]
+    },
+    {
+      "id": "gtcc-request",
+      "name": "Government Travel Card Request",
+      "category": "Administrative",
+      "description": "Request for Government Travel Charge Card",
+      "ssic": "4600",
+      "documentType": "memorandum",
+      "subj": "REQUEST FOR GOVERNMENT TRAVEL CHARGE CARD",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request issuance of a Government Travel Charge Card (GTCC) for official travel purposes."
+        },
+        {
+          "subject": "Justification",
+          "text": "A GTCC is required to support upcoming [TAD/TDY/PCS] orders to [LOCATION] scheduled for [DATE].  [Or: My duties require frequent official travel that necessitates a GTCC.]"
+        },
+        {
+          "subject": "Acknowledgment",
+          "text": "I acknowledge that I have completed the required GTCC training and understand my responsibilities as a cardholder per reference (a)."
+        }
+      ],
+      "refs": [
+        "DoD 7000.14-R, Vol. 9"
+      ],
+      "encls": [
+        "GTCC Training Certificate"
+      ]
+    },
+    {
+      "id": "report-findings",
+      "name": "Report of Findings",
+      "category": "Investigations",
+      "description": "Formal report documenting investigation findings",
+      "ssic": "5830",
+      "documentType": "basic",
+      "subj": "REPORT OF PRELIMINARY INQUIRY",
+      "paragraphs": [
+        {
+          "subject": "Authority",
+          "text": "Per reference (a), a preliminary inquiry was conducted into [SUBJECT MATTER] as directed by [CONVENING AUTHORITY] on [DATE]."
+        },
+        {
+          "subject": "Background",
+          "text": "[Provide background information and circumstances that prompted the inquiry.  Include dates, locations, and personnel involved.]"
+        },
+        {
+          "subject": "Methodology",
+          "text": "[Describe how the inquiry was conducted: witnesses interviewed, documents reviewed, evidence examined, etc.]"
+        },
+        {
+          "subject": "Findings of Fact",
+          "text": "[List specific findings based on evidence gathered.  Use numbered sub-paragraphs for clarity.  Be objective and factual.]"
+        },
+        {
+          "subject": "Conclusion",
+          "text": "[State conclusions drawn from the findings.  Address whether allegations were substantiated or unsubstantiated.]"
+        },
+        {
+          "subject": "Recommendation",
+          "text": "[Provide recommendations for action: further investigation, administrative action, disciplinary action, case closure, or other appropriate disposition.]"
+        }
+      ],
+      "refs": [
+        "[Convening authority directive or appointing order]"
+      ],
+      "encls": [
+        "Witness statements",
+        "Documentary evidence",
+        "Photographs (if applicable)"
+      ]
+    },
+    {
+      "id": "orders-modification",
+      "name": "Request for Orders Modification",
+      "category": "Personnel",
+      "description": "Request to modify PCS or TAD orders",
+      "ssic": "1320",
+      "documentType": "basic",
+      "subj": "REQUEST FOR ORDERS MODIFICATION",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request modification to my orders [ORDER NUMBER] dated [DATE]."
+        },
+        {
+          "subject": "Current Orders",
+          "text": "I am currently ordered to report to [GAINING UNIT] NLT [REPORT DATE] for duty as [BILLET]."
+        },
+        {
+          "subject": "Requested Modification",
+          "text": "[Clearly state the specific modification requested: change of report date, change of duty station, deletion of dependent travel, etc.]"
+        },
+        {
+          "subject": "Justification",
+          "text": "[Provide detailed justification for the modification request.  Include any extenuating circumstances or hardship factors.]"
+        },
+        {
+          "subject": "Impact",
+          "text": "[Address how this modification will or will not impact the gaining unit or Marine Corps manning requirements.]"
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact is the undersigned at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "MCO 1320.11"
+      ],
+      "encls": [
+        "Copy of current orders",
+        "[Supporting documentation]"
+      ]
+    },
+    {
+      "id": "checkout-letter",
+      "name": "Checkout/Transfer Letter",
+      "category": "Personnel",
+      "description": "Letter confirming checkout and transfer requirements",
+      "ssic": "1320",
+      "documentType": "memorandum",
+      "subj": "CHECKOUT INSTRUCTIONS",
+      "paragraphs": [
+        {
+          "subject": "Purpose",
+          "text": "This memorandum provides checkout instructions in preparation for your transfer to [GAINING UNIT] per orders dated [DATE]."
+        },
+        {
+          "subject": "Checkout Requirements",
+          "text": "Complete the attached checkout sheet and obtain all required signatures NLT [DATE].  Ensure all gear is turned in to the armory and supply.  Clear all financial obligations with disbursing."
+        },
+        {
+          "subject": "Records",
+          "text": "Report to Admin to verify your service record book is complete and accurate.  Ensure all awards, training, and qualifications are properly documented."
+        },
+        {
+          "subject": "Final Inspection",
+          "text": "Report to [LOCATION] on [DATE] at [TIME] for final checkout inspection with the [FIRST SERGEANT/SERGEANT MAJOR]."
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "For questions, contact the Admin Chief at [PHONE/EMAIL]."
+        }
+      ],
+      "encls": [
+        "Unit Checkout Sheet"
+      ]
+    },
+    {
+      "id": "sgli-update",
+      "name": "SGLI Beneficiary Update",
+      "category": "Administrative",
+      "description": "Notification of SGLI beneficiary change",
+      "ssic": "1750",
+      "documentType": "basic",
+      "subj": "SERVICEMEMBERS' GROUP LIFE INSURANCE (SGLI) BENEFICIARY UPDATE",
+      "paragraphs": [
+        {
+          "subject": "Purpose",
+          "text": "Per reference (a), this letter confirms my election to update my SGLI beneficiary designation."
+        },
+        {
+          "subject": "Coverage",
+          "text": "I currently maintain SGLI coverage in the amount of $[AMOUNT].  I have elected to [maintain/increase/decrease] my coverage to $[AMOUNT]."
+        },
+        {
+          "subject": "Beneficiary Designation",
+          "text": "Enclosure (1) is my updated SGLV 8286 designating my beneficiaries as indicated therein."
+        },
+        {
+          "subject": "Acknowledgment",
+          "text": "I understand this designation supersedes all previous beneficiary designations and will remain in effect until modified or revoked by me in writing."
+        }
+      ],
+      "refs": [
+        "38 U.S.C. Chapter 19"
+      ],
+      "encls": [
+        "SGLV 8286 (SGLI Election and Certificate)"
+      ]
+    },
+    {
+      "id": "command-interest",
+      "name": "Command Interest Letter",
+      "category": "Leadership",
+      "description": "Letter expressing command interest in a Marine's development",
+      "ssic": "1610",
+      "documentType": "basic",
+      "subj": "COMMAND INTEREST",
+      "paragraphs": [
+        {
+          "subject": "Purpose",
+          "text": "This letter establishes command interest in [RANK FULL NAME] to ensure proper mentorship and career development."
+        },
+        {
+          "subject": "Background",
+          "text": "[Explain why command interest is being established: performance concerns, development potential, recent personal difficulties, or other relevant circumstances.]"
+        },
+        {
+          "subject": "Expectations",
+          "text": "[Outline specific expectations for the Marine during the command interest period.  Include performance standards, behavior requirements, or development goals.]"
+        },
+        {
+          "subject": "Mentorship",
+          "text": "[MENTOR'S RANK AND NAME] is assigned as mentor and will provide weekly counseling and guidance.  Mentor will report progress to the First Sergeant monthly."
+        },
+        {
+          "subject": "Duration",
+          "text": "This command interest will remain in effect for [PERIOD] or until removed by the Commanding Officer, whichever occurs first."
+        }
+      ]
+    },
+    {
+      "id": "6105-entry",
+      "name": "6105 Counseling Entry Request",
+      "category": "Leadership",
+      "description": "Request for adverse page 11 entry (6105)",
+      "ssic": "1610",
+      "documentType": "basic",
+      "subj": "REQUEST FOR ADMINISTRATIVE REMARKS (6105) ENTRY",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per references (a) and (b), request the following 6105 counseling entry be made in the service record of [RANK FULL NAME]."
+        },
+        {
+          "subject": "Incident",
+          "text": "[Describe the specific incident, deficiency, or pattern of behavior that warrants this entry.  Include dates, locations, and factual description of events.]"
+        },
+        {
+          "subject": "Standard Violated",
+          "text": "[Cite the specific order, regulation, policy, or standard that was violated.  Reference UCMJ articles if applicable.]"
+        },
+        {
+          "subject": "Prior Counseling",
+          "text": "[Document prior counseling efforts, including dates and outcomes.  Reference any previous page 11 entries or documented counseling sessions.]"
+        },
+        {
+          "subject": "Proposed Entry",
+          "text": "\"[DATE]: Per MCO 1610.7A, you are being formally counseled for [BRIEF DESCRIPTION].  [DETAILED NARRATIVE].  Failure to correct this deficiency may result in further adverse administrative or disciplinary action, to include [POTENTIAL CONSEQUENCES].\""
+        },
+        {
+          "subject": "Marine's Rights",
+          "text": "Per reference (a), the Marine has been advised of the right to submit a written statement within 10 working days.  The statement will be filed with this entry."
+        }
+      ],
+      "refs": [
+        "MCO 1610.7A",
+        "MCO 1070.12K"
+      ]
+    },
+    {
+      "id": "meritorious-promo",
+      "name": "Meritorious Promotion Recommendation",
+      "category": "Awards",
+      "description": "Recommendation for meritorious promotion",
+      "ssic": "1400",
+      "documentType": "basic",
+      "subj": "MERITORIOUS PROMOTION RECOMMENDATION",
+      "paragraphs": [
+        {
+          "subject": "Recommendation",
+          "text": "Per reference (a), [RANK FULL NAME], [MOS], is recommended for meritorious promotion to the grade of [GRADE]."
+        },
+        {
+          "subject": "Background",
+          "text": "[Current grade date, TIG, TIS, current billet, and MOS proficiency.  Include composite score if applicable.]"
+        },
+        {
+          "subject": "Justification",
+          "text": "[Describe exceptional performance that warrants promotion ahead of peers.  Use specific examples and quantifiable achievements.  Explain why this Marine is more deserving than others awaiting promotion.]"
+        },
+        {
+          "subject": "Leadership",
+          "text": "[Describe leadership qualities demonstrated.  Include examples of leading Marines, training subordinates, and influencing peers.]"
+        },
+        {
+          "subject": "PME and Self-Improvement",
+          "text": "[List completed PME, off-duty education, certifications, and other self-improvement efforts.]"
+        },
+        {
+          "subject": "Physical Fitness",
+          "text": "Current PFT score: [SCORE] ([CLASS]).  Current CFT score: [SCORE] ([CLASS]).  Height/Weight: [COMPLIANT/BCP STATUS]."
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact is the undersigned at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "MCO 1001.62A"
+      ],
+      "encls": [
+        "Career summary",
+        "Most recent fitness report"
+      ]
+    },
+    {
+      "id": "humanitarian-transfer",
+      "name": "Humanitarian/Hardship Transfer Request",
+      "category": "Personnel",
+      "description": "Request for humanitarian or hardship reassignment",
+      "ssic": "1300",
+      "documentType": "basic",
+      "subj": "REQUEST FOR HUMANITARIAN REASSIGNMENT",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request humanitarian reassignment to [GEOGRAPHIC AREA/SPECIFIC DUTY STATION] due to [BRIEFLY STATE REASON - family medical emergency, severe family hardship, etc.]."
+        },
+        {
+          "subject": "Current Assignment",
+          "text": "I am currently assigned to [UNIT] as [BILLET].  My PRD is [DATE].  I have served at this duty station since [DATE]."
+        },
+        {
+          "subject": "Hardship Circumstances",
+          "text": "[Provide detailed explanation of the hardship situation.  Include specific circumstances, timeline of events, and why your presence is required.  Be specific about the nature of the family emergency or hardship.]"
+        },
+        {
+          "subject": "Family Member Information",
+          "text": "[Provide information about the affected family member: relationship, location, nature of condition/situation, prognosis if medical, and why other family members cannot provide necessary support.]"
+        },
+        {
+          "subject": "Requested Location",
+          "text": "I request assignment to the [GEOGRAPHIC AREA] area to be within [REASONABLE DISTANCE] of [AFFECTED FAMILY MEMBER].  [Identify specific units in the area that could utilize your MOS if known.]"
+        },
+        {
+          "subject": "Supporting Documentation",
+          "text": "Enclosures provide supporting documentation including [LIST: medical documentation, dependency letters, Red Cross message, etc.]."
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact is the undersigned at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "MCO 1040.40B"
+      ],
+      "encls": [
+        "Medical documentation (if applicable)",
+        "Red Cross message (if applicable)",
+        "Supporting statements"
+      ]
+    },
+    {
+      "id": "loi",
+      "name": "Letter of Instruction",
+      "category": "Leadership",
+      "description": "Formal letter providing specific instructions or guidance",
+      "ssic": "5000",
+      "documentType": "memorandum",
+      "subj": "LETTER OF INSTRUCTION",
+      "paragraphs": [
+        {
+          "subject": "Purpose",
+          "text": "This letter provides instructions and guidance for [EVENT/TASK/OPERATION/PROGRAM]."
+        },
+        {
+          "subject": "Background",
+          "text": "[Provide context and background information necessary to understand the requirement.]"
+        },
+        {
+          "subject": "Scope",
+          "text": "[Define what is covered by these instructions, including applicable personnel, timeframes, and geographic areas.]"
+        },
+        {
+          "subject": "Instructions",
+          "text": "[Provide detailed, numbered instructions.  Be specific about who, what, when, where, and how.  Include specific tasks, responsibilities, and deadlines.]"
+        },
+        {
+          "subject": "Coordination",
+          "text": "[Identify coordination requirements, reporting chains, and key personnel involved.]"
+        },
+        {
+          "subject": "Resources",
+          "text": "[Identify resources available, funding sources, equipment, or personnel support.]"
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact for this matter is [NAME] at [PHONE/EMAIL]."
+        }
+      ]
+    },
+    {
+      "id": "legal-hold",
+      "name": "Legal Hold Notification",
+      "category": "Legal",
+      "description": "Notification of litigation hold on documents/evidence",
+      "ssic": "5800",
+      "documentType": "memorandum",
+      "subj": "LITIGATION HOLD NOTICE",
+      "paragraphs": [
+        {
+          "subject": "Notice",
+          "text": "This memorandum serves as official notice of a litigation hold effective immediately.  You are required to preserve all documents, records, and electronically stored information (ESI) related to [SUBJECT MATTER/CASE NAME]."
+        },
+        {
+          "subject": "Scope",
+          "text": "This hold applies to all documents and information, regardless of format, related to [DESCRIBE SCOPE: specific incident, time period, individuals, or subject matter].  This includes but is not limited to emails, text messages, photographs, videos, reports, notes, and any other records."
+        },
+        {
+          "subject": "Preservation Requirements",
+          "text": "You must immediately: (1) Suspend any routine destruction of relevant documents; (2) Preserve all relevant electronic communications including emails, texts, and voicemails; (3) Preserve all relevant physical documents; (4) Preserve any relevant evidence in your possession or control."
+        },
+        {
+          "subject": "Prohibition",
+          "text": "Do NOT delete, destroy, alter, or dispose of any potentially relevant documents or information.  Failure to comply with this hold may result in adverse legal consequences and potential disciplinary action."
+        },
+        {
+          "subject": "Duration",
+          "text": "This litigation hold will remain in effect until you receive written notice of its release.  Do not assume the hold has been lifted unless you receive official notification."
+        },
+        {
+          "subject": "Questions",
+          "text": "Direct any questions regarding this hold to the Staff Judge Advocate at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "JAGMAN"
+      ]
+    },
+    {
+      "id": "career-designation",
+      "name": "Career Designation Package Cover",
+      "category": "Personnel",
+      "description": "Cover letter for career designation request",
+      "ssic": "1040",
+      "documentType": "basic",
+      "subj": "CAREER DESIGNATION REQUEST",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request career designation as an indication of my commitment to continued service in the United States Marine Corps."
+        },
+        {
+          "subject": "Service Record",
+          "text": "I entered active duty on [DATE].  I am currently serving in the grade of [RANK] with an EAS of [DATE].  My primary MOS is [MOS/TITLE]."
+        },
+        {
+          "subject": "Career Intentions",
+          "text": "[State your career intentions and reasons for requesting career designation.  Demonstrate your commitment to the Marine Corps and your plans for continued professional development.]"
+        },
+        {
+          "subject": "Qualifications",
+          "text": "Current PFT: [SCORE].  Current CFT: [SCORE].  Rifle qualification: [QUAL/DATE].  [List any additional qualifications, certifications, or achievements relevant to career designation.]"
+        },
+        {
+          "subject": "Recommendation",
+          "text": "I respectfully request favorable consideration of this career designation package."
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact is the undersigned at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "MCO 1040.31"
+      ],
+      "encls": [
+        "Career Designation Checklist",
+        "Career Counseling Worksheet"
+      ]
+    },
+    {
+      "id": "appointment-investigating-officer",
+      "name": "Appointment as Investigating Officer",
+      "category": "Investigations",
+      "description": "Appoint an officer or SNCO to conduct a command investigation",
+      "ssic": "5830",
+      "documentType": "basic",
+      "subj": "APPOINTMENT AS INVESTIGATING OFFICER",
+      "paragraphs": [
+        {
+          "subject": "Appointment",
+          "text": "Per references (a) and (b), you are hereby appointed as Investigating Officer (IO) to conduct a command investigation into [BRIEF DESCRIPTION OF INCIDENT/MATTER]."
+        },
+        {
+          "subject": "Scope",
+          "text": "You are directed to investigate the facts and circumstances surrounding [DETAILED DESCRIPTION].  This investigation should determine [LIST SPECIFIC QUESTIONS TO BE ANSWERED]."
+        },
+        {
+          "subject": "Authority",
+          "text": "You are authorized to interview all personnel who may have relevant information, examine all pertinent documents and physical evidence, and take sworn statements as necessary.  All members of this command are directed to cooperate fully with this investigation."
+        },
+        {
+          "subject": "Timeline",
+          "text": "Submit your findings of fact, opinions, and recommendations to the undersigned no later than [DATE], unless an extension is requested and approved."
+        },
+        {
+          "subject": "Report Format",
+          "text": "Your report should include: (1) preliminary statement identifying the appointment authority and scope; (2) findings of fact; (3) opinions; (4) recommendations; and (5) all enclosures including witness statements and documentary evidence."
+        },
+        {
+          "subject": "Legal Review",
+          "text": "Upon completion, your investigation will be forwarded to the Staff Judge Advocate for legal sufficiency review prior to final action."
+        }
+      ],
+      "refs": [
+        "JAGMAN Chapter II",
+        "MCO 5830.8A"
+      ]
+    },
+    {
+      "id": "appointment-collateral-duty",
+      "name": "Appointment to Collateral Duty",
+      "category": "Administrative",
+      "description": "Appoint a Marine to a collateral duty position",
+      "ssic": "5216",
+      "documentType": "basic",
+      "subj": "APPOINTMENT TO COLLATERAL DUTY",
+      "paragraphs": [
+        {
+          "subject": "Appointment",
+          "text": "Effective [DATE], you are hereby appointed as the [DUTY TITLE] for [UNIT NAME]."
+        },
+        {
+          "subject": "Responsibilities",
+          "text": "Your responsibilities include but are not limited to: [LIST PRIMARY DUTIES AND RESPONSIBILITIES].  You will serve as the primary point of contact for all matters pertaining to this duty."
+        },
+        {
+          "subject": "Authority",
+          "text": "You are authorized to [LIST SPECIFIC AUTHORITIES GRANTED - e.g., sign for equipment, access spaces, approve requests, etc.].  Exercise this authority in accordance with applicable regulations and command policies."
+        },
+        {
+          "subject": "Training",
+          "text": "Ensure completion of all required training for this duty within [NUMBER] days of this appointment.  Coordinate with [PERSON/OFFICE] for scheduling and certification."
+        },
+        {
+          "subject": "Turnover",
+          "text": "Maintain complete and accurate records.  Upon relief, conduct a thorough turnover with your replacement and provide a turnover folder containing all relevant documents, SOPs, and points of contact."
+        },
+        {
+          "subject": "Duration",
+          "text": "This appointment remains in effect until relieved in writing or upon your departure from this command."
+        }
+      ],
+      "refs": []
+    },
+    {
+      "id": "appointment-board-member",
+      "name": "Appointment to Board/Committee",
+      "category": "Administrative",
+      "description": "Appoint a member to a selection, promotion, or administrative board",
+      "ssic": "5216",
+      "documentType": "basic",
+      "subj": "APPOINTMENT TO [BOARD/COMMITTEE NAME]",
+      "paragraphs": [
+        {
+          "subject": "Appointment",
+          "text": "Per reference (a), you are hereby appointed as a [VOTING MEMBER/RECORDER/PRESIDENT] of the [BOARD/COMMITTEE NAME] convening on [DATE] at [TIME] in [LOCATION]."
+        },
+        {
+          "subject": "Purpose",
+          "text": "The purpose of this board is to [STATE PURPOSE - e.g., review candidates for meritorious promotion, evaluate administrative separation, select personnel for special duty assignment, etc.]."
+        },
+        {
+          "subject": "Composition",
+          "text": "The board will consist of: President: [RANK/NAME]; Members: [LIST MEMBERS]; Recorder: [RANK/NAME].  [Additional personnel as required]."
+        },
+        {
+          "subject": "Procedures",
+          "text": "Conduct all proceedings in accordance with reference (a).  The recorder will maintain accurate minutes and all documentation.  All deliberations are confidential and will not be disclosed outside official channels."
+        },
+        {
+          "subject": "Report",
+          "text": "Upon completion of proceedings, submit the board report with findings and recommendations to the undersigned within [NUMBER] working days."
+        }
+      ],
+      "refs": [
+        "MCO 1400.32D"
+      ]
+    },
+    {
+      "id": "meritorious-mast",
+      "name": "Meritorious Mast Recommendation",
+      "category": "Awards",
+      "description": "Recommend a Marine for Meritorious Mast recognition",
+      "ssic": "1650",
+      "documentType": "basic",
+      "subj": "MERITORIOUS MAST RECOMMENDATION FOR [RANK NAME]",
+      "paragraphs": [
+        {
+          "subject": "Recommendation",
+          "text": "[RANK FULL NAME, USMC], is recommended for Meritorious Mast in recognition of [his/her] superior performance of duty while serving as [BILLET] from [START DATE] to [END DATE]."
+        },
+        {
+          "subject": "Accomplishments",
+          "text": "[DESCRIBE SPECIFIC ACCOMPLISHMENTS.  Be specific with facts, figures, and impacts.  What did the Marine do that went above and beyond normal expectations?  How did their actions benefit the command, mission, or fellow Marines?]"
+        },
+        {
+          "subject": "Impact",
+          "text": "[DESCRIBE THE IMPACT.  Quantify results where possible.  How did their performance contribute to mission accomplishment?  What would have happened without their efforts?]"
+        },
+        {
+          "subject": "Character",
+          "text": "[RANK NAME]'s dedication, professionalism, and initiative reflect great credit upon [himself/herself] and are in keeping with the highest traditions of the United States Marine Corps."
+        },
+        {
+          "subject": "Recommendation",
+          "text": "I strongly recommend [RANK NAME] be recognized via Meritorious Mast for [his/her] outstanding contributions to this command."
+        }
+      ],
+      "refs": [
+        "MCO 1650.19J"
+      ]
+    },
+    {
+      "id": "tad-request",
+      "name": "Temporary Additional Duty (TAD) Request",
+      "category": "Personnel",
+      "description": "Request TAD orders for training, schools, or temporary assignment",
+      "ssic": "1320",
+      "documentType": "basic",
+      "subj": "REQUEST FOR TEMPORARY ADDITIONAL DUTY ORDERS",
+      "paragraphs": [
+        {
+          "subject": "Request",
+          "text": "Per reference (a), I request TAD orders for [RANK FULL NAME] to [DESTINATION/SCHOOL/UNIT] for the period of [START DATE] to [END DATE] ([NUMBER] days)."
+        },
+        {
+          "subject": "Purpose",
+          "text": "Purpose of TAD: [STATE PURPOSE - e.g., attendance at formal school, temporary augmentation, training exercise, inspection support, etc.].  [If school: Course number, class number, and report date]."
+        },
+        {
+          "subject": "Justification",
+          "text": "[EXPLAIN WHY THIS TAD IS NECESSARY.  How does it support mission requirements or Marine's professional development?  Why was this Marine selected?]"
+        },
+        {
+          "subject": "Funding",
+          "text": "Funding source: [SPECIFY - e.g., unit OPTAR, TECOM funded, gaining command funded, etc.].  Estimated cost: [AMOUNT] for travel, [AMOUNT] for per diem, [AMOUNT] total."
+        },
+        {
+          "subject": "Impact",
+          "text": "[ADDRESS IMPACT ON UNIT.  How will billet/duties be covered during absence?  Any mission degradation concerns?]"
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact is [NAME/RANK] at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "JTR"
+      ]
+    },
+    {
+      "id": "duty-status-change",
+      "name": "Duty Status Change Notification",
+      "category": "Administrative",
+      "description": "Notify higher headquarters of Marine's change in duty status",
+      "ssic": "1320",
+      "documentType": "basic",
+      "subj": "DUTY STATUS CHANGE NOTIFICATION",
+      "paragraphs": [
+        {
+          "subject": "Notification",
+          "text": "Per reference (a), the following duty status change is reported for [RANK FULL NAME], [EDIPI], [MOS]."
+        },
+        {
+          "subject": "Status Change",
+          "text": "Previous Status: [PRESENT FOR DUTY/TAD/LEAVE/LIMDU/etc.].  New Status: [NEW STATUS].  Effective Date: [DATE]."
+        },
+        {
+          "subject": "Details",
+          "text": "[PROVIDE RELEVANT DETAILS.  For LIMDU: diagnosis category, estimated return date, duty limitations.  For UA: last known location, circumstances, actions taken.  For confinement: location, charges, court-martial date if known.]"
+        },
+        {
+          "subject": "Actions Taken",
+          "text": "[DESCRIBE COMMAND ACTIONS - e.g., administrative processing initiated, legal hold placed, notification to next of kin, etc.]"
+        },
+        {
+          "subject": "Point of Contact",
+          "text": "Point of contact for this matter is [RANK/NAME] at [PHONE/EMAIL]."
+        }
+      ],
+      "refs": [
+        "MCO 1001.59A"
+      ]
+    },
+    {
+      "id": "appointment-safety-officer",
+      "name": "Appointment as Safety Officer",
+      "category": "Administrative",
+      "description": "Appoint a unit Safety Officer",
+      "ssic": "5100",
+      "documentType": "basic",
+      "subj": "APPOINTMENT AS UNIT SAFETY OFFICER",
+      "paragraphs": [
+        {
+          "subject": "Appointment",
+          "text": "Effective [DATE], you are hereby appointed as the Unit Safety Officer for [UNIT NAME]."
+        },
+        {
+          "subject": "Responsibilities",
+          "text": "Your responsibilities include: (1) implementing and managing the unit safety program per reference (a); (2) conducting safety inspections and risk assessments; (3) investigating mishaps and near-misses; (4) conducting safety training and awareness campaigns; (5) maintaining required safety documentation and reports."
+        },
+        {
+          "subject": "Authority",
+          "text": "You are authorized to: halt any operation presenting imminent danger; access all spaces and operations for safety inspections; direct immediate corrective actions for safety hazards; and report directly to the Commanding Officer on safety matters."
+        },
+        {
+          "subject": "Training Requirements",
+          "text": "Complete the following training within 90 days: (1) [SERVICE] Safety Officer Course; (2) Operational Risk Management (ORM) Course; (3) Mishap Investigation Course.  Document all certifications and maintain currency."
+        },
+        {
+          "subject": "Coordination",
+          "text": "Coordinate with higher headquarters safety personnel and participate in all safety working groups and inspections as required."
+        }
+      ],
+      "refs": [
+        "MCO 5100.29B"
+      ]
+    },
+    {
+      "id": "personal-award-recommendation",
+      "name": "Personal Award Recommendation",
+      "category": "Awards",
+      "description": "Recommend a Marine for a personal decoration (general format)",
+      "ssic": "1650",
+      "documentType": "basic",
+      "subj": "PERSONAL AWARD RECOMMENDATION FOR [RANK NAME]",
+      "paragraphs": [
+        {
+          "subject": "Recommendation",
+          "text": "Per reference (a), [RANK FULL NAME, USMC] is recommended for the [AWARD NAME] for [his/her] [meritorious service/heroic achievement/meritorious achievement] while serving as [BILLET] from [START DATE] to [END DATE]."
+        },
+        {
+          "subject": "Summary of Action",
+          "text": "[PROVIDE NARRATIVE DESCRIPTION.  For meritorious service: describe sustained superior performance, specific accomplishments, and impact.  For achievement: describe the specific act or event, circumstances, and outcome.  Be specific with facts and figures.]"
+        },
+        {
+          "subject": "Impact",
+          "text": "[DESCRIBE IMPACT.  How did the Marine's actions contribute to mission accomplishment?  What was the scope of responsibility?  Who benefited from their efforts?]"
+        },
+        {
+          "subject": "Justification",
+          "text": "[EXPLAIN WHY THIS AWARD IS APPROPRIATE.  Compare to award criteria in reference (a).  Why does performance warrant recognition at this level versus a lower award?]"
+        },
+        {
+          "subject": "Recommendation",
+          "text": "[RANK NAME]'s [service/actions] reflect great credit upon [himself/herself] and are in keeping with the highest traditions of the United States Marine Corps.  I strongly recommend approval of this award."
+        }
+      ],
+      "refs": [
+        "SECNAVINST 1650.1H"
+      ],
+      "encls": [
+        "NAVMC 11533 Award Recommendation",
+        "Supporting Documentation"
+      ]
+    },
+    {
+      "id": "notarized-statement",
+      "name": "Statement Under Oath",
+      "category": "Legal",
+      "description": "Format for sworn statement in investigations",
+      "ssic": "5830",
+      "documentType": "memorandum",
+      "subj": "SWORN STATEMENT",
+      "paragraphs": [
+        {
+          "subject": "",
+          "text": "I, [FULL NAME], [RANK/RATE if applicable], having been duly sworn, do hereby state the following:"
+        },
+        {
+          "subject": "",
+          "text": "[PROVIDE DETAILED STATEMENT OF FACTS.  Include: who was involved, what happened, when it occurred, where it took place, and any other relevant details.  Be specific and factual.  Avoid opinions unless specifically requested.]"
+        },
+        {
+          "subject": "",
+          "text": "[CONTINUE STATEMENT AS NEEDED.  Use separate paragraphs for different events or topics.  Include any physical evidence observed, documents reviewed, or statements heard from others (attribute properly).]"
+        },
+        {
+          "subject": "",
+          "text": "I have read this statement consisting of [NUMBER] pages.  I fully understand its contents.  This statement is true and correct to the best of my knowledge and belief."
+        }
+      ],
+      "refs": []
+    },
+    {
+      "id": "extension-endorsement",
+      "name": "Extension of Enlistment Endorsement",
+      "category": "Endorsements",
+      "description": "Command endorsement for reenlistment or extension request",
+      "ssic": "1040",
+      "documentType": "endorsement",
+      "subj": "EXTENSION/REENLISTMENT ENDORSEMENT",
+      "paragraphs": [
+        {
+          "subject": "Recommendation",
+          "text": "[RECOMMEND APPROVAL/DISAPPROVAL] of [RANK NAME]'s request for [extension/reenlistment]."
+        },
+        {
+          "subject": "Performance",
+          "text": "[RANK NAME] has served at this command since [DATE].  [His/Her] performance has been [DESCRIPTION].  Current proficiency/conduct marks: [PRO/CON].  Most recent FITREP marking average: [AVERAGE]."
+        },
+        {
+          "subject": "Qualifications",
+          "text": "Physical fitness: PFT [SCORE/CLASS], CFT [SCORE/CLASS].  Rifle qualification: [QUAL/DATE].  [Any disqualifying factors or waivers required: N/A or specify]."
+        },
+        {
+          "subject": "Conduct",
+          "text": "[Address any adverse information: NJPs, courts-martial, civilian convictions, debt issues, etc.  If none: \"No adverse information is on file.\"]"
+        },
+        {
+          "subject": "Endorsement",
+          "text": "[If recommending approval: This Marine is a valuable asset and continued service is in the best interest of the Marine Corps.  If disapproving: Provide specific reasons per applicable directives.]"
+        }
+      ],
+      "refs": [
+        "MCO 1040.31"
+      ]
+    }
+  ],
+  "categories": [
+    "Personnel",
+    "Awards",
+    "Leadership",
+    "Endorsements",
+    "Training",
+    "Administrative",
+    "Investigations",
+    "Legal"
+  ]
+}

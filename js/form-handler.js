@@ -9,6 +9,7 @@ let sealFilename = 'DOW-Seal-BW.jpg';
 let sealLoaded = false;
 let documentType = 'basic';
 let draggedItem = null;
+let portionMarkingEnabled = false;
 
 // Default seal path (bundled with app)
 const DEFAULT_SEAL_PATH = 'assets/DOW-Seal-BW.jpg';
@@ -64,6 +65,78 @@ function selectDocType(type) {
 }
 
 /**
+ * Select memo style (plain paper vs letterhead)
+ */
+function selectMemoStyle(isFormal) {
+  const hiddenInput = document.getElementById('formalMemo');
+  if (hiddenInput) {
+    hiddenInput.value = isFormal ? 'true' : 'false';
+  }
+
+  // Update toggle UI
+  document.querySelectorAll('.memo-option').forEach(opt => {
+    const optFormal = opt.dataset.formal === 'true';
+    opt.classList.toggle('selected', optFormal === isFormal);
+    opt.setAttribute('aria-checked', optFormal === isFormal);
+  });
+
+  // Update letterhead visibility
+  updateLetterheadVisibility();
+}
+
+/**
+ * Toggle portion marking option visibility based on classification
+ */
+function togglePortionMarking() {
+  const classification = document.getElementById('classification').value;
+  const portionOption = document.getElementById('portionMarkingOption');
+  const portionCheckbox = document.getElementById('enablePortionMarking');
+
+  if (portionOption) {
+    // Show portion marking option for CUI/FOUO (inline-flex for options panel)
+    portionOption.style.display = classification ? 'inline-flex' : 'none';
+
+    // If classification is cleared, disable portion marking
+    if (!classification && portionCheckbox) {
+      portionCheckbox.checked = false;
+      portionMarkingEnabled = false;
+      updatePortionMarkingUI();
+    }
+  }
+}
+
+/**
+ * Handle portion marking checkbox change
+ */
+function handlePortionMarkingChange() {
+  const checkbox = document.getElementById('enablePortionMarking');
+  portionMarkingEnabled = checkbox ? checkbox.checked : false;
+  updatePortionMarkingUI();
+}
+
+/**
+ * Update portion marking UI on all paragraphs
+ */
+function updatePortionMarkingUI() {
+  const classification = document.getElementById('classification').value;
+  const portionSelectors = document.querySelectorAll('.portion-selector');
+
+  portionSelectors.forEach(selector => {
+    selector.style.display = portionMarkingEnabled ? 'inline-block' : 'none';
+  });
+
+  // Update default values based on classification
+  if (portionMarkingEnabled && classification) {
+    portionSelectors.forEach(selector => {
+      if (!selector.value) {
+        // Default to unclassified for new paragraphs
+        selector.value = 'U';
+      }
+    });
+  }
+}
+
+/**
  * Update letterhead section visibility based on document type and formal memo option
  */
 function updateLetterheadVisibility() {
@@ -71,9 +144,10 @@ function updateLetterheadVisibility() {
   if (!letterheadSection) return;
 
   if (documentType === 'memorandum') {
-    // For memos, show letterhead only if formal memo is checked
+    // For memos, show letterhead only if formal memo is selected
     const formalMemo = document.getElementById('formalMemo');
-    letterheadSection.style.display = (formalMemo && formalMemo.checked) ? 'block' : 'none';
+    const isFormal = formalMemo && formalMemo.value === 'true';
+    letterheadSection.style.display = isFormal ? 'block' : 'none';
   } else {
     // For basic letters and endorsements, always show letterhead
     letterheadSection.style.display = 'block';
@@ -103,8 +177,8 @@ function addVia() {
   div.className = 'dynamic-item';
   div.innerHTML = `
     <span class="item-label">(${n})</span>
-    <input type="text" name="via[]" placeholder="Via addressee ${n}">
-    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'via')">×</button>
+    <input type="text" name="via[]" placeholder="Via addressee ${n}" aria-label="Via addressee ${n}">
+    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'via')" aria-label="Remove via addressee ${n}">×</button>
   `;
   list.appendChild(div);
 }
@@ -118,9 +192,9 @@ function addRef() {
   const div = document.createElement('div');
   div.className = 'dynamic-item';
   div.innerHTML = `
-    <span class="item-label">(${LETTERS[n]})</span>
-    <input type="text" name="ref[]" placeholder="Reference ${LETTERS[n]}">
-    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'ref')">×</button>
+    <span class="item-label">(${getLetter(n)})</span>
+    <input type="text" name="ref[]" placeholder="Reference ${getLetter(n)}" aria-label="Reference ${getLetter(n)}">
+    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'ref')" aria-label="Remove reference ${getLetter(n)}">×</button>
   `;
   list.appendChild(div);
 }
@@ -135,8 +209,8 @@ function addEncl() {
   div.className = 'dynamic-item';
   div.innerHTML = `
     <span class="item-label">(${n})</span>
-    <input type="text" name="encl[]" placeholder="Enclosure ${n}">
-    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'encl')">×</button>
+    <input type="text" name="encl[]" placeholder="Enclosure ${n}" aria-label="Enclosure ${n}">
+    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'encl')" aria-label="Remove enclosure ${n}">×</button>
   `;
   list.appendChild(div);
 }
@@ -149,8 +223,8 @@ function addCopy() {
   const div = document.createElement('div');
   div.className = 'dynamic-item';
   div.innerHTML = `
-    <input type="text" name="copy[]" placeholder="Copy recipient">
-    <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">×</button>
+    <input type="text" name="copy[]" placeholder="Copy recipient" aria-label="Copy recipient">
+    <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()" aria-label="Remove copy recipient">×</button>
   `;
   list.appendChild(div);
 }
@@ -167,7 +241,7 @@ function removeItem(btn, type) {
 
   // Renumber items
   Array.from(list.children).forEach((child, i) => {
-    child.querySelector('.item-label').textContent = type === 'ref' ? `(${LETTERS[i]})` : `(${i + 1})`;
+    child.querySelector('.item-label').textContent = type === 'ref' ? `(${getLetter(i)})` : `(${i + 1})`;
   });
 }
 
@@ -196,21 +270,33 @@ function addParaAfter(afterEl, type) {
 
   // Only top-level paragraphs can have subjects
   const subjectField = type === 'para' ? `
-    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" />
+    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" aria-label="Paragraph subject" />
   ` : '';
 
+  // Portion marking selector (shown when enabled)
+  const portionDisplay = portionMarkingEnabled ? 'inline-block' : 'none';
+  const portionSelector = `
+    <select class="portion-selector" style="display: ${portionDisplay};" title="Portion marking" aria-label="Portion marking">
+      <option value="U">(U)</option>
+      <option value="CUI">(CUI)</option>
+      <option value="FOUO">(FOUO)</option>
+    </select>
+  `;
+
   div.innerHTML = `
-    <span class="drag-handle">☰</span>
-    <div class="para-main">
-      <span class="para-label"></span>
-      ${subjectField}
-      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." onclick="setActivePara(this)"></textarea>
+    <div class="para-left-controls">
+      <span class="drag-handle" title="Drag to reorder" aria-hidden="true">☰</span>
+      <div class="para-inline-actions">
+        <button type="button" class="para-action-btn" onclick="addSibling(this)" title="Add paragraph below" aria-label="Add paragraph below">+</button>
+        <button type="button" class="para-action-btn" onclick="addChild(this)" title="Add sub-paragraph" aria-label="Add sub-paragraph" ${type === 'subsubsubpara' ? 'disabled' : ''}>↳</button>
+        <button type="button" class="para-action-btn para-action-delete" onclick="removePara(this)" title="Delete paragraph" aria-label="Delete paragraph">×</button>
+      </div>
     </div>
-    <div class="para-actions">
-      <button type="button" class="btn" onclick="addSibling(this)">+ Same Level</button>
-      <button type="button" class="btn" onclick="addChild(this)" ${type === 'subsubsubpara' ? 'disabled' : ''}>+ Indent</button>
-      <button type="button" class="btn" onclick="addParent(this)" ${type === 'para' ? 'disabled' : ''}>← Outdent</button>
-      <button type="button" class="btn btn-remove" onclick="removePara(this)">Delete</button>
+    <div class="para-main">
+      ${portionSelector}
+      <span class="para-label" aria-hidden="true"></span>
+      ${subjectField}
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text" spellcheck="true"></textarea>
     </div>
   `;
 
@@ -229,6 +315,9 @@ function addParaAfter(afterEl, type) {
 
   updateParaLabels();
   div.querySelector('textarea').focus();
+
+  // Fire paragraphsChanged event for undo/redo tracking
+  dispatchParagraphsChanged();
 }
 
 /**
@@ -282,6 +371,9 @@ function addParent(btn) {
 function removePara(btn) {
   btn.closest('.para-item').remove();
   updateParaLabels();
+
+  // Fire paragraphsChanged event for undo/redo tracking
+  dispatchParagraphsChanged();
 }
 
 /**
@@ -303,14 +395,14 @@ function updateParaLabels() {
       sn++;
       ssn = 0;
       sssn = 0;
-      label = LETTERS[sn - 1] + '.';
+      label = getLetter(sn - 1) + '.';
     } else if (type === 'subsubpara') {
       ssn++;
       sssn = 0;
       label = '(' + ssn + ')';
     } else if (type === 'subsubsubpara') {
       sssn++;
-      label = '(' + LETTERS[sssn - 1] + ')';
+      label = '(' + getLetter(sssn - 1) + ')';
     }
 
     item.querySelector('.para-label').textContent = label;
@@ -352,8 +444,46 @@ function handleDrop(e) {
       this.before(draggedItem);
     }
     updateParaLabels();
+
+    // Fire paragraphsChanged event for undo/redo tracking
+    dispatchParagraphsChanged();
   }
   this.style.borderTop = '';
+}
+
+// Debounce timer for paragraph text changes
+let paragraphChangeDebounce = null;
+
+/**
+ * Dispatch paragraphsChanged event (debounced for text changes)
+ */
+function dispatchParagraphsChanged() {
+  if (paragraphChangeDebounce) {
+    clearTimeout(paragraphChangeDebounce);
+  }
+  paragraphChangeDebounce = setTimeout(() => {
+    document.dispatchEvent(new CustomEvent('paragraphsChanged'));
+  }, 300);
+}
+
+/**
+ * Collect paragraph data for undo/redo
+ */
+function collectParagraphData() {
+  const container = document.getElementById('paraContainer');
+  if (!container) return [];
+
+  const data = [];
+  container.querySelectorAll('.para-item').forEach(item => {
+    const textarea = item.querySelector('textarea');
+    const subjInput = item.querySelector('.para-subject-input');
+    data.push({
+      type: item.dataset.type,
+      text: textarea ? textarea.value : '',
+      subject: subjInput ? subjInput.value : ''
+    });
+  });
+  return data;
 }
 
 // ============================================================
@@ -367,7 +497,7 @@ function handleDrop(e) {
 function collectData() {
   // For memos, check if formal letterhead is requested
   const formalMemo = document.getElementById('formalMemo');
-  const isFormalMemo = documentType === 'memorandum' && formalMemo && formalMemo.checked;
+  const isFormalMemo = documentType === 'memorandum' && formalMemo && formalMemo.value === 'true';
 
   return {
     documentType,
@@ -375,7 +505,7 @@ function collectData() {
     officeCode: document.getElementById('officeCode').value.trim(),
     date: document.getElementById('date').value.trim(),
     classification: document.getElementById('classification').value,
-    branch: document.querySelector('input[name="branch"]:checked').value,
+    branch: 'USMC', // Marine Corps only
     // Letterhead: always for basic/endorsement, optional for memo (formal only)
     useLetterhead: documentType !== "memorandum" || isFormalMemo,
     isFormalMemo, // Track if this is a formal letterhead memo
@@ -390,13 +520,16 @@ function collectData() {
     subj: document.getElementById('subj').value.trim(),
     refs: Array.from(document.querySelectorAll('input[name="ref[]"]')).map(i => i.value.trim()).filter(v => v),
     encls: Array.from(document.querySelectorAll('input[name="encl[]"]')).map(i => i.value.trim()).filter(v => v),
+    portionMarkingEnabled,
     paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => {
       const paraItem = t.closest('.para-item');
       const subjInput = paraItem?.querySelector('.para-subject-input');
+      const portionSelect = paraItem?.querySelector('.portion-selector');
       return {
         type: t.dataset.type,
         subject: subjInput?.value.trim() || '',
-        text: t.value.trim()
+        text: t.value.trim(),
+        portionMark: portionSelect?.value || 'U'
       };
     }).filter(p => p.text),
     sigName: document.getElementById('sigName').value.trim(),
@@ -425,10 +558,20 @@ async function initFormListeners() {
   // Set today's date
   document.getElementById('date').value = getTodayFormatted();
 
-  // Formal memo checkbox - toggle letterhead visibility
-  const formalMemoCheckbox = document.getElementById('formalMemo');
-  if (formalMemoCheckbox) {
-    formalMemoCheckbox.addEventListener('change', updateLetterheadVisibility);
+  // Portion marking checkbox
+  const portionCheckbox = document.getElementById('enablePortionMarking');
+  if (portionCheckbox) {
+    portionCheckbox.addEventListener('change', handlePortionMarkingChange);
+  }
+
+  // Listen for paragraph text changes (using event delegation)
+  const paraContainer = document.getElementById('paraContainer');
+  if (paraContainer) {
+    paraContainer.addEventListener('input', (e) => {
+      if (e.target.matches('textarea, .para-subject-input')) {
+        dispatchParagraphsChanged();
+      }
+    });
   }
 }
 
