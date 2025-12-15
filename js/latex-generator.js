@@ -101,7 +101,7 @@ function generateTex() {
   if (d.refs.length > 0) {
     tex += `\\vspace{\\baselineskip}\n\\noindent\\makebox[\\labeltab][l]{Ref:}%\n\\begin{minipage}[t]{\\dimexpr\\textwidth-\\labeltab\\relax}\n`;
     d.refs.forEach((r, i) => {
-      tex += `(${LETTERS[i]}) ${escapeLatex(r)}${i < d.refs.length - 1 ? '\\\\*\n' : '\n'}`;
+      tex += `(${getLetter(i)}) ${escapeLatex(r)}${i < d.refs.length - 1 ? '\\\\*\n' : '\n'}`;
     });
     tex += `\\end{minipage}\n\n`;
   }
@@ -134,14 +134,14 @@ function generateTex() {
         sn++;
         ssn = 0;
         sssn = 0;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${LETTERS[sn - 1]}.\\ ${text}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}${getLetter(sn - 1)}.\\ ${text}\n\n`;
       } else if (p.type === 'subsubpara') {
         ssn++;
         sssn = 0;
         tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}(${ssn})\\ ${text}\n\n`;
       } else if (p.type === 'subsubsubpara') {
         sssn++;
-        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${LETTERS[sssn - 1]})\\ ${text}\n\n`;
+        tex += `\\par\\vspace{\\baselineskip}\n\\noindent\\hspace{\\Lmain}\\hspace{\\Lsub}\\hspace{\\Lsubsub}(${getLetter(sssn - 1)})\\ ${text}\n\n`;
       }
     }
   }

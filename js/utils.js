@@ -7,6 +7,21 @@
 const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
 /**
+ * Get letter for index (supports >26 with double letters: aa, ab, etc.)
+ * @param {number} index - Zero-based index
+ * @returns {string} - Letter(s) for that index
+ */
+function getLetter(index) {
+  if (index < 26) {
+    return LETTERS[index];
+  }
+  // For 26+, use double letters: aa, ab, ac... ba, bb, bc...
+  const first = Math.floor(index / 26) - 1;
+  const second = index % 26;
+  return LETTERS[first] + LETTERS[second];
+}
+
+/**
  * Escape special LaTeX characters
  * @param {string} str - Input string
  * @returns {string} - LaTeX-safe string
@@ -140,7 +155,17 @@ function showStatus(type, msg) {
  */
 function generateFilename(subject, extension) {
   if (subject) {
-    return subject.toLowerCase().replace(/[^a-z0-9]+/g, '_').substring(0, 30) + '.' + extension;
+    // Sanitize: lowercase, replace non-alphanumeric with underscore, trim underscores
+    const sanitized = subject
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '')  // Trim leading/trailing underscores
+      .substring(0, 30);
+
+    // Return sanitized name if valid, otherwise default
+    if (sanitized && sanitized.length > 0) {
+      return sanitized + '.' + extension;
+    }
   }
   return 'naval_letter.' + extension;
 }

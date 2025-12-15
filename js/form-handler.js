@@ -177,8 +177,8 @@ function addVia() {
   div.className = 'dynamic-item';
   div.innerHTML = `
     <span class="item-label">(${n})</span>
-    <input type="text" name="via[]" placeholder="Via addressee ${n}">
-    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'via')">×</button>
+    <input type="text" name="via[]" placeholder="Via addressee ${n}" aria-label="Via addressee ${n}">
+    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'via')" aria-label="Remove via addressee ${n}">×</button>
   `;
   list.appendChild(div);
 }
@@ -192,9 +192,9 @@ function addRef() {
   const div = document.createElement('div');
   div.className = 'dynamic-item';
   div.innerHTML = `
-    <span class="item-label">(${LETTERS[n]})</span>
-    <input type="text" name="ref[]" placeholder="Reference ${LETTERS[n]}">
-    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'ref')">×</button>
+    <span class="item-label">(${getLetter(n)})</span>
+    <input type="text" name="ref[]" placeholder="Reference ${getLetter(n)}" aria-label="Reference ${getLetter(n)}">
+    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'ref')" aria-label="Remove reference ${getLetter(n)}">×</button>
   `;
   list.appendChild(div);
 }
@@ -209,8 +209,8 @@ function addEncl() {
   div.className = 'dynamic-item';
   div.innerHTML = `
     <span class="item-label">(${n})</span>
-    <input type="text" name="encl[]" placeholder="Enclosure ${n}">
-    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'encl')">×</button>
+    <input type="text" name="encl[]" placeholder="Enclosure ${n}" aria-label="Enclosure ${n}">
+    <button type="button" class="btn btn-remove" onclick="removeItem(this, 'encl')" aria-label="Remove enclosure ${n}">×</button>
   `;
   list.appendChild(div);
 }
@@ -223,8 +223,8 @@ function addCopy() {
   const div = document.createElement('div');
   div.className = 'dynamic-item';
   div.innerHTML = `
-    <input type="text" name="copy[]" placeholder="Copy recipient">
-    <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()">×</button>
+    <input type="text" name="copy[]" placeholder="Copy recipient" aria-label="Copy recipient">
+    <button type="button" class="btn btn-remove" onclick="this.parentElement.remove()" aria-label="Remove copy recipient">×</button>
   `;
   list.appendChild(div);
 }
@@ -241,7 +241,7 @@ function removeItem(btn, type) {
 
   // Renumber items
   Array.from(list.children).forEach((child, i) => {
-    child.querySelector('.item-label').textContent = type === 'ref' ? `(${LETTERS[i]})` : `(${i + 1})`;
+    child.querySelector('.item-label').textContent = type === 'ref' ? `(${getLetter(i)})` : `(${i + 1})`;
   });
 }
 
@@ -270,13 +270,13 @@ function addParaAfter(afterEl, type) {
 
   // Only top-level paragraphs can have subjects
   const subjectField = type === 'para' ? `
-    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" />
+    <input type="text" name="paraSubj[]" class="para-subject-input" placeholder="Subject (optional, underlined)" aria-label="Paragraph subject" />
   ` : '';
 
   // Portion marking selector (shown when enabled)
   const portionDisplay = portionMarkingEnabled ? 'inline-block' : 'none';
   const portionSelector = `
-    <select class="portion-selector" style="display: ${portionDisplay};" title="Portion marking">
+    <select class="portion-selector" style="display: ${portionDisplay};" title="Portion marking" aria-label="Portion marking">
       <option value="U">(U)</option>
       <option value="CUI">(CUI)</option>
       <option value="FOUO">(FOUO)</option>
@@ -285,18 +285,18 @@ function addParaAfter(afterEl, type) {
 
   div.innerHTML = `
     <div class="para-left-controls">
-      <span class="drag-handle" title="Drag to reorder">☰</span>
+      <span class="drag-handle" title="Drag to reorder" aria-hidden="true">☰</span>
       <div class="para-inline-actions">
-        <button type="button" class="para-action-btn" onclick="addSibling(this)" title="Add paragraph below">+</button>
-        <button type="button" class="para-action-btn" onclick="addChild(this)" title="Add sub-paragraph" ${type === 'subsubsubpara' ? 'disabled' : ''}>↳</button>
-        <button type="button" class="para-action-btn para-action-delete" onclick="removePara(this)" title="Delete paragraph">×</button>
+        <button type="button" class="para-action-btn" onclick="addSibling(this)" title="Add paragraph below" aria-label="Add paragraph below">+</button>
+        <button type="button" class="para-action-btn" onclick="addChild(this)" title="Add sub-paragraph" aria-label="Add sub-paragraph" ${type === 'subsubsubpara' ? 'disabled' : ''}>↳</button>
+        <button type="button" class="para-action-btn para-action-delete" onclick="removePara(this)" title="Delete paragraph" aria-label="Delete paragraph">×</button>
       </div>
     </div>
     <div class="para-main">
       ${portionSelector}
-      <span class="para-label"></span>
+      <span class="para-label" aria-hidden="true"></span>
       ${subjectField}
-      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..."></textarea>
+      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text"></textarea>
     </div>
   `;
 
@@ -395,14 +395,14 @@ function updateParaLabels() {
       sn++;
       ssn = 0;
       sssn = 0;
-      label = LETTERS[sn - 1] + '.';
+      label = getLetter(sn - 1) + '.';
     } else if (type === 'subsubpara') {
       ssn++;
       sssn = 0;
       label = '(' + ssn + ')';
     } else if (type === 'subsubsubpara') {
       sssn++;
-      label = '(' + LETTERS[sssn - 1] + ')';
+      label = '(' + getLetter(sssn - 1) + ')';
     }
 
     item.querySelector('.para-label').textContent = label;
