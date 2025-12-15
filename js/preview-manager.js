@@ -496,25 +496,22 @@ async function generatePDFBlob() {
     }
   }
 
-  // Signature block
-  y += LH * 2;
-
-  const sigX = PW / 2;  // Signature starts at page center per SECNAV M-5216.5
-  if (d.byDirection) {
-    pdf.text('By direction', sigX, y);
-    y += LH * 4;
-  } else {
-    y += LH * 3;
-  }
-
+  // Signature block - DoN standard: name only, ALL CAPS, then "By direction" below
   if (d.sigName) {
+    y += LH * 4;
+    const sigX = PW / 2;  // Signature starts at page center per SECNAV M-5216.5
     pdf.setFont('times', 'normal');
     pdf.text(d.sigName.toUpperCase(), sigX, y);
+    y += LH;
+    if (d.byDirection) {
+      pdf.text('By direction', sigX, y);
+      y += LH;
+    }
   }
 
   // Copy to (numbered if multiple)
   if (d.copies && d.copies.length > 0) {
-    y += LH * 3;
+    y += LH * 2;
     pdf.setFont('times', 'normal');
     pdf.text('Copy to:', ML, y);
     d.copies.forEach((c, i) => {

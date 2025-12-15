@@ -612,10 +612,19 @@ async function printPDF() {
       else if (p.type === 'subpara') { sn++; ssn = 0; sssn = 0; label = getLetter(sn - 1) + '.'; indent = IM; }
       else if (p.type === 'subsubpara') { ssn++; sssn = 0; label = '(' + ssn + ')'; indent = IM + IS; }
       else { sssn++; label = '(' + getLetter(sssn - 1) + ')'; indent = IM + IS + ISS; }
-      const lx = ML + indent;
+
+      // Add portion marking if enabled
+      let portionMark = '';
+      let portionWidth = 0;
+      if (d.portionMarkingEnabled && p.portionMark) {
+        portionMark = `(${p.portionMark}) `;
+        portionWidth = pdf.getTextWidth(portionMark);
+      }
+
+      const lx = ML + indent + portionWidth;
       const labelWidth = pdf.getTextWidth(label);
       const tx = lx + labelWidth + 4;
-      const firstLineWidth = CW - indent - labelWidth - 4;
+      const firstLineWidth = CW - indent - labelWidth - 4 - portionWidth;
 
       // Calculate total lines
       const firstLineText = pdf.splitTextToSize(pText, firstLineWidth);
@@ -652,6 +661,14 @@ async function printPDF() {
       }
 
       pageBreak(LH * 2);
+
+      // Draw portion marking if enabled
+      if (portionMark) {
+        pdf.setFont('times', 'bold');
+        pdf.text(portionMark, ML + indent, y);
+        pdf.setFont('times', 'normal');
+      }
+
       pdf.text(label, lx, y);
       if (p.subject && p.type === 'para') {
         const rightEdge = PW - MR;
