@@ -2,7 +2,7 @@
  * Naval Letter Generator - Main Application
  * SECNAV M-5216.5 Compliant Correspondence Tool
  *
- * Version: 2.0
+ * Version: 3.1
  * Author: Jesse Morgan
  */
 
@@ -134,7 +134,7 @@ function initKeyboardShortcuts() {
  * Initialize the application
  */
 async function initApp() {
-  console.log('Naval Letter Generator v2.0 initializing...');
+  console.log('Naval Letter Generator v3.1 initializing...');
 
   // Initialize theme
   initTheme();
@@ -170,7 +170,16 @@ async function initApp() {
   // Initialize undo/redo manager
   initUndoManager();
 
-  console.log('Naval Letter Generator v3.0 ready!');
+  // Initialize import/export manager (Word import, recently used)
+  if (typeof initImportExportManager === 'function') initImportExportManager();
+
+  // Initialize enhanced features (spell check, char count, ref formatting)
+  if (typeof initEnhancedFeatures === 'function') initEnhancedFeatures();
+
+  // Initialize batch generator
+  if (typeof initBatchGeneratorModule === 'function') initBatchGeneratorModule();
+
+  console.log('Naval Letter Generator v3.1 ready!');
 }
 
 // Initialize when DOM is ready
