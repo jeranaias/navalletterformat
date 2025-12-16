@@ -67,7 +67,7 @@ Expanded from 20 to **37 Marine-centric templates** including:
 
 ### UI Polish
 - **Header Information redesigned** — Clean 4-column grid with expandable "More options"
-- **Font customization** — Choose font family (Times, Arial, Courier, Georgia) and size (10-14pt)
+- **Font customization** — Choose font family (Times, Arial, Courier, Georgia) and size (6-18pt)
 - **Always-on features** — Spell check and character count enabled by default
 - **Tooltips everywhere** — Hover for help instead of cluttered help text
 - **Dark mode improvements** — Better contrast throughout
@@ -181,7 +181,7 @@ Theme toggle with system preference detection. Saved to localStorage.
 ### Font Customization
 Adjust document font and size in the "More options" panel:
 - **Font families:** Times New Roman (default), Arial, Courier New, Georgia
-- **Font sizes:** 10pt, 11pt, 12pt (default), 13pt, 14pt
+- **Font sizes:** 6pt through 18pt (default: 12pt)
 
 *Note: SECNAV M-5216.5 specifies Times New Roman 12pt. Other options provided for command-specific preferences.*
 
