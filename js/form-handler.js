@@ -536,7 +536,10 @@ function collectData() {
     byDirection: document.getElementById('byDirection').checked,
     copies: Array.from(document.querySelectorAll('input[name="copy[]"]')).map(i => i.value.trim()).filter(v => v),
     endorseNumber: document.getElementById('endorseNumber').value,
-    endorseAction: document.getElementById('endorseAction').value
+    endorseAction: document.getElementById('endorseAction').value,
+    // Font settings
+    fontFamily: document.getElementById('fontFamily')?.value || 'times',
+    fontSize: parseInt(document.getElementById('fontSize')?.value || '12', 10)
   };
 }
 

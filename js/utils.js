@@ -148,6 +148,31 @@ function showStatus(type, msg) {
 }
 
 /**
+ * Get jsPDF font name from font family value
+ * @param {string} fontFamily - Font family value (times, arial, courier, georgia)
+ * @returns {string} - jsPDF font name
+ */
+function getJsPDFFont(fontFamily) {
+  const fontMap = {
+    'times': 'times',
+    'arial': 'helvetica',  // jsPDF uses helvetica for sans-serif
+    'courier': 'courier',
+    'georgia': 'times'     // Georgia not in jsPDF, fallback to times
+  };
+  return fontMap[fontFamily] || 'times';
+}
+
+/**
+ * Calculate line height based on font size
+ * @param {number} fontSize - Font size in points
+ * @returns {number} - Line height in points
+ */
+function getLineHeight(fontSize) {
+  // Standard line height is approximately 1.15-1.2x font size for body text
+  return Math.round(fontSize * 1.17);
+}
+
+/**
  * Generate filename from subject
  * @param {string} subject - Subject line
  * @param {string} extension - File extension
@@ -179,6 +204,8 @@ if (typeof module !== 'undefined' && module.exports) {
     formatDateValue,
     getTodayFormatted,
     showStatus,
+    getJsPDFFont,
+    getLineHeight,
     generateFilename
   };
 }

@@ -590,6 +590,11 @@ async function generatePDFFromData(d) {
   }
   const { jsPDF } = window.jspdf;
 
+  // Font settings
+  const fontName = getJsPDFFont(d.fontFamily);
+  const fontSize = d.fontSize || 12;
+  const LH = getLineHeight(fontSize);
+
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
   const PW = 612;
   const PH = 792;
@@ -598,7 +603,6 @@ async function generatePDFFromData(d) {
   const MT = 72;
   const MB = 72;
   const CW = PW - ML - MR;
-  const LH = 14;
   const TAB = 45;
 
   let y = 54;
@@ -612,13 +616,13 @@ async function generatePDFFromData(d) {
       y = MT;
 
       if (d.classification) {
-        pdf.setFont('times', 'bold');
-        pdf.setFontSize(12);
+        pdf.setFont(fontName, 'bold');
+        pdf.setFontSize(fontSize);
         pdf.text(d.classification, PW / 2, 20, { align: 'center' });
       }
 
-      pdf.setFont('times', 'normal');
-      pdf.setFontSize(12);
+      pdf.setFont(fontName, 'normal');
+      pdf.setFontSize(fontSize);
       pdf.text('Subj:', ML, y);
 
       const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
@@ -632,8 +636,8 @@ async function generatePDFFromData(d) {
 
   // Classification at top
   if (d.classification) {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
+    pdf.setFont(fontName, 'bold');
+    pdf.setFontSize(fontSize);
     pdf.text(d.classification, PW / 2, 20, { align: 'center' });
   }
 
@@ -648,15 +652,15 @@ async function generatePDFFromData(d) {
     }
 
     if (d.unitName) {
-      pdf.setFont('times', 'bold');
-      pdf.setFontSize(10);
+      pdf.setFont(fontName, 'bold');
+      pdf.setFontSize(Math.max(fontSize - 2, 8));
       pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
       y += 12;
     }
 
     if (d.unitAddress) {
-      pdf.setFont('times', 'normal');
-      pdf.setFontSize(8);
+      pdf.setFont(fontName, 'normal');
+      pdf.setFontSize(Math.max(fontSize - 4, 7));
       const addrLines = d.unitAddress.split('\n');
       addrLines.forEach(line => {
         pdf.text(line.toUpperCase(), PW / 2, y, { align: 'center' });
@@ -669,16 +673,16 @@ async function generatePDFFromData(d) {
 
   // MEMORANDUM header
   if (d.documentType === 'memorandum') {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
+    pdf.setFont(fontName, 'bold');
+    pdf.setFontSize(fontSize);
     pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
     y += LH * 2;
   }
 
   // Sender's symbols
   const senderX = PW - MR - 72;
-  pdf.setFont('times', 'normal');
-  pdf.setFontSize(12);
+  pdf.setFont(fontName, 'normal');
+  pdf.setFontSize(fontSize);
 
   if (d.ssic) {
     pdf.text(d.ssic, senderX, y);
@@ -839,12 +843,12 @@ async function generatePDFFromData(d) {
 
       // Draw portion marking if enabled
       if (portionMark) {
-        pdf.setFont('times', 'bold');
+        pdf.setFont(fontName, 'bold');
         pdf.text(portionMark, ML + indent, y);
-        pdf.setFont('times', 'normal');
+        pdf.setFont(fontName, 'normal');
       }
 
-      pdf.setFont('times', 'normal');
+      pdf.setFont(fontName, 'normal');
       pdf.text(label, lx, y);
 
       if (pText) {
@@ -867,7 +871,7 @@ async function generatePDFFromData(d) {
     y += LH * 4;
     pageBreak(LH * 4);
     const sigX = PW / 2;  // Signature starts at page center per SECNAV M-5216.5
-    pdf.setFont('times', 'normal');  // Not bold per SECNAV M-5216.5
+    pdf.setFont(fontName, 'normal');  // Not bold per SECNAV M-5216.5
     pdf.text(d.sigName.toUpperCase(), sigX, y);
     y += LH;
     if (d.byDirection) {
@@ -880,7 +884,7 @@ async function generatePDFFromData(d) {
   if (d.copies && d.copies.length > 0) {
     y += LH * 2;
     pageBreak(LH * (d.copies.length + 1));
-    pdf.setFont('times', 'normal');
+    pdf.setFont(fontName, 'normal');
     pdf.text('Copy to:', ML, y);
     d.copies.forEach((c, i) => {
       const copyText = d.copies.length > 1 ? `(${i + 1})  ${c}` : c;
@@ -891,8 +895,8 @@ async function generatePDFFromData(d) {
 
   // Classification at bottom (symmetric with top at y=20)
   if (d.classification) {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
+    pdf.setFont(fontName, 'bold');
+    pdf.setFontSize(fontSize);
     pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
   }
 

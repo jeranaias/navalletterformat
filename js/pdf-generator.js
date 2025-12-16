@@ -22,6 +22,11 @@ async function generatePDF() {
 
   showStatus('loading', 'Generating PDF...');
 
+  // Font settings
+  const fontName = getJsPDFFont(d.fontFamily);
+  const fontSize = d.fontSize || 12;
+  const LH = getLineHeight(fontSize);  // Dynamic line height
+
   // Page dimensions (in points)
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
   const PW = 612;       // Page width
@@ -31,7 +36,6 @@ async function generatePDF() {
   const MT = 72;        // Margin top
   const MB = 72;        // Margin bottom
   const CW = PW - ML - MR;  // Content width
-  const LH = 14;        // Line height
   const TAB = 45;       // Tab width for labels
 
   // Paragraph indentation (space between label and text)
@@ -56,14 +60,14 @@ async function generatePDF() {
 
       // Classification at top of continuation pages
       if (d.classification) {
-        pdf.setFont('times', 'bold');
-        pdf.setFontSize(12);
+        pdf.setFont(fontName, 'bold');
+        pdf.setFontSize(fontSize);
         pdf.text(d.classification, PW / 2, 20, { align: 'center' });
       }
 
       // Add continuation header
-      pdf.setFont('times', 'normal');
-      pdf.setFontSize(12);
+      pdf.setFont(fontName, 'normal');
+      pdf.setFontSize(fontSize);
       pdf.text('Subj:', ML, y);
 
       // Full subject line on continuation pages, wrapped as needed
@@ -78,8 +82,8 @@ async function generatePDF() {
 
   // Classification at VERY TOP of page (above letterhead) - per DoD 5200.01
   if (d.classification) {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
+    pdf.setFont(fontName, 'bold');
+    pdf.setFontSize(fontSize);
     pdf.text(d.classification, PW / 2, 20, { align: 'center' });
     // Note: Classification does NOT push down letterhead - it's in a fixed position
   }
@@ -95,18 +99,18 @@ async function generatePDF() {
       }
     }
 
-    // Service/organization name
+    // Service/organization name (slightly smaller than body)
     if (d.unitName) {
-      pdf.setFont('times', 'bold');
-      pdf.setFontSize(10);
+      pdf.setFont(fontName, 'bold');
+      pdf.setFontSize(Math.max(fontSize - 2, 8));
       pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
       y += 12;
     }
 
-    // Unit address
+    // Unit address (smaller)
     if (d.unitAddress) {
-      pdf.setFont('times', 'normal');
-      pdf.setFontSize(8);
+      pdf.setFont(fontName, 'normal');
+      pdf.setFontSize(Math.max(fontSize - 4, 7));
       d.unitAddress.split('\n').filter(l => l.trim()).forEach(line => {
         pdf.text(line.trim(), PW / 2, y, { align: 'center' });
         y += 10;
@@ -117,15 +121,15 @@ async function generatePDF() {
 
   // Memorandum header - appears for ALL memos (after letterhead for formal memos)
   if (d.documentType === 'memorandum') {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
+    pdf.setFont(fontName, 'bold');
+    pdf.setFontSize(fontSize);
     pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
     y += LH * 2;
   }
 
   // Header block - sender's symbols left-aligned under first character
-  pdf.setFont('times', 'normal');
-  pdf.setFontSize(12);
+  pdf.setFont(fontName, 'normal');
+  pdf.setFontSize(fontSize);
   const senderX = PW - MR - 72;  // Position on right side, left-aligned
 
   if (d.ssic) {
@@ -141,10 +145,10 @@ async function generatePDF() {
 
   // Endorsement header
   if (d.documentType === 'endorsement') {
-    pdf.setFont('times', 'bold');
+    pdf.setFont(fontName, 'bold');
     pdf.text(`${d.endorseNumber} ENDORSEMENT`, PW / 2, y, { align: 'center' });
     y += LH * 2;
-    pdf.setFont('times', 'normal');
+    pdf.setFont(fontName, 'normal');
   }
 
   // From
@@ -326,9 +330,9 @@ async function generatePDF() {
 
       // Draw portion marking if enabled
       if (portionMark) {
-        pdf.setFont('times', 'bold');
+        pdf.setFont(fontName, 'bold');
         pdf.text(portionMark, ML + indent, y);
-        pdf.setFont('times', 'normal');
+        pdf.setFont(fontName, 'normal');
       }
 
       pdf.text(label, lx, y);
@@ -414,7 +418,7 @@ async function generatePDF() {
   if (d.sigName) {
     y += LH * 4;
     const sx = PW / 2;
-    pdf.setFont('times', 'normal');
+    pdf.setFont(fontName, 'normal');
     pdf.text(d.sigName.toUpperCase(), sx, y);
     y += LH;
     if (d.byDirection) {
@@ -438,8 +442,8 @@ async function generatePDF() {
   if (d.classification) {
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
-      pdf.setFont('times', 'bold');
-      pdf.setFontSize(12);
+      pdf.setFont(fontName, 'bold');
+      pdf.setFontSize(fontSize);
       pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
     }
   }
@@ -449,8 +453,8 @@ async function generatePDF() {
     const pageNumY = d.classification ? PH - 50 : PH - 36;
     for (let i = 2; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
-      pdf.setFont('times', 'normal');
-      pdf.setFontSize(12);
+      pdf.setFont(fontName, 'normal');
+      pdf.setFontSize(fontSize);
       pdf.text(String(i), PW / 2, pageNumY, { align: 'center' });
     }
   }
@@ -475,10 +479,15 @@ async function printPDF() {
 
   showStatus('loading', 'Preparing print preview...');
 
+  // Font settings
+  const fontName = getJsPDFFont(d.fontFamily);
+  const fontSize = d.fontSize || 12;
+  const LH = getLineHeight(fontSize);
+
   // Generate the PDF using same logic as generatePDF
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
   const PW = 612, PH = 792, ML = 72, MR = 72, MT = 72, MB = 72;
-  const CW = PW - ML - MR, LH = 14, TAB = 45;
+  const CW = PW - ML - MR, TAB = 45;
   const IM = 14, IS = 14, ISS = 14, ISSS = 14;
   let y = 54, pageNum = 1;
   const subjText = d.subj.toUpperCase();
@@ -490,12 +499,12 @@ async function printPDF() {
       y = MT;
       // Classification at top of continuation pages
       if (d.classification) {
-        pdf.setFont('times', 'bold');
-        pdf.setFontSize(12);
+        pdf.setFont(fontName, 'bold');
+        pdf.setFontSize(fontSize);
         pdf.text(d.classification, PW / 2, 20, { align: 'center' });
       }
-      pdf.setFont('times', 'normal');
-      pdf.setFontSize(12);
+      pdf.setFont(fontName, 'normal');
+      pdf.setFontSize(fontSize);
       pdf.text('Subj:', ML, y);
       const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
       subjLines.forEach((line) => { pdf.text(line, ML + TAB, y); y += LH; });
@@ -505,8 +514,8 @@ async function printPDF() {
 
   // Classification at VERY TOP of page (above letterhead) - per DoD 5200.01
   if (d.classification) {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
+    pdf.setFont(fontName, 'bold');
+    pdf.setFontSize(fontSize);
     pdf.text(d.classification, PW / 2, 20, { align: 'center' });
   }
 
@@ -516,13 +525,13 @@ async function printPDF() {
       try { pdf.addImage(d.sealData, 'JPEG', 36, 36, 72, 72); } catch (e) {}
     }
     if (d.unitName) {
-      pdf.setFont('times', 'bold');
+      pdf.setFont(fontName, 'bold');
       pdf.setFontSize(10);
       pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
       y += 12;
     }
     if (d.unitAddress) {
-      pdf.setFont('times', 'normal');
+      pdf.setFont(fontName, 'normal');
       pdf.setFontSize(8);
       d.unitAddress.split('\n').filter(l => l.trim()).forEach(line => {
         pdf.text(line.trim(), PW / 2, y, { align: 'center' });
@@ -534,13 +543,13 @@ async function printPDF() {
 
   // Memorandum header - appears for ALL memos (after letterhead for formal memos)
   if (d.documentType === 'memorandum') {
-    pdf.setFont('times', 'bold');
+    pdf.setFont(fontName, 'bold');
     pdf.setFontSize(12);
     pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
     y += LH * 2;
   }
 
-  pdf.setFont('times', 'normal');
+  pdf.setFont(fontName, 'normal');
   pdf.setFontSize(12);
   const senderX = PW - MR - 72;
   if (d.ssic) { pdf.text(d.ssic, senderX, y); y += LH; }
@@ -549,10 +558,10 @@ async function printPDF() {
   y += LH * 2;
 
   if (d.documentType === 'endorsement') {
-    pdf.setFont('times', 'bold');
+    pdf.setFont(fontName, 'bold');
     pdf.text(d.endorseNumber + ' ENDORSEMENT', PW / 2, y, { align: 'center' });
     y += LH * 2;
-    pdf.setFont('times', 'normal');
+    pdf.setFont(fontName, 'normal');
   }
 
   pdf.text('From:', ML, y);
@@ -664,9 +673,9 @@ async function printPDF() {
 
       // Draw portion marking if enabled
       if (portionMark) {
-        pdf.setFont('times', 'bold');
+        pdf.setFont(fontName, 'bold');
         pdf.text(portionMark, ML + indent, y);
-        pdf.setFont('times', 'normal');
+        pdf.setFont(fontName, 'normal');
       }
 
       pdf.text(label, lx, y);
@@ -708,7 +717,7 @@ async function printPDF() {
 
   if (d.sigName) {
     y += LH * 4;
-    pdf.setFont('times', 'normal');
+    pdf.setFont(fontName, 'normal');
     pdf.text(d.sigName.toUpperCase(), PW / 2, y);
     y += LH;
     if (d.byDirection) { pdf.text('By direction', PW / 2, y); y += LH; }
@@ -729,8 +738,8 @@ async function printPDF() {
   if (d.classification) {
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
-      pdf.setFont('times', 'bold');
-      pdf.setFontSize(12);
+      pdf.setFont(fontName, 'bold');
+      pdf.setFontSize(fontSize);
       pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
     }
   }
@@ -740,8 +749,8 @@ async function printPDF() {
     const pageNumY = d.classification ? PH - 50 : PH - 36;
     for (let i = 2; i <= pdf.getNumberOfPages(); i++) {
       pdf.setPage(i);
-      pdf.setFont('times', 'normal');
-      pdf.setFontSize(12);
+      pdf.setFont(fontName, 'normal');
+      pdf.setFontSize(fontSize);
       pdf.text(String(i), PW / 2, pageNumY, { align: 'center' });
     }
   }

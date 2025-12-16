@@ -130,6 +130,11 @@ async function generatePDFBlob() {
   const { jsPDF } = window.jspdf;
   const d = collectData();
 
+  // Font settings
+  const fontName = getJsPDFFont(d.fontFamily);
+  const fontSize = d.fontSize || 12;
+  const LH = getLineHeight(fontSize);
+
   // Page dimensions (in points)
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
   const PW = 612;
@@ -139,7 +144,6 @@ async function generatePDFBlob() {
   const MT = 72;
   const MB = 72;
   const CW = PW - ML - MR;
-  const LH = 14;
   const TAB = 45;
 
   const IM = 14;
@@ -158,13 +162,13 @@ async function generatePDFBlob() {
       y = MT;
 
       if (d.classification) {
-        pdf.setFont('times', 'bold');
-        pdf.setFontSize(12);
+        pdf.setFont(fontName, 'bold');
+        pdf.setFontSize(fontSize);
         pdf.text(d.classification, PW / 2, 20, { align: 'center' });
       }
 
-      pdf.setFont('times', 'normal');
-      pdf.setFontSize(12);
+      pdf.setFont(fontName, 'normal');
+      pdf.setFontSize(fontSize);
       pdf.text('Subj:', ML, y);
 
       const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
@@ -178,8 +182,8 @@ async function generatePDFBlob() {
 
   // Classification at top
   if (d.classification) {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
+    pdf.setFont(fontName, 'bold');
+    pdf.setFontSize(fontSize);
     pdf.text(d.classification, PW / 2, 20, { align: 'center' });
   }
 
@@ -194,15 +198,15 @@ async function generatePDFBlob() {
     }
 
     if (d.unitName) {
-      pdf.setFont('times', 'bold');
-      pdf.setFontSize(10);
+      pdf.setFont(fontName, 'bold');
+      pdf.setFontSize(Math.max(fontSize - 2, 8));
       pdf.text(d.unitName.toUpperCase(), PW / 2, y, { align: 'center' });
       y += 12;
     }
 
     if (d.unitAddress) {
-      pdf.setFont('times', 'normal');
-      pdf.setFontSize(8);
+      pdf.setFont(fontName, 'normal');
+      pdf.setFontSize(Math.max(fontSize - 4, 7));
       const addrLines = d.unitAddress.split('\n');
       addrLines.forEach(line => {
         pdf.text(line.toUpperCase(), PW / 2, y, { align: 'center' });
@@ -215,16 +219,16 @@ async function generatePDFBlob() {
 
   // Memorandum header (after letterhead)
   if (d.documentType === 'memorandum') {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
+    pdf.setFont(fontName, 'bold');
+    pdf.setFontSize(fontSize);
     pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
     y += LH * 2;
   }
 
   // Sender's symbols (right side, left-aligned)
   const senderX = PW - MR - 72;
-  pdf.setFont('times', 'normal');
-  pdf.setFontSize(12);
+  pdf.setFont(fontName, 'normal');
+  pdf.setFontSize(fontSize);
 
   if (d.ssic) {
     pdf.text(d.ssic, senderX, y);
@@ -241,14 +245,14 @@ async function generatePDFBlob() {
 
   // Endorsement header
   if (d.documentType === 'endorsement') {
-    pdf.setFont('times', 'bold');
+    pdf.setFont(fontName, 'bold');
     pdf.text(`${d.endorseNumber} ENDORSEMENT`, PW / 2, y, { align: 'center' });
     y += LH * 2;
-    pdf.setFont('times', 'normal');
+    pdf.setFont(fontName, 'normal');
   }
 
   // From (with text wrapping for long values)
-  pdf.setFont('times', 'normal');
+  pdf.setFont(fontName, 'normal');
   pdf.text('From:', ML, y);
   pdf.splitTextToSize(d.from, CW - TAB).forEach(line => {
     pdf.text(line, ML + TAB, y);
@@ -413,13 +417,13 @@ async function generatePDFBlob() {
 
       // Draw portion marking if enabled
       if (portionMark) {
-        pdf.setFont('times', 'bold');
+        pdf.setFont(fontName, 'bold');
         pdf.text(portionMark, ML + indent, y);
-        pdf.setFont('times', 'normal');
+        pdf.setFont(fontName, 'normal');
       }
 
       // Draw label
-      pdf.setFont('times', 'normal');
+      pdf.setFont(fontName, 'normal');
       pdf.text(label, lx, y);
 
       // Paragraph subject (only for top-level) - underlined, NOT bold
@@ -500,7 +504,7 @@ async function generatePDFBlob() {
   if (d.sigName) {
     y += LH * 4;
     const sigX = PW / 2;  // Signature starts at page center per SECNAV M-5216.5
-    pdf.setFont('times', 'normal');
+    pdf.setFont(fontName, 'normal');
     pdf.text(d.sigName.toUpperCase(), sigX, y);
     y += LH;
     if (d.byDirection) {
@@ -512,7 +516,7 @@ async function generatePDFBlob() {
   // Copy to (numbered if multiple)
   if (d.copies && d.copies.length > 0) {
     y += LH * 2;
-    pdf.setFont('times', 'normal');
+    pdf.setFont(fontName, 'normal');
     pdf.text('Copy to:', ML, y);
     d.copies.forEach((c, i) => {
       const copyText = d.copies.length > 1 ? `(${i + 1})  ${c}` : c;
@@ -523,8 +527,8 @@ async function generatePDFBlob() {
 
   // Classification at bottom (symmetric with top at y=20)
   if (d.classification) {
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(12);
+    pdf.setFont(fontName, 'bold');
+    pdf.setFontSize(fontSize);
     pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
   }
 
