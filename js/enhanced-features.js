@@ -24,6 +24,7 @@ const MILITARY_TERMS = new Set([
 ]);
 
 let spellCheckTimeout = null;
+let charCountTimeout = null;
 
 /**
  * Initialize spell check functionality - always enabled
@@ -36,13 +37,18 @@ function initSpellCheck() {
     }
   });
 
-  // Also run when paragraphs are added
+  // Also run when paragraphs are added (debounced)
   document.addEventListener('paragraphsChanged', () => {
-    setTimeout(() => runSpellCheckOnAll(), 100);
+    if (spellCheckTimeout) clearTimeout(spellCheckTimeout);
+    spellCheckTimeout = setTimeout(() => runSpellCheckOnAll(), 300);
   });
 
-  // Run spell check on existing paragraphs
-  setTimeout(() => runSpellCheckOnAll(), 600);
+  // Run spell check on existing paragraphs (use idle callback if available)
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => runSpellCheckOnAll(), { timeout: 2000 });
+  } else {
+    setTimeout(() => runSpellCheckOnAll(), 800);
+  }
 }
 
 /**
@@ -53,7 +59,7 @@ function scheduleSpellCheck(textarea) {
   if (spellCheckTimeout) clearTimeout(spellCheckTimeout);
   spellCheckTimeout = setTimeout(() => {
     checkSpelling(textarea);
-  }, 500);
+  }, 750);
 }
 
 /**
@@ -155,20 +161,37 @@ function clearAllSpellCheckHighlights() {
  * Initialize character count functionality - always enabled
  */
 function initCharacterCount() {
-  // Listen for paragraph changes
+  // Listen for paragraph changes (debounced for performance)
   document.getElementById('paraContainer')?.addEventListener('input', (e) => {
     if (e.target.matches('textarea')) {
-      updateCharacterCount(e.target);
+      scheduleCharacterCount(e.target);
     }
   });
 
   // Also update when paragraphs are added
   document.addEventListener('paragraphsChanged', () => {
-    showCharacterCounts();
+    if (charCountTimeout) clearTimeout(charCountTimeout);
+    charCountTimeout = setTimeout(() => showCharacterCounts(), 200);
   });
 
-  // Show counts on any existing paragraphs
-  setTimeout(() => showCharacterCounts(), 500);
+  // Show counts on any existing paragraphs (use idle callback if available)
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => showCharacterCounts(), { timeout: 1500 });
+  } else {
+    setTimeout(() => showCharacterCounts(), 600);
+  }
+}
+
+/**
+ * Schedule character count update with debounce
+ * @param {HTMLTextAreaElement} textarea
+ */
+function scheduleCharacterCount(textarea) {
+  // Store pending update on the element itself for per-textarea debouncing
+  if (textarea._charCountTimeout) clearTimeout(textarea._charCountTimeout);
+  textarea._charCountTimeout = setTimeout(() => {
+    updateCharacterCount(textarea);
+  }, 150);
 }
 
 /**

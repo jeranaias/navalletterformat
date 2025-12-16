@@ -136,11 +136,13 @@ function initKeyboardShortcuts() {
 async function initApp() {
   console.log('Naval Letter Generator v3.1 initializing...');
 
-  // Initialize theme
+  // Initialize theme immediately (visual)
   initTheme();
 
-  // Register service worker for offline support
-  registerServiceWorker();
+  // Initialize core form functionality first
+  initFormListeners();
+  initSearchListeners();
+  initKeyboardShortcuts();
 
   // Load external data (SSIC and unit databases)
   await loadData();
@@ -148,21 +150,8 @@ async function initApp() {
   // Load templates
   await loadTemplates();
 
-  // Initialize form event listeners
-  initFormListeners();
-
-  // Initialize search functionality
-  initSearchListeners();
-
   // Initialize draft auto-save and restore
   initDraftManager();
-
-  // Initialize keyboard shortcuts
-  initKeyboardShortcuts();
-
-  // Initialize live preview manager
-  initPreviewManager();
-  restorePreviewState();
 
   // Initialize template manager
   initTemplateManager();
@@ -170,14 +159,33 @@ async function initApp() {
   // Initialize undo/redo manager
   initUndoManager();
 
-  // Initialize import/export manager (Word import, recently used)
-  if (typeof initImportExportManager === 'function') initImportExportManager();
+  // Defer non-critical initializations to avoid blocking
+  requestAnimationFrame(() => {
+    // Initialize live preview manager
+    initPreviewManager();
+    restorePreviewState();
 
-  // Initialize enhanced features (spell check, char count, ref formatting)
-  if (typeof initEnhancedFeatures === 'function') initEnhancedFeatures();
+    // Initialize import/export manager (Word import, recently used)
+    if (typeof initImportExportManager === 'function') initImportExportManager();
 
-  // Initialize batch generator
-  if (typeof initBatchGeneratorModule === 'function') initBatchGeneratorModule();
+    // Initialize batch generator
+    if (typeof initBatchGeneratorModule === 'function') initBatchGeneratorModule();
+  });
+
+  // Use idle callback for enhanced features (spell check, char count)
+  // These can run when browser is idle
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => {
+      if (typeof initEnhancedFeatures === 'function') initEnhancedFeatures();
+    }, { timeout: 2000 });
+  } else {
+    setTimeout(() => {
+      if (typeof initEnhancedFeatures === 'function') initEnhancedFeatures();
+    }, 500);
+  }
+
+  // Register service worker last (non-blocking)
+  registerServiceWorker();
 
   console.log('Naval Letter Generator v3.1 ready!');
 }

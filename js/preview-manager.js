@@ -73,7 +73,7 @@ function schedulePreviewUpdate() {
     clearTimeout(previewDebounceTimer);
   }
 
-  previewDebounceTimer = setTimeout(updateLivePreview, 500);
+  previewDebounceTimer = setTimeout(updateLivePreview, 750);
 }
 
 /**
