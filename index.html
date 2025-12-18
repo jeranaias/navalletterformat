@@ -663,8 +663,12 @@
           </div>
         </div>
 
-        <!-- Find & Replace Panel -->
+        <!-- Find & Replace Panel (floating) -->
         <div id="findReplacePanel" class="find-replace-panel" style="display: none;">
+          <div class="find-replace-header">
+            <span class="find-replace-title">Find & Replace</span>
+            <button type="button" class="find-replace-close" onclick="toggleFindReplace()" title="Close (Esc)">&times;</button>
+          </div>
           <div class="find-replace-row">
             <div class="find-replace-field">
               <label for="findInput">Find:</label>
@@ -675,7 +679,7 @@
               <input type="text" id="replaceInput" placeholder="Replace with" aria-label="Replace text">
             </div>
             <div class="find-replace-actions">
-              <button type="button" class="btn btn-sm" onclick="findNext()">Find Next</button>
+              <button type="button" class="btn btn-sm" onclick="findNext()" title="Find Next (Enter or F3)">Find Next</button>
               <button type="button" class="btn btn-sm" onclick="replaceNext()">Replace</button>
               <button type="button" class="btn btn-sm" onclick="replaceAll()">Replace All</button>
             </div>
@@ -686,6 +690,7 @@
               Case sensitive
             </label>
             <span id="findResultStatus" class="find-result-status"></span>
+            <span class="find-replace-hint">Enter or F3 = Next &nbsp;|&nbsp; Esc = Close</span>
           </div>
         </div>
 

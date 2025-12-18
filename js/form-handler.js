@@ -954,17 +954,49 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Enter key in find input triggers find next
+// Find & Replace keyboard shortcuts
 document.addEventListener('DOMContentLoaded', () => {
   const findInput = document.getElementById('findInput');
+  const replaceInput = document.getElementById('replaceInput');
+
+  // Enter in find/replace inputs triggers find next
   if (findInput) {
     findInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         findNext();
       }
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        toggleFindReplace();
+      }
     });
   }
+
+  if (replaceInput) {
+    replaceInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        toggleFindReplace();
+      }
+    });
+  }
+
+  // Global F3 for find next when panel is open
+  document.addEventListener('keydown', (e) => {
+    const panel = document.getElementById('findReplacePanel');
+    if (panel && panel.style.display !== 'none') {
+      if (e.key === 'F3') {
+        e.preventDefault();
+        findNext();
+      }
+      // Escape closes the panel (when not in an input)
+      if (e.key === 'Escape' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        toggleFindReplace();
+      }
+    }
+  });
 });
 
 /**

@@ -1714,11 +1714,53 @@ textarea {
    FIND & REPLACE PANEL
    ============================================ */
 .find-replace-panel {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
   background: var(--gray-50);
   border: 1px solid var(--gray-300);
   border-radius: var(--radius);
   padding: 12px 16px;
-  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 500px;
+  max-width: 90vw;
+}
+
+.find-replace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.find-replace-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--gray-700);
+}
+
+.find-replace-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--gray-500);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.find-replace-close:hover {
+  background: var(--gray-200);
+  color: var(--gray-700);
+}
+
+.find-replace-hint {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--gray-400);
 }
 
 .find-replace-row {
@@ -1819,6 +1861,23 @@ textarea {
   background: var(--gray-100);
   border-color: var(--gray-400);
   color: var(--gray-800);
+}
+
+[data-theme="dark"] .find-replace-title {
+  color: var(--gray-800);
+}
+
+[data-theme="dark"] .find-replace-close {
+  color: var(--gray-600);
+}
+
+[data-theme="dark"] .find-replace-close:hover {
+  background: var(--gray-300);
+  color: var(--gray-800);
+}
+
+[data-theme="dark"] .find-replace-hint {
+  color: var(--gray-500);
 }
 
 /* Inline paragraph actions */

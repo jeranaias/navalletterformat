@@ -21,6 +21,11 @@ Thumbs.db
 *.local
 *.log
 
+# Private/personal files
+beneficial-suggestion-draft.json
+ENCL-1-508-CERTIFICATION.md
+508-COMPLIANCE-CERTIFICATION.md
+
 # =============================================================================
 # NOTE: dist/ is NOT ignored intentionally
 # =============================================================================
