@@ -245,20 +245,38 @@ header {
     right: -100%;
   }
 
+  .live-preview-pane.show {
+    right: 0;
+  }
+
   .container.preview-active {
     display: none;
   }
 
-  /* Hide live preview button on mobile - not ideal UX for editing */
+  /* Show preview button on mobile - full screen overlay mode */
   #previewToggle {
-    display: none;
+    display: inline-flex;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  /* Larger close button for mobile */
+  .preview-close {
+    font-size: 2rem;
+    padding: 4px 12px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .preview-header {
+    padding: 14px 16px;
   }
 }
 
 /* Tablet breakpoint: make preview toggle smaller */
 @media (max-width: 768px) and (min-width: 641px) {
   #previewToggle {
-    padding: 8px 12px;
+    padding: 10px 14px;
     font-size: 0.875rem;
   }
 }
@@ -3659,4 +3677,562 @@ button:focus-visible,
 [data-theme="dark"] .pii-modal,
 [data-theme="dark"] .cui-modal {
   background: var(--white);
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE ENHANCEMENTS
+   ============================================================ */
+
+/* Mobile-first: Small screens (phones) */
+@media (max-width: 480px) {
+  /* Header layout - stack controls */
+  header {
+    padding: 16px 12px 20px;
+  }
+
+  header h1 {
+    font-size: 1.2rem;
+    margin-top: 32px;
+  }
+
+  header .subtitle {
+    font-size: 0.75rem;
+  }
+
+  .header-profile {
+    top: 8px;
+    left: 8px;
+  }
+
+  .header-controls {
+    top: 8px;
+    right: 8px;
+    gap: 6px;
+  }
+
+  .theme-toggle {
+    padding: 4px 10px;
+    font-size: 1.2rem;
+  }
+
+  .offline-indicator {
+    font-size: 0.65rem;
+    padding: 3px 6px;
+  }
+
+  .offline-indicator .indicator-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Container padding */
+  .container {
+    padding: 12px;
+  }
+
+  /* Find & Replace - Full width on mobile */
+  .find-replace-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: none;
+    min-width: unset;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    padding: 12px;
+    z-index: 2000;
+  }
+
+  .find-replace-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .find-replace-field {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .find-replace-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .find-replace-actions .btn-sm {
+    flex: 1;
+    padding: 10px 8px;
+  }
+
+  .find-replace-options {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .find-replace-hint {
+    display: none;
+  }
+
+  /* Toolbar - larger touch targets */
+  .para-toolbar {
+    padding: 6px 8px;
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+
+  .toolbar-select {
+    height: 36px;
+    font-size: 0.8rem;
+    padding: 4px 6px;
+  }
+
+  .toolbar-divider {
+    height: 24px;
+    margin: 0 4px;
+  }
+
+  /* Form inputs - larger touch targets */
+  input[type="text"],
+  input[type="email"],
+  input[type="date"],
+  select,
+  textarea {
+    font-size: 16px; /* Prevents iOS zoom */
+    padding: 12px;
+    min-height: 44px;
+  }
+
+  /* Buttons - larger touch targets */
+  .btn {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    min-height: 44px;
+  }
+
+  .btn-sm {
+    padding: 10px 12px;
+    min-height: 40px;
+  }
+
+  .btn-icon {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+  }
+
+  /* Actions row */
+  .actions {
+    gap: 8px;
+  }
+
+  /* Quick toolbar - stack on mobile */
+  .quick-toolbar {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .quick-toolbar .btn {
+    width: 100%;
+  }
+
+  /* Modal adjustments */
+  .modal-content {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .template-modal,
+  .template-modal-wide {
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+  }
+
+  .template-filters {
+    flex-direction: column;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .template-search,
+  .category-filter {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .template-list {
+    padding: 12px;
+    grid-template-columns: 1fr;
+  }
+
+  .template-card {
+    padding: 12px;
+  }
+
+  /* Help modal */
+  .help-content {
+    padding: 12px;
+  }
+
+  .help-modes {
+    grid-template-columns: 1fr;
+  }
+
+  /* Welcome modal */
+  .welcome-modal {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+
+  .welcome-features {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .feature-card {
+    padding: 12px;
+  }
+
+  /* Header info row */
+  .header-info-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Paragraph content editors */
+  .para-content {
+    min-height: 100px;
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+
+  /* Collapsible sections */
+  .collapsible-header {
+    padding: 12px 0;
+  }
+
+  .section-title {
+    font-size: 1rem;
+  }
+
+  /* Checkbox and radio - larger touch targets */
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+
+  /* Doc type selector */
+  .doc-type-option {
+    padding: 12px;
+  }
+
+  /* Memo style selector */
+  .memo-style-option {
+    padding: 10px 12px;
+  }
+
+  /* Drop zone */
+  .doc-drop-zone {
+    padding: 16px 12px;
+  }
+
+  .drop-zone-content {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  /* Recent drafts */
+  .recent-draft-item {
+    padding: 10px;
+  }
+
+  .draft-actions {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* PII/CUI modals */
+  .pii-modal,
+  .cui-modal {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  /* Batch modal - full screen on phone */
+  .batch-modal,
+  .batch-modal-wide,
+  .batch-help-modal {
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .batch-content {
+    padding: 12px;
+  }
+
+  .batch-guide {
+    padding: 12px;
+  }
+
+  .batch-options {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .batch-option {
+    padding: 8px 0;
+  }
+
+  .batch-table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* Reference Library - full screen on phone */
+  .ref-library-modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .ref-library-content {
+    padding: 12px;
+    max-height: calc(100vh - 60px);
+  }
+
+  .ref-categories {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .ref-category-btn {
+    padding: 10px 8px;
+    min-height: 60px;
+  }
+
+  .ref-result-item {
+    padding: 10px;
+  }
+
+  .ref-item-actions {
+    position: static;
+    transform: none;
+    margin-top: 8px;
+    opacity: 1;
+  }
+
+  .ref-add-btn {
+    width: 100%;
+    padding: 10px;
+    min-height: 44px;
+  }
+
+  /* Live Preview - mobile full screen */
+  .live-preview-pane {
+    width: 100%;
+    height: 100%;
+  }
+
+  .preview-header {
+    padding: 12px;
+  }
+
+  .preview-header span:first-child {
+    font-size: 0.9rem;
+  }
+
+  #previewToggle {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    min-height: 44px;
+  }
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 768px) and (min-width: 481px) {
+  /* Find & Replace - responsive but not full width */
+  .find-replace-panel {
+    min-width: unset;
+    width: calc(100% - 32px);
+    max-width: 500px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Toolbar - slightly larger touch targets */
+  .toolbar-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Form inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="date"],
+  select,
+  textarea {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  /* Template modal */
+  .template-modal-wide {
+    width: 95vw;
+  }
+
+  .template-body {
+    flex-direction: column;
+  }
+
+  .template-list-pane,
+  .template-preview-pane {
+    width: 100%;
+    max-height: 40vh;
+  }
+
+  /* Help modal */
+  .help-modes {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Welcome modal */
+  .welcome-features {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Batch modal */
+  .batch-modal,
+  .batch-modal-wide {
+    width: 95vw;
+  }
+
+  .batch-options {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Reference Library */
+  .ref-library-modal {
+    width: 95vw;
+    max-height: 90vh;
+  }
+
+  .ref-categories {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover states that don't work well on touch */
+  .template-card:hover {
+    transform: none;
+  }
+
+  .btn:hover {
+    transform: none;
+  }
+
+  /* Add active states for touch feedback */
+  .btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  .template-card:active {
+    transform: scale(0.98);
+    border-color: var(--navy);
+  }
+
+  .toolbar-btn:active {
+    background: var(--gray-300);
+  }
+
+  /* Larger tap targets for touch */
+  .collapsible-header {
+    min-height: 48px;
+  }
+
+  .doc-type-option,
+  .memo-style-option {
+    min-height: 48px;
+  }
+
+  /* Prevent text selection on buttons */
+  .btn,
+  .toolbar-btn,
+  .theme-toggle {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* Landscape phone orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  header {
+    padding: 12px;
+  }
+
+  header h1 {
+    font-size: 1.1rem;
+    margin-top: 0;
+  }
+
+  .header-profile,
+  .header-controls {
+    position: static;
+    display: inline-flex;
+  }
+
+  header .subtitle {
+    display: none;
+  }
+
+  .modal-content {
+    max-height: 90vh;
+  }
+
+  .welcome-modal {
+    max-height: 85vh;
+  }
+}
+
+/* Safe area insets for notched devices */
+@supports (padding: max(0px)) {
+  .container {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  .find-replace-panel {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  .modal-content {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
