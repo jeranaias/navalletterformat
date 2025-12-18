@@ -6,6 +6,16 @@
 let previewDebounceTimer = null;
 let previewEnabled = false;
 let lastPreviewData = null;
+let mobilePreviewUrl = null;
+
+/**
+ * Check if device is mobile/touch
+ */
+function isMobileDevice() {
+  return (window.innerWidth <= 1024) ||
+         ('ontouchstart' in window) ||
+         (navigator.maxTouchPoints > 0);
+}
 
 /**
  * Initialize the live preview system
@@ -44,6 +54,12 @@ function toggleLivePreview() {
   const previewPane = document.getElementById('livePreviewPane');
   const toggleBtn = document.getElementById('previewToggle');
 
+  // On mobile, open preview in new tab instead of side panel
+  if (isMobileDevice()) {
+    openMobilePreview();
+    return;
+  }
+
   previewEnabled = !previewEnabled;
 
   if (previewEnabled) {
@@ -61,6 +77,91 @@ function toggleLivePreview() {
 
   // Save preference
   localStorage.setItem('livePreviewEnabled', previewEnabled);
+}
+
+/**
+ * Open preview in full-screen modal for mobile devices
+ */
+async function openMobilePreview() {
+  const toggleBtn = document.getElementById('previewToggle');
+
+  try {
+    // Show loading state
+    toggleBtn.textContent = 'Generating...';
+    toggleBtn.disabled = true;
+
+    // Generate PDF blob
+    const pdfBlob = await generatePDFBlob();
+
+    if (pdfBlob) {
+      // Revoke old URL if exists
+      if (mobilePreviewUrl) {
+        URL.revokeObjectURL(mobilePreviewUrl);
+      }
+
+      // Create new blob URL
+      mobilePreviewUrl = URL.createObjectURL(pdfBlob);
+
+      // Show in full-screen modal
+      showMobilePreviewModal(mobilePreviewUrl);
+    }
+  } catch (error) {
+    console.error('Mobile preview error:', error);
+    alert('Error generating preview. Please try again.');
+  } finally {
+    // Restore button state
+    toggleBtn.textContent = 'Preview';
+    toggleBtn.disabled = false;
+  }
+}
+
+/**
+ * Show mobile preview in a full-screen modal
+ */
+function showMobilePreviewModal(pdfUrl) {
+  // Remove existing modal if any
+  const existing = document.getElementById('mobilePreviewModal');
+  if (existing) {
+    existing.remove();
+  }
+
+  // Create modal
+  const modal = document.createElement('div');
+  modal.id = 'mobilePreviewModal';
+  modal.className = 'modal show';
+  modal.style.cssText = 'display:flex; z-index:3000;';
+
+  modal.innerHTML = `
+    <div class="modal-content" style="width:100%; height:100%; max-width:100%; max-height:100%; margin:0; border-radius:0; display:flex; flex-direction:column;">
+      <div class="modal-header" style="flex-shrink:0;">
+        <h2>Preview</h2>
+        <button type="button" class="modal-close" onclick="closeMobilePreview()" aria-label="Close">&times;</button>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; overflow:hidden; background:#f5f5f5;">
+        <object data="${pdfUrl}" type="application/pdf" style="flex:1; width:100%; min-height:0;">
+          <div style="padding:20px; text-align:center;">
+            <p style="margin-bottom:16px; color:#666;">PDF preview not supported on this device.</p>
+            <a href="${pdfUrl}" target="_blank" class="btn btn-primary" style="margin-right:8px;">Open PDF</a>
+            <a href="${pdfUrl}" download="preview.pdf" class="btn btn-secondary">Download</a>
+          </div>
+        </object>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+}
+
+/**
+ * Close mobile preview modal
+ */
+function closeMobilePreview() {
+  const modal = document.getElementById('mobilePreviewModal');
+  if (modal) {
+    modal.remove();
+  }
+  document.body.style.overflow = '';
 }
 
 /**
@@ -547,12 +648,28 @@ async function generatePDFBlob() {
  * Restore preview state from localStorage
  */
 function restorePreviewState() {
+  // Don't auto-restore on mobile - preview opens in new tab
+  if (isMobileDevice()) {
+    updateMobileUI();
+    return;
+  }
+
   const savedState = localStorage.getItem('livePreviewEnabled');
   if (savedState === 'true') {
     // Delay to ensure DOM is ready
     setTimeout(() => {
       toggleLivePreview();
     }, 500);
+  }
+}
+
+/**
+ * Update button text for mobile devices
+ */
+function updateMobileUI() {
+  const toggleBtn = document.getElementById('previewToggle');
+  if (toggleBtn) {
+    toggleBtn.textContent = 'Preview';
   }
 }
 
@@ -563,4 +680,7 @@ if (typeof window !== 'undefined') {
   window.updateLivePreview = updateLivePreview;
   window.generatePDFBlob = generatePDFBlob;
   window.restorePreviewState = restorePreviewState;
+  window.openMobilePreview = openMobilePreview;
+  window.closeMobilePreview = closeMobilePreview;
+  window.updateMobileUI = updateMobileUI;
 }
