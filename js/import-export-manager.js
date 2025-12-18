@@ -285,7 +285,10 @@ function parseNavalLetterText(text) {
     const items = paraContainer.querySelectorAll('.para-item');
     const lastItem = items[items.length - 1];
     if (lastItem) {
-      lastItem.querySelector('textarea').value = p.text;
+      const editor = lastItem.querySelector('.para-editor');
+      if (editor && p.text) {
+        editor.innerHTML = p.text;
+      }
     }
   });
 

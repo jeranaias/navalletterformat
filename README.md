@@ -4,7 +4,7 @@
 
 [![SECNAV M-5216.5](https://img.shields.io/badge/SECNAV-M--5216.5-blue)](https://www.secnav.navy.mil/doni/SECNAV%20Manuals1/5216.5%20DON%20Correspondence%20Manual.pdf)
 [![MCO 5216.20](https://img.shields.io/badge/MCO-5216.20-red)](https://www.marines.mil/News/Publications/MCPEL/Electronic-Library-Display/Article/899678/mco-521620/)
-[![Version](https://img.shields.io/badge/Version-3.1.0-green)](https://github.com/jeranaias/navalletterformat/releases)
+[![Version](https://img.shields.io/badge/Version-3.1.1-green)](https://github.com/jeranaias/navalletterformat/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **Live Tool: [https://jeranaias.github.io/navalletterformat/](https://jeranaias.github.io/navalletterformat/)**
@@ -21,7 +21,22 @@ Just open the link, fill in your information, and download your PDF.
 
 ---
 
-## 🚀 What's New in v3.1 — Major Release
+## 🚀 What's New in v3.1.1
+
+### Rich Text Formatting in PDF Output
+- **Bold, italic, underline, and strikethrough** now render correctly in PDF preview and exports
+- Format text in the editor and see it in your final document
+
+### Offline Support
+- All libraries now bundled locally — works fully offline after initial page load
+- No CDN dependencies required
+
+### Alignment Fixes
+- Sub-paragraph labels now properly align with parent paragraph text
+
+---
+
+## What's New in v3.1 — Major Release
 
 **This is the biggest update yet.** We've added user profiles, a massive reference library, 37 total templates, smart validation, and polished every corner of the UI.
 
@@ -369,7 +384,7 @@ Thanks to the Marines who've provided feedback:
 ## About
 
 **Created by:** Jesse Morgan
-**Version:** 3.1.0
+**Version:** 3.1.1
 **Status:** Active development
 
 *Personal project, not officially endorsed by any military branch.*

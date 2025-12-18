@@ -11,23 +11,23 @@
       "subj": "REQUEST FOR LEAVE",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), I request annual leave for the period of [START DATE] to [END DATE], for a total of [NUMBER] days of chargeable leave."
         },
         {
-          "subject": "Purpose",
+          "subject": "Purpose.",
           "text": "[State the purpose of leave - e.g., family vacation, wedding, personal matters, etc.]"
         },
         {
-          "subject": "Leave Balance",
+          "subject": "Leave Balance.",
           "text": "My current leave balance is [NUMBER] days.  Upon completion of this leave, my balance will be [NUMBER] days."
         },
         {
-          "subject": "Contact Information",
+          "subject": "Contact Information.",
           "text": "While on leave, I can be reached at [PHONE NUMBER].  My leave address will be [FULL ADDRESS INCLUDING CITY, STATE, ZIP]."
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "Point of contact for this request is the undersigned at [DSN/COMMERCIAL PHONE] or [EMAIL]."
         }
       ],
@@ -45,19 +45,19 @@
       "subj": "REQUEST FOR SPECIAL LIBERTY",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), I request [72/96] hour special liberty for the period of [START DATE/TIME] to [END DATE/TIME]."
         },
         {
-          "subject": "Purpose",
+          "subject": "Purpose.",
           "text": "[Provide justification for the special liberty request - e.g., family event, personal matter requiring travel, etc.]"
         },
         {
-          "subject": "Travel",
+          "subject": "Travel.",
           "text": "I [will/will not] be traveling outside the local liberty area.  [If traveling: destination is (CITY, STATE), approximately (X) miles from base.]"
         },
         {
-          "subject": "Contact Information",
+          "subject": "Contact Information.",
           "text": "I can be reached at [PHONE NUMBER] during the liberty period."
         }
       ],
@@ -75,19 +75,19 @@
       "subj": "REQUEST MAST",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), I respectfully request mast with the Commanding Officer."
         },
         {
-          "subject": "Nature of Request",
+          "subject": "Nature of Request.",
           "text": "[Clearly state the issue or matter you wish to discuss.  Be specific but professional.  Include relevant dates and circumstances.]"
         },
         {
-          "subject": "Chain of Command Actions",
+          "subject": "Chain of Command Actions.",
           "text": "[Describe what actions you have taken to resolve this matter through the chain of command, including dates and outcomes of those discussions.]"
         },
         {
-          "subject": "Desired Resolution",
+          "subject": "Desired Resolution.",
           "text": "[State what outcome or resolution you are seeking from the Commanding Officer.]"
         }
       ],
@@ -105,23 +105,23 @@
       "subj": "RECOMMENDATION FOR NAVY AND MARINE CORPS ACHIEVEMENT MEDAL",
       "paragraphs": [
         {
-          "subject": "Recommendation",
+          "subject": "Recommendation.",
           "text": "Per references (a) and (b), [RANK FULL NAME] is recommended for the Navy and Marine Corps Achievement Medal for meritorious [service/achievement] while serving as [BILLET TITLE], [UNIT NAME], from [START DATE] to [END DATE]."
         },
         {
-          "subject": "Background",
+          "subject": "Background.",
           "text": "[Provide context about the Marine's duties and responsibilities during the award period.]"
         },
         {
-          "subject": "Justification",
+          "subject": "Justification.",
           "text": "[Describe specific achievements that warrant recognition.  Use quantifiable metrics where possible.  Focus on actions that exceeded normal expectations.  Examples: led X Marines, trained X personnel, saved $X, improved readiness by X%, etc.]"
         },
         {
-          "subject": "Impact",
+          "subject": "Impact.",
           "text": "[Explain the positive impact these achievements had on unit readiness, mission accomplishment, or Marine Corps operations.]"
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "Point of contact for this matter is the undersigned at [PHONE/EMAIL]."
         }
       ],
@@ -164,19 +164,19 @@
       "subj": "POSITIVE COUNSELING",
       "paragraphs": [
         {
-          "subject": "Purpose",
+          "subject": "Purpose.",
           "text": "To formally recognize and document your outstanding performance and positive contributions to the unit."
         },
         {
-          "subject": "Observation",
+          "subject": "Observation.",
           "text": "[Describe the specific positive behavior, accomplishment, or performance observed.  Include date(s) and circumstances.]"
         },
         {
-          "subject": "Impact",
+          "subject": "Impact.",
           "text": "[Explain the positive impact this had on the unit, mission accomplishment, or fellow Marines.]"
         },
         {
-          "subject": "Recommendation",
+          "subject": "Recommendation.",
           "text": "Continue to maintain this high standard of performance.  Your dedication and professionalism set the example for others to follow."
         }
       ]
@@ -191,31 +191,31 @@
       "subj": "CORRECTIVE COUNSELING",
       "paragraphs": [
         {
-          "subject": "Purpose",
+          "subject": "Purpose.",
           "text": "To formally document a deficiency in your performance/conduct and establish clear expectations for immediate improvement."
         },
         {
-          "subject": "Observation",
+          "subject": "Observation.",
           "text": "[Describe the specific deficiency observed.  Include date, time, location, and circumstances.  Be factual and specific.]"
         },
         {
-          "subject": "Standard",
+          "subject": "Standard.",
           "text": "[Cite the applicable standard, order, regulation, or policy that was not met.  Reference specific MCO, unit SOP, or UCMJ article if applicable.]"
         },
         {
-          "subject": "Impact",
+          "subject": "Impact.",
           "text": "[Explain how this deficiency negatively affected or could affect unit readiness, good order and discipline, or mission accomplishment.]"
         },
         {
-          "subject": "Expectation",
+          "subject": "Expectation.",
           "text": "You are expected to correct this deficiency immediately and ensure it does not recur.  Failure to improve may result in adverse administrative or disciplinary action."
         },
         {
-          "subject": "Assistance",
+          "subject": "Assistance.",
           "text": "[Identify any assistance, resources, or training available to help the Marine improve.  Include mentor assignment if applicable.]"
         },
         {
-          "subject": "Acknowledgment",
+          "subject": "Acknowledgment.",
           "text": "Your signature below acknowledges receipt of this counseling.  It does not indicate agreement or disagreement with its contents."
         }
       ]
@@ -230,15 +230,15 @@
       "subj": "REQUEST FOR PAGE 11 ENTRY",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), request the following administrative remarks entry be made in the official military personnel file of [RANK FULL NAME]."
         },
         {
-          "subject": "Proposed Entry",
+          "subject": "Proposed Entry.",
           "text": "\"[DATE]: [VERBATIM TEXT OF PROPOSED PAGE 11 ENTRY.  Use proper format per IRAM.]\""
         },
         {
-          "subject": "Justification",
+          "subject": "Justification.",
           "text": "[Explain why this entry is necessary and appropriate.  Reference supporting documentation if applicable.]"
         }
       ],
@@ -318,19 +318,19 @@
       "subj": "REQUEST FOR PFT/CFT WAIVER",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), I request a waiver from the [PFT/CFT] scheduled for [DATE] due to [MEDICAL/ADMINISTRATIVE] reasons."
         },
         {
-          "subject": "Justification",
+          "subject": "Justification.",
           "text": "[Explain the circumstances requiring the waiver.  If medical, reference medical documentation.  If administrative, explain the situation.]"
         },
         {
-          "subject": "Alternative Date",
+          "subject": "Alternative Date.",
           "text": "I request to complete the [PFT/CFT] on or about [PROPOSED DATE] when [explain when condition will be resolved or situation permits]."
         },
         {
-          "subject": "Supporting Documentation",
+          "subject": "Supporting Documentation.",
           "text": "Enclosure (1) provides [medical documentation/supporting documentation] for this request."
         }
       ],
@@ -351,23 +351,23 @@
       "subj": "REQUEST FOR TRAINING",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), I request authorization to attend [COURSE NAME] ([COURSE NUMBER if applicable]) conducted at [LOCATION] from [START DATE] to [END DATE]."
         },
         {
-          "subject": "Justification",
+          "subject": "Justification.",
           "text": "[Explain how this training supports your current billet, MOS requirements, or career development.  Describe how the unit will benefit from this training.]"
         },
         {
-          "subject": "Funding",
+          "subject": "Funding.",
           "text": "[Address funding requirements: TDY costs, course fees, etc.  Identify source of funding if known.]"
         },
         {
-          "subject": "Impact",
+          "subject": "Impact.",
           "text": "My absence during this training period [will/will not] impact unit operations.  [If applicable: explain how duties will be covered.]"
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "Point of contact for this request is the undersigned at [PHONE/EMAIL]."
         }
       ],
@@ -385,15 +385,15 @@
       "subj": "REQUEST FOR GOVERNMENT TRAVEL CHARGE CARD",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), I request issuance of a Government Travel Charge Card (GTCC) for official travel purposes."
         },
         {
-          "subject": "Justification",
+          "subject": "Justification.",
           "text": "A GTCC is required to support upcoming [TAD/TDY/PCS] orders to [LOCATION] scheduled for [DATE].  [Or: My duties require frequent official travel that necessitates a GTCC.]"
         },
         {
-          "subject": "Acknowledgment",
+          "subject": "Acknowledgment.",
           "text": "I acknowledge that I have completed the required GTCC training and understand my responsibilities as a cardholder per reference (a)."
         }
       ],
@@ -414,27 +414,27 @@
       "subj": "REPORT OF PRELIMINARY INQUIRY",
       "paragraphs": [
         {
-          "subject": "Authority",
+          "subject": "Authority.",
           "text": "Per reference (a), a preliminary inquiry was conducted into [SUBJECT MATTER] as directed by [CONVENING AUTHORITY] on [DATE]."
         },
         {
-          "subject": "Background",
+          "subject": "Background.",
           "text": "[Provide background information and circumstances that prompted the inquiry.  Include dates, locations, and personnel involved.]"
         },
         {
-          "subject": "Methodology",
+          "subject": "Methodology.",
           "text": "[Describe how the inquiry was conducted: witnesses interviewed, documents reviewed, evidence examined, etc.]"
         },
         {
-          "subject": "Findings of Fact",
+          "subject": "Findings of Fact.",
           "text": "[List specific findings based on evidence gathered.  Use numbered sub-paragraphs for clarity.  Be objective and factual.]"
         },
         {
-          "subject": "Conclusion",
+          "subject": "Conclusion.",
           "text": "[State conclusions drawn from the findings.  Address whether allegations were substantiated or unsubstantiated.]"
         },
         {
-          "subject": "Recommendation",
+          "subject": "Recommendation.",
           "text": "[Provide recommendations for action: further investigation, administrative action, disciplinary action, case closure, or other appropriate disposition.]"
         }
       ],
@@ -457,27 +457,27 @@
       "subj": "REQUEST FOR ORDERS MODIFICATION",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), I request modification to my orders [ORDER NUMBER] dated [DATE]."
         },
         {
-          "subject": "Current Orders",
+          "subject": "Current Orders.",
           "text": "I am currently ordered to report to [GAINING UNIT] NLT [REPORT DATE] for duty as [BILLET]."
         },
         {
-          "subject": "Requested Modification",
+          "subject": "Requested Modification.",
           "text": "[Clearly state the specific modification requested: change of report date, change of duty station, deletion of dependent travel, etc.]"
         },
         {
-          "subject": "Justification",
+          "subject": "Justification.",
           "text": "[Provide detailed justification for the modification request.  Include any extenuating circumstances or hardship factors.]"
         },
         {
-          "subject": "Impact",
+          "subject": "Impact.",
           "text": "[Address how this modification will or will not impact the gaining unit or Marine Corps manning requirements.]"
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "Point of contact is the undersigned at [PHONE/EMAIL]."
         }
       ],
@@ -499,23 +499,23 @@
       "subj": "CHECKOUT INSTRUCTIONS",
       "paragraphs": [
         {
-          "subject": "Purpose",
+          "subject": "Purpose.",
           "text": "This memorandum provides checkout instructions in preparation for your transfer to [GAINING UNIT] per orders dated [DATE]."
         },
         {
-          "subject": "Checkout Requirements",
+          "subject": "Checkout Requirements.",
           "text": "Complete the attached checkout sheet and obtain all required signatures NLT [DATE].  Ensure all gear is turned in to the armory and supply.  Clear all financial obligations with disbursing."
         },
         {
-          "subject": "Records",
+          "subject": "Records.",
           "text": "Report to Admin to verify your service record book is complete and accurate.  Ensure all awards, training, and qualifications are properly documented."
         },
         {
-          "subject": "Final Inspection",
+          "subject": "Final Inspection.",
           "text": "Report to [LOCATION] on [DATE] at [TIME] for final checkout inspection with the [FIRST SERGEANT/SERGEANT MAJOR]."
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "For questions, contact the Admin Chief at [PHONE/EMAIL]."
         }
       ],
@@ -533,19 +533,19 @@
       "subj": "SERVICEMEMBERS' GROUP LIFE INSURANCE (SGLI) BENEFICIARY UPDATE",
       "paragraphs": [
         {
-          "subject": "Purpose",
+          "subject": "Purpose.",
           "text": "Per reference (a), this letter confirms my election to update my SGLI beneficiary designation."
         },
         {
-          "subject": "Coverage",
+          "subject": "Coverage.",
           "text": "I currently maintain SGLI coverage in the amount of $[AMOUNT].  I have elected to [maintain/increase/decrease] my coverage to $[AMOUNT]."
         },
         {
-          "subject": "Beneficiary Designation",
+          "subject": "Beneficiary Designation.",
           "text": "Enclosure (1) is my updated SGLV 8286 designating my beneficiaries as indicated therein."
         },
         {
-          "subject": "Acknowledgment",
+          "subject": "Acknowledgment.",
           "text": "I understand this designation supersedes all previous beneficiary designations and will remain in effect until modified or revoked by me in writing."
         }
       ],
@@ -566,23 +566,23 @@
       "subj": "COMMAND INTEREST",
       "paragraphs": [
         {
-          "subject": "Purpose",
+          "subject": "Purpose.",
           "text": "This letter establishes command interest in [RANK FULL NAME] to ensure proper mentorship and career development."
         },
         {
-          "subject": "Background",
+          "subject": "Background.",
           "text": "[Explain why command interest is being established: performance concerns, development potential, recent personal difficulties, or other relevant circumstances.]"
         },
         {
-          "subject": "Expectations",
+          "subject": "Expectations.",
           "text": "[Outline specific expectations for the Marine during the command interest period.  Include performance standards, behavior requirements, or development goals.]"
         },
         {
-          "subject": "Mentorship",
+          "subject": "Mentorship.",
           "text": "[MENTOR'S RANK AND NAME] is assigned as mentor and will provide weekly counseling and guidance.  Mentor will report progress to the First Sergeant monthly."
         },
         {
-          "subject": "Duration",
+          "subject": "Duration.",
           "text": "This command interest will remain in effect for [PERIOD] or until removed by the Commanding Officer, whichever occurs first."
         }
       ]
@@ -597,27 +597,27 @@
       "subj": "REQUEST FOR ADMINISTRATIVE REMARKS (6105) ENTRY",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per references (a) and (b), request the following 6105 counseling entry be made in the service record of [RANK FULL NAME]."
         },
         {
-          "subject": "Incident",
+          "subject": "Incident.",
           "text": "[Describe the specific incident, deficiency, or pattern of behavior that warrants this entry.  Include dates, locations, and factual description of events.]"
         },
         {
-          "subject": "Standard Violated",
+          "subject": "Standard Violated.",
           "text": "[Cite the specific order, regulation, policy, or standard that was violated.  Reference UCMJ articles if applicable.]"
         },
         {
-          "subject": "Prior Counseling",
+          "subject": "Prior Counseling.",
           "text": "[Document prior counseling efforts, including dates and outcomes.  Reference any previous page 11 entries or documented counseling sessions.]"
         },
         {
-          "subject": "Proposed Entry",
+          "subject": "Proposed Entry.",
           "text": "\"[DATE]: Per MCO 1610.7A, you are being formally counseled for [BRIEF DESCRIPTION].  [DETAILED NARRATIVE].  Failure to correct this deficiency may result in further adverse administrative or disciplinary action, to include [POTENTIAL CONSEQUENCES].\""
         },
         {
-          "subject": "Marine's Rights",
+          "subject": "Marine's Rights.",
           "text": "Per reference (a), the Marine has been advised of the right to submit a written statement within 10 working days.  The statement will be filed with this entry."
         }
       ],
@@ -636,31 +636,31 @@
       "subj": "MERITORIOUS PROMOTION RECOMMENDATION",
       "paragraphs": [
         {
-          "subject": "Recommendation",
+          "subject": "Recommendation.",
           "text": "Per reference (a), [RANK FULL NAME], [MOS], is recommended for meritorious promotion to the grade of [GRADE]."
         },
         {
-          "subject": "Background",
+          "subject": "Background.",
           "text": "[Current grade date, TIG, TIS, current billet, and MOS proficiency.  Include composite score if applicable.]"
         },
         {
-          "subject": "Justification",
+          "subject": "Justification.",
           "text": "[Describe exceptional performance that warrants promotion ahead of peers.  Use specific examples and quantifiable achievements.  Explain why this Marine is more deserving than others awaiting promotion.]"
         },
         {
-          "subject": "Leadership",
+          "subject": "Leadership.",
           "text": "[Describe leadership qualities demonstrated.  Include examples of leading Marines, training subordinates, and influencing peers.]"
         },
         {
-          "subject": "PME and Self-Improvement",
+          "subject": "PME and Self-Improvement.",
           "text": "[List completed PME, off-duty education, certifications, and other self-improvement efforts.]"
         },
         {
-          "subject": "Physical Fitness",
+          "subject": "Physical Fitness.",
           "text": "Current PFT score: [SCORE] ([CLASS]).  Current CFT score: [SCORE] ([CLASS]).  Height/Weight: [COMPLIANT/BCP STATUS]."
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "Point of contact is the undersigned at [PHONE/EMAIL]."
         }
       ],
@@ -682,31 +682,31 @@
       "subj": "REQUEST FOR HUMANITARIAN REASSIGNMENT",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), I request humanitarian reassignment to [GEOGRAPHIC AREA/SPECIFIC DUTY STATION] due to [BRIEFLY STATE REASON - family medical emergency, severe family hardship, etc.]."
         },
         {
-          "subject": "Current Assignment",
+          "subject": "Current Assignment.",
           "text": "I am currently assigned to [UNIT] as [BILLET].  My PRD is [DATE].  I have served at this duty station since [DATE]."
         },
         {
-          "subject": "Hardship Circumstances",
+          "subject": "Hardship Circumstances.",
           "text": "[Provide detailed explanation of the hardship situation.  Include specific circumstances, timeline of events, and why your presence is required.  Be specific about the nature of the family emergency or hardship.]"
         },
         {
-          "subject": "Family Member Information",
+          "subject": "Family Member Information.",
           "text": "[Provide information about the affected family member: relationship, location, nature of condition/situation, prognosis if medical, and why other family members cannot provide necessary support.]"
         },
         {
-          "subject": "Requested Location",
+          "subject": "Requested Location.",
           "text": "I request assignment to the [GEOGRAPHIC AREA] area to be within [REASONABLE DISTANCE] of [AFFECTED FAMILY MEMBER].  [Identify specific units in the area that could utilize your MOS if known.]"
         },
         {
-          "subject": "Supporting Documentation",
+          "subject": "Supporting Documentation.",
           "text": "Enclosures provide supporting documentation including [LIST: medical documentation, dependency letters, Red Cross message, etc.]."
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "Point of contact is the undersigned at [PHONE/EMAIL]."
         }
       ],
@@ -729,31 +729,31 @@
       "subj": "LETTER OF INSTRUCTION",
       "paragraphs": [
         {
-          "subject": "Purpose",
+          "subject": "Purpose.",
           "text": "This letter provides instructions and guidance for [EVENT/TASK/OPERATION/PROGRAM]."
         },
         {
-          "subject": "Background",
+          "subject": "Background.",
           "text": "[Provide context and background information necessary to understand the requirement.]"
         },
         {
-          "subject": "Scope",
+          "subject": "Scope.",
           "text": "[Define what is covered by these instructions, including applicable personnel, timeframes, and geographic areas.]"
         },
         {
-          "subject": "Instructions",
+          "subject": "Instructions.",
           "text": "[Provide detailed, numbered instructions.  Be specific about who, what, when, where, and how.  Include specific tasks, responsibilities, and deadlines.]"
         },
         {
-          "subject": "Coordination",
+          "subject": "Coordination.",
           "text": "[Identify coordination requirements, reporting chains, and key personnel involved.]"
         },
         {
-          "subject": "Resources",
+          "subject": "Resources.",
           "text": "[Identify resources available, funding sources, equipment, or personnel support.]"
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "Point of contact for this matter is [NAME] at [PHONE/EMAIL]."
         }
       ]
@@ -768,27 +768,27 @@
       "subj": "LITIGATION HOLD NOTICE",
       "paragraphs": [
         {
-          "subject": "Notice",
+          "subject": "Notice.",
           "text": "This memorandum serves as official notice of a litigation hold effective immediately.  You are required to preserve all documents, records, and electronically stored information (ESI) related to [SUBJECT MATTER/CASE NAME]."
         },
         {
-          "subject": "Scope",
+          "subject": "Scope.",
           "text": "This hold applies to all documents and information, regardless of format, related to [DESCRIBE SCOPE: specific incident, time period, individuals, or subject matter].  This includes but is not limited to emails, text messages, photographs, videos, reports, notes, and any other records."
         },
         {
-          "subject": "Preservation Requirements",
+          "subject": "Preservation Requirements.",
           "text": "You must immediately: (1) Suspend any routine destruction of relevant documents; (2) Preserve all relevant electronic communications including emails, texts, and voicemails; (3) Preserve all relevant physical documents; (4) Preserve any relevant evidence in your possession or control."
         },
         {
-          "subject": "Prohibition",
+          "subject": "Prohibition.",
           "text": "Do NOT delete, destroy, alter, or dispose of any potentially relevant documents or information.  Failure to comply with this hold may result in adverse legal consequences and potential disciplinary action."
         },
         {
-          "subject": "Duration",
+          "subject": "Duration.",
           "text": "This litigation hold will remain in effect until you receive written notice of its release.  Do not assume the hold has been lifted unless you receive official notification."
         },
         {
-          "subject": "Questions",
+          "subject": "Questions.",
           "text": "Direct any questions regarding this hold to the Staff Judge Advocate at [PHONE/EMAIL]."
         }
       ],
@@ -806,27 +806,27 @@
       "subj": "CAREER DESIGNATION REQUEST",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), I request career designation as an indication of my commitment to continued service in the United States Marine Corps."
         },
         {
-          "subject": "Service Record",
+          "subject": "Service Record.",
           "text": "I entered active duty on [DATE].  I am currently serving in the grade of [RANK] with an EAS of [DATE].  My primary MOS is [MOS/TITLE]."
         },
         {
-          "subject": "Career Intentions",
+          "subject": "Career Intentions.",
           "text": "[State your career intentions and reasons for requesting career designation.  Demonstrate your commitment to the Marine Corps and your plans for continued professional development.]"
         },
         {
-          "subject": "Qualifications",
+          "subject": "Qualifications.",
           "text": "Current PFT: [SCORE].  Current CFT: [SCORE].  Rifle qualification: [QUAL/DATE].  [List any additional qualifications, certifications, or achievements relevant to career designation.]"
         },
         {
-          "subject": "Recommendation",
+          "subject": "Recommendation.",
           "text": "I respectfully request favorable consideration of this career designation package."
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "Point of contact is the undersigned at [PHONE/EMAIL]."
         }
       ],
@@ -848,27 +848,27 @@
       "subj": "APPOINTMENT AS INVESTIGATING OFFICER",
       "paragraphs": [
         {
-          "subject": "Appointment",
+          "subject": "Appointment.",
           "text": "Per references (a) and (b), you are hereby appointed as Investigating Officer (IO) to conduct a command investigation into [BRIEF DESCRIPTION OF INCIDENT/MATTER]."
         },
         {
-          "subject": "Scope",
+          "subject": "Scope.",
           "text": "You are directed to investigate the facts and circumstances surrounding [DETAILED DESCRIPTION].  This investigation should determine [LIST SPECIFIC QUESTIONS TO BE ANSWERED]."
         },
         {
-          "subject": "Authority",
+          "subject": "Authority.",
           "text": "You are authorized to interview all personnel who may have relevant information, examine all pertinent documents and physical evidence, and take sworn statements as necessary.  All members of this command are directed to cooperate fully with this investigation."
         },
         {
-          "subject": "Timeline",
+          "subject": "Timeline.",
           "text": "Submit your findings of fact, opinions, and recommendations to the undersigned no later than [DATE], unless an extension is requested and approved."
         },
         {
-          "subject": "Report Format",
+          "subject": "Report Format.",
           "text": "Your report should include: (1) preliminary statement identifying the appointment authority and scope; (2) findings of fact; (3) opinions; (4) recommendations; and (5) all enclosures including witness statements and documentary evidence."
         },
         {
-          "subject": "Legal Review",
+          "subject": "Legal Review.",
           "text": "Upon completion, your investigation will be forwarded to the Staff Judge Advocate for legal sufficiency review prior to final action."
         }
       ],
@@ -887,27 +887,27 @@
       "subj": "APPOINTMENT TO COLLATERAL DUTY",
       "paragraphs": [
         {
-          "subject": "Appointment",
+          "subject": "Appointment.",
           "text": "Effective [DATE], you are hereby appointed as the [DUTY TITLE] for [UNIT NAME]."
         },
         {
-          "subject": "Responsibilities",
+          "subject": "Responsibilities.",
           "text": "Your responsibilities include but are not limited to: [LIST PRIMARY DUTIES AND RESPONSIBILITIES].  You will serve as the primary point of contact for all matters pertaining to this duty."
         },
         {
-          "subject": "Authority",
+          "subject": "Authority.",
           "text": "You are authorized to [LIST SPECIFIC AUTHORITIES GRANTED - e.g., sign for equipment, access spaces, approve requests, etc.].  Exercise this authority in accordance with applicable regulations and command policies."
         },
         {
-          "subject": "Training",
+          "subject": "Training.",
           "text": "Ensure completion of all required training for this duty within [NUMBER] days of this appointment.  Coordinate with [PERSON/OFFICE] for scheduling and certification."
         },
         {
-          "subject": "Turnover",
+          "subject": "Turnover.",
           "text": "Maintain complete and accurate records.  Upon relief, conduct a thorough turnover with your replacement and provide a turnover folder containing all relevant documents, SOPs, and points of contact."
         },
         {
-          "subject": "Duration",
+          "subject": "Duration.",
           "text": "This appointment remains in effect until relieved in writing or upon your departure from this command."
         }
       ],
@@ -923,23 +923,23 @@
       "subj": "APPOINTMENT TO [BOARD/COMMITTEE NAME]",
       "paragraphs": [
         {
-          "subject": "Appointment",
+          "subject": "Appointment.",
           "text": "Per reference (a), you are hereby appointed as a [VOTING MEMBER/RECORDER/PRESIDENT] of the [BOARD/COMMITTEE NAME] convening on [DATE] at [TIME] in [LOCATION]."
         },
         {
-          "subject": "Purpose",
+          "subject": "Purpose.",
           "text": "The purpose of this board is to [STATE PURPOSE - e.g., review candidates for meritorious promotion, evaluate administrative separation, select personnel for special duty assignment, etc.]."
         },
         {
-          "subject": "Composition",
+          "subject": "Composition.",
           "text": "The board will consist of: President: [RANK/NAME]; Members: [LIST MEMBERS]; Recorder: [RANK/NAME].  [Additional personnel as required]."
         },
         {
-          "subject": "Procedures",
+          "subject": "Procedures.",
           "text": "Conduct all proceedings in accordance with reference (a).  The recorder will maintain accurate minutes and all documentation.  All deliberations are confidential and will not be disclosed outside official channels."
         },
         {
-          "subject": "Report",
+          "subject": "Report.",
           "text": "Upon completion of proceedings, submit the board report with findings and recommendations to the undersigned within [NUMBER] working days."
         }
       ],
@@ -957,23 +957,23 @@
       "subj": "MERITORIOUS MAST RECOMMENDATION FOR [RANK NAME]",
       "paragraphs": [
         {
-          "subject": "Recommendation",
+          "subject": "Recommendation.",
           "text": "[RANK FULL NAME, USMC], is recommended for Meritorious Mast in recognition of [his/her] superior performance of duty while serving as [BILLET] from [START DATE] to [END DATE]."
         },
         {
-          "subject": "Accomplishments",
+          "subject": "Accomplishments.",
           "text": "[DESCRIBE SPECIFIC ACCOMPLISHMENTS.  Be specific with facts, figures, and impacts.  What did the Marine do that went above and beyond normal expectations?  How did their actions benefit the command, mission, or fellow Marines?]"
         },
         {
-          "subject": "Impact",
+          "subject": "Impact.",
           "text": "[DESCRIBE THE IMPACT.  Quantify results where possible.  How did their performance contribute to mission accomplishment?  What would have happened without their efforts?]"
         },
         {
-          "subject": "Character",
+          "subject": "Character.",
           "text": "[RANK NAME]'s dedication, professionalism, and initiative reflect great credit upon [himself/herself] and are in keeping with the highest traditions of the United States Marine Corps."
         },
         {
-          "subject": "Recommendation",
+          "subject": "Recommendation.",
           "text": "I strongly recommend [RANK NAME] be recognized via Meritorious Mast for [his/her] outstanding contributions to this command."
         }
       ],
@@ -991,27 +991,27 @@
       "subj": "REQUEST FOR TEMPORARY ADDITIONAL DUTY ORDERS",
       "paragraphs": [
         {
-          "subject": "Request",
+          "subject": "Request.",
           "text": "Per reference (a), I request TAD orders for [RANK FULL NAME] to [DESTINATION/SCHOOL/UNIT] for the period of [START DATE] to [END DATE] ([NUMBER] days)."
         },
         {
-          "subject": "Purpose",
+          "subject": "Purpose.",
           "text": "Purpose of TAD: [STATE PURPOSE - e.g., attendance at formal school, temporary augmentation, training exercise, inspection support, etc.].  [If school: Course number, class number, and report date]."
         },
         {
-          "subject": "Justification",
+          "subject": "Justification.",
           "text": "[EXPLAIN WHY THIS TAD IS NECESSARY.  How does it support mission requirements or Marine's professional development?  Why was this Marine selected?]"
         },
         {
-          "subject": "Funding",
+          "subject": "Funding.",
           "text": "Funding source: [SPECIFY - e.g., unit OPTAR, TECOM funded, gaining command funded, etc.].  Estimated cost: [AMOUNT] for travel, [AMOUNT] for per diem, [AMOUNT] total."
         },
         {
-          "subject": "Impact",
+          "subject": "Impact.",
           "text": "[ADDRESS IMPACT ON UNIT.  How will billet/duties be covered during absence?  Any mission degradation concerns?]"
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "Point of contact is [NAME/RANK] at [PHONE/EMAIL]."
         }
       ],
@@ -1029,23 +1029,23 @@
       "subj": "DUTY STATUS CHANGE NOTIFICATION",
       "paragraphs": [
         {
-          "subject": "Notification",
+          "subject": "Notification.",
           "text": "Per reference (a), the following duty status change is reported for [RANK FULL NAME], [EDIPI], [MOS]."
         },
         {
-          "subject": "Status Change",
+          "subject": "Status Change.",
           "text": "Previous Status: [PRESENT FOR DUTY/TAD/LEAVE/LIMDU/etc.].  New Status: [NEW STATUS].  Effective Date: [DATE]."
         },
         {
-          "subject": "Details",
+          "subject": "Details.",
           "text": "[PROVIDE RELEVANT DETAILS.  For LIMDU: diagnosis category, estimated return date, duty limitations.  For UA: last known location, circumstances, actions taken.  For confinement: location, charges, court-martial date if known.]"
         },
         {
-          "subject": "Actions Taken",
+          "subject": "Actions Taken.",
           "text": "[DESCRIBE COMMAND ACTIONS - e.g., administrative processing initiated, legal hold placed, notification to next of kin, etc.]"
         },
         {
-          "subject": "Point of Contact",
+          "subject": "Point of Contact.",
           "text": "Point of contact for this matter is [RANK/NAME] at [PHONE/EMAIL]."
         }
       ],
@@ -1063,23 +1063,23 @@
       "subj": "APPOINTMENT AS UNIT SAFETY OFFICER",
       "paragraphs": [
         {
-          "subject": "Appointment",
+          "subject": "Appointment.",
           "text": "Effective [DATE], you are hereby appointed as the Unit Safety Officer for [UNIT NAME]."
         },
         {
-          "subject": "Responsibilities",
+          "subject": "Responsibilities.",
           "text": "Your responsibilities include: (1) implementing and managing the unit safety program per reference (a); (2) conducting safety inspections and risk assessments; (3) investigating mishaps and near-misses; (4) conducting safety training and awareness campaigns; (5) maintaining required safety documentation and reports."
         },
         {
-          "subject": "Authority",
+          "subject": "Authority.",
           "text": "You are authorized to: halt any operation presenting imminent danger; access all spaces and operations for safety inspections; direct immediate corrective actions for safety hazards; and report directly to the Commanding Officer on safety matters."
         },
         {
-          "subject": "Training Requirements",
+          "subject": "Training Requirements.",
           "text": "Complete the following training within 90 days: (1) [SERVICE] Safety Officer Course; (2) Operational Risk Management (ORM) Course; (3) Mishap Investigation Course.  Document all certifications and maintain currency."
         },
         {
-          "subject": "Coordination",
+          "subject": "Coordination.",
           "text": "Coordinate with higher headquarters safety personnel and participate in all safety working groups and inspections as required."
         }
       ],
@@ -1097,23 +1097,23 @@
       "subj": "PERSONAL AWARD RECOMMENDATION FOR [RANK NAME]",
       "paragraphs": [
         {
-          "subject": "Recommendation",
+          "subject": "Recommendation.",
           "text": "Per reference (a), [RANK FULL NAME, USMC] is recommended for the [AWARD NAME] for [his/her] [meritorious service/heroic achievement/meritorious achievement] while serving as [BILLET] from [START DATE] to [END DATE]."
         },
         {
-          "subject": "Summary of Action",
+          "subject": "Summary of Action.",
           "text": "[PROVIDE NARRATIVE DESCRIPTION.  For meritorious service: describe sustained superior performance, specific accomplishments, and impact.  For achievement: describe the specific act or event, circumstances, and outcome.  Be specific with facts and figures.]"
         },
         {
-          "subject": "Impact",
+          "subject": "Impact.",
           "text": "[DESCRIBE IMPACT.  How did the Marine's actions contribute to mission accomplishment?  What was the scope of responsibility?  Who benefited from their efforts?]"
         },
         {
-          "subject": "Justification",
+          "subject": "Justification.",
           "text": "[EXPLAIN WHY THIS AWARD IS APPROPRIATE.  Compare to award criteria in reference (a).  Why does performance warrant recognition at this level versus a lower award?]"
         },
         {
-          "subject": "Recommendation",
+          "subject": "Recommendation.",
           "text": "[RANK NAME]'s [service/actions] reflect great credit upon [himself/herself] and are in keeping with the highest traditions of the United States Marine Corps.  I strongly recommend approval of this award."
         }
       ],
@@ -1163,28 +1163,145 @@
       "subj": "EXTENSION/REENLISTMENT ENDORSEMENT",
       "paragraphs": [
         {
-          "subject": "Recommendation",
+          "subject": "Recommendation.",
           "text": "[RECOMMEND APPROVAL/DISAPPROVAL] of [RANK NAME]'s request for [extension/reenlistment]."
         },
         {
-          "subject": "Performance",
+          "subject": "Performance.",
           "text": "[RANK NAME] has served at this command since [DATE].  [His/Her] performance has been [DESCRIPTION].  Current proficiency/conduct marks: [PRO/CON].  Most recent FITREP marking average: [AVERAGE]."
         },
         {
-          "subject": "Qualifications",
+          "subject": "Qualifications.",
           "text": "Physical fitness: PFT [SCORE/CLASS], CFT [SCORE/CLASS].  Rifle qualification: [QUAL/DATE].  [Any disqualifying factors or waivers required: N/A or specify]."
         },
         {
-          "subject": "Conduct",
+          "subject": "Conduct.",
           "text": "[Address any adverse information: NJPs, courts-martial, civilian convictions, debt issues, etc.  If none: \"No adverse information is on file.\"]"
         },
         {
-          "subject": "Endorsement",
+          "subject": "Endorsement.",
           "text": "[If recommending approval: This Marine is a valuable asset and continued service is in the best interest of the Marine Corps.  If disapproving: Provide specific reasons per applicable directives.]"
         }
       ],
       "refs": [
         "MCO 1040.31"
+      ]
+    },
+    {
+      "id": "showcase-multipage",
+      "name": "Multi-Page Showcase (Testing)",
+      "category": "Administrative",
+      "description": "Comprehensive multi-page letter demonstrating all formatting features for quality assurance testing",
+      "ssic": "5216",
+      "officeCode": "G-6",
+      "documentType": "basic",
+      "unitName": "UNITED STATES MARINE CORPS",
+      "unitAddress": "MARINE CORPS SYSTEMS COMMAND\n2200 LESTER STREET\nQUANTICO, VIRGINIA 22134-5010",
+      "from": "Commanding Officer, Marine Corps Systems Command",
+      "to": "Commandant of the Marine Corps (HQMC C4)",
+      "via": [
+        "Commanding General, Marine Corps Installations Command",
+        "Deputy Commandant for Information (DC I)"
+      ],
+      "sigName": "J. M. SMITH",
+      "copies": [
+        "CMC (HQMC ARNORTH)",
+        "CG MCICOM",
+        "CO MARCORSYSCOM (Records)"
+      ],
+      "subj": "COMPREHENSIVE FORMAT VALIDATION AND QUALITY ASSURANCE REVIEW FOR NAVAL CORRESPONDENCE GENERATION SYSTEM",
+      "paragraphs": [
+        {
+          "subject": "Purpose.",
+          "text": "Per references (a) through (f), this correspondence serves as a comprehensive demonstration of the Naval Letter Generator's formatting capabilities and validates compliance with SECNAV M-5216.5 requirements.  This document exercises all major features including multi-page rendering, paragraph hierarchy, text formatting, and proper element spacing to ensure the system produces accurate, regulation-compliant naval correspondence suitable for official use."
+        },
+        {
+          "subject": "Background.",
+          "text": "The Naval Letter Generator was developed to address the critical need for accurate, standardized military correspondence within the Department of the Navy.  Traditional methods of creating naval letters often resulted in formatting inconsistencies, regulatory non-compliance, and significant time expenditure on administrative tasks that could be better spent on mission-essential functions.  This tool automates the formatting process while maintaining strict adherence to established standards, thereby improving efficiency and ensuring uniformity across all generated correspondence."
+        },
+        {
+          "subject": "Scope of Validation.",
+          "text": "This validation document tests the following system capabilities: proper letterhead rendering including unit name, address, and official seal placement; correct SSIC and office code positioning; accurate date formatting in military style; appropriate spacing between letter elements; proper handling of references and enclosures; paragraph numbering and sub-paragraph lettering; page break logic and continuation page formatting; signature block placement; and distribution list rendering.  Each feature has been specifically exercised within this correspondence to provide a complete quality assurance review."
+        },
+        {
+          "subject": "Technical Implementation.",
+          "text": "The system employs jsPDF for portable document format generation with precise coordinate mapping to ensure compliance with SECNAV M-5216.5 margin and spacing requirements.  The one-inch margins are maintained throughout, with the letterhead centered appropriately at the top of the first page.  Subsequent pages include proper continuation headers with page numbers.  Text rendering utilizes Times New Roman font at 12-point size, the standard for official naval correspondence.  Line spacing is set to provide optimal readability while maintaining professional appearance."
+        },
+        {
+          "subject": "Feature Demonstration - References.",
+          "text": "The references section demonstrates proper alphabetical designation and formatting.  Reference (a) provides the foundational formatting guidance from the Secretary of the Navy.  Reference (b) establishes Marine Corps-specific correspondence requirements.  Reference (c) defines administrative procedures for military correspondence.  References (d) through (f) provide additional regulatory framework.  The system correctly renders reference callouts within paragraph text and properly formats the references section with appropriate lettering and indentation."
+        },
+        {
+          "subject": "Feature Demonstration - Enclosures.",
+          "text": "The enclosures section validates proper numerical sequencing and formatting of attached documents.  Enclosures are numbered sequentially starting with (1) and continue through the complete list.  The system maintains proper alignment and spacing between enclosure entries.  When enclosures are referenced within paragraph text, they appear as 'Enclosure (1)' with the numerical designation in parentheses.  This correspondence includes multiple enclosures to validate proper rendering across varying quantities."
+        },
+        {
+          "subject": "Multi-Page Validation.",
+          "text": "This paragraph intentionally contains extended text to force page break processing and validate proper continuation page formatting.  The system must correctly identify when content exceeds available page space, insert an appropriate page break, generate a continuation page header with sequential page numbering, and resume content rendering with proper margins and spacing.  The continuation header should appear approximately one inch from the top of subsequent pages and include the subject line with 'Cont'd' annotation and page number.  Following the continuation header, body text should resume with appropriate spacing.  This validation ensures documents of any length will render correctly without manual intervention or formatting adjustments by the user.  The importance of proper page break handling cannot be overstated, as official correspondence often extends beyond a single page when addressing complex matters requiring detailed explanation or comprehensive documentation.  Furthermore, the page break algorithm must account for paragraph integrity, avoiding orphaned lines at the bottom of pages or widowed lines at the top of continuation pages when possible.  The system should also ensure that subject lines within paragraphs remain attached to their corresponding paragraph text rather than appearing isolated at page boundaries."
+        },
+        {
+          "subject": "Paragraph Hierarchy Demonstration.",
+          "text": "The following sub-paragraphs demonstrate proper hierarchical paragraph structure and indentation as prescribed by SECNAV M-5216.5.  Main paragraphs are numbered with Arabic numerals followed by a period.  Sub-paragraphs use lowercase letters followed by periods.  Sub-sub-paragraphs use Arabic numerals in parentheses.  Sub-sub-sub-paragraphs use lowercase letters in parentheses.  This hierarchical structure allows for organized presentation of complex information while maintaining readability and clear logical flow."
+        },
+        {
+          "type": "subpara",
+          "text": "This is a sub-paragraph (labeled with lowercase letter followed by period, e.g., 'a.').  Sub-paragraphs are used to break down main paragraph topics into component parts.  They should be indented appropriately and maintain consistent formatting throughout the document.  Each sub-paragraph addresses a distinct aspect of the parent paragraph's subject matter."
+        },
+        {
+          "type": "subpara",
+          "text": "This is another sub-paragraph demonstrating sequential lettering.  When multiple sub-paragraphs exist under a single main paragraph, they are lettered consecutively (a., b., c., etc.).  The system must correctly track and render this sequence regardless of the number of sub-paragraphs present."
+        },
+        {
+          "type": "subsubpara",
+          "text": "This is a sub-sub-paragraph (labeled with Arabic numeral in parentheses, e.g., '(1)').  Sub-sub-paragraphs provide an additional level of detail beneath sub-paragraphs.  They are used when further breakdown of information is necessary for clarity."
+        },
+        {
+          "type": "subsubpara",
+          "text": "This is another sub-sub-paragraph demonstrating sequential numbering within the sub-sub-paragraph level.  Multiple sub-sub-paragraphs under the same sub-paragraph are numbered consecutively ((1), (2), (3), etc.)."
+        },
+        {
+          "type": "subsubsubpara",
+          "text": "This is a sub-sub-sub-paragraph (labeled with lowercase letter in parentheses, e.g., '(a)').  This represents the deepest level of paragraph hierarchy per SECNAV M-5216.5.  Use of this level should be limited to situations requiring maximum detail organization."
+        },
+        {
+          "type": "subsubsubpara",
+          "text": "This is another sub-sub-sub-paragraph demonstrating the fourth and final level of the paragraph hierarchy.  Documents requiring this level of detail are typically complex policy documents, investigative reports, or technical instructions."
+        },
+        {
+          "type": "subpara",
+          "text": "This sub-paragraph follows the sub-sub-sub-paragraphs to demonstrate that the system correctly resets numbering when returning to a higher level in the hierarchy.  The lettering should continue from where the previous sub-paragraph level left off."
+        },
+        {
+          "subject": "Quality Assurance Procedures.",
+          "text": "Quality assurance testing should verify the following elements upon document generation: first, confirm the letterhead displays correctly with proper seal positioning, unit name centering, and address formatting; second, verify SSIC and office code appear in the correct location relative to the date; third, examine the From, To, and Via lines for proper formatting and alignment; fourth, review the subject line for correct capitalization and positioning; fifth, check all references for proper alphabetical designation and formatting; sixth, verify enclosures display with correct numerical sequencing; seventh, examine paragraph numbering for accuracy and consistency; eighth, verify sub-paragraph indentation and lettering; ninth, check page breaks for proper continuation header generation; tenth, confirm signature block positioning at document conclusion."
+        },
+        {
+          "subject": "Compliance Certification.",
+          "text": "Upon successful completion of this validation, the Naval Letter Generator system may be certified as compliant with SECNAV M-5216.5 formatting requirements for standard naval correspondence.  The system correctly implements all required formatting elements and produces documents suitable for official use within the Department of the Navy.  Commands may rely upon this tool for routine correspondence generation with confidence that output will meet regulatory standards.  Any deviations from standard formatting should be reported for immediate corrective action to maintain system integrity and compliance status."
+        },
+        {
+          "subject": "Recommendations.",
+          "text": "The following recommendations are provided for system users and administrators: first, regularly verify system output against current regulatory guidance as correspondence standards may be updated periodically; second, maintain the system with current software updates to ensure optimal performance and security; third, provide user feedback through established channels to support continuous improvement; fourth, utilize the template library for common correspondence types to maximize efficiency; fifth, review generated documents prior to signature to catch any anomalies specific to unique content; sixth, report any formatting discrepancies immediately for investigation and resolution.  Following these recommendations will ensure continued high-quality correspondence output and user satisfaction."
+        },
+        {
+          "subject": "Point of Contact.",
+          "text": "The point of contact for this matter is the undersigned at (555) 123-4567 or via email at naval.letter.generator@example.mil.  Additional technical support is available through the project repository and documentation resources.  Users experiencing difficulties or requiring assistance should not hesitate to reach out for support."
+        }
+      ],
+      "refs": [
+        "SECNAV M-5216.5 (Department of the Navy Correspondence Manual)",
+        "MCO 5216.20 (Marine Corps Correspondence Manual)",
+        "DoD 5110.4-M (Manual for Written Material)",
+        "NAVSO P-3006 (Navy Correspondence Manual)",
+        "MIL-STD-1949 (Documentation Standards)",
+        "SECNAVINST 5216.5D (Correspondence Procedures)"
+      ],
+      "encls": [
+        "Sample Output Document",
+        "Compliance Checklist",
+        "User Acceptance Testing Results",
+        "Screenshot Documentation",
+        "Regulatory Cross-Reference Matrix"
       ]
     }
   ],
@@ -1196,6 +1313,7 @@
     "Training",
     "Administrative",
     "Investigations",
-    "Legal"
+    "Legal",
+    "Testing"
   ]
 }

@@ -146,10 +146,10 @@ async function generatePDFBlob() {
   const CW = PW - ML - MR;
   const TAB = 45;
 
-  const IM = 14;
-  const IS = 14;
-  const ISS = 14;
-  const ISSS = 14;
+  const IM = 15;        // Align sub-para with main para text
+  const IS = 16;        // Sub-sub aligns with sub-para text
+  const ISS = 18;       // Wider label "(1)"
+  const ISSS = 19;      // Wider label "(a)"
 
   let y = 54;
   let pageNum = 1;
@@ -229,6 +229,13 @@ async function generatePDFBlob() {
   const senderX = PW - MR - 72;
   pdf.setFont(fontName, 'normal');
   pdf.setFontSize(fontSize);
+
+  // "IN REPLY REFER TO:" label (if enabled) - sits above SSIC without affecting layout
+  if (d.showInReplyTo) {
+    pdf.setFontSize(6);
+    pdf.text('IN REPLY REFER TO:', senderX, y - 11); // 11pt above SSIC, left-aligned
+    pdf.setFontSize(fontSize); // Reset to 12pt
+  }
 
   if (d.ssic) {
     pdf.text(d.ssic, senderX, y);
@@ -342,7 +349,9 @@ async function generatePDFBlob() {
     for (let pIdx = 0; pIdx < d.paras.length; pIdx++) {
       const p = d.paras[pIdx];
       const isLastPara = (pIdx === d.paras.length - 1);
-      const pText = ensureDoubleSpaces(p.text || '');
+      // Use HTML content if available for formatting, fall back to plain text
+      const pHtml = ensureDoubleSpaces(p.html || p.text || '');
+      const segments = parseHtmlToSegments(pHtml);
       let label, indent;
 
       if (p.type === 'para') {
@@ -379,20 +388,12 @@ async function generatePDFBlob() {
       const tx = lx + labelWidth;
       const textWidth = CW - indent - labelWidth - portionWidth;
 
-      // Calculate total lines this paragraph will need
-      const firstLineText = pdf.splitTextToSize(pText, textWidth);
-      let totalLines = 1;
-      if (firstLineText.length > 1) {
-        const remainingText = pText.substring(firstLineText[0].length).trim();
-        if (remainingText) {
-          totalLines += pdf.splitTextToSize(remainingText, CW).length;
-        }
-      }
-
-      const paraHeight = totalLines * LH;
+      // Calculate total height this paragraph will need using formatted text
+      const paraHeight = getFormattedTextHeight(pdf, segments, textWidth, CW, LH, fontName, fontSize);
       const spaceRemaining = PH - MB - y - LH; // Account for the y += LH below
 
       // Orphan/widow prevention
+      const totalLines = Math.ceil(paraHeight / LH);
       if (isLastPara) {
         const linesToKeepWithEnd = Math.min(END_BLOCK_KEEP_LINES, totalLines);
         if (paraHeight > spaceRemaining) {
@@ -442,47 +443,53 @@ async function generatePDFBlob() {
         const afterSubjectX = tx + subjectWidth + 6;
         const remainingWidth = CW - (afterSubjectX - ML);
 
-        if (pText && remainingWidth > 50) {
-          // Text starts on same line after subject
-          const firstLinePart = pdf.splitTextToSize(pText, remainingWidth);
-          pdf.text(firstLinePart[0], afterSubjectX, y);
+        if (segments.length > 0 && segments[0].text && remainingWidth > 50) {
+          // Render formatted text starting after subject
+          y = renderFormattedText(pdf, segments, {
+            firstLineX: afterSubjectX,
+            firstLineWidth: remainingWidth,
+            contX: ML,
+            contWidth: CW,
+            y: y,
+            lineHeight: LH,
+            fontName: fontName,
+            fontSize: fontSize,
+            pageBreak: (h) => pageBreak(h)
+          });
           y += LH;
-
-          // Remaining text wraps to margin
-          if (pText.length > firstLinePart[0].length) {
-            const leftover = pText.substring(firstLinePart[0].length).trim();
-            if (leftover) {
-              pdf.splitTextToSize(leftover, CW).forEach(line => {
-                pageBreak(LH);
-                pdf.text(line, ML, y);
-                y += LH;
-              });
-            }
-          }
         } else {
           // Subject takes full line, text on next line
           y += LH;
-          if (pText) {
-            pdf.splitTextToSize(pText, CW).forEach(line => {
-              pageBreak(LH);
-              pdf.text(line, ML, y);
-              y += LH;
+          if (segments.length > 0 && segments[0].text) {
+            y = renderFormattedText(pdf, segments, {
+              firstLineX: ML,
+              firstLineWidth: CW,
+              contX: ML,
+              contWidth: CW,
+              y: y,
+              lineHeight: LH,
+              fontName: fontName,
+              fontSize: fontSize,
+              pageBreak: (h) => pageBreak(h)
             });
+            y += LH;
           }
         }
       } else {
-        // Regular paragraph text (no subject)
-        if (pText) {
-          const lines = pdf.splitTextToSize(pText, textWidth);
-          lines.forEach((line, i) => {
-            if (i === 0) {
-              pdf.text(line, tx, y);
-            } else {
-              pdf.text(line, ML, y);
-            }
-            y += LH;
-            pageBreak(LH);
+        // Regular paragraph text (no subject) - render with formatting
+        if (segments.length > 0 && segments[0].text) {
+          y = renderFormattedText(pdf, segments, {
+            firstLineX: tx,
+            firstLineWidth: textWidth,
+            contX: ML,
+            contWidth: CW,
+            y: y,
+            lineHeight: LH,
+            fontName: fontName,
+            fontSize: fontSize,
+            pageBreak: (h) => pageBreak(h)
           });
+          y += LH;
         }
       }
     }

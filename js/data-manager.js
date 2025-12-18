@@ -6,6 +6,7 @@
 // Data stores
 let SSIC_DATABASE = [];
 let UNIT_DATABASE = [];
+let OFFICE_CODE_DATABASE = [];
 let dataLoaded = false;
 
 /**
@@ -15,9 +16,10 @@ let dataLoaded = false;
 async function loadData() {
   try {
     // Try to load from external files
-    const [ssicResponse, unitsResponse] = await Promise.all([
+    const [ssicResponse, unitsResponse, officeCodesResponse] = await Promise.all([
       fetch('data/ssic.json'),
-      fetch('data/units.json')
+      fetch('data/units.json'),
+      fetch('data/office-codes.json')
     ]);
 
     if (ssicResponse.ok) {
@@ -37,6 +39,12 @@ async function loadData() {
         service: u.service
       }));
       console.log(`Loaded ${UNIT_DATABASE.length} units from external file`);
+    }
+
+    if (officeCodesResponse.ok) {
+      const officeData = await officeCodesResponse.json();
+      OFFICE_CODE_DATABASE = officeData.codes;
+      console.log(`Loaded ${OFFICE_CODE_DATABASE.length} office codes from external file`);
     }
 
     dataLoaded = true;
@@ -172,6 +180,63 @@ function selectUnit(index, query) {
 }
 
 /**
+ * Search office codes database
+ * @param {string} query - Search term
+ * @returns {Array} Matching office codes
+ */
+function searchOfficeCodes(query) {
+  if (!query) return OFFICE_CODE_DATABASE.slice(0, 10);
+
+  query = query.toLowerCase();
+  return OFFICE_CODE_DATABASE.filter(oc =>
+    oc.code.toLowerCase().includes(query) ||
+    oc.title.toLowerCase().includes(query) ||
+    oc.description.toLowerCase().includes(query) ||
+    oc.category.toLowerCase().includes(query)
+  ).slice(0, 15);
+}
+
+/**
+ * Handle office code search input
+ */
+function handleOfficeCodeSearch() {
+  const input = document.getElementById('officeCode');
+  const results = document.getElementById('officeCodeResults');
+  if (!results) return; // Results container might not exist yet
+
+  const query = input.value.toLowerCase().trim();
+
+  if (query.length < 1) {
+    results.classList.remove('show');
+    return;
+  }
+
+  const matches = searchOfficeCodes(query);
+
+  if (matches.length > 0) {
+    results.innerHTML = matches.map(oc =>
+      `<div class="search-result-item" onmousedown="selectOfficeCode('${oc.code}')">
+        <div class="code">${oc.code}</div>
+        <div class="desc">${oc.title} · ${oc.category}</div>
+      </div>`
+    ).join('');
+    results.classList.add('show');
+  } else {
+    results.classList.remove('show');
+  }
+}
+
+/**
+ * Select an office code from search results
+ * @param {string} code - Office code
+ */
+function selectOfficeCode(code) {
+  document.getElementById('officeCode').value = code;
+  const results = document.getElementById('officeCodeResults');
+  if (results) results.classList.remove('show');
+}
+
+/**
  * Initialize search event listeners
  */
 function initSearchListeners() {
@@ -185,6 +250,13 @@ function initSearchListeners() {
   unitInput.addEventListener('input', handleUnitSearch);
   unitInput.addEventListener('focus', handleUnitSearch);
 
+  // Office Code Search
+  const officeCodeInput = document.getElementById('officeCode');
+  if (officeCodeInput) {
+    officeCodeInput.addEventListener('input', handleOfficeCodeSearch);
+    officeCodeInput.addEventListener('focus', handleOfficeCodeSearch);
+  }
+
   // Close dropdowns when clicking outside
   document.addEventListener('click', (e) => {
     if (!e.target.closest('#ssicSearch') && !e.target.closest('#ssicResults')) {
@@ -192,6 +264,10 @@ function initSearchListeners() {
     }
     if (!e.target.closest('#unitSearch') && !e.target.closest('#unitResults')) {
       document.getElementById('unitResults').classList.remove('show');
+    }
+    if (!e.target.closest('#officeCode') && !e.target.closest('#officeCodeResults')) {
+      const officeResults = document.getElementById('officeCodeResults');
+      if (officeResults) officeResults.classList.remove('show');
     }
   });
 }
@@ -202,12 +278,16 @@ if (typeof module !== 'undefined' && module.exports) {
     loadData,
     searchSSIC,
     searchUnits,
+    searchOfficeCodes,
     handleSSICSearch,
     handleUnitSearch,
+    handleOfficeCodeSearch,
     selectSSIC,
     selectUnit,
+    selectOfficeCode,
     initSearchListeners,
     get SSIC_DATABASE() { return SSIC_DATABASE; },
-    get UNIT_DATABASE() { return UNIT_DATABASE; }
+    get UNIT_DATABASE() { return UNIT_DATABASE; },
+    get OFFICE_CODE_DATABASE() { return OFFICE_CODE_DATABASE; }
   };
 }

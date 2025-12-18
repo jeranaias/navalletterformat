@@ -66,13 +66,14 @@ function getParagraphState() {
   const paraItems = container.querySelectorAll('.para-item');
 
   paraItems.forEach(item => {
-    const textarea = item.querySelector('textarea');
+    const editor = item.querySelector('.para-editor');
     const subjectInput = item.querySelector('.para-subject-input');
     const portionSelector = item.querySelector('.portion-selector');
 
     state.push({
       type: item.dataset.type || 'para',
-      text: textarea ? textarea.value : '',
+      text: editor ? editor.innerText.trim() : '',
+      html: editor ? editor.innerHTML : '',
       subject: subjectInput ? subjectInput.value : '',
       portionMark: portionSelector ? portionSelector.value : 'U'
     });
@@ -178,6 +179,9 @@ function rebuildParagraphFromFlat(container, paraData) {
     </select>
   `;
 
+  // Use HTML content if available, otherwise plain text
+  const editorContent = paraData.html || escapeHtml(paraData.text || '');
+
   paraItem.innerHTML = `
     <div class="para-left-controls">
       <span class="drag-handle" title="Drag to reorder" aria-hidden="true">☰</span>
@@ -191,7 +195,36 @@ function rebuildParagraphFromFlat(container, paraData) {
       ${portionSelector}
       <span class="para-label" aria-hidden="true"></span>
       ${subjectField}
-      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text" spellcheck="true">${escapeHtml(paraData.text || '')}</textarea>
+      <div class="para-editor-wrapper">
+        <div class="para-toolbar">
+          <button type="button" class="toolbar-btn" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+          <button type="button" class="toolbar-btn" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+          <button type="button" class="toolbar-btn" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+          <button type="button" class="toolbar-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+          <span class="toolbar-divider"></span>
+          <select class="toolbar-select toolbar-font" data-cmd="fontName" title="Font">
+            <option value="Times New Roman">Times</option>
+            <option value="Arial">Arial</option>
+            <option value="Courier New">Courier</option>
+            <option value="Georgia">Georgia</option>
+          </select>
+          <select class="toolbar-select toolbar-size" data-cmd="fontSize" title="Size">
+            <option value="1">8</option>
+            <option value="2">10</option>
+            <option value="3" selected>12</option>
+            <option value="4">14</option>
+            <option value="5">18</option>
+          </select>
+          <span class="toolbar-divider"></span>
+          <button type="button" class="toolbar-btn toolbar-clear" data-action="clearFormat" title="Clear Formatting">✕</button>
+          <button type="button" class="toolbar-btn toolbar-collapse" data-action="collapse" title="Collapse Toolbar">▲</button>
+        </div>
+        <div class="para-editor" contenteditable="true" data-type="${type}" data-placeholder="Enter paragraph text..." spellcheck="true">${editorContent}</div>
+        <div class="para-editor-footer">
+          <span class="word-count">0 words</span>
+          <span class="char-count">0 chars</span>
+        </div>
+      </div>
     </div>
   `;
 
@@ -202,6 +235,12 @@ function rebuildParagraphFromFlat(container, paraData) {
   paraItem.addEventListener('dragend', handleDragEnd);
 
   container.appendChild(paraItem);
+
+  // Initialize the editor
+  const editor = paraItem.querySelector('.para-editor');
+  if (typeof initParaEditor === 'function') {
+    initParaEditor(editor);
+  }
 
   return paraItem;
 }

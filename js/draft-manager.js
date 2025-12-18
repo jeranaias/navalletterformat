@@ -81,12 +81,13 @@ function collectParagraphs() {
 
   const paragraphs = [];
   container.querySelectorAll('.para-item').forEach(item => {
-    const textarea = item.querySelector('textarea');
+    const editor = item.querySelector('.para-editor');
     const subjInput = item.querySelector('.para-subject-input');
     paragraphs.push({
       type: item.dataset.type || 'para',
       subject: subjInput?.value || '',
-      text: textarea?.value || ''
+      text: editor?.innerText.trim() || '',
+      html: editor?.innerHTML || ''
     });
   });
 
@@ -190,9 +191,9 @@ function restoreParagraphs(paragraphs) {
 
   // Check if paragraphs are in new flat format or old nested format
   if (paragraphs[0] && paragraphs[0].type !== undefined) {
-    // New flat format with type
+    // New flat format with type - use html if available, otherwise text
     paragraphs.forEach(para => {
-      addParagraphWithType(container, para.type, para.text, para.subject || '');
+      addParagraphWithType(container, para.type, para.html || para.text, para.subject || '');
     });
   } else {
     // Old nested format - flatten it
@@ -224,7 +225,7 @@ function flattenAndAddParagraphs(container, paragraphs, type) {
 /**
  * Add a single paragraph with specified type
  */
-function addParagraphWithType(container, type, text, subject) {
+function addParagraphWithType(container, type, content, subject) {
   const div = document.createElement('div');
   div.className = 'para-item';
   div.draggable = true;
@@ -245,6 +246,9 @@ function addParagraphWithType(container, type, text, subject) {
     </select>
   `;
 
+  // Use HTML content if it looks like HTML, otherwise use plain text
+  const editorContent = content && content.includes('<') ? content : (content || '');
+
   div.innerHTML = `
     <div class="para-left-controls">
       <span class="drag-handle" title="Drag to reorder" aria-hidden="true">☰</span>
@@ -258,7 +262,36 @@ function addParagraphWithType(container, type, text, subject) {
       ${portionSelector}
       <span class="para-label" aria-hidden="true"></span>
       ${subjectField}
-      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text">${text || ''}</textarea>
+      <div class="para-editor-wrapper">
+        <div class="para-toolbar">
+          <button type="button" class="toolbar-btn" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+          <button type="button" class="toolbar-btn" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+          <button type="button" class="toolbar-btn" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+          <button type="button" class="toolbar-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+          <span class="toolbar-divider"></span>
+          <select class="toolbar-select toolbar-font" data-cmd="fontName" title="Font">
+            <option value="Times New Roman">Times</option>
+            <option value="Arial">Arial</option>
+            <option value="Courier New">Courier</option>
+            <option value="Georgia">Georgia</option>
+          </select>
+          <select class="toolbar-select toolbar-size" data-cmd="fontSize" title="Size">
+            <option value="1">8</option>
+            <option value="2">10</option>
+            <option value="3" selected>12</option>
+            <option value="4">14</option>
+            <option value="5">18</option>
+          </select>
+          <span class="toolbar-divider"></span>
+          <button type="button" class="toolbar-btn toolbar-clear" data-action="clearFormat" title="Clear Formatting">✕</button>
+          <button type="button" class="toolbar-btn toolbar-collapse" data-action="collapse" title="Collapse Toolbar">▲</button>
+        </div>
+        <div class="para-editor" contenteditable="true" data-type="${type}" data-placeholder="Enter paragraph text..." spellcheck="true">${editorContent}</div>
+        <div class="para-editor-footer">
+          <span class="word-count">0 words</span>
+          <span class="char-count">0 chars</span>
+        </div>
+      </div>
     </div>
   `;
 
@@ -270,6 +303,12 @@ function addParagraphWithType(container, type, text, subject) {
   div.addEventListener('drop', handleDrop);
 
   container.appendChild(div);
+
+  // Initialize the editor
+  const editor = div.querySelector('.para-editor');
+  if (typeof initParaEditor === 'function') {
+    initParaEditor(editor);
+  }
 }
 
 /**

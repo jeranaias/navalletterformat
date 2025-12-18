@@ -5,6 +5,72 @@ All notable changes to the Naval Letter Generator will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1] - 2024-12-17
+
+### Added
+- **Rich Text Formatting in PDF Output**
+  - Bold, italic, underline, and strikethrough now render in PDF preview and exports
+  - New `parseHtmlToSegments()` function in `utils.js` parses HTML formatting
+  - New `renderFormattedText()` function handles word-by-word rendering with formatting
+  - Supports mixed formatting within paragraphs (e.g., "This is **bold** and *italic*")
+
+- **Bundled Libraries for Offline Support**
+  - jsPDF, mammoth.js, docx.js, and JSZip now bundled locally in `lib/` folder
+  - Application works fully offline after initial page load
+  - No CDN dependencies required
+
+### Fixed
+- **Sub-paragraph alignment** - Adjusted IM indent value (14→15) so sub-paragraph labels align with parent paragraph text
+- **Sub-sub-sub paragraph alignment** - Adjusted ISSS value (18→19) for proper alignment
+
+### Changed
+- Libraries now load from local `lib/` folder instead of CDN
+- PDF generation uses HTML content from editor for formatting preservation
+
+---
+
+## [3.2.0] - 2024-12-16
+
+### Added
+- **Rich Text Editor** for paragraph editing
+  - Custom contenteditable editor replacing plain textareas
+  - Formatting toolbar with Bold, Italic, Underline, Strikethrough buttons
+  - Font selection dropdown (Times New Roman, Arial, Courier, Georgia)
+  - Font size dropdown (8pt - 18pt)
+  - Keyboard shortcuts: Ctrl+B (bold), Ctrl+I (italic), Ctrl+U (underline)
+  - Active state indicators show current formatting
+  - Selection-based formatting (highlight text, apply format)
+
+- **Clear Formatting button** - Resets selected text to Times New Roman 12pt with no styling
+
+- **Collapsible Toolbar** - Toggle button (▲/▼) to collapse/expand toolbar and save space
+
+- **Word/Character Counter** - Footer below each paragraph shows real-time word and character counts
+
+- **Find & Replace** (`Ctrl+H`)
+  - Search icon button in Body Paragraphs header
+  - Find Next, Replace, Replace All buttons
+  - Case-sensitive search option
+  - Status indicator showing match count (e.g., "3 of 7")
+  - Enter key in find field triggers Find Next
+  - Searches across all paragraphs
+
+- **"IN REPLY REFER TO:" option**
+  - Checkbox in Header Information section
+  - Adds "In Reply Refer To:" line above SSIC in PDF output
+  - Per SECNAV M-5216.5 - use when not pre-printed on letterhead
+
+### Changed
+- Paragraph input changed from textarea to contenteditable div
+- Help text updated: shows `Ctrl+B/I/U format` and `Ctrl+H find/replace`
+
+### Removed
+- **More Options** panel removed from Header Information
+  - Serial number and DTG format options removed (were rarely used)
+  - Portion marking checkbox remains (appears when classification is selected)
+
+---
+
 ## [3.1.0] - 2024-12-14
 
 ### Added
@@ -314,6 +380,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Description |
 |---------|------|-------------|
+| 3.1.1   | Dec 2024 | Rich text formatting in PDF output, bundled libraries for offline, alignment fixes |
+| 3.2.0   | Dec 2024 | Rich text editor, Find & Replace, "IN REPLY REFER TO:" option, collapsible toolbar |
 | 3.1.0   | Dec 2024 | User profiles, 100+ reference library, 37 templates total, smart validation, batch generator enhancements, UI polish |
 | 3.0.0   | Dec 2024 | Live preview, 20 Marine-centric templates, undo/redo, portion markings, streamlined UI |
 | 2.0.0   | TBD  | Modular architecture, draft save/load, memorandum, dark mode, PWA, keyboard shortcuts, 111 tests |

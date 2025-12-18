@@ -13,7 +13,7 @@
   --gray-200: #e9ecef;
   --gray-300: #dee2e6;
   --gray-400: #ced4da;
-  --gray-500: #adb5bd;
+  --gray-500: #757575;  /* WCAG AA compliant: 4.6:1 contrast on white */
   --gray-600: #6c757d;
   --gray-700: #495057;
   --gray-800: #343a40;
@@ -692,20 +692,6 @@ header {
   color: var(--navy-light);
 }
 
-[data-theme="dark"] .font-option-label {
-  color: var(--white);
-}
-
-[data-theme="dark"] .font-option-label select {
-  background: var(--gray-200);
-  border-color: var(--gray-500);
-  color: var(--white);
-}
-
-[data-theme="dark"] .font-option-label select:hover {
-  border-color: var(--navy-light);
-}
-
 /* Section Header with Actions */
 .section-header-with-actions {
   display: flex;
@@ -987,56 +973,6 @@ header .subtitle {
   color: var(--navy);
 }
 
-/* Font Options */
-.font-options {
-  display: flex;
-  gap: 16px;
-  grid-column: -1;
-  justify-self: end;
-}
-
-.font-option-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
-  color: var(--gray-700);
-}
-
-.font-option-label select {
-  padding: 4px 8px;
-  font-size: 0.85rem;
-  border: 1px solid var(--gray-300);
-  border-radius: var(--radius);
-  background: var(--white);
-  color: var(--gray-700);
-  cursor: pointer;
-}
-
-.font-option-label select:hover {
-  border-color: var(--navy);
-}
-
-.font-option-label select:focus {
-  outline: none;
-  border-color: var(--navy);
-  box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.1);
-}
-
-[data-theme="dark"] .font-options {
-  border-left-color: var(--gray-500);
-}
-
-[data-theme="dark"] .font-option-label {
-  color: var(--gray-300);
-}
-
-[data-theme="dark"] .font-option-label select {
-  background: var(--gray-100);
-  border-color: var(--gray-500);
-  color: var(--gray-300);
-}
-
 @media (max-width: 768px) {
   .header-info-row {
     grid-template-columns: 1fr 1fr;
@@ -1046,26 +982,11 @@ header .subtitle {
     grid-template-columns: 1fr 1fr;
     gap: 12px 16px;
   }
-
-  .font-options {
-    grid-column: 1 / -1;
-    justify-self: start;
-    padding-top: 8px;
-    border-top: 1px solid var(--gray-300);
-    width: 100%;
-    justify-content: flex-start;
-  }
 }
 
 @media (max-width: 480px) {
   .header-options-panel {
     grid-template-columns: 1fr;
-  }
-
-  .font-options {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
   }
 }
 
@@ -1430,10 +1351,10 @@ textarea {
 
 .para-item {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  padding: 12px;
-  background: var(--gray-100);
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px;
+  background: var(--white);
   border: 1px solid var(--gray-300);
   border-radius: var(--radius);
   position: relative;
@@ -1442,25 +1363,37 @@ textarea {
 
 .para-item:hover {
   border-color: var(--gray-400);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .para-item.active {
   border-color: var(--navy);
-  background: rgba(0, 51, 102, 0.03);
-  box-shadow: var(--shadow);
+  box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.1);
+}
+
+/* Left controls - compact vertical strip */
+.para-left-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 2px;
+  min-width: 32px;
+  flex-shrink: 0;
 }
 
 .para-item .drag-handle {
   cursor: grab;
   color: var(--gray-400);
-  font-size: 1.1rem;
-  padding: 2px 4px;
-  border-radius: 3px;
+  font-size: 0.9rem;
+  padding: 4px;
+  border-radius: 4px;
   transition: all 0.15s;
+  line-height: 1;
 }
 
 .para-item .drag-handle:hover {
-  background: var(--gray-200);
+  background: var(--gray-100);
   color: var(--gray-600);
 }
 
@@ -1468,43 +1401,49 @@ textarea {
   cursor: grabbing;
 }
 
-.para-item .para-label {
-  min-width: 40px;
-  font-weight: 600;
-  color: var(--navy);
-  padding-top: 10px;
-  font-size: 0.9rem;
-}
-
+/* Main content area */
 .para-main {
   flex: 1;
+  min-width: 0; /* Prevent flex overflow */
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+}
+
+/* Header row with label and optional subject */
+.para-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.para-item .para-label {
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 0.95rem;
+  min-width: 28px;
+  flex-shrink: 0;
 }
 
 .para-main .para-label {
-  display: inline;
-  font-weight: bold;
-  margin-right: 8px;
+  display: inline-block;
+  font-weight: 700;
+  margin-right: 0;
   padding: 0;
   min-width: auto;
 }
 
-.para-item textarea {
-  width: 100%;
-  min-height: 70px;
-  font-size: 0.9rem;
-}
-
+/* Subject input styling */
 .para-subject-input {
-  width: 200px;
-  padding: 4px 8px;
+  flex: 1;
+  max-width: 280px;
+  padding: 6px 10px;
   border: 1px dashed var(--gray-300);
   border-radius: var(--radius);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   background: var(--gray-50);
-  margin-left: 0;
+  color: var(--gray-700);
 }
 
 .para-subject-input:focus {
@@ -1519,13 +1458,367 @@ textarea {
   font-style: italic;
 }
 
-/* Left controls container (drag handle + action buttons) */
-.para-left-controls {
+/* Portion selector */
+.portion-selector {
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  background: var(--gray-50);
+  color: var(--gray-600);
+  cursor: pointer;
+}
+
+.portion-selector:focus {
+  outline: none;
+  border-color: var(--navy);
+}
+
+/* ============================================
+   Paragraph Editor Styles
+   ============================================ */
+
+/* Editor wrapper */
+.para-editor-wrapper {
+  width: 100%;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.para-editor-wrapper:focus-within {
+  border-color: var(--navy);
+}
+
+/* Toolbar */
+.para-toolbar {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.toolbar-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--gray-700);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.toolbar-btn:hover {
+  background: var(--gray-200);
+  border-color: var(--gray-300);
+}
+
+.toolbar-btn.active {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--gray-300);
+  margin: 0 4px;
+}
+
+.toolbar-select {
+  padding: 4px 6px;
+  border: 1px solid var(--gray-300);
+  border-radius: 4px;
+  background: var(--white);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.toolbar-select:focus {
+  outline: none;
+  border-color: var(--navy);
+}
+
+.toolbar-font {
+  width: 80px;
+}
+
+.toolbar-size {
+  width: 50px;
+}
+
+/* Editor area */
+.para-editor {
+  min-height: 80px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  background: var(--white);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.para-editor:focus {
+  outline: none;
+}
+
+.para-editor:empty::before {
+  content: attr(data-placeholder);
+  color: var(--gray-400);
+  font-style: italic;
+  pointer-events: none;
+}
+
+/* ============================================
+   Dark Mode Paragraph Styles
+   ============================================ */
+[data-theme="dark"] .para-item {
+  background: var(--gray-100);
+  border-color: var(--gray-400);
+}
+
+[data-theme="dark"] .para-item:hover {
+  border-color: var(--gray-500);
+}
+
+[data-theme="dark"] .para-item .para-label {
+  color: var(--navy-light, #4a90d9);
+}
+
+[data-theme="dark"] .para-subject-input {
+  background: var(--gray-200);
+  border-color: var(--gray-400);
+  color: var(--gray-800);
+}
+
+[data-theme="dark"] .para-subject-input:focus {
+  background: var(--gray-100);
+}
+
+[data-theme="dark"] .portion-selector {
+  background: var(--gray-200);
+  border-color: var(--gray-400);
+  color: var(--gray-700);
+}
+
+[data-theme="dark"] .para-editor-wrapper {
+  border-color: var(--gray-400);
+}
+
+[data-theme="dark"] .para-toolbar {
+  background: var(--gray-200);
+  border-bottom-color: var(--gray-400);
+}
+
+[data-theme="dark"] .toolbar-btn {
+  color: var(--gray-700);
+}
+
+[data-theme="dark"] .toolbar-btn:hover {
+  background: var(--gray-300);
+}
+
+[data-theme="dark"] .toolbar-select {
+  background: var(--gray-100);
+  border-color: var(--gray-400);
+  color: var(--gray-800);
+}
+
+[data-theme="dark"] .para-editor {
+  background: var(--gray-100);
+  color: var(--gray-800);
+}
+
+[data-theme="dark"] .para-editor-wrapper:focus-within {
+  border-color: var(--navy-light, #4a90d9);
+}
+
+/* Editor footer with word/char count */
+.para-editor-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 4px 10px;
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+  font-size: 0.75rem;
+  color: var(--gray-500);
+}
+
+.word-count, .char-count {
+  font-variant-numeric: tabular-nums;
+}
+
+[data-theme="dark"] .para-editor-footer {
+  background: var(--gray-200);
+  border-top-color: var(--gray-400);
+  color: var(--gray-600);
+}
+
+/* Collapsed toolbar state - minimal thin bar */
+.para-toolbar.collapsed {
+  padding: 0;
+  min-height: 16px;
+  height: 16px;
+  justify-content: center;
+  background: var(--gray-100);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.para-toolbar.collapsed .toolbar-btn:not(.toolbar-collapse),
+.para-toolbar.collapsed .toolbar-select,
+.para-toolbar.collapsed .toolbar-divider {
+  display: none;
+}
+
+.para-toolbar.collapsed .toolbar-collapse {
+  margin: 0;
+  width: 100%;
+  height: 16px;
+  font-size: 0.6rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--gray-400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.para-toolbar.collapsed .toolbar-collapse:hover {
+  background: var(--gray-200);
+  color: var(--gray-600);
+}
+
+/* Clear formatting button */
+.toolbar-clear {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Collapse toggle button */
+.toolbar-collapse {
+  margin-left: auto;
+  font-size: 0.7rem;
+}
+
+/* ============================================
+   FIND & REPLACE PANEL
+   ============================================ */
+.find-replace-panel {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.find-replace-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.find-replace-field {
+  flex: 1;
+  min-width: 140px;
+}
+
+.find-replace-field label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--gray-600);
+  margin-bottom: 4px;
+}
+
+.find-replace-field input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.find-replace-field input:focus {
+  outline: none;
+  border-color: var(--navy);
+}
+
+.find-replace-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.find-replace-options {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+
+.checkbox-label {
+  display: flex;
   align-items: center;
   gap: 6px;
-  padding-right: 8px;
+  cursor: pointer;
+  color: var(--gray-600);
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.find-result-status {
+  color: var(--gray-500);
+  font-style: italic;
+}
+
+.find-result-status.found {
+  color: var(--navy);
+}
+
+.find-result-status.not-found {
+  color: var(--danger);
+}
+
+.icon-search {
+  font-size: 1.1rem;
+}
+
+/* Find highlight in editor */
+.find-highlight {
+  background-color: #ffeb3b;
+  outline: 2px solid #ffc107;
+}
+
+[data-theme="dark"] .find-replace-panel {
+  background: var(--gray-200);
+  border-color: var(--gray-400);
+}
+
+[data-theme="dark"] .find-replace-field input {
+  background: var(--gray-100);
+  border-color: var(--gray-400);
+  color: var(--gray-800);
 }
 
 /* Inline paragraph actions */

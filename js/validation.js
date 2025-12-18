@@ -89,8 +89,9 @@ function validateRequiredFields() {
     // Check if any paragraph has content
     let hasContent = false;
     paras.forEach(p => {
-      const textarea = p.querySelector('textarea');
-      if (textarea && textarea.value.trim()) {
+      const editor = p.querySelector('.para-editor');
+      const text = editor ? editor.innerText : '';
+      if (text.trim()) {
         hasContent = true;
       }
     });

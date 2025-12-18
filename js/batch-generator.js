@@ -756,9 +756,9 @@ async function generatePDFFromData(d) {
   // Body paragraphs with orphan/widow prevention
   if (d.paras && d.paras.length > 0) {
     let pn = 0, sn = 0, ssn = 0, sssn = 0;
-    const IM = 14;
-    const IS = 14;
-    const ISS = 14;
+    const IM = 15;
+    const IS = 16;
+    const ISS = 18;
     const MIN_LINES_ON_PAGE = 2;
     const MIN_LINES_TO_CARRY = 2;
     const END_BLOCK_KEEP_LINES = 3;

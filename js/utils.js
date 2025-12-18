@@ -195,6 +195,285 @@ function generateFilename(subject, extension) {
   return 'naval_letter.' + extension;
 }
 
+/**
+ * Parse HTML content into formatted text segments for PDF rendering
+ * Supports: bold, italic, underline, strikethrough
+ * @param {string} html - HTML string from contenteditable
+ * @returns {Array} - Array of segments: { text, bold, italic, underline, strike }
+ */
+function parseHtmlToSegments(html) {
+  if (!html) return [{ text: '', bold: false, italic: false, underline: false, strike: false }];
+
+  // Create a temporary DOM element to parse HTML
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+
+  const segments = [];
+
+  function walkNode(node, formatting) {
+    // Clone formatting state
+    const fmt = { ...formatting };
+
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent;
+      if (text) {
+        segments.push({
+          text: text,
+          bold: fmt.bold,
+          italic: fmt.italic,
+          underline: fmt.underline,
+          strike: fmt.strike
+        });
+      }
+      return;
+    }
+
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const tag = node.tagName.toLowerCase();
+
+      // Update formatting based on tag
+      if (tag === 'b' || tag === 'strong') fmt.bold = true;
+      if (tag === 'i' || tag === 'em') fmt.italic = true;
+      if (tag === 'u') fmt.underline = true;
+      if (tag === 's' || tag === 'strike' || tag === 'del') fmt.strike = true;
+
+      // Check for style attribute
+      const style = node.style;
+      if (style) {
+        if (style.fontWeight === 'bold' || parseInt(style.fontWeight) >= 700) fmt.bold = true;
+        if (style.fontStyle === 'italic') fmt.italic = true;
+        if (style.textDecoration && style.textDecoration.includes('underline')) fmt.underline = true;
+        if (style.textDecoration && style.textDecoration.includes('line-through')) fmt.strike = true;
+      }
+
+      // Handle line breaks
+      if (tag === 'br') {
+        segments.push({ text: '\n', bold: false, italic: false, underline: false, strike: false });
+        return;
+      }
+
+      // Handle div/p as line breaks (but not the first one)
+      if ((tag === 'div' || tag === 'p') && segments.length > 0) {
+        const lastSeg = segments[segments.length - 1];
+        if (lastSeg && !lastSeg.text.endsWith('\n')) {
+          segments.push({ text: '\n', bold: false, italic: false, underline: false, strike: false });
+        }
+      }
+
+      // Recursively process children
+      for (const child of node.childNodes) {
+        walkNode(child, fmt);
+      }
+    }
+  }
+
+  walkNode(temp, { bold: false, italic: false, underline: false, strike: false });
+
+  // Merge adjacent segments with same formatting
+  const merged = [];
+  for (const seg of segments) {
+    if (merged.length > 0) {
+      const last = merged[merged.length - 1];
+      if (last.bold === seg.bold && last.italic === seg.italic &&
+          last.underline === seg.underline && last.strike === seg.strike) {
+        last.text += seg.text;
+        continue;
+      }
+    }
+    merged.push({ ...seg });
+  }
+
+  return merged.length > 0 ? merged : [{ text: '', bold: false, italic: false, underline: false, strike: false }];
+}
+
+/**
+ * Render formatted segments to PDF with line wrapping
+ * Supports different X position and width for first line vs continuation lines
+ * @param {jsPDF} pdf - jsPDF instance
+ * @param {Array} segments - Array from parseHtmlToSegments
+ * @param {Object} options - Rendering options
+ * @param {number} options.firstLineX - X position for first line
+ * @param {number} options.firstLineWidth - Max width for first line
+ * @param {number} options.contX - X position for continuation lines
+ * @param {number} options.contWidth - Max width for continuation lines
+ * @param {number} options.y - Starting Y position
+ * @param {number} options.lineHeight - Line height
+ * @param {string} options.fontName - Base font name (times, helvetica, courier)
+ * @param {number} options.fontSize - Font size
+ * @param {function} options.pageBreak - Optional page break function(neededHeight)
+ * @returns {number} - Final Y position after rendering
+ */
+function renderFormattedText(pdf, segments, options) {
+  const {
+    firstLineX,
+    firstLineWidth,
+    contX,
+    contWidth,
+    y: startY,
+    lineHeight,
+    fontName,
+    fontSize,
+    pageBreak
+  } = options;
+
+  let x = firstLineX;
+  let currentY = startY;
+  let currentLineWidth = firstLineWidth;
+  let currentLineX = firstLineX;
+  let isFirstLine = true;
+
+  // Flatten segments into words with formatting
+  const words = [];
+  for (const seg of segments) {
+    if (seg.text === '\n') {
+      words.push({ text: '\n', ...seg });
+      continue;
+    }
+
+    // Split by spaces but keep spaces attached to words
+    const parts = seg.text.split(/(\s+)/);
+    for (const part of parts) {
+      if (part) {
+        words.push({
+          text: part,
+          bold: seg.bold,
+          italic: seg.italic,
+          underline: seg.underline,
+          strike: seg.strike
+        });
+      }
+    }
+  }
+
+  function setFont(word) {
+    let style = 'normal';
+    if (word.bold && word.italic) style = 'bolditalic';
+    else if (word.bold) style = 'bold';
+    else if (word.italic) style = 'italic';
+    pdf.setFont(fontName, style);
+    pdf.setFontSize(fontSize);
+  }
+
+  function getWordWidth(word) {
+    setFont(word);
+    return pdf.getTextWidth(word.text);
+  }
+
+  function drawWord(word, wx, wy) {
+    setFont(word);
+    pdf.text(word.text, wx, wy);
+
+    const width = pdf.getTextWidth(word.text);
+
+    // Draw underline
+    if (word.underline) {
+      const underlineY = wy + 1.5;
+      pdf.setLineWidth(0.5);
+      pdf.line(wx, underlineY, wx + width, underlineY);
+    }
+
+    // Draw strikethrough
+    if (word.strike) {
+      const strikeY = wy - fontSize * 0.3;
+      pdf.setLineWidth(0.5);
+      pdf.line(wx, strikeY, wx + width, strikeY);
+    }
+
+    return width;
+  }
+
+  function newLine() {
+    isFirstLine = false;
+    currentLineX = contX;
+    currentLineWidth = contWidth;
+    x = currentLineX;
+    currentY += lineHeight;
+    if (pageBreak) pageBreak(lineHeight);
+  }
+
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+
+    // Handle explicit line breaks
+    if (word.text === '\n') {
+      newLine();
+      continue;
+    }
+
+    const wordWidth = getWordWidth(word);
+
+    // Check if we need to wrap
+    if (x + wordWidth > currentLineX + currentLineWidth && x > currentLineX) {
+      // Don't wrap if it's just whitespace
+      if (word.text.trim() === '') {
+        continue; // Skip trailing whitespace at line end
+      }
+      newLine();
+    }
+
+    // Draw the word
+    const drawnWidth = drawWord(word, x, currentY);
+    x += drawnWidth;
+  }
+
+  // Reset font to normal
+  pdf.setFont(fontName, 'normal');
+
+  return currentY;
+}
+
+/**
+ * Calculate height needed for formatted text
+ * @param {jsPDF} pdf - jsPDF instance
+ * @param {Array} segments - Array from parseHtmlToSegments
+ * @param {number} firstLineWidth - Max width for first line
+ * @param {number} contWidth - Max width for continuation lines
+ * @param {number} lineHeight - Line height
+ * @param {string} fontName - Base font name
+ * @param {number} fontSize - Font size
+ * @returns {number} - Height in points
+ */
+function getFormattedTextHeight(pdf, segments, firstLineWidth, contWidth, lineHeight, fontName, fontSize) {
+  let x = 0;
+  let lines = 1;
+  let currentWidth = firstLineWidth;
+
+  for (const seg of segments) {
+    if (seg.text === '\n') {
+      x = 0;
+      lines++;
+      currentWidth = contWidth;
+      continue;
+    }
+
+    // Set font for accurate width measurement
+    let style = 'normal';
+    if (seg.bold && seg.italic) style = 'bolditalic';
+    else if (seg.bold) style = 'bold';
+    else if (seg.italic) style = 'italic';
+    pdf.setFont(fontName, style);
+    pdf.setFontSize(fontSize);
+
+    const parts = seg.text.split(/(\s+)/);
+    for (const part of parts) {
+      if (!part) continue;
+      const wordWidth = pdf.getTextWidth(part);
+
+      if (x + wordWidth > currentWidth && x > 0 && part.trim() !== '') {
+        x = 0;
+        lines++;
+        currentWidth = contWidth;
+      }
+      x += wordWidth;
+    }
+  }
+
+  // Reset font
+  pdf.setFont(fontName, 'normal');
+
+  return lines * lineHeight;
+}
+
 // Export for module usage (when bundled)
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
@@ -206,6 +485,9 @@ if (typeof module !== 'undefined' && module.exports) {
     showStatus,
     getJsPDFFont,
     getLineHeight,
-    generateFilename
+    generateFilename,
+    parseHtmlToSegments,
+    renderFormattedText,
+    getFormattedTextHeight
   };
 }

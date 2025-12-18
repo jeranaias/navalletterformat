@@ -284,6 +284,64 @@ function applyTemplate(templateId) {
     if (ssicInput) ssicInput.value = template.ssic;
   }
 
+  // Apply Office Code
+  if (template.officeCode) {
+    const officeCodeInput = document.getElementById('officeCode');
+    if (officeCodeInput) officeCodeInput.value = template.officeCode;
+  }
+
+  // Apply Unit Name (letterhead)
+  if (template.unitName) {
+    const unitNameInput = document.getElementById('unitName');
+    if (unitNameInput) unitNameInput.value = template.unitName;
+  }
+
+  // Apply Unit Address (letterhead)
+  if (template.unitAddress) {
+    const unitAddressInput = document.getElementById('unitAddress');
+    if (unitAddressInput) unitAddressInput.value = template.unitAddress;
+  }
+
+  // Apply From
+  if (template.from) {
+    const fromInput = document.getElementById('from');
+    if (fromInput) fromInput.value = template.from;
+  }
+
+  // Apply To
+  if (template.to) {
+    const toInput = document.getElementById('to');
+    if (toInput) toInput.value = template.to;
+  }
+
+  // Apply Via
+  if (template.via && template.via.length > 0) {
+    clearDynamicList('viaList');
+    template.via.forEach(v => {
+      addVia();
+      const inputs = document.querySelectorAll('#viaList input');
+      const lastInput = inputs[inputs.length - 1];
+      if (lastInput) lastInput.value = v;
+    });
+  }
+
+  // Apply Signature
+  if (template.sigName) {
+    const sigInput = document.getElementById('sigName');
+    if (sigInput) sigInput.value = template.sigName;
+  }
+
+  // Apply Copy To
+  if (template.copies && template.copies.length > 0) {
+    clearDynamicList('copyList');
+    template.copies.forEach(c => {
+      addCopy();
+      const inputs = document.querySelectorAll('#copyList input');
+      const lastInput = inputs[inputs.length - 1];
+      if (lastInput) lastInput.value = c;
+    });
+  }
+
   // Apply subject
   if (template.subj) {
     const subjInput = document.getElementById('subj');
@@ -328,17 +386,32 @@ function applyTemplate(templateId) {
   // Clear and apply paragraphs
   clearParagraphs();
   if (template.paragraphs && template.paragraphs.length > 0) {
+    const container = document.getElementById('paraContainer');
+
     template.paragraphs.forEach((para, i) => {
-      addFirstPara();
-      const container = document.getElementById('paraContainer');
+      // Determine paragraph type (default to 'para' for main paragraphs)
+      const paraType = para.type || 'para';
+
+      // Get the last paragraph to add after (if any)
       const paraItems = container.querySelectorAll('.para-item');
-      const lastPara = paraItems[paraItems.length - 1];
+      const lastPara = paraItems.length > 0 ? paraItems[paraItems.length - 1] : null;
 
+      // Add paragraph with the specified type
+      let newEditor;
       if (lastPara) {
-        const textArea = lastPara.querySelector('textarea');
-        const subjectInput = lastPara.querySelector('.para-subject');
+        newEditor = addParaAfter(lastPara.querySelector('.para-editor'), paraType, '');
+      } else {
+        // First paragraph - use addParaAfter with null
+        newEditor = addParaAfter(null, paraType, '');
+      }
 
-        if (textArea) textArea.value = para.text || '';
+      // Set content
+      const newParaItem = newEditor.closest('.para-item');
+      if (newParaItem) {
+        if (para.text) {
+          newEditor.innerHTML = para.text;
+        }
+        const subjectInput = newParaItem.querySelector('.para-subject-input');
         if (subjectInput && para.subject) subjectInput.value = para.subject;
       }
     });

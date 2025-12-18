@@ -1,4 +1,30 @@
+# Naval Letter Generator - robots.txt
+# https://jeranaias.github.io/navalletterformat/
+
 User-agent: *
 Allow: /
 
+# Sitemap location
 Sitemap: https://jeranaias.github.io/navalletterformat/sitemap.xml
+
+# Crawl-delay (be nice to the server)
+Crawl-delay: 1
+
+# Specific bot rules
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 0
+
+# Block testing/development directories if they exist
+Disallow: /testing/
+Disallow: /dist/
+Disallow: /*.json$
+Disallow: /node_modules/

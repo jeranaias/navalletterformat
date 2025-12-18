@@ -39,10 +39,10 @@ async function generatePDF() {
   const TAB = 45;       // Tab width for labels
 
   // Paragraph indentation (space between label and text)
-  const IM = 14;        // Main paragraph indent (after "1.")
-  const IS = 14;        // Sub paragraph indent (after "a.")
-  const ISS = 14;       // Sub-sub paragraph indent (after "(1)")
-  const ISSS = 14;      // Sub-sub-sub paragraph indent (after "(a)")
+  const IM = 15;        // Align sub-para with main para text
+  const IS = 16;        // Sub-sub aligns with sub-para text
+  const ISS = 18;       // Sub-sub paragraph indent (after "(1)" - wider label)
+  const ISSS = 19;      // Sub-sub-sub paragraph indent (after "(a)" - wider label)
 
   let y = 54;           // Current Y position (start of letterhead area)
   let pageNum = 1;
@@ -131,6 +131,13 @@ async function generatePDF() {
   pdf.setFont(fontName, 'normal');
   pdf.setFontSize(fontSize);
   const senderX = PW - MR - 72;  // Position on right side, left-aligned
+
+  // "IN REPLY REFER TO:" label (if enabled) - sits above SSIC without affecting layout
+  if (d.showInReplyTo) {
+    pdf.setFontSize(6);
+    pdf.text('IN REPLY REFER TO:', senderX, y - 11); // 11pt above SSIC, left-aligned with SSIC
+    pdf.setFontSize(fontSize); // Reset to 12pt for SSIC/date
+  }
 
   if (d.ssic) {
     pdf.text(d.ssic, senderX, y);
@@ -227,8 +234,9 @@ async function generatePDF() {
     for (let pIdx = 0; pIdx < d.paras.length; pIdx++) {
       const p = d.paras[pIdx];
       const isLastPara = (pIdx === d.paras.length - 1);
-      // Ensure double spaces after periods (military standard)
-      const pText = ensureDoubleSpaces(p.text);
+      // Use HTML content if available for formatting, fall back to plain text
+      const pHtml = ensureDoubleSpaces(p.html || p.text || '');
+      const segments = parseHtmlToSegments(pHtml);
 
       y += LH;
       let label, indent, tIndent;
@@ -275,18 +283,9 @@ async function generatePDF() {
       const firstLineWidth = CW - indent - labelWidth - 4;
       const wrapWidth = CW;
 
-      // Calculate total lines this paragraph will need
-      const firstLineText = pdf.splitTextToSize(pText, firstLineWidth);
-      let totalLines = 1;
-      if (firstLineText.length > 1) {
-        const remainingText = pText.substring(firstLineText[0].length).trim();
-        if (remainingText) {
-          totalLines += pdf.splitTextToSize(remainingText, wrapWidth).length;
-        }
-      }
-
-      // Calculate paragraph height
-      const paraHeight = totalLines * LH;
+      // Calculate total height this paragraph will need using formatted text
+      const paraHeight = getFormattedTextHeight(pdf, segments, firstLineWidth, wrapWidth, LH, fontName, fontSize);
+      const totalLines = Math.ceil(paraHeight / LH);
 
       // Calculate space remaining on current page
       const spaceRemaining = PH - MB - y;
@@ -357,45 +356,52 @@ async function generatePDF() {
         const afterSubjectX = tx + subjectWidth + 6;
         const remainingWidth = firstLineWidth - subjectWidth - 6;
 
-        if (pText && remainingWidth > 50 && afterSubjectX < rightEdge - 50) {
-          const firstLinePart = pdf.splitTextToSize(pText, remainingWidth);
-          pdf.text(firstLinePart[0], afterSubjectX, y);
+        if (segments.length > 0 && segments[0].text && remainingWidth > 50 && afterSubjectX < rightEdge - 50) {
+          // Render formatted text starting after subject
+          y = renderFormattedText(pdf, segments, {
+            firstLineX: afterSubjectX,
+            firstLineWidth: remainingWidth,
+            contX: ML,
+            contWidth: wrapWidth,
+            y: y,
+            lineHeight: LH,
+            fontName: fontName,
+            fontSize: fontSize,
+            pageBreak: (h) => pageBreak(h)
+          });
           y += LH;
-
-          if (firstLinePart.length > 1 || pText.length > firstLinePart[0].length) {
-            const leftover = pText.substring(firstLinePart[0].length).trim();
-            if (leftover) {
-              pdf.splitTextToSize(leftover, wrapWidth).forEach(line => {
-                pageBreak(LH);
-                pdf.text(line, ML, y);
-                y += LH;
-              });
-            }
-          }
         } else {
           y += LH;
-          if (pText) {
-            pdf.splitTextToSize(pText, wrapWidth).forEach(line => {
-              pageBreak(LH);
-              pdf.text(line, ML, y);
-              y += LH;
+          if (segments.length > 0 && segments[0].text) {
+            y = renderFormattedText(pdf, segments, {
+              firstLineX: ML,
+              firstLineWidth: wrapWidth,
+              contX: ML,
+              contWidth: wrapWidth,
+              y: y,
+              lineHeight: LH,
+              fontName: fontName,
+              fontSize: fontSize,
+              pageBreak: (h) => pageBreak(h)
             });
+            y += LH;
           }
         }
       } else {
-        // No subject - render text normally
-        pdf.text(firstLineText[0], tx, y);
-        y += LH;
-
-        if (firstLineText.length > 1) {
-          const remainingText = pText.substring(firstLineText[0].length).trim();
-          if (remainingText) {
-            pdf.splitTextToSize(remainingText, wrapWidth).forEach(line => {
-              pageBreak(LH);
-              pdf.text(line, ML, y);
-              y += LH;
-            });
-          }
+        // No subject - render text with formatting
+        if (segments.length > 0 && segments[0].text) {
+          y = renderFormattedText(pdf, segments, {
+            firstLineX: tx,
+            firstLineWidth: firstLineWidth,
+            contX: ML,
+            contWidth: wrapWidth,
+            y: y,
+            lineHeight: LH,
+            fontName: fontName,
+            fontSize: fontSize,
+            pageBreak: (h) => pageBreak(h)
+          });
+          y += LH;
         }
       }
     }
@@ -488,7 +494,7 @@ async function printPDF() {
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
   const PW = 612, PH = 792, ML = 72, MR = 72, MT = 72, MB = 72;
   const CW = PW - ML - MR, TAB = 45;
-  const IM = 14, IS = 14, ISS = 14, ISSS = 14;
+  const IM = 15, IS = 16, ISS = 18, ISSS = 19;
   let y = 54, pageNum = 1;
   const subjText = d.subj.toUpperCase();
 
@@ -552,6 +558,7 @@ async function printPDF() {
   pdf.setFont(fontName, 'normal');
   pdf.setFontSize(12);
   const senderX = PW - MR - 72;
+  if (d.showInReplyTo) { pdf.setFontSize(6); pdf.text('IN REPLY REFER TO:', senderX, y - 11); pdf.setFontSize(12); }
   if (d.ssic) { pdf.text(d.ssic, senderX, y); y += LH; }
   if (d.officeCode) { pdf.text(d.officeCode, senderX, y); y += LH; }
   pdf.text(d.date, senderX, y);

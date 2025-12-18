@@ -260,8 +260,9 @@ function addFirstPara() {
  * Add paragraph after specified element
  * @param {HTMLElement|null} afterEl - Element to add after
  * @param {string} type - Paragraph type ('para', 'subpara', 'subsubpara', 'subsubsubpara')
+ * @param {string} initialContent - Optional initial HTML content
  */
-function addParaAfter(afterEl, type) {
+function addParaAfter(afterEl, type, initialContent = '') {
   const container = document.getElementById('paraContainer');
   const div = document.createElement('div');
   div.className = 'para-item';
@@ -296,7 +297,36 @@ function addParaAfter(afterEl, type) {
       ${portionSelector}
       <span class="para-label" aria-hidden="true"></span>
       ${subjectField}
-      <textarea name="para[]" data-type="${type}" placeholder="Enter paragraph text..." aria-label="Paragraph text" spellcheck="true"></textarea>
+      <div class="para-editor-wrapper">
+        <div class="para-toolbar">
+          <button type="button" class="toolbar-btn" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+          <button type="button" class="toolbar-btn" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+          <button type="button" class="toolbar-btn" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+          <button type="button" class="toolbar-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+          <span class="toolbar-divider"></span>
+          <select class="toolbar-select toolbar-font" data-cmd="fontName" title="Font">
+            <option value="Times New Roman">Times</option>
+            <option value="Arial">Arial</option>
+            <option value="Courier New">Courier</option>
+            <option value="Georgia">Georgia</option>
+          </select>
+          <select class="toolbar-select toolbar-size" data-cmd="fontSize" title="Size">
+            <option value="1">8</option>
+            <option value="2">10</option>
+            <option value="3" selected>12</option>
+            <option value="4">14</option>
+            <option value="5">18</option>
+          </select>
+          <span class="toolbar-divider"></span>
+          <button type="button" class="toolbar-btn toolbar-clear" data-action="clearFormat" title="Clear Formatting">✕</button>
+          <button type="button" class="toolbar-btn toolbar-collapse" data-action="collapse" title="Collapse Toolbar">▲</button>
+        </div>
+        <div class="para-editor" contenteditable="true" data-type="${type}" data-placeholder="Enter paragraph text..." spellcheck="true">${initialContent}</div>
+        <div class="para-editor-footer">
+          <span class="word-count">0 words</span>
+          <span class="char-count">0 chars</span>
+        </div>
+      </div>
     </div>
   `;
 
@@ -314,19 +344,146 @@ function addParaAfter(afterEl, type) {
   }
 
   updateParaLabels();
-  div.querySelector('textarea').focus();
+
+  // Initialize the editor
+  const editor = div.querySelector('.para-editor');
+  initParaEditor(editor);
+  editor.focus();
 
   // Fire paragraphsChanged event for undo/redo tracking
   dispatchParagraphsChanged();
+
+  return editor;
+}
+
+/**
+ * Initialize a paragraph editor with toolbar functionality
+ */
+function initParaEditor(editor) {
+  const wrapper = editor.closest('.para-editor-wrapper');
+  const toolbar = wrapper.querySelector('.para-toolbar');
+
+  // Toolbar button clicks (format commands)
+  toolbar.querySelectorAll('.toolbar-btn[data-cmd]').forEach(btn => {
+    btn.addEventListener('mousedown', (e) => {
+      e.preventDefault(); // Prevent losing focus
+      const cmd = btn.dataset.cmd;
+      document.execCommand(cmd, false, null);
+      updateToolbarState(toolbar);
+    });
+  });
+
+  // Toolbar action buttons (clear format, collapse)
+  toolbar.querySelectorAll('.toolbar-btn[data-action]').forEach(btn => {
+    btn.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      const action = btn.dataset.action;
+
+      if (action === 'clearFormat') {
+        document.execCommand('removeFormat', false, null);
+        // Also remove font styling
+        document.execCommand('fontName', false, 'Times New Roman');
+        document.execCommand('fontSize', false, '3');
+        // Reset toolbar dropdowns to defaults
+        const fontSelect = toolbar.querySelector('.toolbar-font');
+        const sizeSelect = toolbar.querySelector('.toolbar-size');
+        if (fontSelect) fontSelect.value = 'Times New Roman';
+        if (sizeSelect) sizeSelect.value = '3';
+        // Update button states (will deactivate B/I/U/S)
+        updateToolbarState(toolbar);
+        editor.focus();
+      } else if (action === 'collapse') {
+        toolbar.classList.toggle('collapsed');
+        btn.textContent = toolbar.classList.contains('collapsed') ? '▼' : '▲';
+        btn.title = toolbar.classList.contains('collapsed') ? 'Expand Toolbar' : 'Collapse Toolbar';
+      }
+    });
+  });
+
+  // Toolbar select changes
+  toolbar.querySelectorAll('.toolbar-select').forEach(select => {
+    select.addEventListener('change', (e) => {
+      const cmd = select.dataset.cmd;
+      document.execCommand(cmd, false, select.value);
+      editor.focus();
+      updateToolbarState(toolbar);
+    });
+  });
+
+  // Keyboard shortcuts
+  editor.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey) {
+      switch (e.key.toLowerCase()) {
+        case 'b':
+          e.preventDefault();
+          document.execCommand('bold', false, null);
+          updateToolbarState(toolbar);
+          break;
+        case 'i':
+          e.preventDefault();
+          document.execCommand('italic', false, null);
+          updateToolbarState(toolbar);
+          break;
+        case 'u':
+          e.preventDefault();
+          document.execCommand('underline', false, null);
+          updateToolbarState(toolbar);
+          break;
+      }
+    }
+  });
+
+  // Update toolbar state on selection change
+  editor.addEventListener('keyup', () => updateToolbarState(toolbar));
+  editor.addEventListener('mouseup', () => updateToolbarState(toolbar));
+
+  // Input event for change tracking and counter update
+  editor.addEventListener('input', () => {
+    dispatchParagraphsChanged();
+    updateEditorCounter(wrapper);
+  });
+
+  // Initial counter update
+  updateEditorCounter(wrapper);
+}
+
+/**
+ * Update word and character count in editor footer
+ */
+function updateEditorCounter(wrapper) {
+  const editor = wrapper.querySelector('.para-editor');
+  const wordCountEl = wrapper.querySelector('.word-count');
+  const charCountEl = wrapper.querySelector('.char-count');
+
+  if (!editor || !wordCountEl || !charCountEl) return;
+
+  const text = editor.innerText || '';
+  const charCount = text.length;
+  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+  wordCountEl.textContent = `${wordCount} word${wordCount !== 1 ? 's' : ''}`;
+  charCountEl.textContent = `${charCount} char${charCount !== 1 ? 's' : ''}`;
+}
+
+/**
+ * Update toolbar button active states based on current selection
+ */
+function updateToolbarState(toolbar) {
+  toolbar.querySelectorAll('.toolbar-btn[data-cmd]').forEach(btn => {
+    const cmd = btn.dataset.cmd;
+    if (cmd) {
+      btn.classList.toggle('active', document.queryCommandState(cmd));
+    }
+  });
 }
 
 /**
  * Set active paragraph (shows action buttons)
- * @param {HTMLElement} textarea - Textarea element
+ * @param {HTMLElement} editor - Editor element
  */
-function setActivePara(textarea) {
+function setActivePara(editor) {
   document.querySelectorAll('.para-item').forEach(p => p.classList.remove('active'));
-  textarea.closest('.para-item').classList.add('active');
+  editor.closest('.para-item').classList.add('active');
 }
 
 /**
@@ -335,7 +492,7 @@ function setActivePara(textarea) {
  */
 function addSibling(btn) {
   const para = btn.closest('.para-item');
-  addParaAfter(para.querySelector('textarea'), para.dataset.type);
+  addParaAfter(para.querySelector('.para-editor'), para.dataset.type);
 }
 
 /**
@@ -347,7 +504,7 @@ function addChild(btn) {
   const types = ['para', 'subpara', 'subsubpara', 'subsubsubpara'];
   const idx = types.indexOf(para.dataset.type);
   if (idx < types.length - 1) {
-    addParaAfter(para.querySelector('textarea'), types[idx + 1]);
+    addParaAfter(para.querySelector('.para-editor'), types[idx + 1]);
   }
 }
 
@@ -360,7 +517,7 @@ function addParent(btn) {
   const types = ['para', 'subpara', 'subsubpara', 'subsubsubpara'];
   const idx = types.indexOf(para.dataset.type);
   if (idx > 0) {
-    addParaAfter(para.querySelector('textarea'), types[idx - 1]);
+    addParaAfter(para.querySelector('.para-editor'), types[idx - 1]);
   }
 }
 
@@ -406,7 +563,8 @@ function updateParaLabels() {
     }
 
     item.querySelector('.para-label').textContent = label;
-    item.querySelector('textarea').dataset.type = type;
+    const editor = item.querySelector('.para-editor');
+    if (editor) editor.dataset.type = type;
   });
 }
 
@@ -475,11 +633,12 @@ function collectParagraphData() {
 
   const data = [];
   container.querySelectorAll('.para-item').forEach(item => {
-    const textarea = item.querySelector('textarea');
+    const editor = item.querySelector('.para-editor');
     const subjInput = item.querySelector('.para-subject-input');
     data.push({
       type: item.dataset.type,
-      text: textarea ? textarea.value : '',
+      text: editor ? editor.innerText.trim() : '',
+      html: editor ? editor.innerHTML : '',
       subject: subjInput ? subjInput.value : ''
     });
   });
@@ -505,6 +664,7 @@ function collectData() {
     officeCode: document.getElementById('officeCode').value.trim(),
     date: document.getElementById('date').value.trim(),
     classification: document.getElementById('classification').value,
+    showInReplyTo: document.getElementById('showInReplyTo')?.checked || false,
     branch: 'USMC', // Marine Corps only
     // Letterhead: always for basic/endorsement, optional for memo (formal only)
     useLetterhead: documentType !== "memorandum" || isFormalMemo,
@@ -521,14 +681,16 @@ function collectData() {
     refs: Array.from(document.querySelectorAll('input[name="ref[]"]')).map(i => i.value.trim()).filter(v => v),
     encls: Array.from(document.querySelectorAll('input[name="encl[]"]')).map(i => i.value.trim()).filter(v => v),
     portionMarkingEnabled,
-    paras: Array.from(document.querySelectorAll('textarea[name="para[]"]')).map(t => {
-      const paraItem = t.closest('.para-item');
-      const subjInput = paraItem?.querySelector('.para-subject-input');
-      const portionSelect = paraItem?.querySelector('.portion-selector');
+    paras: Array.from(document.querySelectorAll('.para-item')).map(paraItem => {
+      const editor = paraItem.querySelector('.para-editor');
+      const subjInput = paraItem.querySelector('.para-subject-input');
+      const portionSelect = paraItem.querySelector('.portion-selector');
+
       return {
-        type: t.dataset.type,
+        type: paraItem.dataset.type,
         subject: subjInput?.value.trim() || '',
-        text: t.value.trim(),
+        text: editor?.innerText.trim() || '',
+        html: editor?.innerHTML || '',
         portionMark: portionSelect?.value || 'U'
       };
     }).filter(p => p.text),
@@ -536,12 +698,274 @@ function collectData() {
     byDirection: document.getElementById('byDirection').checked,
     copies: Array.from(document.querySelectorAll('input[name="copy[]"]')).map(i => i.value.trim()).filter(v => v),
     endorseNumber: document.getElementById('endorseNumber').value,
-    endorseAction: document.getElementById('endorseAction').value,
-    // Font settings
-    fontFamily: document.getElementById('fontFamily')?.value || 'times',
-    fontSize: parseInt(document.getElementById('fontSize')?.value || '12', 10)
+    endorseAction: document.getElementById('endorseAction').value
   };
 }
+
+// ============================================================
+// FIND & REPLACE
+// ============================================================
+
+let currentFindIndex = -1;
+let findMatches = [];
+
+/**
+ * Toggle Find & Replace panel visibility
+ */
+function toggleFindReplace() {
+  const panel = document.getElementById('findReplacePanel');
+  const btn = document.getElementById('findReplaceBtn');
+
+  if (panel.style.display === 'none') {
+    panel.style.display = 'block';
+    btn.classList.add('active');
+    document.getElementById('findInput').focus();
+  } else {
+    panel.style.display = 'none';
+    btn.classList.remove('active');
+    clearFindHighlights();
+    updateFindStatus('');
+  }
+}
+
+/**
+ * Find next occurrence of search text
+ */
+function findNext() {
+  const searchText = document.getElementById('findInput').value;
+  if (!searchText) {
+    updateFindStatus('Enter text to find', 'not-found');
+    return;
+  }
+
+  const caseSensitive = document.getElementById('findCaseSensitive').checked;
+  const editors = document.querySelectorAll('.para-editor');
+
+  // Clear previous highlights
+  clearFindHighlights();
+
+  // Collect all matches
+  findMatches = [];
+  editors.forEach((editor, editorIndex) => {
+    const text = editor.innerText;
+    const searchIn = caseSensitive ? text : text.toLowerCase();
+    const searchFor = caseSensitive ? searchText : searchText.toLowerCase();
+
+    let pos = 0;
+    while ((pos = searchIn.indexOf(searchFor, pos)) !== -1) {
+      findMatches.push({
+        editor,
+        editorIndex,
+        start: pos,
+        length: searchText.length
+      });
+      pos += searchFor.length;
+    }
+  });
+
+  if (findMatches.length === 0) {
+    updateFindStatus('No matches found', 'not-found');
+    currentFindIndex = -1;
+    return;
+  }
+
+  // Move to next match
+  currentFindIndex = (currentFindIndex + 1) % findMatches.length;
+  highlightMatch(findMatches[currentFindIndex]);
+  updateFindStatus(`${currentFindIndex + 1} of ${findMatches.length}`, 'found');
+}
+
+/**
+ * Replace current match
+ */
+function replaceNext() {
+  const searchText = document.getElementById('findInput').value;
+  const replaceText = document.getElementById('replaceInput').value;
+
+  if (!searchText) {
+    updateFindStatus('Enter text to find', 'not-found');
+    return;
+  }
+
+  if (findMatches.length === 0 || currentFindIndex < 0) {
+    findNext();
+    return;
+  }
+
+  const match = findMatches[currentFindIndex];
+  const editor = match.editor;
+  const caseSensitive = document.getElementById('findCaseSensitive').checked;
+
+  // Replace in the editor's text content
+  const text = editor.innerText;
+  const searchIn = caseSensitive ? text : text.toLowerCase();
+  const searchFor = caseSensitive ? searchText : searchText.toLowerCase();
+
+  // Find the exact position again (in case content changed)
+  const pos = searchIn.indexOf(searchFor, match.start > 0 ? match.start - 1 : 0);
+  if (pos !== -1) {
+    const before = text.substring(0, pos);
+    const after = text.substring(pos + searchText.length);
+    editor.innerText = before + replaceText + after;
+
+    // Trigger change event
+    dispatchParagraphsChanged();
+    updateEditorCounter(editor.closest('.para-editor-wrapper'));
+  }
+
+  // Find next
+  currentFindIndex--;
+  findNext();
+}
+
+/**
+ * Replace all occurrences
+ */
+function replaceAll() {
+  const searchText = document.getElementById('findInput').value;
+  const replaceText = document.getElementById('replaceInput').value;
+
+  if (!searchText) {
+    updateFindStatus('Enter text to find', 'not-found');
+    return;
+  }
+
+  const caseSensitive = document.getElementById('findCaseSensitive').checked;
+  const editors = document.querySelectorAll('.para-editor');
+  let totalReplaced = 0;
+  const regex = new RegExp(escapeRegExp(searchText), caseSensitive ? 'g' : 'gi');
+
+  editors.forEach(editor => {
+    const text = editor.innerText;
+
+    // Count matches before replacing
+    const matches = text.match(regex);
+    if (matches) {
+      totalReplaced += matches.length;
+      editor.innerText = text.replace(regex, replaceText);
+      updateEditorCounter(editor.closest('.para-editor-wrapper'));
+    }
+  });
+
+  clearFindHighlights();
+  findMatches = [];
+  currentFindIndex = -1;
+
+  if (totalReplaced > 0) {
+    updateFindStatus(`Replaced ${totalReplaced} occurrence${totalReplaced !== 1 ? 's' : ''}`, 'found');
+    dispatchParagraphsChanged();
+  } else {
+    updateFindStatus('No matches found', 'not-found');
+  }
+}
+
+/**
+ * Escape special regex characters
+ */
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Highlight a match in the editor
+ */
+function highlightMatch(match) {
+  const editor = match.editor;
+  editor.focus();
+
+  // Use Selection API to highlight
+  const text = editor.innerText;
+  const range = document.createRange();
+  const sel = window.getSelection();
+
+  // Find the text node containing our match
+  let currentPos = 0;
+  let found = false;
+
+  function findTextNode(node) {
+    if (found) return;
+
+    if (node.nodeType === Node.TEXT_NODE) {
+      const nodeLength = node.textContent.length;
+      if (currentPos + nodeLength > match.start) {
+        // Found the starting node
+        const startOffset = match.start - currentPos;
+        const endOffset = Math.min(startOffset + match.length, nodeLength);
+
+        range.setStart(node, startOffset);
+
+        // Check if end is in same node
+        if (startOffset + match.length <= nodeLength) {
+          range.setEnd(node, startOffset + match.length);
+          found = true;
+        } else {
+          // Need to find end node
+          range.setEnd(node, nodeLength);
+          found = true;
+        }
+      }
+      currentPos += nodeLength;
+    } else {
+      for (const child of node.childNodes) {
+        findTextNode(child);
+        if (found) break;
+      }
+    }
+  }
+
+  findTextNode(editor);
+
+  if (found) {
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    // Scroll into view
+    editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+/**
+ * Clear find highlights
+ */
+function clearFindHighlights() {
+  document.querySelectorAll('.find-highlight').forEach(el => {
+    const parent = el.parentNode;
+    parent.replaceChild(document.createTextNode(el.textContent), el);
+    parent.normalize();
+  });
+}
+
+/**
+ * Update find status message
+ */
+function updateFindStatus(message, type = '') {
+  const status = document.getElementById('findResultStatus');
+  if (status) {
+    status.textContent = message;
+    status.className = 'find-result-status' + (type ? ' ' + type : '');
+  }
+}
+
+// Keyboard shortcut for Find & Replace (Ctrl+H)
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'h') {
+    e.preventDefault();
+    toggleFindReplace();
+  }
+});
+
+// Enter key in find input triggers find next
+document.addEventListener('DOMContentLoaded', () => {
+  const findInput = document.getElementById('findInput');
+  if (findInput) {
+    findInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        findNext();
+      }
+    });
+  }
+});
 
 /**
  * Initialize form event listeners
@@ -567,11 +991,11 @@ async function initFormListeners() {
     portionCheckbox.addEventListener('change', handlePortionMarkingChange);
   }
 
-  // Listen for paragraph text changes (using event delegation)
+  // Listen for paragraph text and subject input changes (using event delegation)
   const paraContainer = document.getElementById('paraContainer');
   if (paraContainer) {
     paraContainer.addEventListener('input', (e) => {
-      if (e.target.matches('textarea, .para-subject-input')) {
+      if (e.target.matches('.para-subject-input') || e.target.matches('.para-editor')) {
         dispatchParagraphsChanged();
       }
     });
