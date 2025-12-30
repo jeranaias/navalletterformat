@@ -243,7 +243,7 @@ async function generatePDFBlob() {
   const ML = 72;
   const MR = 72;
   const MT = 72;
-  const MB = 72;
+  const MB = 100;  // Larger bottom margin for visual balance with classification
   const CW = PW - ML - MR;
   const TAB = 45;
 

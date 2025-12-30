@@ -34,7 +34,7 @@ async function generatePDF() {
   const ML = 72;        // Margin left (1 inch)
   const MR = 72;        // Margin right
   const MT = 72;        // Margin top
-  const MB = 72;        // Margin bottom
+  const MB = 100;       // Margin bottom (larger for visual balance with classification)
   const CW = PW - ML - MR;  // Content width
   const TAB = 45;       // Tab width for labels
 
