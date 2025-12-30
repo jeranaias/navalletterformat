@@ -313,7 +313,8 @@ function renderFormattedText(pdf, segments, options) {
     lineHeight,
     fontName,
     fontSize,
-    pageBreak
+    pageBreak,
+    skipLeadingNewlines = false // Skip newlines at start (after page break)
   } = options;
 
   let x = firstLineX;
@@ -321,7 +322,7 @@ function renderFormattedText(pdf, segments, options) {
   let currentLineWidth = firstLineWidth;
   let currentLineX = firstLineX;
   let isFirstLine = true;
-  let justDidPageBreak = false; // Track if we just did a page break
+  let justDidPageBreak = skipLeadingNewlines; // Initialize from option
 
   // Flatten segments into words with formatting
   const words = [];

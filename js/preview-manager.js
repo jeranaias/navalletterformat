@@ -260,6 +260,9 @@ async function generatePDFBlob() {
   const largeGaps = [];
   const GAP_WARNING_THRESHOLD = 108; // ~1.5 inches - warn if gap is this large
 
+  // Track when a page break just occurred (for skipping leading newlines)
+  let freshPageBreak = false;
+
   // Page break check - used for pre-checking space
   function pageBreak(need) {
     if (y + need > PH - MB) {
@@ -269,6 +272,7 @@ async function generatePDFBlob() {
 
   // Actual page break - adds page and draws header
   function doPageBreak() {
+    freshPageBreak = true; // Flag that we just did a page break
     // Calculate gap left on current page
     const gapLeft = PH - MB - y;
     if (gapLeft > GAP_WARNING_THRESHOLD) {
@@ -571,6 +575,8 @@ async function generatePDFBlob() {
 
         if (segments.length > 0 && segments[0].text && remainingWidth > 50) {
           // Render formatted text starting after subject
+          const skipNewlines = freshPageBreak;
+          freshPageBreak = false;
           y = renderFormattedText(pdf, segments, {
             firstLineX: afterSubjectX,
             firstLineWidth: remainingWidth,
@@ -580,13 +586,16 @@ async function generatePDFBlob() {
             lineHeight: LH,
             fontName: fontName,
             fontSize: fontSize,
-            pageBreak: pageBreakAtY
+            pageBreak: pageBreakAtY,
+            skipLeadingNewlines: skipNewlines
           });
           y += LH;
         } else {
           // Subject takes full line, text on next line
           y += LH;
           if (segments.length > 0 && segments[0].text) {
+            const skipNewlines = freshPageBreak;
+            freshPageBreak = false;
             y = renderFormattedText(pdf, segments, {
               firstLineX: ML,
               firstLineWidth: CW,
@@ -596,7 +605,8 @@ async function generatePDFBlob() {
               lineHeight: LH,
               fontName: fontName,
               fontSize: fontSize,
-              pageBreak: pageBreakAtY
+              pageBreak: pageBreakAtY,
+              skipLeadingNewlines: skipNewlines
             });
             y += LH;
           }
@@ -604,6 +614,8 @@ async function generatePDFBlob() {
       } else {
         // Regular paragraph text (no subject) - render with formatting
         if (segments.length > 0 && segments[0].text) {
+          const skipNewlines = freshPageBreak;
+          freshPageBreak = false;
           y = renderFormattedText(pdf, segments, {
             firstLineX: tx,
             firstLineWidth: textWidth,
@@ -613,11 +625,15 @@ async function generatePDFBlob() {
             lineHeight: LH,
             fontName: fontName,
             fontSize: fontSize,
-            pageBreak: pageBreakAtY
+            pageBreak: pageBreakAtY,
+            skipLeadingNewlines: skipNewlines
           });
           y += LH;
         }
       }
+
+      // Reset flag at end of each paragraph to prevent carry-over
+      freshPageBreak = false;
     }
   }
 

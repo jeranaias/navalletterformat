@@ -48,6 +48,9 @@ async function generatePDF() {
   let pageNum = 1;
   const subjText = d.subj.toUpperCase();
 
+  // Track when a page break just occurred (for skipping leading newlines)
+  let freshPageBreak = false;
+
   /**
    * Handle page break with continuation header - pre-check version
    * @param {number} need - Space needed
@@ -62,6 +65,7 @@ async function generatePDF() {
    * Actual page break - adds page and draws header
    */
   function doPageBreak() {
+    freshPageBreak = true; // Flag that we just did a page break
     pdf.addPage();
     pageNum++;
     y = MT;
@@ -376,6 +380,8 @@ async function generatePDF() {
 
         if (segments.length > 0 && segments[0].text && remainingWidth > 50 && afterSubjectX < rightEdge - 50) {
           // Render formatted text starting after subject
+          const skipNewlines = freshPageBreak;
+          freshPageBreak = false;
           y = renderFormattedText(pdf, segments, {
             firstLineX: afterSubjectX,
             firstLineWidth: remainingWidth,
@@ -385,12 +391,15 @@ async function generatePDF() {
             lineHeight: LH,
             fontName: fontName,
             fontSize: fontSize,
-            pageBreak: pageBreakAtY
+            pageBreak: pageBreakAtY,
+            skipLeadingNewlines: skipNewlines
           });
           y += LH;
         } else {
           y += LH;
           if (segments.length > 0 && segments[0].text) {
+            const skipNewlines = freshPageBreak;
+            freshPageBreak = false;
             y = renderFormattedText(pdf, segments, {
               firstLineX: ML,
               firstLineWidth: wrapWidth,
@@ -400,7 +409,8 @@ async function generatePDF() {
               lineHeight: LH,
               fontName: fontName,
               fontSize: fontSize,
-              pageBreak: pageBreakAtY
+              pageBreak: pageBreakAtY,
+              skipLeadingNewlines: skipNewlines
             });
             y += LH;
           }
@@ -408,6 +418,8 @@ async function generatePDF() {
       } else {
         // No subject - render text with formatting
         if (segments.length > 0 && segments[0].text) {
+          const skipNewlines = freshPageBreak;
+          freshPageBreak = false;
           y = renderFormattedText(pdf, segments, {
             firstLineX: tx,
             firstLineWidth: firstLineWidth,
@@ -417,11 +429,15 @@ async function generatePDF() {
             lineHeight: LH,
             fontName: fontName,
             fontSize: fontSize,
-            pageBreak: pageBreakAtY
+            pageBreak: pageBreakAtY,
+            skipLeadingNewlines: skipNewlines
           });
           y += LH;
         }
       }
+
+      // Reset flag at end of each paragraph to prevent carry-over
+      freshPageBreak = false;
     }
   }
 
