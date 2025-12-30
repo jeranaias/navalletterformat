@@ -170,6 +170,13 @@ async function initApp() {
 
     // Initialize batch generator
     if (typeof initBatchGeneratorModule === 'function') initBatchGeneratorModule();
+
+    // Check layout warnings after all initialization (for restored drafts)
+    setTimeout(() => {
+      if (typeof checkLayoutWarnings === 'function') {
+        checkLayoutWarnings();
+      }
+    }, 300);
   });
 
   // Use idle callback for enhanced features (spell check, char count)
