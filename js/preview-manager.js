@@ -710,6 +710,18 @@ function updateMobileUI() {
   }
 }
 
+/**
+ * Check for layout warnings without showing preview
+ * Call this after loading drafts, saving, etc.
+ */
+async function checkLayoutWarnings() {
+  try {
+    await generatePDFBlob(); // This dispatches layoutWarning event
+  } catch (err) {
+    console.error('Layout check failed:', err);
+  }
+}
+
 // Export for use in other modules
 if (typeof window !== 'undefined') {
   window.initPreviewManager = initPreviewManager;
@@ -720,4 +732,5 @@ if (typeof window !== 'undefined') {
   window.openMobilePreview = openMobilePreview;
   window.closeMobilePreview = closeMobilePreview;
   window.updateMobileUI = updateMobileUI;
+  window.checkLayoutWarnings = checkLayoutWarnings;
 }

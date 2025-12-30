@@ -401,6 +401,13 @@ function importDraft() {
         if (restoreFormData(data)) {
           showStatus('Draft loaded successfully', 'success');
           saveDraftToStorage(); // Update auto-save with loaded data
+
+          // Check layout after importing
+          setTimeout(() => {
+            if (typeof checkLayoutWarnings === 'function') {
+              checkLayoutWarnings();
+            }
+          }, 500);
         } else {
           showStatus('Failed to load draft - invalid format', 'error');
         }
@@ -429,6 +436,13 @@ function initDraftManager() {
     if (confirm(`Found a saved draft from ${timeAgo}. Would you like to restore it?`)) {
       restoreFormData(savedDraft);
       showStatus('Draft restored', 'success');
+
+      // Check layout after restoring draft
+      setTimeout(() => {
+        if (typeof checkLayoutWarnings === 'function') {
+          checkLayoutWarnings();
+        }
+      }, 500);
     }
   }
 
