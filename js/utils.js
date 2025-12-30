@@ -388,7 +388,13 @@ function renderFormattedText(pdf, segments, options) {
     currentLineWidth = contWidth;
     x = currentLineX;
     currentY += lineHeight;
-    if (pageBreak) pageBreak(lineHeight);
+    // pageBreak receives current Y position and returns new Y (reset if page added)
+    if (pageBreak) {
+      const newY = pageBreak(currentY);
+      if (typeof newY === 'number') {
+        currentY = newY;
+      }
+    }
   }
 
   for (let i = 0; i < words.length; i++) {

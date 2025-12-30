@@ -34,7 +34,7 @@ async function generatePDF() {
   const ML = 72;        // Margin left (1 inch)
   const MR = 72;        // Margin right
   const MT = 72;        // Margin top
-  const MB = 100;       // Margin bottom (larger for visual balance with classification)
+  const MB = 72;        // Margin bottom
   const CW = PW - ML - MR;  // Content width
   const TAB = 45;       // Tab width for labels
 
@@ -49,35 +49,53 @@ async function generatePDF() {
   const subjText = d.subj.toUpperCase();
 
   /**
-   * Handle page break with continuation header
+   * Handle page break with continuation header - pre-check version
    * @param {number} need - Space needed
    */
   function pageBreak(need) {
     if (y + need > PH - MB) {
-      pdf.addPage();
-      pageNum++;
-      y = MT;
-
-      // Classification at top of continuation pages
-      if (d.classification) {
-        pdf.setFont(fontName, 'bold');
-        pdf.setFontSize(fontSize);
-        pdf.text(d.classification, PW / 2, 20, { align: 'center' });
-      }
-
-      // Add continuation header
-      pdf.setFont(fontName, 'normal');
-      pdf.setFontSize(fontSize);
-      pdf.text('Subj:', ML, y);
-
-      // Full subject line on continuation pages, wrapped as needed
-      const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
-      subjLines.forEach((line, i) => {
-        pdf.text(line, ML + TAB, y);
-        y += LH;
-      });
-      y += LH;  // One blank line after subject
+      doPageBreak();
     }
+  }
+
+  /**
+   * Actual page break - adds page and draws header
+   */
+  function doPageBreak() {
+    pdf.addPage();
+    pageNum++;
+    y = MT;
+
+    // Classification at top of continuation pages
+    if (d.classification) {
+      pdf.setFont(fontName, 'bold');
+      pdf.setFontSize(fontSize);
+      pdf.text(d.classification, PW / 2, 20, { align: 'center' });
+    }
+
+    // Add continuation header
+    pdf.setFont(fontName, 'normal');
+    pdf.setFontSize(fontSize);
+    pdf.text('Subj:', ML, y);
+
+    // Full subject line on continuation pages, wrapped as needed
+    const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
+    subjLines.forEach((line, i) => {
+      pdf.text(line, ML + TAB, y);
+      y += LH;
+    });
+    y += LH;  // One blank line after subject
+  }
+
+  /**
+   * Page break callback for renderFormattedText - receives actual Y position
+   */
+  function pageBreakAtY(currentY) {
+    if (currentY > PH - MB) {
+      doPageBreak();
+      return y; // Return new position after header
+    }
+    return currentY; // No change
   }
 
   // Classification at VERY TOP of page (above letterhead) - per DoD 5200.01
@@ -367,7 +385,7 @@ async function generatePDF() {
             lineHeight: LH,
             fontName: fontName,
             fontSize: fontSize,
-            pageBreak: (h) => pageBreak(h)
+            pageBreak: pageBreakAtY
           });
           y += LH;
         } else {
@@ -382,7 +400,7 @@ async function generatePDF() {
               lineHeight: LH,
               fontName: fontName,
               fontSize: fontSize,
-              pageBreak: (h) => pageBreak(h)
+              pageBreak: pageBreakAtY
             });
             y += LH;
           }
@@ -399,7 +417,7 @@ async function generatePDF() {
             lineHeight: LH,
             fontName: fontName,
             fontSize: fontSize,
-            pageBreak: (h) => pageBreak(h)
+            pageBreak: pageBreakAtY
           });
           y += LH;
         }

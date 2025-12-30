@@ -243,7 +243,7 @@ async function generatePDFBlob() {
   const ML = 72;
   const MR = 72;
   const MT = 72;
-  const MB = 100;  // Larger bottom margin for visual balance with classification
+  const MB = 72;
   const CW = PW - ML - MR;
   const TAB = 45;
 
@@ -256,29 +256,44 @@ async function generatePDFBlob() {
   let pageNum = 1;
   const subjText = d.subj.toUpperCase();
 
+  // Page break check - used for pre-checking space
   function pageBreak(need) {
     if (y + need > PH - MB) {
-      pdf.addPage();
-      pageNum++;
-      y = MT;
-
-      if (d.classification) {
-        pdf.setFont(fontName, 'bold');
-        pdf.setFontSize(fontSize);
-        pdf.text(d.classification, PW / 2, 20, { align: 'center' });
-      }
-
-      pdf.setFont(fontName, 'normal');
-      pdf.setFontSize(fontSize);
-      pdf.text('Subj:', ML, y);
-
-      const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
-      subjLines.forEach((line, i) => {
-        pdf.text(line, ML + TAB, y);
-        y += LH;
-      });
-      y += LH;
+      doPageBreak();
     }
+  }
+
+  // Actual page break - adds page and draws header
+  function doPageBreak() {
+    pdf.addPage();
+    pageNum++;
+    y = MT;
+
+    if (d.classification) {
+      pdf.setFont(fontName, 'bold');
+      pdf.setFontSize(fontSize);
+      pdf.text(d.classification, PW / 2, 20, { align: 'center' });
+    }
+
+    pdf.setFont(fontName, 'normal');
+    pdf.setFontSize(fontSize);
+    pdf.text('Subj:', ML, y);
+
+    const subjLines = pdf.splitTextToSize(subjText, CW - TAB);
+    subjLines.forEach((line, i) => {
+      pdf.text(line, ML + TAB, y);
+      y += LH;
+    });
+    y += LH;
+  }
+
+  // Page break callback for renderFormattedText - receives actual Y position
+  function pageBreakAtY(currentY) {
+    if (currentY > PH - MB) {
+      doPageBreak();
+      return y; // Return new position after header
+    }
+    return currentY; // No change
   }
 
   // Classification at top
@@ -555,7 +570,7 @@ async function generatePDFBlob() {
             lineHeight: LH,
             fontName: fontName,
             fontSize: fontSize,
-            pageBreak: (h) => pageBreak(h)
+            pageBreak: pageBreakAtY
           });
           y += LH;
         } else {
@@ -571,7 +586,7 @@ async function generatePDFBlob() {
               lineHeight: LH,
               fontName: fontName,
               fontSize: fontSize,
-              pageBreak: (h) => pageBreak(h)
+              pageBreak: pageBreakAtY
             });
             y += LH;
           }
@@ -588,7 +603,7 @@ async function generatePDFBlob() {
             lineHeight: LH,
             fontName: fontName,
             fontSize: fontSize,
-            pageBreak: (h) => pageBreak(h)
+            pageBreak: pageBreakAtY
           });
           y += LH;
         }
