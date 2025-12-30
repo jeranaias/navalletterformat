@@ -450,7 +450,7 @@ async function generatePDF() {
       pdf.setPage(i);
       pdf.setFont(fontName, 'bold');
       pdf.setFontSize(fontSize);
-      pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
+      pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
     }
   }
 
@@ -747,7 +747,7 @@ async function printPDF() {
       pdf.setPage(i);
       pdf.setFont(fontName, 'bold');
       pdf.setFontSize(fontSize);
-      pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
+      pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
     }
   }
 

@@ -893,11 +893,11 @@ async function generatePDFFromData(d) {
     });
   }
 
-  // Classification at bottom (symmetric with top at y=20)
+  // Classification at bottom
   if (d.classification) {
     pdf.setFont(fontName, 'bold');
     pdf.setFontSize(fontSize);
-    pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
+    pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
   }
 
   return pdf.output('blob');
