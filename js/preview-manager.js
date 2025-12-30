@@ -256,6 +256,10 @@ async function generatePDFBlob() {
   let pageNum = 1;
   const subjText = d.subj.toUpperCase();
 
+  // Track large gaps for user warning
+  const largeGaps = [];
+  const GAP_WARNING_THRESHOLD = 180; // ~2.5 inches - warn if gap is this large
+
   // Page break check - used for pre-checking space
   function pageBreak(need) {
     if (y + need > PH - MB) {
@@ -265,6 +269,12 @@ async function generatePDFBlob() {
 
   // Actual page break - adds page and draws header
   function doPageBreak() {
+    // Calculate gap left on current page
+    const gapLeft = PH - MB - y;
+    if (gapLeft > GAP_WARNING_THRESHOLD) {
+      largeGaps.push({ page: pageNum, gap: Math.round(gapLeft) });
+    }
+
     pdf.addPage();
     pageNum++;
     y = MT;
@@ -653,6 +663,18 @@ async function generatePDFBlob() {
     pdf.setFont(fontName, 'bold');
     pdf.setFontSize(fontSize);
     pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
+  }
+
+  // Notify about large gaps that may need user attention
+  if (largeGaps.length > 0) {
+    window.dispatchEvent(new CustomEvent('layoutWarning', {
+      detail: { type: 'largeGap', gaps: largeGaps }
+    }));
+  } else {
+    // Clear any previous warning
+    window.dispatchEvent(new CustomEvent('layoutWarning', {
+      detail: { type: 'clear' }
+    }));
   }
 
   // Return as blob

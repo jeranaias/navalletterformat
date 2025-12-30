@@ -457,6 +457,18 @@
 
     </p>
 
+    <!-- Layout Warning Banner -->
+    <div id="layoutWarning" class="layout-warning" style="display: none;" role="alert">
+      <div class="layout-warning-content">
+        <span class="layout-warning-icon">&#9888;</span>
+        <div class="layout-warning-text">
+          <strong>Layout Notice:</strong>
+          <span id="layoutWarningMessage"></span>
+        </div>
+        <button type="button" class="layout-warning-dismiss" onclick="dismissLayoutWarning()" aria-label="Dismiss">&times;</button>
+      </div>
+    </div>
+
     <form id="letterForm" role="form" aria-label="Naval letter form">
       <!-- Document Type -->
       <div class="form-section">

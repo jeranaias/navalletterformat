@@ -1034,6 +1034,40 @@ async function initFormListeners() {
   }
 }
 
+// ============================================
+// Layout Warning Handler
+// ============================================
+
+/**
+ * Handle layout warnings from PDF generation
+ */
+window.addEventListener('layoutWarning', (e) => {
+  const warning = document.getElementById('layoutWarning');
+  const message = document.getElementById('layoutWarningMessage');
+
+  if (!warning || !message) return;
+
+  if (e.detail.type === 'largeGap' && e.detail.gaps.length > 0) {
+    const gap = e.detail.gaps[0]; // Show first gap
+    const inches = (gap.gap / 72).toFixed(1);
+    message.innerHTML = `Page ${gap.page} has a ${inches}" gap at the bottom due to formatting rules. ` +
+      `Consider adding or removing content to improve the layout.`;
+    warning.style.display = 'block';
+  } else if (e.detail.type === 'clear') {
+    warning.style.display = 'none';
+  }
+});
+
+/**
+ * Dismiss layout warning
+ */
+function dismissLayoutWarning() {
+  const warning = document.getElementById('layoutWarning');
+  if (warning) {
+    warning.style.display = 'none';
+  }
+}
+
 // Export for module usage
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
