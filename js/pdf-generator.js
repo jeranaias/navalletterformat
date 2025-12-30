@@ -70,10 +70,10 @@ async function generatePDF() {
     pageNum++;
     y = MT;
 
-    // Page number at top right of continuation pages
+    // Page number centered at bottom of continuation pages (0.5" from bottom edge)
     pdf.setFont(fontName, 'normal');
     pdf.setFontSize(fontSize);
-    pdf.text(String(pageNum), PW - MR, MT, { align: 'right' });
+    pdf.text(String(pageNum), PW / 2, PH - 36, { align: 'center' });
 
     // Classification at top of continuation pages
     if (d.classification) {
