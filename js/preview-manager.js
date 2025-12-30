@@ -258,7 +258,7 @@ async function generatePDFBlob() {
 
   // Track large gaps for user warning
   const largeGaps = [];
-  const GAP_WARNING_THRESHOLD = 180; // ~2.5 inches - warn if gap is this large
+  const GAP_WARNING_THRESHOLD = 108; // ~1.5 inches - warn if gap is this large
 
   // Page break check - used for pre-checking space
   function pageBreak(need) {
