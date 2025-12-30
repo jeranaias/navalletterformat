@@ -283,6 +283,11 @@ async function generatePDFBlob() {
     pageNum++;
     y = MT;
 
+    // Page number at top right of continuation pages
+    pdf.setFont(fontName, 'normal');
+    pdf.setFontSize(fontSize);
+    pdf.text(String(pageNum), PW - MR, MT, { align: 'right' });
+
     if (d.classification) {
       pdf.setFont(fontName, 'bold');
       pdf.setFontSize(fontSize);
@@ -298,7 +303,7 @@ async function generatePDFBlob() {
       pdf.text(line, ML + TAB, y);
       y += LH;
     });
-    y += LH;
+    // No extra blank line - content starts on next line after subject
   }
 
   // Page break callback for renderFormattedText - receives actual Y position

@@ -70,6 +70,11 @@ async function generatePDF() {
     pageNum++;
     y = MT;
 
+    // Page number at top right of continuation pages
+    pdf.setFont(fontName, 'normal');
+    pdf.setFontSize(fontSize);
+    pdf.text(String(pageNum), PW - MR, MT, { align: 'right' });
+
     // Classification at top of continuation pages
     if (d.classification) {
       pdf.setFont(fontName, 'bold');
@@ -88,7 +93,7 @@ async function generatePDF() {
       pdf.text(line, ML + TAB, y);
       y += LH;
     });
-    y += LH;  // One blank line after subject
+    // No extra blank line - content starts on next line after subject
   }
 
   /**

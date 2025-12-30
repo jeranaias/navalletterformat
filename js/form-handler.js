@@ -1048,7 +1048,8 @@ window.addEventListener('layoutWarning', (e) => {
   if (!warning || !message) return;
 
   if (e.detail.type === 'largeGap' && e.detail.gaps.length > 0) {
-    const gap = e.detail.gaps[0]; // Show first gap
+    // Find the gap with the largest size
+    const gap = e.detail.gaps.reduce((max, g) => g.gap > max.gap ? g : max, e.detail.gaps[0]);
     const inches = (gap.gap / 72).toFixed(1);
     message.innerHTML = `Page ${gap.page} has a ${inches}" gap at the bottom due to formatting rules. ` +
       `Consider adding or removing content to improve the layout.`;
