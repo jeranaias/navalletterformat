@@ -321,6 +321,7 @@ function renderFormattedText(pdf, segments, options) {
   let currentLineWidth = firstLineWidth;
   let currentLineX = firstLineX;
   let isFirstLine = true;
+  let justDidPageBreak = false; // Track if we just did a page break
 
   // Flatten segments into words with formatting
   const words = [];
@@ -391,8 +392,9 @@ function renderFormattedText(pdf, segments, options) {
     // pageBreak receives current Y position and returns new Y (reset if page added)
     if (pageBreak) {
       const newY = pageBreak(currentY);
-      if (typeof newY === 'number') {
+      if (typeof newY === 'number' && newY !== currentY) {
         currentY = newY;
+        justDidPageBreak = true; // Flag that we just did a page break
       }
     }
   }
@@ -402,8 +404,17 @@ function renderFormattedText(pdf, segments, options) {
 
     // Handle explicit line breaks
     if (word.text === '\n') {
+      // Skip consecutive newlines after a page break to avoid extra spacing
+      if (justDidPageBreak) {
+        continue;
+      }
       newLine();
       continue;
+    }
+
+    // Reset the page break flag when we encounter actual content
+    if (word.text.trim() !== '') {
+      justDidPageBreak = false;
     }
 
     const wordWidth = getWordWidth(word);
