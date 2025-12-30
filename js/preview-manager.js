@@ -9,12 +9,13 @@ let lastPreviewData = null;
 let mobilePreviewUrl = null;
 
 /**
- * Check if device is mobile/touch
+ * Check if device is mobile (not just touch-capable)
+ * Laptops with touchscreens should still get side-by-side preview
  */
 function isMobileDevice() {
-  return (window.innerWidth <= 1024) ||
-         ('ontouchstart' in window) ||
-         (navigator.maxTouchPoints > 0);
+  // Only use modal preview on narrow screens (phones/small tablets)
+  // 768px is standard tablet portrait breakpoint
+  return window.innerWidth <= 768;
 }
 
 /**
