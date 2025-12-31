@@ -257,9 +257,9 @@ async function generatePDFBlob() {
   let pageNum = 1;
   const subjText = d.subj.toUpperCase();
 
-  // Track large gaps for user warning
+  // Track large gaps for user warning (disabled for now - needs refinement)
   const largeGaps = [];
-  const GAP_WARNING_THRESHOLD = 108; // ~1.5 inches - warn if gap is this large
+  const GAP_WARNING_THRESHOLD = 999; // Disabled - set very high to prevent false positives
 
   // Track when a page break just occurred (for skipping leading newlines)
   let freshPageBreak = false;
@@ -284,17 +284,26 @@ async function generatePDFBlob() {
     pageNum++;
     y = MT;
 
-    // Page number centered at bottom of continuation pages (0.5" from bottom edge)
+    // Classification/CUI at top of page (centered, 0.5" from top)
+    if (d.classification) {
+      pdf.setFont(fontName, 'bold');
+      pdf.setFontSize(fontSize);
+      pdf.text(d.classification, PW / 2, 36, { align: 'center' });
+    }
+
+    // Page number centered at bottom (0.5" from bottom edge)
     pdf.setFont(fontName, 'normal');
     pdf.setFontSize(fontSize);
     pdf.text(String(pageNum), PW / 2, PH - 36, { align: 'center' });
 
+    // Classification/CUI at bottom of page (centered, below page number)
     if (d.classification) {
       pdf.setFont(fontName, 'bold');
       pdf.setFontSize(fontSize);
-      pdf.text(d.classification, PW / 2, 20, { align: 'center' });
+      pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
     }
 
+    // Subject line continuation header
     pdf.setFont(fontName, 'normal');
     pdf.setFontSize(fontSize);
     pdf.text('Subj:', ML, y);
@@ -304,7 +313,7 @@ async function generatePDFBlob() {
       pdf.text(line, ML + TAB, y);
       y += LH;
     });
-    // No extra blank line - content starts on next line after subject
+    // Spacing handled by paragraph loop or skipLeadingNewlines logic
   }
 
   // Page break callback for renderFormattedText - receives actual Y position

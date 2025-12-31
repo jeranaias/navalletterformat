@@ -70,16 +70,23 @@ async function generatePDF() {
     pageNum++;
     y = MT;
 
-    // Page number centered at bottom of continuation pages (0.5" from bottom edge)
+    // Classification/CUI at top of page (centered, 0.5" from top)
+    if (d.classification) {
+      pdf.setFont(fontName, 'bold');
+      pdf.setFontSize(fontSize);
+      pdf.text(d.classification, PW / 2, 36, { align: 'center' });
+    }
+
+    // Page number centered at bottom (0.5" from bottom edge)
     pdf.setFont(fontName, 'normal');
     pdf.setFontSize(fontSize);
     pdf.text(String(pageNum), PW / 2, PH - 36, { align: 'center' });
 
-    // Classification at top of continuation pages
+    // Classification/CUI at bottom of page (centered, below page number)
     if (d.classification) {
       pdf.setFont(fontName, 'bold');
       pdf.setFontSize(fontSize);
-      pdf.text(d.classification, PW / 2, 20, { align: 'center' });
+      pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
     }
 
     // Add continuation header
@@ -93,7 +100,7 @@ async function generatePDF() {
       pdf.text(line, ML + TAB, y);
       y += LH;
     });
-    // No extra blank line - content starts on next line after subject
+    // Spacing handled by paragraph loop
   }
 
   /**
