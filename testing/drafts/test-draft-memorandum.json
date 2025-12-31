@@ -1,0 +1,67 @@
+{
+  "version": "2.0",
+  "savedAt": "2024-12-13T12:00:00.000Z",
+  "docType": "memorandum",
+  "ssic": "",
+  "officeCode": "",
+  "date": "13 Dec 24",
+  "classification": "",
+  "branch": "USMC",
+  "unitName": "",
+  "unitAddress": "",
+  "from": "Operations Officer",
+  "to": "All Department Heads",
+  "subj": "WEEKLY STAFF MEETING AGENDA",
+  "endorseNumber": "",
+  "endorseAction": "",
+  "viaList": [],
+  "refList": [
+    "Standing Operating Procedures"
+  ],
+  "enclList": [
+    "Meeting Agenda",
+    "Action Items from Previous Meeting"
+  ],
+  "copyList": [
+    "File"
+  ],
+  "paragraphs": [
+    {
+      "type": "para",
+      "subject": "Purpose.",
+      "text": "To provide the agenda for the upcoming weekly staff meeting scheduled for 16 Dec 24 at 0900."
+    },
+    {
+      "type": "para",
+      "subject": "Discussion.",
+      "text": "The following topics will be covered during the meeting:"
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Review of action items from previous meeting"
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Budget update and year-end projections"
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Personnel status and upcoming changes"
+    },
+    {
+      "type": "subpara",
+      "subject": "",
+      "text": "Training schedule for next quarter"
+    },
+    {
+      "type": "para",
+      "subject": "Action.",
+      "text": "All department heads are requested to attend with prepared updates on their respective areas."
+    }
+  ],
+  "sigName": "J. M. OPERATIONS",
+  "byDirection": false
+}

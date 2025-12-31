@@ -1,0 +1,62 @@
+{
+  "version": "2.0",
+  "savedAt": "2024-12-13T12:00:00.000Z",
+  "docType": "endorsement",
+  "ssic": "1650",
+  "officeCode": "CO",
+  "date": "13 Dec 24",
+  "classification": "",
+  "branch": "USMC",
+  "unitName": "UNITED STATES MARINE CORPS",
+  "unitAddress": "HEADQUARTERS, 1ST MARINE DIVISION\nBOX 555300\nCAMP PENDLETON, CA 92055-5300",
+  "from": "Commanding General, 1st Marine Division",
+  "to": "Commandant of the Marine Corps (MMMA-2)",
+  "subj": "MERITORIOUS PROMOTION RECOMMENDATION FOR CPL MARTINEZ, J. R.",
+  "endorseNumber": "FIRST",
+  "endorseAction": "Forwarded, recommending approval",
+  "viaList": [
+    "Commanding General, I Marine Expeditionary Force"
+  ],
+  "refList": [
+    "MCO 1400.32D",
+    "MARADMIN 445/24",
+    "CO, 1/5 ltr 1650 CO of 28 Nov 24"
+  ],
+  "enclList": [
+    "Meritorious Promotion Package"
+  ],
+  "paragraphs": [
+    {
+      "type": "para",
+      "subject": "",
+      "text": "Reference (c) is forwarded, recommending approval. Corporal Martinez has demonstrated exceptional leadership, technical proficiency, and dedication to duty that clearly distinguishes him from his peers and warrants advancement to the grade of Sergeant ahead of his contemporaries."
+    },
+    {
+      "type": "para",
+      "subject": "",
+      "text": "During his current tour with 1st Battalion, 5th Marines, Corporal Martinez has consistently performed duties well above his current grade. As a Fire Team Leader, he has led his Marines through two combat deployments and numerous training exercises, earning the respect of both his subordinates and superiors through his tactical acumen and genuine concern for the welfare of his Marines."
+    },
+    {
+      "type": "para",
+      "subject": "",
+      "text": "His performance during Operation RESOLUTE DEFENDER was particularly noteworthy. When his squad leader was wounded during a complex ambush, Corporal Martinez immediately assumed control of the squad, directed suppressive fire, coordinated casualty evacuation, and maneuvered his element to a position of advantage. His actions under fire directly contributed to the successful conclusion of the engagement with no friendly casualties."
+    },
+    {
+      "type": "para",
+      "subject": "",
+      "text": "Beyond his tactical capabilities, Corporal Martinez has demonstrated exceptional potential for increased responsibility. He has completed the Corporal's Course with a 95 percent average, earned his Combat Fitness Test first class designation, and is currently enrolled in Marine Corps Institute courses for professional military education. His physical fitness scores consistently rank in the top 5 percent of the battalion."
+    },
+    {
+      "type": "para",
+      "subject": "",
+      "text": "Corporal Martinez embodies the leadership traits and principles expected of a Marine non-commissioned officer. His meritorious promotion would recognize his outstanding performance and provide the battalion with a proven combat leader in a critical billet. This command strongly endorses his advancement to the grade of Sergeant."
+    }
+  ],
+  "sigName": "W. F. GRUBER",
+  "byDirection": true,
+  "copyList": [
+    "CO, 5th Marine Regiment",
+    "CO, 1/5",
+    "Personnel File"
+  ]
+}

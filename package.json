@@ -1,0 +1,48 @@
+{
+  "name": "naval-letter-generator",
+  "version": "2.0.0",
+  "description": "Free online tool for creating SECNAV M-5216.5 compliant naval correspondence for USMC and Navy",
+  "main": "index.html",
+  "scripts": {
+    "build": "node build.js",
+    "serve": "npx serve .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "generate-examples": "node testing/testing/generate_examples.js"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "verbose": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeranaias/navalletterformat.git"
+  },
+  "keywords": [
+    "naval-letter",
+    "SECNAV",
+    "M-5216.5",
+    "MCO-5216.20",
+    "USMC",
+    "Marine-Corps",
+    "Navy",
+    "military-correspondence",
+    "PDF-generator",
+    "LaTeX"
+  ],
+  "author": "Jesse Morgan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jeranaias/navalletterformat/issues"
+  },
+  "homepage": "https://jeranaias.github.io/navalletterformat/",
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "jsdom": "^27.3.0",
+    "pdfkit": "^0.17.2"
+  }
+}
