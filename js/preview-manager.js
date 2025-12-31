@@ -692,6 +692,12 @@ async function generatePDFBlob() {
     });
   }
 
+  // Check for gap on final page (content ended with space remaining)
+  const finalPageGap = PH - MB - y;
+  if (finalPageGap > GAP_WARNING_THRESHOLD) {
+    largeGaps.push({ page: pageNum, gap: Math.round(finalPageGap) });
+  }
+
   // Classification at bottom of every page
   if (d.classification) {
     for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
