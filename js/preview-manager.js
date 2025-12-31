@@ -257,9 +257,11 @@ async function generatePDFBlob() {
   let pageNum = 1;
   const subjText = d.subj.toUpperCase();
 
-  // Track large gaps for user warning (disabled for now - needs refinement)
+  // Track large gaps for user warning
+  // Gap = space from current Y position to bottom margin when forced page break occurs
+  // This happens when orphan/widow prevention pushes content to next page
   const largeGaps = [];
-  const GAP_WARNING_THRESHOLD = 999; // Disabled - set very high to prevent false positives
+  const GAP_WARNING_THRESHOLD = 94; // 1.3 inches (94pt) - warn if gap is this large or more
 
   // Track when a page break just occurred (for skipping leading newlines)
   let freshPageBreak = false;
