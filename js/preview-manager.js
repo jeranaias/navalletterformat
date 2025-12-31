@@ -293,17 +293,8 @@ async function generatePDFBlob() {
       pdf.text(d.classification, PW / 2, 36, { align: 'center' });
     }
 
-    // Page number centered at bottom (0.5" from bottom edge)
-    pdf.setFont(fontName, 'normal');
-    pdf.setFontSize(fontSize);
-    pdf.text(String(pageNum), PW / 2, PH - 36, { align: 'center' });
-
-    // Classification/CUI at bottom of page (centered, below page number)
-    if (d.classification) {
-      pdf.setFont(fontName, 'bold');
-      pdf.setFontSize(fontSize);
-      pdf.text(d.classification, PW / 2, PH - 20, { align: 'center' });
-    }
+    // Note: Page numbers and classification are added at the end via loop
+    // to ensure consistent placement across all pages
 
     // Subject line continuation header
     pdf.setFont(fontName, 'normal');
@@ -696,11 +687,25 @@ async function generatePDFBlob() {
     });
   }
 
-  // Classification at bottom
+  // Classification at bottom of every page
   if (d.classification) {
-    pdf.setFont(fontName, 'bold');
-    pdf.setFontSize(fontSize);
-    pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
+    for (let i = 1; i <= pdf.getNumberOfPages(); i++) {
+      pdf.setPage(i);
+      pdf.setFont(fontName, 'bold');
+      pdf.setFontSize(fontSize);
+      pdf.text(d.classification, PW / 2, PH - 36, { align: 'center' });
+    }
+  }
+
+  // Page numbers (above classification if present) - only on page 2+
+  if (pdf.getNumberOfPages() > 1) {
+    const pageNumY = d.classification ? PH - 50 : PH - 36;
+    for (let i = 2; i <= pdf.getNumberOfPages(); i++) {
+      pdf.setPage(i);
+      pdf.setFont(fontName, 'normal');
+      pdf.setFontSize(fontSize);
+      pdf.text(String(i), PW / 2, pageNumY, { align: 'center' });
+    }
   }
 
   // Notify about large gaps that may need user attention
