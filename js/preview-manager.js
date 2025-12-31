@@ -269,17 +269,22 @@ async function generatePDFBlob() {
   // Page break check - used for pre-checking space
   function pageBreak(need) {
     if (y + need > PH - MB) {
-      doPageBreak();
+      doPageBreak(true); // Record gap for intentional early breaks
     }
   }
 
   // Actual page break - adds page and draws header
-  function doPageBreak() {
+  // recordGap: true for orphan prevention (intentional early break), false for natural mid-paragraph breaks
+  function doPageBreak(recordGap = false) {
     freshPageBreak = true; // Flag that we just did a page break
-    // Calculate gap left on current page
-    const gapLeft = PH - MB - y;
-    if (gapLeft > GAP_WARNING_THRESHOLD) {
-      largeGaps.push({ page: pageNum, gap: Math.round(gapLeft) });
+
+    // Only record gaps for orphan prevention breaks (where we intentionally leave space)
+    // Don't record for mid-paragraph breaks (where text fills to the margin)
+    if (recordGap) {
+      const gapLeft = PH - MB - y;
+      if (gapLeft > GAP_WARNING_THRESHOLD) {
+        largeGaps.push({ page: pageNum, gap: Math.round(gapLeft) });
+      }
     }
 
     pdf.addPage();
