@@ -282,8 +282,10 @@ async function generatePDFBlob() {
     // For orphan prevention: breakY is before content, gap is significant
     // For mid-paragraph: breakY is past margin, gap is 0 or negative
     const gapLeft = PH - MB - breakY;
+    console.log(`[GAP DEBUG] Page ${pageNum}: breakY=${Math.round(breakY)}, gapLeft=${Math.round(gapLeft)}, threshold=${GAP_WARNING_THRESHOLD}`);
     if (gapLeft > GAP_WARNING_THRESHOLD) {
       largeGaps.push({ page: pageNum, gap: Math.round(gapLeft) });
+      console.log(`[GAP DEBUG] Recorded gap for page ${pageNum}: ${Math.round(gapLeft)} points`);
     }
 
     pdf.addPage();
