@@ -269,22 +269,21 @@ async function generatePDFBlob() {
   // Page break check - used for pre-checking space
   function pageBreak(need) {
     if (y + need > PH - MB) {
-      doPageBreak(true); // Record gap for intentional early breaks
+      doPageBreak(y); // Pass current y for gap calculation
     }
   }
 
   // Actual page break - adds page and draws header
-  // recordGap: true for orphan prevention (intentional early break), false for natural mid-paragraph breaks
-  function doPageBreak(recordGap = false) {
+  // breakY: the Y position at which the break occurs (for accurate gap calculation)
+  function doPageBreak(breakY) {
     freshPageBreak = true; // Flag that we just did a page break
 
-    // Only record gaps for orphan prevention breaks (where we intentionally leave space)
-    // Don't record for mid-paragraph breaks (where text fills to the margin)
-    if (recordGap) {
-      const gapLeft = PH - MB - y;
-      if (gapLeft > GAP_WARNING_THRESHOLD) {
-        largeGaps.push({ page: pageNum, gap: Math.round(gapLeft) });
-      }
+    // Calculate gap from break position to bottom margin
+    // For orphan prevention: breakY is before content, gap is significant
+    // For mid-paragraph: breakY is past margin, gap is 0 or negative
+    const gapLeft = PH - MB - breakY;
+    if (gapLeft > GAP_WARNING_THRESHOLD) {
+      largeGaps.push({ page: pageNum, gap: Math.round(gapLeft) });
     }
 
     pdf.addPage();
@@ -317,7 +316,7 @@ async function generatePDFBlob() {
   // Page break callback for renderFormattedText - receives actual Y position
   function pageBreakAtY(currentY) {
     if (currentY > PH - MB) {
-      doPageBreak();
+      doPageBreak(currentY); // Pass actual position - gap will be 0 or negative, won't be recorded
       return y; // Return new position after header
     }
     return currentY; // No change
@@ -690,12 +689,6 @@ async function generatePDFBlob() {
       pdf.text(copyText, ML + TAB, y);
       y += LH;
     });
-  }
-
-  // Check for gap on final page (content ended with space remaining)
-  const finalPageGap = PH - MB - y;
-  if (finalPageGap > GAP_WARNING_THRESHOLD) {
-    largeGaps.push({ page: pageNum, gap: Math.round(finalPageGap) });
   }
 
   // Classification at bottom of every page
