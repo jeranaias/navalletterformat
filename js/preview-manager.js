@@ -189,6 +189,23 @@ async function updateLivePreview() {
 
   if (!previewFrame) return;
 
+  // Try to capture current page from URL fragment (e.g., #page=3)
+  let currentPage = 1;
+  try {
+    const currentUrl = previewFrame.src;
+    const pageMatch = currentUrl.match(/#page=(\d+)/);
+    if (pageMatch) {
+      currentPage = parseInt(pageMatch[1], 10);
+    } else if (previewFrame.contentWindow) {
+      // Try to estimate page from scroll position
+      // PDF viewers typically have pages around 800-1000px height
+      const scrollY = previewFrame.contentWindow.scrollY || 0;
+      currentPage = Math.max(1, Math.floor(scrollY / 900) + 1);
+    }
+  } catch (e) {
+    // Cross-origin access denied, keep default page
+  }
+
   try {
     // Show loading indicator
     if (previewLoading) {
@@ -207,7 +224,9 @@ async function updateLivePreview() {
         URL.revokeObjectURL(previewFrame.dataset.blobUrl);
       }
 
-      previewFrame.src = blobUrl;
+      // Append page fragment to preserve position (works in most PDF viewers)
+      const urlWithPage = currentPage > 1 ? `${blobUrl}#page=${currentPage}` : blobUrl;
+      previewFrame.src = urlWithPage;
       previewFrame.dataset.blobUrl = blobUrl;
     }
   } catch (error) {
