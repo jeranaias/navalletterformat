@@ -100,7 +100,7 @@ async function generatePDF() {
       pdf.text(line, ML + TAB, y);
       y += LH;
     });
-    // Spacing handled by paragraph loop
+    y += LH; // One blank line after subject - consistent for all page breaks
   }
 
   /**

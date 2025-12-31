@@ -313,7 +313,7 @@ async function generatePDFBlob() {
       pdf.text(line, ML + TAB, y);
       y += LH;
     });
-    // Spacing handled by paragraph loop or skipLeadingNewlines logic
+    y += LH; // One blank line after subject - consistent for all page breaks
   }
 
   // Page break callback for renderFormattedText - receives actual Y position
@@ -558,7 +558,12 @@ async function generatePDFBlob() {
         }
       }
 
-      y += LH;
+      // Add inter-paragraph spacing only if we didn't just do a page break
+      // (orphan prevention breaks already have spacing from doPageBreak)
+      if (!freshPageBreak) {
+        y += LH;
+      }
+      freshPageBreak = false; // Reset after check
       pageBreak(LH * 2);
 
       // Draw portion marking if enabled
