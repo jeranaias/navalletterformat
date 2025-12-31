@@ -261,7 +261,7 @@ async function generatePDFBlob() {
   // Gap = space from current Y position to bottom margin when forced page break occurs
   // This happens when orphan/widow prevention pushes content to next page
   const largeGaps = [];
-  const GAP_WARNING_THRESHOLD = 94; // 1.3 inches (94pt) - warn if gap is this large or more
+  const GAP_WARNING_THRESHOLD = 22; // 0.3 inches (22pt) - warn for any noticeable gap above the 1" margin
 
   // Track when a page break just occurred (for skipping leading newlines)
   let freshPageBreak = false;
@@ -282,10 +282,8 @@ async function generatePDFBlob() {
     // For orphan prevention: breakY is before content, gap is significant
     // For mid-paragraph: breakY is past margin, gap is 0 or negative
     const gapLeft = PH - MB - breakY;
-    console.log(`[GAP DEBUG] Page ${pageNum}: breakY=${Math.round(breakY)}, gapLeft=${Math.round(gapLeft)}, threshold=${GAP_WARNING_THRESHOLD}`);
     if (gapLeft > GAP_WARNING_THRESHOLD) {
       largeGaps.push({ page: pageNum, gap: Math.round(gapLeft) });
-      console.log(`[GAP DEBUG] Recorded gap for page ${pageNum}: ${Math.round(gapLeft)} points`);
     }
 
     pdf.addPage();
