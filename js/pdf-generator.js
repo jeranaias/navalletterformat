@@ -574,7 +574,11 @@ async function printPDF() {
   // Letterhead (for basic letters, endorsements, and formal memos) - before MEMORANDUM for formal memos
   if (d.useLetterhead) {
     if (d.hasSeal && d.sealData) {
-      try { pdf.addImage(d.sealData, 'JPEG', 36, 36, 72, 72); } catch (e) {}
+      try {
+        pdf.addImage(d.sealData, 'JPEG', 36, 36, 72, 72);
+      } catch (e) {
+        console.warn('Could not add seal image:', e);
+      }
     }
     if (d.unitName) {
       pdf.setFont(fontName, 'bold');

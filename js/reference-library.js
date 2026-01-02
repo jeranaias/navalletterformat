@@ -13,7 +13,6 @@ async function loadReferenceData() {
   try {
     const response = await fetch('data/references.json');
     referenceData = await response.json();
-    console.log(`Loaded ${referenceData.references.length} references`);
   } catch (e) {
     console.error('Failed to load reference data:', e);
     referenceData = { references: [], categories: [] };

@@ -5,7 +5,6 @@
 
 let previewDebounceTimer = null;
 let previewEnabled = false;
-let lastPreviewData = null;
 let mobilePreviewUrl = null;
 
 /**
@@ -129,20 +128,22 @@ function showMobilePreviewModal(pdfUrl) {
   // Create modal
   const modal = document.createElement('div');
   modal.id = 'mobilePreviewModal';
-  modal.className = 'modal show';
-  modal.style.cssText = 'display:flex; z-index:3000;';
+  modal.className = 'modal show mobile-preview-modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-labelledby', 'mobilePreviewTitle');
 
   modal.innerHTML = `
-    <div class="modal-content" style="width:100%; height:100%; max-width:100%; max-height:100%; margin:0; border-radius:0; display:flex; flex-direction:column;">
-      <div class="modal-header" style="flex-shrink:0;">
-        <h2>Preview</h2>
-        <button type="button" class="modal-close" onclick="closeMobilePreview()" aria-label="Close">&times;</button>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="mobilePreviewTitle">Preview</h2>
+        <button type="button" class="modal-close" onclick="closeMobilePreview()" aria-label="Close preview">&times;</button>
       </div>
-      <div style="flex:1; display:flex; flex-direction:column; overflow:hidden; background:#f5f5f5;">
-        <object data="${pdfUrl}" type="application/pdf" style="flex:1; width:100%; min-height:0;">
-          <div style="padding:20px; text-align:center;">
-            <p style="margin-bottom:16px; color:#666;">PDF preview not supported on this device.</p>
-            <a href="${pdfUrl}" target="_blank" class="btn btn-primary" style="margin-right:8px;">Open PDF</a>
+      <div class="mobile-preview-body">
+        <object data="${pdfUrl}" type="application/pdf" aria-label="PDF preview">
+          <div class="mobile-preview-fallback">
+            <p>PDF preview not supported on this device.</p>
+            <a href="${pdfUrl}" target="_blank" class="btn btn-primary">Open PDF</a>
             <a href="${pdfUrl}" download="preview.pdf" class="btn btn-secondary">Download</a>
           </div>
         </object>

@@ -318,7 +318,6 @@ function saveDraftToStorage() {
   try {
     const data = collectFormData();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    console.log('Draft auto-saved');
     return true;
   } catch (err) {
     console.error('Failed to save draft:', err);

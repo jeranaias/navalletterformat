@@ -1,13 +1,23 @@
-# Naval Letter Generator
+<p align="center">
+  <img src="assets/don-seal.png" alt="Department of the Navy Seal" width="120">
+</p>
 
-### Free Online Tool for SECNAV M-5216.5 Compliant Military Correspondence
+<h1 align="center">Naval Letter Generator</h1>
 
-[![SECNAV M-5216.5](https://img.shields.io/badge/SECNAV-M--5216.5-blue)](https://www.secnav.navy.mil/doni/SECNAV%20Manuals1/5216.5%20DON%20Correspondence%20Manual.pdf)
-[![MCO 5216.20](https://img.shields.io/badge/MCO-5216.20-red)](https://www.marines.mil/News/Publications/MCPEL/Electronic-Library-Display/Article/899678/mco-521620/)
-[![Version](https://img.shields.io/badge/Version-3.1.1-green)](https://github.com/jeranaias/navalletterformat/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+<p align="center">
+  <strong>Free Online Tool for SECNAV M-5216.5 Compliant Military Correspondence</strong>
+</p>
 
-**Live Tool: [https://jeranaias.github.io/navalletterformat/](https://jeranaias.github.io/navalletterformat/)**
+<p align="center">
+  <a href="https://www.secnav.navy.mil/doni/SECNAV%20Manuals1/5216.5%20DON%20Correspondence%20Manual.pdf"><img src="https://img.shields.io/badge/SECNAV-M--5216.5-8B0000" alt="SECNAV M-5216.5"></a>
+  <a href="https://www.marines.mil/News/Publications/MCPEL/Electronic-Library-Display/Article/899678/mco-521620/"><img src="https://img.shields.io/badge/MCO-5216.20-DC4444" alt="MCO 5216.20"></a>
+  <a href="https://github.com/jeranaias/navalletterformat/releases"><img src="https://img.shields.io/badge/Version-3.2-EAB308" alt="Version 3.2"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-28a745" alt="License: MIT"></a>
+</p>
+
+<p align="center">
+  <a href="https://jeranaias.github.io/navalletterformat/"><strong>Launch Tool →</strong></a>
+</p>
 
 ---
 
@@ -15,13 +25,42 @@
 
 The **Naval Letter Generator** is a free, browser-based tool that creates properly formatted naval correspondence for the **United States Marine Corps**. It generates publication-ready documents that comply with **SECNAV M-5216.5** (Department of the Navy Correspondence Manual) and **MCO 5216.20** (Marine Corps supplement).
 
-**No software installation. No account. No Overleaf required.**
+<table>
+<tr>
+<td>✅ No software installation</td>
+<td>✅ No account required</td>
+<td>✅ No Overleaf needed</td>
+</tr>
+</table>
 
 Just open the link, fill in your information, and download your PDF.
 
 ---
 
-## 🚀 What's New in v3.1.1
+## 🚀 What's New in v3.2
+
+### Theme System — Dark, Light & Night Modes
+- **Three visual themes** to match your preference and environment
+- **Dark Mode** 🌙 — USMC red accent on dark background (default)
+- **Light Mode** ☀️ — Clean light background with dark red accents
+- **Night Mode** ⭐ — Red-on-black for low-light conditions
+- Theme syncs with OSMEAC Generator and other USMC tools via shared localStorage
+
+### Visual Refresh
+- New red/gold color scheme matching USMC branding
+- Updated header gradients and accent colors
+- Improved button and card styling
+- Better visual hierarchy throughout
+
+### Code Quality Improvements
+- Removed debug logging from production
+- Added accessibility attributes to mobile preview
+- Improved error handling and null checks
+- Moved inline styles to proper CSS classes
+
+---
+
+## What's New in v3.1.1
 
 ### Rich Text Formatting in PDF Output
 - **Bold, italic, underline, and strikethrough** now render correctly in PDF preview and exports
@@ -383,9 +422,11 @@ Thanks to the Marines who've provided feedback:
 
 ## About
 
-**Created by:** Jesse Morgan
-**Version:** 3.1.1
-**Status:** Active development
+| | |
+|---|---|
+| **Created by** | Jesse Morgan |
+| **Version** | 3.2 |
+| **Status** | Active development |
 
 *Personal project, not officially endorsed by any military branch.*
 

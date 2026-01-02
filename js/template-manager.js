@@ -15,7 +15,6 @@ async function loadTemplates() {
     const data = await response.json();
     TEMPLATE_DATABASE = data.templates || [];
     templateCategories = data.categories || [];
-    console.log(`Loaded ${TEMPLATE_DATABASE.length} templates`);
     return true;
   } catch (error) {
     console.warn('Could not load templates:', error);

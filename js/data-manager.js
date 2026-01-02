@@ -28,7 +28,6 @@ async function loadData() {
         code: c.code,
         desc: c.title
       }));
-      console.log(`Loaded ${SSIC_DATABASE.length} SSICs from external file`);
     }
 
     if (unitsResponse.ok) {
@@ -38,13 +37,11 @@ async function loadData() {
         address: u.address,
         service: u.service
       }));
-      console.log(`Loaded ${UNIT_DATABASE.length} units from external file`);
     }
 
     if (officeCodesResponse.ok) {
       const officeData = await officeCodesResponse.json();
       OFFICE_CODE_DATABASE = officeData.codes;
-      console.log(`Loaded ${OFFICE_CODE_DATABASE.length} office codes from external file`);
     }
 
     dataLoaded = true;
@@ -242,13 +239,17 @@ function selectOfficeCode(code) {
 function initSearchListeners() {
   // SSIC Search
   const ssicInput = document.getElementById('ssicSearch');
-  ssicInput.addEventListener('input', handleSSICSearch);
-  ssicInput.addEventListener('focus', handleSSICSearch);
+  if (ssicInput) {
+    ssicInput.addEventListener('input', handleSSICSearch);
+    ssicInput.addEventListener('focus', handleSSICSearch);
+  }
 
   // Unit Search
   const unitInput = document.getElementById('unitSearch');
-  unitInput.addEventListener('input', handleUnitSearch);
-  unitInput.addEventListener('focus', handleUnitSearch);
+  if (unitInput) {
+    unitInput.addEventListener('input', handleUnitSearch);
+    unitInput.addEventListener('focus', handleUnitSearch);
+  }
 
   // Office Code Search
   const officeCodeInput = document.getElementById('officeCode');
@@ -257,17 +258,21 @@ function initSearchListeners() {
     officeCodeInput.addEventListener('focus', handleOfficeCodeSearch);
   }
 
+  // Cache dropdown result elements for performance
+  const ssicResults = document.getElementById('ssicResults');
+  const unitResults = document.getElementById('unitResults');
+  const officeCodeResults = document.getElementById('officeCodeResults');
+
   // Close dropdowns when clicking outside
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('#ssicSearch') && !e.target.closest('#ssicResults')) {
-      document.getElementById('ssicResults').classList.remove('show');
+    if (ssicResults && !e.target.closest('#ssicSearch') && !e.target.closest('#ssicResults')) {
+      ssicResults.classList.remove('show');
     }
-    if (!e.target.closest('#unitSearch') && !e.target.closest('#unitResults')) {
-      document.getElementById('unitResults').classList.remove('show');
+    if (unitResults && !e.target.closest('#unitSearch') && !e.target.closest('#unitResults')) {
+      unitResults.classList.remove('show');
     }
-    if (!e.target.closest('#officeCode') && !e.target.closest('#officeCodeResults')) {
-      const officeResults = document.getElementById('officeCodeResults');
-      if (officeResults) officeResults.classList.remove('show');
+    if (officeCodeResults && !e.target.closest('#officeCode') && !e.target.closest('#officeCodeResults')) {
+      officeCodeResults.classList.remove('show');
     }
   });
 }

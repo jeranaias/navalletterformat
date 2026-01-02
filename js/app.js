@@ -27,7 +27,6 @@ function registerServiceWorker() {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
-          console.log('Service Worker registered:', registration.scope);
           updateOfflineIndicator('ready', 'Ready offline');
         })
         .catch((error) => {
@@ -56,33 +55,47 @@ function registerServiceWorker() {
 }
 
 /**
- * Theme toggle functionality
+ * Theme toggle functionality - 3 modes: dark, light, night
  */
+const THEMES = ['dark', 'light', 'night'];
+const THEME_ICONS = {
+  dark: '🌙',
+  light: '☀️',
+  night: '⭐'
+};
+let currentThemeIndex = 0;
+
 function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute('data-theme');
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  currentThemeIndex = (currentThemeIndex + 1) % THEMES.length;
+  const newTheme = THEMES[currentThemeIndex];
   setTheme(newTheme);
 }
 
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem('theme', theme);
+  localStorage.setItem('usmc-tools-theme', theme);
   updateThemeIcon(theme);
 }
 
 function updateThemeIcon(theme) {
-  const icon = document.getElementById('themeIcon');
-  if (icon) {
-    icon.textContent = theme === 'dark' ? '☽' : '☀';
+  const btn = document.querySelector('.theme-toggle');
+  if (btn) {
+    btn.innerHTML = THEME_ICONS[theme] || '🌙';
+    btn.title = `Current: ${theme.charAt(0).toUpperCase() + theme.slice(1)} mode (click to toggle)`;
   }
 }
 
 function initTheme() {
-  // Check for saved preference, then system preference
-  const savedTheme = localStorage.getItem('theme');
+  // Check for saved preference (new key first, then legacy)
+  const savedTheme = localStorage.getItem('usmc-tools-theme') || localStorage.getItem('theme');
   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
-  setTheme(theme);
+
+  // Set the current index
+  currentThemeIndex = THEMES.indexOf(theme);
+  if (currentThemeIndex === -1) currentThemeIndex = 0;
+
+  setTheme(THEMES[currentThemeIndex]);
 }
 
 /**
@@ -134,8 +147,6 @@ function initKeyboardShortcuts() {
  * Initialize the application
  */
 async function initApp() {
-  console.log('Naval Letter Generator v3.1 initializing...');
-
   // Initialize theme immediately (visual)
   initTheme();
 
@@ -193,8 +204,6 @@ async function initApp() {
 
   // Register service worker last (non-blocking)
   registerServiceWorker();
-
-  console.log('Naval Letter Generator v3.1 ready!');
 }
 
 // Initialize when DOM is ready

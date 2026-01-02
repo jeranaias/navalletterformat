@@ -28,7 +28,6 @@ async function loadDefaultSeal() {
         reader.onload = function(e) {
           sealData = e.target.result;
           sealLoaded = true;
-          console.log('Default DON seal loaded successfully');
           resolve(true);
         };
         reader.readAsDataURL(blob);
