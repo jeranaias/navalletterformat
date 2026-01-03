@@ -2,7 +2,8 @@
   "name": "Naval Letter Generator",
   "short_name": "NavalLetter",
   "description": "SECNAV M-5216.5 Compliant Correspondence Tool for Marines and Sailors",
-  "start_url": "/navalletterformat/",
+  "start_url": ".",
+  "scope": ".",
   "display": "standalone",
   "background_color": "#f5f5f0",
   "theme_color": "#003366",
@@ -26,7 +27,7 @@
   "shortcuts": [
     {
       "name": "New Letter",
-      "url": "/navalletterformat/",
+      "url": "./",
       "description": "Create a new naval letter"
     }
   ]

@@ -3,22 +3,22 @@
  * Enables offline functionality and caching
  */
 
-const CACHE_NAME = 'naval-letter-v2.0';
+const CACHE_NAME = 'naval-letter-v2.1';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/css/styles.css',
-  '/js/utils.js',
-  '/js/data-manager.js',
-  '/js/form-handler.js',
-  '/js/latex-generator.js',
-  '/js/pdf-generator.js',
-  '/js/draft-manager.js',
-  '/js/app.js',
-  '/data/ssic.json',
-  '/data/units.json',
-  '/assets/DOW-Seal-BW.jpg',
-  '/manifest.json'
+  './',
+  './index.html',
+  './css/styles.css',
+  './js/utils.js',
+  './js/data-manager.js',
+  './js/form-handler.js',
+  './js/latex-generator.js',
+  './js/pdf-generator.js',
+  './js/draft-manager.js',
+  './js/app.js',
+  './data/ssic.json',
+  './data/units.json',
+  './assets/DOW-Seal-BW.jpg',
+  './manifest.json'
 ];
 
 // Install event - cache assets
