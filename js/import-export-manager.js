@@ -324,8 +324,53 @@ function dataUrlToUint8Array(dataUrl) {
 }
 
 /**
+ * Parse HTML content to extract text with formatting
+ * Returns array of { text, bold, italic, underline }
+ */
+function parseHtmlForWord(html) {
+  if (!html) return [{ text: '', bold: false, italic: false, underline: false }];
+
+  const segments = [];
+  const div = document.createElement('div');
+  div.innerHTML = html;
+
+  function processNode(node, style = { bold: false, italic: false, underline: false }) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      if (node.textContent) {
+        segments.push({
+          text: node.textContent,
+          bold: style.bold,
+          italic: style.italic,
+          underline: style.underline
+        });
+      }
+      return;
+    }
+
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const newStyle = { ...style };
+      const tag = node.tagName.toLowerCase();
+
+      if (tag === 'b' || tag === 'strong') newStyle.bold = true;
+      if (tag === 'i' || tag === 'em') newStyle.italic = true;
+      if (tag === 'u') newStyle.underline = true;
+
+      for (const child of node.childNodes) {
+        processNode(child, newStyle);
+      }
+    }
+  }
+
+  for (const child of div.childNodes) {
+    processNode(child);
+  }
+
+  return segments.length > 0 ? segments : [{ text: '', bold: false, italic: false, underline: false }];
+}
+
+/**
  * Export letter as Word document (.docx)
- * Matches PDF output as closely as possible
+ * Matches PDF output exactly
  */
 async function exportToWord() {
   const d = collectData();
@@ -333,23 +378,31 @@ async function exportToWord() {
   showStatus('loading', 'Generating Word document...');
 
   try {
-    const { Document, Packer, Paragraph, TextRun, ImageRun, AlignmentType, TabStopType, TabStopPosition, convertInchesToTwip, Header, Footer } = docx;
+    const { Document, Packer, Paragraph, TextRun, ImageRun, AlignmentType, TabStopType, UnderlineType, convertInchesToTwip, Header, Footer } = docx;
 
-    // Font settings to match PDF
+    // Font settings to match PDF exactly
     const FONT = 'Times New Roman';
     const SIZE_12 = 24; // 12pt in half-points
     const SIZE_10 = 20; // 10pt
     const SIZE_8 = 16;  // 8pt
-    const LINE_SPACING = 276; // ~14pt line height
+    const SIZE_6 = 12;  // 6pt for "IN REPLY REFER TO"
+    const LINE_SPACING = 240; // Single line spacing (240 twips = 1 line)
 
-    // Tab stop for labels (0.625 inch = 900 twips)
+    // Tab stop for labels - matches PDF TAB = 45pt = 900 twips (0.625 inch)
     const LABEL_TAB = 900;
-    // Center of page for signature (about 3 inches from left = 4320 twips)
-    const SIG_INDENT = 4320;
+
+    // Indentation values to match PDF (in twips, 1 pt = 20 twips)
+    const IM = 300;   // 15pt - main para text indent
+    const IS = 320;   // 16pt - subpara indent
+    const ISS = 360;  // 18pt - subsubpara indent
+    const ISSS = 380; // 19pt - subsubsubpara indent
+
+    // Signature starts at page center (3.25 inches from left = 4680 twips)
+    const SIG_INDENT = 4680;
 
     const children = [];
 
-    // Get seal image data from collectData (already loaded as base64)
+    // Get seal image data
     let sealImageData = null;
     if (d.useLetterhead && d.hasSeal && d.sealData) {
       sealImageData = dataUrlToUint8Array(d.sealData);
@@ -360,13 +413,12 @@ async function exportToWord() {
       children.push(new Paragraph({
         children: [new TextRun({ text: d.classification, bold: true, size: SIZE_12, font: FONT })],
         alignment: AlignmentType.CENTER,
-        spacing: { after: 120 }
+        spacing: { after: 0 }
       }));
     }
 
     // Letterhead section
     if (d.useLetterhead) {
-      // Add seal image as floating element in first paragraph
       const unitNameChildren = [];
 
       if (sealImageData) {
@@ -375,14 +427,8 @@ async function exportToWord() {
             data: sealImageData,
             transformation: { width: 72, height: 72 },
             floating: {
-              horizontalPosition: {
-                relative: 'page',
-                offset: 457200 // 0.5 inch from left edge
-              },
-              verticalPosition: {
-                relative: 'page',
-                offset: 457200 // 0.5 inch from top edge
-              },
+              horizontalPosition: { relative: 'page', offset: 457200 },
+              verticalPosition: { relative: 'page', offset: 457200 },
               wrap: { type: 'none' },
               behindDocument: true
             }
@@ -392,7 +438,6 @@ async function exportToWord() {
         }
       }
 
-      // Unit name (bold, 10pt, centered)
       if (d.unitName) {
         unitNameChildren.push(new TextRun({ text: d.unitName.toUpperCase(), bold: true, size: SIZE_10, font: FONT }));
         children.push(new Paragraph({
@@ -401,14 +446,9 @@ async function exportToWord() {
           spacing: { after: 0 }
         }));
       } else if (sealImageData) {
-        // If no unit name but we have a seal, still add the paragraph with seal
-        children.push(new Paragraph({
-          children: unitNameChildren,
-          spacing: { after: 0 }
-        }));
+        children.push(new Paragraph({ children: unitNameChildren, spacing: { after: 0 } }));
       }
 
-      // Unit address (8pt, centered)
       if (d.unitAddress) {
         d.unitAddress.split('\n').filter(l => l.trim()).forEach(line => {
           children.push(new Paragraph({
@@ -419,95 +459,104 @@ async function exportToWord() {
         });
       }
 
-      // Spacing after letterhead
-      children.push(new Paragraph({ children: [], spacing: { after: 240 } }));
+      // Match PDF spacing after letterhead
+      children.push(new Paragraph({ children: [], spacing: { after: 480 } }));
     }
 
-    // MEMORANDUM header for memos (centered, bold)
+    // MEMORANDUM header (centered, bold)
     if (d.documentType === 'memorandum') {
       children.push(new Paragraph({
         children: [new TextRun({ text: 'MEMORANDUM', bold: true, size: SIZE_12, font: FONT })],
         alignment: AlignmentType.CENTER,
-        spacing: { after: 280 }
+        spacing: { after: LINE_SPACING * 2 }
       }));
     }
 
-    // Sender's symbols block (right side, left-aligned within block)
-    // Use a right-aligned paragraph with the text
-    const senderLines = [];
-    if (d.ssic) senderLines.push(d.ssic);
-    if (d.officeCode) senderLines.push(d.officeCode);
-    if (d.date) senderLines.push(d.date);
-
-    senderLines.forEach((line, i) => {
+    // Sender's symbols block - positioned on right side
+    // "IN REPLY REFER TO:" label if enabled
+    if (d.showInReplyTo) {
       children.push(new Paragraph({
-        children: [new TextRun({ text: line, size: SIZE_12, font: FONT })],
+        children: [new TextRun({ text: 'IN REPLY REFER TO:', size: SIZE_6, font: FONT })],
         alignment: AlignmentType.RIGHT,
-        spacing: { after: i === senderLines.length - 1 ? 280 : 0 }
+        spacing: { after: 0 }
       }));
-    });
+    }
+
+    if (d.ssic) {
+      children.push(new Paragraph({
+        children: [new TextRun({ text: d.ssic, size: SIZE_12, font: FONT })],
+        alignment: AlignmentType.RIGHT,
+        spacing: { after: 0 }
+      }));
+    }
+    if (d.officeCode) {
+      children.push(new Paragraph({
+        children: [new TextRun({ text: d.officeCode, size: SIZE_12, font: FONT })],
+        alignment: AlignmentType.RIGHT,
+        spacing: { after: 0 }
+      }));
+    }
+    if (d.date) {
+      children.push(new Paragraph({
+        children: [new TextRun({ text: d.date, size: SIZE_12, font: FONT })],
+        alignment: AlignmentType.RIGHT,
+        spacing: { after: LINE_SPACING * 2 }
+      }));
+    }
 
     // Endorsement header (centered, bold)
     if (d.documentType === 'endorsement') {
       children.push(new Paragraph({
         children: [new TextRun({ text: `${d.endorseNumber} ENDORSEMENT`, bold: true, size: SIZE_12, font: FONT })],
         alignment: AlignmentType.CENTER,
-        spacing: { after: 280 }
+        spacing: { after: LINE_SPACING * 2 }
       }));
     }
 
     // Helper for labeled fields with tab stops
-    const addLabeledField = (label, value, extraSpacing = false) => {
-      children.push(new Paragraph({
+    const createLabeledPara = (label, value, spacing = 0) => {
+      return new Paragraph({
         children: [
           new TextRun({ text: label, size: SIZE_12, font: FONT }),
           new TextRun({ text: '\t', size: SIZE_12 }),
           new TextRun({ text: value, size: SIZE_12, font: FONT })
         ],
         tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }],
-        spacing: { after: extraSpacing ? 280 : 0 }
-      }));
+        spacing: { after: spacing }
+      });
     };
 
     // From line
-    addLabeledField('From:', d.from);
+    children.push(createLabeledPara('From:', d.from));
 
     // To line
-    addLabeledField('To:', d.to);
+    children.push(createLabeledPara('To:', d.to));
 
     // Via lines (numbered if multiple)
     if (d.via && d.via.length > 0) {
       d.via.forEach((v, i) => {
-        if (i === 0) {
-          children.push(new Paragraph({
-            children: [
-              new TextRun({ text: 'Via:', size: SIZE_12, font: FONT }),
-              new TextRun({ text: '\t', size: SIZE_12 }),
-              new TextRun({ text: d.via.length > 1 ? `(${i + 1})  ${v}` : v, size: SIZE_12, font: FONT })
-            ],
-            tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }]
-          }));
-        } else {
-          children.push(new Paragraph({
-            children: [
-              new TextRun({ text: '\t', size: SIZE_12 }),
-              new TextRun({ text: `(${i + 1})  ${v}`, size: SIZE_12, font: FONT })
-            ],
-            tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }]
-          }));
-        }
+        const viaText = d.via.length > 1 ? `(${i + 1})  ${v}` : v;
+        children.push(new Paragraph({
+          children: [
+            new TextRun({ text: i === 0 ? 'Via:' : '', size: SIZE_12, font: FONT }),
+            new TextRun({ text: '\t', size: SIZE_12 }),
+            new TextRun({ text: viaText, size: SIZE_12, font: FONT })
+          ],
+          tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }],
+          spacing: { after: 0 }
+        }));
       });
     }
 
-    // Blank line before Subject
-    children.push(new Paragraph({ children: [], spacing: { after: 0 } }));
+    // Blank line before Subject (matches PDF y += LH)
+    children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
 
     // Subject line (uppercase)
-    addLabeledField('Subj:', d.subj.toUpperCase());
+    children.push(createLabeledPara('Subj:', d.subj.toUpperCase()));
 
-    // References
+    // References (with blank line before)
     if (d.refs && d.refs.length > 0) {
-      children.push(new Paragraph({ children: [], spacing: { after: 0 } }));
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
       d.refs.forEach((r, i) => {
         const letter = String.fromCharCode(97 + i);
         children.push(new Paragraph({
@@ -516,14 +565,15 @@ async function exportToWord() {
             new TextRun({ text: '\t', size: SIZE_12 }),
             new TextRun({ text: `(${letter})  ${r}`, size: SIZE_12, font: FONT })
           ],
-          tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }]
+          tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }],
+          spacing: { after: 0 }
         }));
       });
     }
 
-    // Enclosures
+    // Enclosures (with blank line before)
     if (d.encls && d.encls.length > 0) {
-      children.push(new Paragraph({ children: [], spacing: { after: 0 } }));
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
       d.encls.forEach((e, i) => {
         children.push(new Paragraph({
           children: [
@@ -531,90 +581,156 @@ async function exportToWord() {
             new TextRun({ text: '\t', size: SIZE_12 }),
             new TextRun({ text: `(${i + 1})  ${e}`, size: SIZE_12, font: FONT })
           ],
-          tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }]
+          tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }],
+          spacing: { after: 0 }
         }));
       });
     }
 
-    // Blank line before body
-    children.push(new Paragraph({ children: [], spacing: { after: 280 } }));
+    // Endorsement action
+    if (d.documentType === 'endorsement' && d.endorseAction) {
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
+      children.push(new Paragraph({
+        children: [new TextRun({ text: `1.  ${d.endorseAction}.`, size: SIZE_12, font: FONT })],
+        spacing: { after: LINE_SPACING * 2 }
+      }));
+    }
 
-    // Body paragraphs with proper indentation
+    // Body paragraphs with proper indentation matching PDF
     if (d.paras && d.paras.length > 0) {
       let pn = 0, sn = 0, ssn = 0, sssn = 0;
-      const INDENT_UNIT = 360; // 0.25 inch per level
 
-      d.paras.forEach(p => {
-        let label, indent = 0;
-        const pText = p.text ? p.text.replace(/\.(\s)/g, '.  ') : ''; // Double space after periods
+      d.paras.forEach((p, pIdx) => {
+        let label, indent = 0, labelWidth = 0;
+
+        // Parse HTML content for formatting
+        const htmlContent = p.html || p.text || '';
+        const segments = parseHtmlForWord(htmlContent);
 
         if (p.type === 'para') {
           pn++; sn = 0; ssn = 0; sssn = 0;
           label = pn + '.';
           indent = 0;
+          labelWidth = IM;
         } else if (p.type === 'subpara') {
           sn++; ssn = 0; sssn = 0;
           label = String.fromCharCode(96 + sn) + '.';
-          indent = INDENT_UNIT;
+          indent = IM;
+          labelWidth = IS;
         } else if (p.type === 'subsubpara') {
           ssn++; sssn = 0;
           label = '(' + ssn + ')';
-          indent = INDENT_UNIT * 2;
+          indent = IM + IS;
+          labelWidth = ISS;
         } else {
           sssn++;
           label = '(' + String.fromCharCode(96 + sssn) + ')';
-          indent = INDENT_UNIT * 3;
+          indent = IM + IS + ISS;
+          labelWidth = ISSS;
         }
 
-        // Paragraph with hanging indent for wrapped text
+        // Build text runs with formatting
+        const textRuns = [];
+
+        // Handle paragraph subject (top-level only, underlined)
+        if (p.subject && p.type === 'para') {
+          textRuns.push(new TextRun({
+            text: label + '  ',
+            size: SIZE_12,
+            font: FONT
+          }));
+          textRuns.push(new TextRun({
+            text: p.subject,
+            size: SIZE_12,
+            font: FONT,
+            underline: { type: UnderlineType.SINGLE }
+          }));
+          // Add space after subject if there's body text
+          if (segments.some(s => s.text.trim())) {
+            textRuns.push(new TextRun({ text: '  ', size: SIZE_12, font: FONT }));
+          }
+        } else {
+          textRuns.push(new TextRun({ text: label + '  ', size: SIZE_12, font: FONT }));
+        }
+
+        // Add formatted text segments
+        segments.forEach(seg => {
+          if (seg.text) {
+            // Ensure double space after periods
+            const text = seg.text.replace(/\.(\s)(?!\s)/g, '.  ');
+            textRuns.push(new TextRun({
+              text: text,
+              size: SIZE_12,
+              font: FONT,
+              bold: seg.bold,
+              italics: seg.italic,
+              underline: seg.underline ? { type: UnderlineType.SINGLE } : undefined
+            }));
+          }
+        });
+
+        // Add paragraph with proper hanging indent
         children.push(new Paragraph({
-          children: [
-            new TextRun({ text: label + '  ' + pText, size: SIZE_12, font: FONT })
-          ],
-          indent: { left: indent, hanging: 0 },
-          spacing: { after: 280, line: LINE_SPACING }
+          children: textRuns,
+          indent: {
+            left: indent,
+            hanging: 0,
+            firstLine: 0
+          },
+          spacing: {
+            before: LINE_SPACING,
+            after: 0,
+            line: LINE_SPACING
+          }
         }));
       });
     }
 
-    // Signature block - 4 blank lines before signature
-    children.push(new Paragraph({ children: [], spacing: { after: 280 } }));
-    children.push(new Paragraph({ children: [], spacing: { after: 280 } }));
-    children.push(new Paragraph({ children: [], spacing: { after: 280 } }));
-
-    if (d.byDirection) {
-      children.push(new Paragraph({
-        children: [new TextRun({ text: 'By direction', size: SIZE_12, font: FONT })],
-        indent: { left: SIG_INDENT },
-        spacing: { after: 280 }
-      }));
-      children.push(new Paragraph({ children: [], spacing: { after: 280 } }));
-      children.push(new Paragraph({ children: [], spacing: { after: 280 } }));
-    }
-
-    // Signature name (ALL CAPS, NOT bold per SECNAV M-5216.5)
+    // Signature block - matches PDF exactly
+    // 4 blank lines before signature name
     if (d.sigName) {
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
+
+      // Signature name (ALL CAPS) at page center
       children.push(new Paragraph({
         children: [new TextRun({ text: d.sigName.toUpperCase(), size: SIZE_12, font: FONT })],
-        indent: { left: SIG_INDENT }
+        indent: { left: SIG_INDENT },
+        spacing: { after: 0 }
       }));
+
+      // "By direction" AFTER signature name (per SECNAV M-5216.5)
+      if (d.byDirection) {
+        children.push(new Paragraph({
+          children: [new TextRun({ text: 'By direction', size: SIZE_12, font: FONT })],
+          indent: { left: SIG_INDENT },
+          spacing: { after: 0 }
+        }));
+      }
     }
 
     // Copy to section
     if (d.copies && d.copies.length > 0) {
-      children.push(new Paragraph({ children: [], spacing: { after: 280 } }));
-      children.push(new Paragraph({ children: [], spacing: { after: 280 } }));
-      children.push(new Paragraph({
-        children: [new TextRun({ text: 'Copy to:', size: SIZE_12, font: FONT })]
-      }));
-      d.copies.forEach(c => {
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
+
+      d.copies.forEach((c, i) => {
+        const copyText = d.copies.length > 1 ? `(${i + 1})  ${c}` : c;
         children.push(new Paragraph({
-          children: [new TextRun({ text: c, size: SIZE_12, font: FONT })]
+          children: [
+            new TextRun({ text: i === 0 ? 'Copy to:' : '', size: SIZE_12, font: FONT }),
+            new TextRun({ text: '\t', size: SIZE_12 }),
+            new TextRun({ text: copyText, size: SIZE_12, font: FONT })
+          ],
+          tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }],
+          spacing: { after: 0 }
         }));
       });
     }
 
-    // Build document with headers/footers for classification
+    // Build document with 1-inch margins
     const sections = [{
       properties: {
         page: {
