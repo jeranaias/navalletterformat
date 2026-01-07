@@ -317,7 +317,7 @@ header {
 }
 
 [data-theme="dark"] .preview-header {
-  background: #1a3a5c;
+  background: #5c1a1a;
 }
 
 [data-theme="dark"] .preview-frame {
@@ -675,7 +675,7 @@ header {
 }
 
 [data-theme="dark"] .modal-header {
-  background: #1a3a5c;
+  background: #5c1a1a;
 }
 
 [data-theme="dark"] .template-filters {
@@ -3639,8 +3639,8 @@ button:focus-visible,
 }
 
 .pii-section.info {
-  background: #e0f2fe;
-  border: 1px solid #0284c7;
+  background: #fef2f2;
+  border: 1px solid #dc3545;
 }
 
 .pii-section h4 {

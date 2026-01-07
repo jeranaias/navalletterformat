@@ -487,8 +487,6 @@ async function generatePDFBlob() {
     });
   }
 
-  y += LH;
-
   // Endorsement action
   if (d.documentType === 'endorsement' && d.endorseAction) {
     pdf.text(`1.  ${d.endorseAction}.`, ML, y);
