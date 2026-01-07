@@ -487,7 +487,7 @@ async function generatePDFBlob() {
     });
   }
 
-  y += LH * 2;
+  y += LH;
 
   // Endorsement action
   if (d.documentType === 'endorsement' && d.endorseAction) {
