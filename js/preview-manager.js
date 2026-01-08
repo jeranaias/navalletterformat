@@ -405,11 +405,10 @@ async function generatePDFBlob() {
 
   // Memorandum title (after SSIC/date, left-aligned, one line gap before and after)
   if (d.documentType === 'memorandum') {
-    y += LH; // One line gap after SSIC/date block
-    pdf.setFont(fontName, 'bold');
-    pdf.text(d.memoTitle || 'MEMORANDUM', ML, y);
+    y += LH * 2; // One blank line gap after SSIC/date block
     pdf.setFont(fontName, 'normal');
-    y += LH; // One line gap before subject
+    pdf.text(d.memoTitle || 'MEMORANDUM', ML, y);
+    y += LH * 2; // One blank line gap before subject
   } else {
     y += LH; // Standard gap for non-memo documents
   }

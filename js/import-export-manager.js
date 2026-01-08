@@ -495,13 +495,13 @@ async function exportToWord() {
       }));
     }
 
-    // Memorandum title (after SSIC/date, left-aligned, one line gap before and after)
+    // Memorandum title (after SSIC/date, left-aligned, one blank line gap before and after)
     if (d.documentType === 'memorandum') {
-      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING * 2 } }));
       children.push(new Paragraph({
-        children: [new TextRun({ text: d.memoTitle || 'MEMORANDUM', bold: true, size: SIZE_12, font: FONT })],
+        children: [new TextRun({ text: d.memoTitle || 'MEMORANDUM', size: SIZE_12, font: FONT })],
         alignment: AlignmentType.LEFT,
-        spacing: { after: LINE_SPACING }
+        spacing: { after: LINE_SPACING * 2 }
       }));
     } else {
       children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
