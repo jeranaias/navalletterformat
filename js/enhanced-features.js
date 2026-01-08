@@ -278,8 +278,9 @@ function autoFormatReference(input) {
   let value = input.value.trim();
   if (!value) return;
 
-  // Remove any existing letter prefix like "(a)" or "a."
-  value = value.replace(/^\s*\(?[a-z]\)?\.?\s*/i, '');
+  // Remove any existing letter prefix like "(a)" or "a." but NOT just a letter followed by space
+  // Only match: (a), (a)., a. - NOT just "a " which would strip first letter of normal text
+  value = value.replace(/^\s*(?:\([a-z]\)\.?|[a-z]\.)\s*/i, '');
 
   // Common reference patterns and their formatted versions
   const patterns = [
