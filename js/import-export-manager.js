@@ -463,15 +463,6 @@ async function exportToWord() {
       children.push(new Paragraph({ children: [], spacing: { after: 480 } }));
     }
 
-    // MEMORANDUM header (centered, bold)
-    if (d.documentType === 'memorandum') {
-      children.push(new Paragraph({
-        children: [new TextRun({ text: 'MEMORANDUM', bold: true, size: SIZE_12, font: FONT })],
-        alignment: AlignmentType.CENTER,
-        spacing: { after: LINE_SPACING * 2 }
-      }));
-    }
-
     // Sender's symbols block - positioned on right side
     // "IN REPLY REFER TO:" label if enabled
     if (d.showInReplyTo) {
@@ -500,8 +491,20 @@ async function exportToWord() {
       children.push(new Paragraph({
         children: [new TextRun({ text: d.date, size: SIZE_12, font: FONT })],
         alignment: AlignmentType.RIGHT,
-        spacing: { after: LINE_SPACING * 2 }
+        spacing: { after: LINE_SPACING }
       }));
+    }
+
+    // Memorandum title (after SSIC/date, left-aligned, one line gap before and after)
+    if (d.documentType === 'memorandum') {
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
+      children.push(new Paragraph({
+        children: [new TextRun({ text: d.memoTitle || 'MEMORANDUM', bold: true, size: SIZE_12, font: FONT })],
+        alignment: AlignmentType.LEFT,
+        spacing: { after: LINE_SPACING }
+      }));
+    } else {
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
     }
 
     // Endorsement header (centered, bold)
@@ -526,30 +529,33 @@ async function exportToWord() {
       });
     };
 
-    // From line
-    children.push(createLabeledPara('From:', d.from));
+    // From/To/Via only for non-memo documents
+    if (d.documentType !== 'memorandum') {
+      // From line
+      children.push(createLabeledPara('From:', d.from));
 
-    // To line
-    children.push(createLabeledPara('To:', d.to));
+      // To line
+      children.push(createLabeledPara('To:', d.to));
 
-    // Via lines (numbered if multiple)
-    if (d.via && d.via.length > 0) {
-      d.via.forEach((v, i) => {
-        const viaText = d.via.length > 1 ? `(${i + 1})  ${v}` : v;
-        children.push(new Paragraph({
-          children: [
-            new TextRun({ text: i === 0 ? 'Via:' : '', size: SIZE_12, font: FONT }),
-            new TextRun({ text: '\t', size: SIZE_12 }),
-            new TextRun({ text: viaText, size: SIZE_12, font: FONT })
-          ],
-          tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }],
-          spacing: { after: 0 }
-        }));
-      });
+      // Via lines (numbered if multiple)
+      if (d.via && d.via.length > 0) {
+        d.via.forEach((v, i) => {
+          const viaText = d.via.length > 1 ? `(${i + 1})  ${v}` : v;
+          children.push(new Paragraph({
+            children: [
+              new TextRun({ text: i === 0 ? 'Via:' : '', size: SIZE_12, font: FONT }),
+              new TextRun({ text: '\t', size: SIZE_12 }),
+              new TextRun({ text: viaText, size: SIZE_12, font: FONT })
+            ],
+            tabStops: [{ type: TabStopType.LEFT, position: LABEL_TAB }],
+            spacing: { after: 0 }
+          }));
+        });
+      }
+
+      // Blank line before Subject (matches PDF y += LH)
+      children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
     }
-
-    // Blank line before Subject (matches PDF y += LH)
-    children.push(new Paragraph({ children: [], spacing: { after: LINE_SPACING } }));
 
     // Subject line (uppercase)
     children.push(createLabeledPara('Subj:', d.subj.toUpperCase()));

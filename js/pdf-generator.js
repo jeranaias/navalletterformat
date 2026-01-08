@@ -153,14 +153,6 @@ async function generatePDF() {
     y = Math.max(y, 130);
   }
 
-  // Memorandum header - appears for ALL memos (after letterhead for formal memos)
-  if (d.documentType === 'memorandum') {
-    pdf.setFont(fontName, 'bold');
-    pdf.setFontSize(fontSize);
-    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
-    y += LH * 2;
-  }
-
   // Header block - sender's symbols left-aligned under first character
   pdf.setFont(fontName, 'normal');
   pdf.setFontSize(fontSize);
@@ -182,7 +174,18 @@ async function generatePDF() {
     y += LH;
   }
   pdf.text(d.date, senderX, y);
-  y += LH * 2;
+  y += LH;
+
+  // Memorandum title (after SSIC/date, left-aligned, one line gap before and after)
+  if (d.documentType === 'memorandum') {
+    y += LH; // One line gap after SSIC/date block
+    pdf.setFont(fontName, 'bold');
+    pdf.text(d.memoTitle || 'MEMORANDUM', ML, y);
+    pdf.setFont(fontName, 'normal');
+    y += LH; // One line gap before subject
+  } else {
+    y += LH; // Standard gap for non-memo documents
+  }
 
   // Endorsement header
   if (d.documentType === 'endorsement') {
@@ -192,34 +195,38 @@ async function generatePDF() {
     pdf.setFont(fontName, 'normal');
   }
 
-  // From
-  pdf.text('From:', ML, y);
-  pdf.splitTextToSize(d.from, CW - TAB).forEach(line => {
-    pdf.text(line, ML + TAB, y);
-    y += LH;
-  });
-
-  // To
-  pdf.text('To:', ML, y);
-  pdf.splitTextToSize(d.to, CW - TAB).forEach(line => {
-    pdf.text(line, ML + TAB, y);
-    y += LH;
-  });
-
-  // Via - only number if multiple addressees
-  if (d.via.length > 0) {
-    pdf.text('Via:', ML, y);
-    d.via.forEach((v, i) => {
-      const viaText = d.via.length > 1 ? `(${i + 1})  ${v}` : v;
-      pdf.splitTextToSize(viaText, CW - TAB).forEach(line => {
-        pdf.text(line, ML + TAB, y);
-        y += LH;
-      });
+  // From/To/Via only for non-memo documents
+  if (d.documentType !== 'memorandum') {
+    // From
+    pdf.text('From:', ML, y);
+    pdf.splitTextToSize(d.from, CW - TAB).forEach(line => {
+      pdf.text(line, ML + TAB, y);
+      y += LH;
     });
+
+    // To
+    pdf.text('To:', ML, y);
+    pdf.splitTextToSize(d.to, CW - TAB).forEach(line => {
+      pdf.text(line, ML + TAB, y);
+      y += LH;
+    });
+
+    // Via - only number if multiple addressees
+    if (d.via.length > 0) {
+      pdf.text('Via:', ML, y);
+      d.via.forEach((v, i) => {
+        const viaText = d.via.length > 1 ? `(${i + 1})  ${v}` : v;
+        pdf.splitTextToSize(viaText, CW - TAB).forEach(line => {
+          pdf.text(line, ML + TAB, y);
+          y += LH;
+        });
+      });
+    }
+
+    y += LH;
   }
 
   // Subject
-  y += LH;
   pageBreak(LH * 2);
   pdf.text('Subj:', ML, y);
   pdf.splitTextToSize(subjText, CW - TAB).forEach(line => {
@@ -593,14 +600,6 @@ async function printPDF() {
     y = Math.max(y, 130);
   }
 
-  // Memorandum header - appears for ALL memos (after letterhead for formal memos)
-  if (d.documentType === 'memorandum') {
-    pdf.setFont(fontName, 'bold');
-    pdf.setFontSize(12);
-    pdf.text('MEMORANDUM', PW / 2, y, { align: 'center' });
-    y += LH * 2;
-  }
-
   pdf.setFont(fontName, 'normal');
   pdf.setFontSize(12);
   const senderX = PW - MR - 72;
@@ -608,7 +607,18 @@ async function printPDF() {
   if (d.ssic) { pdf.text(d.ssic, senderX, y); y += LH; }
   if (d.officeCode) { pdf.text(d.officeCode, senderX, y); y += LH; }
   pdf.text(d.date, senderX, y);
-  y += LH * 2;
+  y += LH;
+
+  // Memorandum title (after SSIC/date, left-aligned)
+  if (d.documentType === 'memorandum') {
+    y += LH;
+    pdf.setFont(fontName, 'bold');
+    pdf.text(d.memoTitle || 'MEMORANDUM', ML, y);
+    pdf.setFont(fontName, 'normal');
+    y += LH;
+  } else {
+    y += LH;
+  }
 
   if (d.documentType === 'endorsement') {
     pdf.setFont(fontName, 'bold');
@@ -617,20 +627,23 @@ async function printPDF() {
     pdf.setFont(fontName, 'normal');
   }
 
-  pdf.text('From:', ML, y);
-  pdf.splitTextToSize(d.from, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
-  pdf.text('To:', ML, y);
-  pdf.splitTextToSize(d.to, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+  // From/To/Via only for non-memo documents
+  if (d.documentType !== 'memorandum') {
+    pdf.text('From:', ML, y);
+    pdf.splitTextToSize(d.from, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+    pdf.text('To:', ML, y);
+    pdf.splitTextToSize(d.to, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
 
-  if (d.via.length > 0) {
-    pdf.text('Via:', ML, y);
-    d.via.forEach((v, i) => {
-      const viaText = d.via.length > 1 ? '(' + (i + 1) + ')  ' + v : v;
-      pdf.splitTextToSize(viaText, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
-    });
+    if (d.via.length > 0) {
+      pdf.text('Via:', ML, y);
+      d.via.forEach((v, i) => {
+        const viaText = d.via.length > 1 ? '(' + (i + 1) + ')  ' + v : v;
+        pdf.splitTextToSize(viaText, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });
+      });
+    }
+
+    y += LH;
   }
-
-  y += LH;
   pageBreak(LH * 2);
   pdf.text('Subj:', ML, y);
   pdf.splitTextToSize(subjText, CW - TAB).forEach(line => { pdf.text(line, ML + TAB, y); y += LH; });

@@ -60,6 +60,12 @@ function selectDocType(type) {
     memoFields.style.display = type === 'memorandum' ? 'block' : 'none';
   }
 
+  // Show/hide memo title row
+  const memoTitleRow = document.getElementById('memoTitleRow');
+  if (memoTitleRow) {
+    memoTitleRow.style.display = type === 'memorandum' ? 'block' : 'none';
+  }
+
   // Show/hide letterhead section based on document type and formal memo checkbox
   updateLetterheadVisibility();
 }
@@ -669,6 +675,7 @@ function collectData() {
     // Letterhead: always for basic/endorsement, optional for memo (formal only)
     useLetterhead: documentType !== "memorandum" || isFormalMemo,
     isFormalMemo, // Track if this is a formal letterhead memo
+    memoTitle: document.getElementById('memoTitle')?.value.trim() || 'MEMORANDUM',
     unitName: document.getElementById('unitName').value.trim(),
     unitAddress: document.getElementById('unitAddress').value.trim(),
     hasSeal: sealData !== null,
