@@ -299,9 +299,15 @@ function scanFormForPII() {
     if (input.value) allText += ' ' + input.value;
   });
 
-  // Scan paragraphs
-  document.querySelectorAll('#paraContainer textarea').forEach(textarea => {
-    if (textarea.value) allText += ' ' + textarea.value;
+  // Scan paragraphs (contenteditable divs)
+  document.querySelectorAll('#paraContainer .para-editor').forEach(editor => {
+    const text = editor.innerText || editor.textContent;
+    if (text) allText += ' ' + text;
+  });
+
+  // Also scan paragraph subject lines
+  document.querySelectorAll('#paraContainer .para-subject-input').forEach(input => {
+    if (input.value) allText += ' ' + input.value;
   });
 
   return scanForPII(allText);

@@ -4320,3 +4320,14 @@ button:focus-visible,
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* Preview PII Warning */
+.preview-pii-warning {
+  background: #fff3cd;
+  border-bottom: 1px solid #ffc107;
+  padding: 8px 12px;
+  color: #856404;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+

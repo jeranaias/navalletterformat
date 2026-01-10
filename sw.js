@@ -3,18 +3,29 @@
  * Enables offline functionality and caching
  */
 
-const CACHE_NAME = 'naval-letter-v2.1';
+const CACHE_NAME = 'naval-letter-v2.2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './css/styles.css',
-  './js/utils.js',
+  './js/app.js',
+  './js/batch-generator.js',
   './js/data-manager.js',
+  './js/draft-manager.js',
+  './js/enhanced-features.js',
+  './js/enhancements.js',
   './js/form-handler.js',
+  './js/import-export-manager.js',
   './js/latex-generator.js',
   './js/pdf-generator.js',
-  './js/draft-manager.js',
-  './js/app.js',
+  './js/preview-manager.js',
+  './js/reference-library.js',
+  './js/template-manager.js',
+  './js/undo-manager.js',
+  './js/user-profile.js',
+  './js/utils.js',
+  './js/validation.js',
+  './js/welcome.js',
   './data/ssic.json',
   './data/units.json',
   './assets/DOW-Seal-BW.jpg',

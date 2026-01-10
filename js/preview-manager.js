@@ -108,7 +108,7 @@ async function openMobilePreview() {
     }
   } catch (error) {
     console.error('Mobile preview error:', error);
-    alert('Error generating preview. Please try again.');
+    showStatus('error', 'Error generating preview. Please try again.');
   } finally {
     // Restore button state
     toggleBtn.textContent = 'Preview';
@@ -126,6 +126,15 @@ function showMobilePreviewModal(pdfUrl) {
     existing.remove();
   }
 
+  // Check for PII to show warning banner
+  const piiFindings = typeof scanFormForPII === 'function' ? scanFormForPII() : [];
+  const hasPII = piiFindings.length > 0;
+  const piiWarning = hasPII ? `
+    <div style="background:#fff3cd; border-bottom:1px solid #ffc107; padding:8px 12px; color:#856404; font-size:13px;">
+      <strong>⚠️ PII Warning:</strong> Potential sensitive information detected. Review before sharing.
+    </div>
+  ` : '';
+
   // Create modal
   const modal = document.createElement('div');
   modal.id = 'mobilePreviewModal';
@@ -138,12 +147,13 @@ function showMobilePreviewModal(pdfUrl) {
         <h2>Preview</h2>
         <button type="button" class="modal-close" onclick="closeMobilePreview()" aria-label="Close">&times;</button>
       </div>
+      ${piiWarning}
       <div style="flex:1; display:flex; flex-direction:column; overflow:hidden; background:#f5f5f5;">
         <object data="${pdfUrl}" type="application/pdf" style="flex:1; width:100%; min-height:0;">
           <div style="padding:20px; text-align:center;">
             <p style="margin-bottom:16px; color:#666;">PDF preview not supported on this device.</p>
             <a href="${pdfUrl}" target="_blank" class="btn btn-primary" style="margin-right:8px;">Open PDF</a>
-            <a href="${pdfUrl}" download="preview.pdf" class="btn btn-secondary">Download</a>
+            <button onclick="safeDownloadPreview('${pdfUrl}')" class="btn btn-secondary">Download</button>
           </div>
         </object>
       </div>
@@ -152,6 +162,29 @@ function showMobilePreviewModal(pdfUrl) {
 
   document.body.appendChild(modal);
   document.body.style.overflow = 'hidden';
+}
+
+/**
+ * Safe download with PII check for preview
+ */
+function safeDownloadPreview(pdfUrl) {
+  const piiFindings = typeof scanFormForPII === 'function' ? scanFormForPII() : [];
+  
+  if (piiFindings.length > 0 && typeof showPIIWarning === 'function') {
+    showPIIWarning(piiFindings, () => {
+      // Proceed with download after acknowledgment
+      const a = document.createElement('a');
+      a.href = pdfUrl;
+      a.download = 'preview.pdf';
+      a.click();
+    });
+  } else {
+    // No PII, download directly
+    const a = document.createElement('a');
+    a.href = pdfUrl;
+    a.download = 'preview.pdf';
+    a.click();
+  }
 }
 
 /**
@@ -186,8 +219,15 @@ async function updateLivePreview() {
 
   const previewFrame = document.getElementById('previewFrame');
   const previewLoading = document.getElementById('previewLoading');
+  const piiWarning = document.getElementById('previewPIIWarning');
 
   if (!previewFrame) return;
+
+  // Check for PII and show/hide warning
+  if (piiWarning) {
+    const piiFindings = typeof scanFormForPII === 'function' ? scanFormForPII() : [];
+    piiWarning.style.display = piiFindings.length > 0 ? 'block' : 'none';
+  }
 
   // Try to capture current page from URL fragment (e.g., #page=3)
   let currentPage = 1;
