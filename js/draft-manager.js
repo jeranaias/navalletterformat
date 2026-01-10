@@ -38,6 +38,7 @@ function collectFormData() {
     // Endorsement
     endorseNumber: document.getElementById('endorseNumber')?.value || 'FIRST',
     endorseAction: document.getElementById('endorseAction')?.value || 'Forwarded',
+    endorseBasicLtr: document.getElementById('endorseBasicLtr')?.value || '',
 
     // Dynamic lists
     viaList: collectDynamicList('viaList'),
@@ -133,6 +134,7 @@ function restoreFormData(data) {
     // Endorsement
     setInputValue('endorseNumber', data.endorseNumber);
     setInputValue('endorseAction', data.endorseAction);
+    setInputValue('endorseBasicLtr', data.endorseBasicLtr);
 
     // Dynamic lists
     restoreDynamicList('viaList', data.viaList, addVia);

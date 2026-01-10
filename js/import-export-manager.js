@@ -510,7 +510,7 @@ async function exportToWord() {
     // Endorsement header (centered, bold)
     if (d.documentType === 'endorsement') {
       children.push(new Paragraph({
-        children: [new TextRun({ text: `${d.endorseNumber} ENDORSEMENT`, bold: true, size: SIZE_12, font: FONT })],
+        children: [new TextRun({ text: d.endorseBasicLtr ? `${d.endorseNumber} ENDORSEMENT on ${d.endorseBasicLtr}` : `${d.endorseNumber} ENDORSEMENT`, bold: true, size: SIZE_12, font: FONT })],
         alignment: AlignmentType.CENTER,
         spacing: { after: LINE_SPACING * 2 }
       }));

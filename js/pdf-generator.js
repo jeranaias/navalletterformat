@@ -186,10 +186,13 @@ async function generatePDF() {
     y += LH; // Standard gap for non-memo documents
   }
 
-  // Endorsement header
+  // Endorsement header - format: "FIRST ENDORSEMENT on [basic letter ref]"
   if (d.documentType === 'endorsement') {
     pdf.setFont(fontName, 'bold');
-    pdf.text(`${d.endorseNumber} ENDORSEMENT`, PW / 2, y, { align: 'center' });
+    const endorseHeader = d.endorseBasicLtr
+      ? `${d.endorseNumber} ENDORSEMENT on ${d.endorseBasicLtr}`
+      : `${d.endorseNumber} ENDORSEMENT`;
+    pdf.text(endorseHeader, PW / 2, y, { align: 'center' });
     y += LH * 2;
     pdf.setFont(fontName, 'normal');
   }
@@ -621,7 +624,10 @@ async function printPDF() {
 
   if (d.documentType === 'endorsement') {
     pdf.setFont(fontName, 'bold');
-    pdf.text(d.endorseNumber + ' ENDORSEMENT', PW / 2, y, { align: 'center' });
+    const endorseHeader2 = d.endorseBasicLtr
+      ? d.endorseNumber + ' ENDORSEMENT on ' + d.endorseBasicLtr
+      : d.endorseNumber + ' ENDORSEMENT';
+    pdf.text(endorseHeader2, PW / 2, y, { align: 'center' });
     y += LH * 2;
     pdf.setFont(fontName, 'normal');
   }

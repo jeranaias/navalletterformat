@@ -361,6 +361,14 @@ function applyTemplate(templateId) {
     }
   }
 
+  // Apply endorsement basic letter reference
+  if (template.endorseBasicLtr) {
+    const basicLtrInput = document.getElementById('endorseBasicLtr');
+    if (basicLtrInput) {
+      basicLtrInput.value = template.endorseBasicLtr;
+    }
+  }
+
   // Clear and apply references
   clearDynamicList('refList');
   if (template.refs && template.refs.length > 0) {
