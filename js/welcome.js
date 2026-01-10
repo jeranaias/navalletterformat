@@ -8,7 +8,7 @@
 // ============================================================
 
 const WELCOME_KEY = 'nlg_has_seen_welcome';
-const WELCOME_VERSION = '3.1'; // Bump this to show welcome again after major updates
+const WELCOME_VERSION = '3.2'; // Bump this to show welcome again after major updates
 
 /**
  * Check if user has seen the welcome modal
