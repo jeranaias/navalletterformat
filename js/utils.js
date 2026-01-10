@@ -51,9 +51,11 @@ function escapeLatex(str) {
  */
 function ensureDoubleSpaces(str) {
   if (!str) return '';
-  // Replace period + single space (not at end) with period + double space
-  // Also handles multiple periods (e.g., "sentence. Another. Third.")
-  return str.replace(/\.(\s)(?=\S)/g, '.  ');
+  // Only double-space after periods that end actual words (2+ letters)
+  // This prevents double-spacing after initials like "J." or "C." in names
+  // Also won't add a third space if user already typed two spaces
+  // Pattern: word of 2+ letters + period + exactly one space + any letter
+  return str.replace(/([a-zA-Z]{2,})\. (?=[a-zA-Z])/g, '$1.  ');
 }
 
 /**

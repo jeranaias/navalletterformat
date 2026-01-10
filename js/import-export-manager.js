@@ -662,8 +662,8 @@ async function exportToWord() {
         // Add formatted text segments
         segments.forEach(seg => {
           if (seg.text) {
-            // Ensure double space after periods
-            const text = seg.text.replace(/\.(\s)(?!\s)/g, '.  ');
+            // Ensure double space after periods (but not after initials like "C.")
+            const text = seg.text.replace(/([a-zA-Z]{2,})\. (?=[a-zA-Z])/g, '$1.  ');
             textRuns.push(new TextRun({
               text: text,
               size: SIZE_12,

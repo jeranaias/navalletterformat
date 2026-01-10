@@ -700,7 +700,7 @@ function collectData() {
         html: editor?.innerHTML || '',
         portionMark: portionSelect?.value || 'U'
       };
-    }).filter(p => p.text),
+    }).filter(p => p.text || p.subject),
     sigName: document.getElementById('sigName').value.trim(),
     byDirection: document.getElementById('byDirection').checked,
     copies: Array.from(document.querySelectorAll('input[name="copy[]"]')).map(i => i.value.trim()).filter(v => v),
